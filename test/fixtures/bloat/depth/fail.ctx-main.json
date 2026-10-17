@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "bloat/depth",
+    "severity": "warning",
+    "at": "1:145-1:157",
+    "message": "This element is nested 13 levels deep, more than 12; flatten wrappers."
+  }
+]

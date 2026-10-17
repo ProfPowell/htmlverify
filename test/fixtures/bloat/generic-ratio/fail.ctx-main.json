@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "bloat/generic-ratio",
+    "severity": "warning",
+    "at": "1:1-1:4",
+    "message": "95% of the elements are generic (div, span, custom elements without a role), above 35%; use semantic elements, or data-layout on them."
+  }
+]

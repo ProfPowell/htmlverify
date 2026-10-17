@@ -1,0 +1,7 @@
+[
+  {
+    "rule": "semantic/heading-candidate",
+    "review": "1:1",
+    "ask": "Is \"Shipping\" a heading? If it introduces the text after it, use <h2>–<h6>."
+  }
+]

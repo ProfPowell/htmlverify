@@ -2,15 +2,16 @@ import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, sep } from 'node:path';
 import { test } from 'node:test';
-import { check, type ProfileName } from '../src/index.ts';
+import { check, parseConfig, type ProfileName } from '../src/index.ts';
 import { decodeUtf8 } from '../src/parse/decode.ts';
 import { applyEdits, treeSignature } from './helpers.ts';
 
 /*
  * Golden fixtures: test/fixtures/<family>/<rule>/<case>[.<flag>…].html with the
  * expected findings in <case>[.<flag>…].json. Flags: `standard` selects the
- * standard profile; `ctx-<tag>` checks the file as a fragment inside <tag>.
- * A `fail-` case must report its rule and a `pass` case must not; `boundary-`
+ * standard profile; `ctx-<tag>` checks the file as a fragment inside <tag>;
+ * `on` turns the directory's rule on, for rules that are off by default.
+ * A `fail` case must report its rule and a `pass` case must not; `boundary-`
  * cases rely on the golden file alone. Review items follow the findings.
  * Run with UPDATE_GOLDEN=1 to rewrite
  * the golden files, then review the diff.
@@ -34,16 +35,18 @@ for (const file of htmlFiles(ROOT)) {
   const [caseName = '', ...flags] = basename(file, '.html').split('.');
   const profile: ProfileName = flags.includes('standard') ? 'standard' : 'strict';
   const context = flags.find((f) => f.startsWith('ctx-'))?.slice(4) ?? null;
+  const config = flags.includes('on') && rule ? parseConfig({ rules: { [rule]: 'error' } }, rel) : null;
 
   test(rel, async () => {
     const bytes = new Uint8Array(readFileSync(file));
-    const [result] = (await check({ path: rel, source: bytes, context }, { profile })).files;
+    const [result] = (await check({ path: rel, source: bytes, context }, { profile, config })).files;
     assert.ok(result);
 
     // A finding merged into another family's still counts for its rule.
     const reports = (f: (typeof result.findings)[number]) => f.rule === rule || (f.alsoReportedBy ?? []).includes(rule ?? '');
-    if (rule && caseName.startsWith('fail-')) {
-      assert.ok(result.findings.some(reports), `expected a ${rule} finding`);
+    if (rule && (caseName === 'fail' || caseName.startsWith('fail-'))) {
+      // Review-only rules fail by asking.
+      assert.ok(result.findings.some(reports) || result.reviews.some((r) => r.rule === rule), `expected a ${rule} finding`);
     }
     if (rule && caseName.startsWith('pass')) {
       assert.ok(!result.findings.some(reports), `unexpected ${rule} finding`);
@@ -74,7 +77,7 @@ for (const file of htmlFiles(ROOT)) {
     assert.ok(decoded.ok);
     const fixed = applyEdits(decoded.text, edits);
     assert.equal(treeSignature(fixed, context), treeSignature(decoded.text, context), 'fixes must preserve the tree');
-    const recheck = (await check({ path: rel, source: (decoded.bom ? '﻿' : '') + fixed, context }, { profile })).files[0]!;
+    const recheck = (await check({ path: rel, source: (decoded.bom ? '﻿' : '') + fixed, context }, { profile, config })).files[0]!;
     assert.deepEqual(recheck.findings.filter((f) => f.fix).map((f) => `${f.rule} ${f.line}:${f.column}`), [], 'fixes must resolve every fixable finding');
   });
 }

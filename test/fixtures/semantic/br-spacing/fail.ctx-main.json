@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "semantic/br-spacing",
+    "severity": "warning",
+    "at": "1:7-1:13",
+    "message": "Consecutive <br> elements make vertical space; use separate paragraphs or CSS margins."
+  },
+  {
+    "rule": "semantic/br-spacing",
+    "severity": "warning",
+    "at": "2:18-2:24",
+    "message": "A <br> at the end of <p> only adds an empty line; remove it, and use CSS for spacing."
+  },
+  {
+    "rule": "semantic/br-spacing",
+    "severity": "warning",
+    "at": "3:4-3:10",
+    "message": "A <br> at the start of <p> only adds an empty line; remove it, and use CSS for spacing."
+  }
+]

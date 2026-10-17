@@ -1,6 +1,6 @@
 Experiments in hacking a tool together to check HTML for problems and reassemble it a proper semantic manner.  Trying to prove or disprove that we can actually predictably build something as simple as a web page with LLMs with actual quality
 
-The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), and M1b (ARIA data, accessible names, and the `a11y` rules).
+The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), and M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`).
 
 ## Usage
 
@@ -21,7 +21,12 @@ Exit codes: 0 pass, 1 fail, 2 usage, config, or input error, 3 incomplete.
 `check` and `rules` read `htmlverify.config.json` from the working directory or its nearest ancestor (or `--config <file>`):
 
 ```json
-{ "extends": "strict", "options": { "voidElements": "xhtml", "booleanValue": "true" }, "rules": { "style/void-element": "warning" }, "maxWarnings": 0 }
+{
+  "extends": "strict",
+  "options": { "voidElements": "xhtml", "booleanValue": "true" },
+  "rules": { "style/void-element": "warning", "bloat/depth": ["warning", { "max": 16 }], "policy/elements": ["error", { "deny": ["iframe"] }] },
+  "maxWarnings": 0
+}
 ```
 
 Unknown keys, rules, and severities are errors; keys the spec reserves for later milestones are rejected with the milestone that adds them.
@@ -29,13 +34,17 @@ Unknown keys, rules, and severities are errors; keys the spec reserves for later
 ## What it checks
 
 - `syntax/*`: parse errors, plus the repairs parse5 makes silently. It compares the tag tokens with the tree to find implied elements, missing and stray end tags, dropped start tags, misnested formatting, and content moved out of tables.
-- `style/*` (strict profile): double-quoted attributes, `name="true"` booleans, lowercase names, `<br />`, explicit start and end tags, `<!doctype html>`. Mechanical fixes come with each finding and are verified to leave the parsed tree unchanged.
+- `style/*` (strict profile): double-quoted attributes, `name="true"` booleans, lowercase names, `<br />`, explicit start and end tags, `<!doctype html>`, escaped `&` and `>`, space indentation, no trailing whitespace, and one newline at the end. Mechanical fixes come with each finding and are verified to leave the parsed tree unchanged; whitespace inside text, comments, and attribute values is content, so those lines are listed without a fix.
 - `content/*`: HTML conformance against a pinned WHATWG snapshot. Child grammars (with transparent content), order and counts, descendant prohibitions, contexts, unknown and obsolete elements and attributes, attribute values (keywords, numbers, URLs, dates, language tags, `srcset`, `sizes`, `autocomplete`, …), required attributes, and IDs and ID references.
 - `a11y/*`: static accessibility against WAI-ARIA and ARIA in HTML. Page language and title, image alternatives, inline `svg`, accessible names and form labels (with the source of each computed name), roles and `aria-*` attributes, focusable content under `aria-hidden`, `tabindex`, heading levels, landmarks, link text, radio and checkbox groups, data tables, and media. A failure is evidence; a pass is never a WCAG claim. What only a person can judge, such as whether an alt text is accurate, becomes a review item.
 
+- `semantic/*`: native features over rebuilt ones (`span role="button"`, `href="#"`, ARIA dialogs and disclosures, text inputs for email and phone), sections without headings, `br` used for spacing, empty spacer elements, fragment links with no target, and placeholder text such as lorem ipsum, TODO, `{{…}}`, and `example.com` links. Likely headings and lists become review items.
+- `policy/*`: the house rules: no `div`, one `h1`, typed buttons, no inline handlers, styles, or `javascript:` URLs, the icon component over inline `svg`, `strong` and `em` over `b` and `i`, `charset` first and a viewport in `head`, a configurable element denylist (off by default), and clean `class` lists.
+- `bloat/*`: share of generic elements, wrapper chains, class counts, depth, and size, with thresholds set per rule. The metrics are in every JSON report, whether or not a threshold is crossed.
+
 When several rules report one defect (a missing title is `content/order` and `a11y/title`), the earliest family keeps it and lists the others in `alsoReportedBy`.
 
-The `component`, `semantic`, `policy`, and `bloat` families come in later M1 steps and are reported as untested until then. Content inside `<svg>`, `<math>`, and `<noscript>` isn't modeled, and coverage says so.
+The `component` family comes in M1d and is reported as untested until then. Content inside `<svg>`, `<math>`, and `<noscript>` isn't modeled, and coverage says so.
 
 ## Spec data
 

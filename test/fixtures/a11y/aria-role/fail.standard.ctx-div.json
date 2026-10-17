@@ -28,5 +28,11 @@
     "severity": "error",
     "at": "5:7-5:22",
     "message": "role=\"listitem\" must be inside an element with role directory or list."
+  },
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "5:7-5:22",
+    "message": "role=\"listitem\" rebuilds a native element; use <li>, which comes with its behavior."
   }
 ]

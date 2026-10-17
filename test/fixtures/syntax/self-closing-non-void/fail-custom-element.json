@@ -2,8 +2,8 @@
   {
     "rule": "syntax/self-closing-non-void",
     "severity": "error",
-    "at": "9:1-9:37",
-    "message": "<user-avatar/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <user-avatar> stays open and swallows everything up to 11:1. Write <user-avatar></user-avatar>."
+    "at": "11:1-11:37",
+    "message": "<user-avatar/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <user-avatar> stays open and swallows everything up to 13:1. Write <user-avatar></user-avatar>."
   },
   {
     "rule": "a11y/lang",
@@ -12,7 +12,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

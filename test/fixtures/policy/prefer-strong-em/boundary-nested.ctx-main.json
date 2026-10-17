@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "policy/prefer-strong-em",
+    "severity": "warning",
+    "at": "1:12-1:15",
+    "message": "Use <strong> for important text; <b> is for keywords and names that need no extra importance."
+  }
+]

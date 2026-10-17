@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "1:29-1:29",
+    "message": "End the file with a newline.",
+    "fix": [
+      {
+        "offset": 28,
+        "endOffset": 28,
+        "text": "\n"
+      }
+    ]
+  }
+]

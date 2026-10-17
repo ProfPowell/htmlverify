@@ -1,7 +1,9 @@
 import { isBooleanAttribute, OPTIONAL_START_TAGS, VOID_ELEMENTS } from '../spec/html.ts';
 import { isHtml, startOf, walk, type Document, type Element } from '../parse/tree.ts';
+import { checkEscape } from './escape.ts';
 import type { Edit, RawFinding, RuleContext } from './types.ts';
 import { at, locatedElements, nameAt, readAttribute, startTagSpan } from './util.ts';
+import { checkWhitespace } from './whitespace.ts';
 
 export function checkStyle(ctx: RuleContext, absorbed: Set<Element>): RawFinding[] {
   const findings: RawFinding[] = [];
@@ -13,6 +15,7 @@ export function checkStyle(ctx: RuleContext, absorbed: Set<Element>): RawFinding
   }
   const doctype = doctypeForm(ctx);
   if (doctype) findings.push(doctype);
+  findings.push(...checkEscape(ctx, absorbed), ...checkWhitespace(ctx));
   return findings;
 }
 
@@ -166,9 +169,14 @@ function voidForm(ctx: RuleContext, element: Element): RawFinding | null {
   if (!token) return null;
   const tag = ctx.text.slice(token.offset, token.endOffset);
   // The token decides self-closing: in `<img src=a/>` the slash belongs to the value.
-  const suffix = token.selfClosing ? /[\t\n\f\r ]*\/>$/.exec(tag)![0] : /[\t\n\f\r ]*>$/.exec(tag)![0];
+  let suffix = token.selfClosing ? /[\t\n\f\r ]*\/>$/.exec(tag)![0] : /[\t\n\f\r ]*>$/.exec(tag)![0];
   const style = ctx.options.voidElements;
-  const wanted = style === 'xhtml' ? ' />' : style === 'tight' ? '/>' : '>';
+  let wanted = style === 'xhtml' ? ' />' : style === 'tight' ? '/>' : '>';
+  // A tag that closes on its own line keeps that line break: only the slash is in question.
+  if (/[\n\r]/.test(suffix)) {
+    suffix = token.selfClosing ? '/>' : '>';
+    wanted = wanted.trimStart();
+  }
   if (suffix === wanted) return null;
   const example = VOID_FORMS[style].replace('br', element.tagName);
   return {

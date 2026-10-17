@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "policy/class",
+    "severity": "warning",
+    "at": "1:4-1:12",
+    "message": "Remove the empty class attribute."
+  },
+  {
+    "rule": "policy/class",
+    "severity": "warning",
+    "at": "2:4-2:21",
+    "message": "class repeats \"note\"; list each class once."
+  }
+]

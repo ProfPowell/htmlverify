@@ -1,9 +1,15 @@
 [
   {
+    "rule": "policy/no-div",
+    "severity": "error",
+    "at": "10:10-10:15",
+    "message": "Replace <div> with a semantic element (section, article, header, nav, …), put data-layout on a semantic parent, or use a Vanilla Breeze layout element such as <layout-stack>."
+  },
+  {
     "rule": "syntax/stray-end-tag",
     "severity": "error",
-    "at": "8:31-8:35",
-    "message": "</p> matches nothing: the <p> from 8:1 was already closed at 8:10 when <div> began, because <p> can’t contain it. The parser inserted an empty <p> here."
+    "at": "10:31-10:35",
+    "message": "</p> matches nothing: the <p> from 10:1 was already closed at 10:10 when <div> began, because <p> can’t contain it. The parser inserted an empty <p> here."
   },
   {
     "rule": "a11y/lang",
@@ -12,7 +18,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

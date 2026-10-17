@@ -36,6 +36,12 @@
     "message": "<div> with role slider has no accessible name: add aria-label or aria-labelledby (WCAG 4.1.2)."
   },
   {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "6:6-6:19",
+    "message": "role=\"slider\" rebuilds a native element; use <input type=\"range\">, which comes with its behavior."
+  },
+  {
     "rule": "a11y/name",
     "severity": "error",
     "at": "7:1-7:9",

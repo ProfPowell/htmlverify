@@ -2,17 +2,17 @@
   {
     "rule": "style/lowercase",
     "severity": "error",
-    "at": "8:1-8:4",
+    "at": "10:1-10:4",
     "message": "Write <p> in lowercase.",
     "fix": [
       {
-        "offset": 104,
-        "endOffset": 105,
+        "offset": 192,
+        "endOffset": 193,
         "text": "p"
       },
       {
-        "offset": 110,
-        "endOffset": 111,
+        "offset": 198,
+        "endOffset": 199,
         "text": "p"
       }
     ]
@@ -24,7 +24,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

@@ -1,0 +1,7 @@
+[
+  {
+    "rule": "semantic/list-candidate",
+    "review": "1:1",
+    "ask": "These 3 <span class=\"tag\"> siblings look like a list; would <ul> with <li> items fit?"
+  }
+]

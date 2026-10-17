@@ -2,12 +2,12 @@
   {
     "rule": "style/void-element",
     "severity": "error",
-    "at": "8:7-8:11",
+    "at": "10:7-10:11",
     "message": "Write void elements as <br />.",
     "fix": [
       {
-        "offset": 112,
-        "endOffset": 113,
+        "offset": 200,
+        "endOffset": 201,
         "text": " />"
       }
     ]
@@ -19,7 +19,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

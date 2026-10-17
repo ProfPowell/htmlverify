@@ -2,7 +2,7 @@
   {
     "rule": "syntax/duplicate-attribute",
     "severity": "error",
-    "at": "8:18-8:30",
+    "at": "10:18-10:30",
     "message": "Duplicate class attribute: the parser keeps the first (class=\"intro\") and drops this one. Merge them into one attribute."
   },
   {
@@ -12,7 +12,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

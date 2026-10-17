@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "1:16-4:1",
+    "message": "End the file with a single newline; it ends with 2 blank lines.",
+    "fix": [
+      {
+        "offset": 15,
+        "endOffset": 18,
+        "text": "\n"
+      }
+    ]
+  }
+]

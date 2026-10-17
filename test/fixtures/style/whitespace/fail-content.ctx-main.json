@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "2:1-2:2",
+    "message": "Indent with spaces, not tabs, on lines 2 and 4: the tabs are inside attribute values and comments, which a fix won’t change, so edit them by hand."
+  }
+]

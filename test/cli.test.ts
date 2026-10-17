@@ -37,7 +37,7 @@ test('a clean file passes with exit 0', async () => {
 test('a failing file exits 1 and names the rule, position, and fix', async () => {
   const r = await run(['check', FAIL]);
   assert.equal(r.code, 1);
-  assert.match(r.stdout, /test\/fixtures\/style\/attr-quotes\/fail-unquoted\.html\n {2}8:4 +error +style\/attr-quotes +Quote the value with double quotes: class="card"\. {2}\[fix\]/);
+  assert.match(r.stdout, /test\/fixtures\/style\/attr-quotes\/fail-unquoted\.html\n {2}10:4 +error +style\/attr-quotes +Quote the value with double quotes: class="card"\. {2}\[fix\]/);
 });
 
 test('--format json emits one canonical report', async () => {

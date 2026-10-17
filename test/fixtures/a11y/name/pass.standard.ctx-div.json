@@ -1,5 +1,11 @@
 [
   {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "5:6-5:19",
+    "message": "role=\"slider\" rebuilds a native element; use <input type=\"range\">, which comes with its behavior."
+  },
+  {
     "rule": "a11y/img-alt",
     "review": "2:31",
     "ask": "Does alt=\"Home\" convey what the image shows here?"

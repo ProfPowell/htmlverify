@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "bloat/class-count",
+    "severity": "warning",
+    "at": "1:1-1:73",
+    "message": "<p> has 7 classes; more than 6 usually means utility classes standing in for a component or data-layout."
+  }
+]

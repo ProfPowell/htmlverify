@@ -9,10 +9,13 @@ import { checkAttributes, checkBooleanValues } from '../rules/attributes.ts';
 import { checkContentModel } from '../rules/content-model.ts';
 import { checkDocument } from '../rules/document.ts';
 import { checkIds } from '../rules/ids.ts';
-import { RULE_BY_ID } from '../rules/registry.ts';
+import { RULE_BY_ID, RULES } from '../rules/registry.ts';
 import { checkStyle } from '../rules/style.ts';
 import { checkSyntax } from '../rules/syntax.ts';
 import { checkA11y } from '../rules/a11y.ts';
+import { checkBloat, type Metrics } from '../rules/bloat.ts';
+import { checkPolicy } from '../rules/policy.ts';
+import { checkSemantic } from '../rules/semantic.ts';
 import type { Authority, Edit, RawFinding, RawReview, RuleContext, Severity } from '../rules/types.ts';
 import { VERSION } from '../version.ts';
 import { canonicalJson } from './canonical.ts';
@@ -71,6 +74,8 @@ export interface FileReport {
   summary: { errors: number; warnings: number; infos: number; reviews: number };
   findings: Finding[];
   reviews: Review[];
+  /** Structural metrics (spec §6.8), reported whether or not a bloat threshold is crossed. */
+  metrics: Metrics | null;
   coverage: { untested: { check: string; reason: string }[] };
   score: { overall: number | null; dimensions: Record<string, number | null> };
 }
@@ -157,10 +162,16 @@ async function checkFile(input: CheckInput, profile: Profile): Promise<FileRepor
     signals: reconcile(parsed, decoded.text),
     lines,
     options: profile.options,
+    ruleOptions: Object.fromEntries(RULES.filter((r) => r.options).map((r) => [
+      r.id,
+      { ...Object.fromEntries(Object.entries(r.options!).map(([k, o]) => [k, o.default])), ...profile.ruleOptions[r.id] },
+    ])),
   };
   const syntax = checkSyntax(ctx);
   const content = checkContentModel(ctx);
   const a11y = checkA11y(ctx);
+  const semantic = checkSemantic(ctx);
+  const bloat = checkBloat(ctx);
   const raw = [
     ...syntax.findings,
     ...checkStyle(ctx, syntax.absorbed),
@@ -170,15 +181,18 @@ async function checkFile(input: CheckInput, profile: Profile): Promise<FileRepor
     ...checkIds(ctx),
     ...checkDocument(ctx),
     ...a11y.findings,
+    ...semantic.findings,
+    ...checkPolicy(ctx),
+    ...bloat.findings,
   ];
   const enabled = raw.filter((r) => (profile.severities[r.rule] ?? 'off') !== 'off');
   const findings = dedupe(enabled).map(({ raw: r, also }) => toFinding(r, input.path, lines, profile, also));
-  const reviews = a11y.reviews.filter((r) => (profile.severities[r.rule] ?? 'off') !== 'off').map((r) => toReview(r, lines));
+  const reviews = [...a11y.reviews, ...semantic.reviews].filter((r) => (profile.severities[r.rule] ?? 'off') !== 'off').map((r) => toReview(r, lines));
   const untested = [...profile.untested, ...content.untested];
   if (kind === 'fragment') {
     untested.push({ check: 'syntax/doctype, syntax/encoding (charset declaration), a11y/lang, a11y/title, first-heading check', reason: 'fragments have no document' });
   }
-  return finish(base, findings, reviews, profile, untested);
+  return finish(base, findings, reviews, profile, untested, bloat.metrics);
 }
 
 /** Family order for deduplication: the earliest family keeps the finding (spec §5.1). */
@@ -236,7 +250,7 @@ function toFinding(raw: RawFinding, path: string, lines: LineIndex, profile: Pro
 
 type Base = Pick<FileReport, 'path' | 'kind' | 'sha256'>;
 
-function finish(base: Base, findings: Finding[], reviews: Review[], profile: Profile, untested: FileReport['coverage']['untested']): FileReport {
+function finish(base: Base, findings: Finding[], reviews: Review[], profile: Profile, untested: FileReport['coverage']['untested'], metrics: Metrics | null = null): FileReport {
   findings.sort((a, b) => a.offset - b.offset || cmp(a.rule, b.rule) || a.endOffset - b.endOffset || cmp(a.message, b.message));
   reviews.sort((a, b) => a.offset - b.offset || cmp(a.rule, b.rule) || cmp(a.ask, b.ask));
   const count = (s: Severity) => findings.filter((f) => f.severity === s).length;
@@ -247,6 +261,7 @@ function finish(base: Base, findings: Finding[], reviews: Review[], profile: Pro
     summary,
     findings,
     reviews,
+    metrics,
     coverage: { untested },
     score: score(findings, profile, untested),
   };
@@ -259,6 +274,7 @@ function incomplete(base: Base, reason: string): FileReport {
     summary: { errors: 0, warnings: 0, infos: 0, reviews: 0 },
     findings: [],
     reviews: [],
+    metrics: null,
     coverage: { untested: [{ check: 'every rule', reason }] },
     score: { overall: null, dimensions: Object.fromEntries(DIMENSIONS.map((d) => [d.id, null])) },
   };

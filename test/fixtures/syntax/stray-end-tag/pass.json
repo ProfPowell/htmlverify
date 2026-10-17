@@ -1,12 +1,18 @@
 [
   {
+    "rule": "semantic/section-heading",
+    "severity": "warning",
+    "at": "11:1-11:10",
+    "message": "<section> has no heading; give it one (h2–h6), or name it with aria-labelledby. A <section> that is only a styling hook isn’t a section; use data-layout on its parent instead."
+  },
+  {
     "rule": "a11y/lang",
     "review": "2:7",
     "ask": "Does lang=\"en\" match the language of the page’s content?"
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

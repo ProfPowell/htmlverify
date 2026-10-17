@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "bloat/size",
+    "severity": "warning",
+    "at": "1:1-1:4",
+    "message": "The fragment has 1501 elements, more than 1500; split it, or remove wrappers."
+  }
+]

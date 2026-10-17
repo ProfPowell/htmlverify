@@ -2,12 +2,12 @@
   {
     "rule": "style/attr-quotes",
     "severity": "error",
-    "at": "8:15-8:22",
+    "at": "10:15-10:22",
     "message": "Quote the value with double quotes: class=\"x\".",
     "fix": [
       {
-        "offset": 123,
-        "endOffset": 124,
+        "offset": 211,
+        "endOffset": 212,
         "text": "\"x\""
       }
     ]
@@ -19,7 +19,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

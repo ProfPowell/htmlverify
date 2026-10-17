@@ -1,0 +1,21 @@
+[
+  {
+    "rule": "policy/inline-handler",
+    "severity": "error",
+    "at": "1:23-1:39",
+    "message": "onclick runs inline script; use command and commandfor on buttons, or attach listeners from a script module."
+  },
+  {
+    "rule": "style/lowercase",
+    "severity": "error",
+    "at": "1:23-1:39",
+    "message": "Write the onclick attribute in lowercase.",
+    "fix": [
+      {
+        "offset": 22,
+        "endOffset": 29,
+        "text": "onclick"
+      }
+    ]
+  }
+]

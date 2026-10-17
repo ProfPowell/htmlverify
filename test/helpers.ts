@@ -1,6 +1,5 @@
+import { treeSignature as signature } from '../src/fix/equivalence.ts';
 import { parseHtml } from '../src/parse/parse.ts';
-import { childrenOf, isElement, isHtml, type Node } from '../src/parse/tree.ts';
-import { isBooleanAttribute } from '../src/spec/html.ts';
 import type { Edit } from '../src/rules/types.ts';
 
 /** Applies non-overlapping edits; throws if any two overlap. */
@@ -18,31 +17,7 @@ export function applyEdits(text: string, edits: readonly Edit[]): string {
   return out;
 }
 
-/**
- * The tree-equivalence contract for fixes (spec §8): node types, namespaces,
- * names, attributes with exact values, text, comments, child order, document
- * mode. Boolean attributes compare by presence.
- */
+/** The tree-equivalence contract for fixes (spec §8), from source text. */
 export function treeSignature(text: string, context: string | null): string {
-  return JSON.stringify(signature(parseHtml(text, context).root));
-}
-
-function signature(node: Node): unknown {
-  if (isElement(node)) {
-    const attrs = node.attrs
-      .map((a) => [a.namespace ?? '', a.prefix ?? '', a.name, isHtml(node) && isBooleanAttribute(node.tagName, a.name) ? true : a.value])
-      .sort((a, b) => String(a.slice(0, 3)).localeCompare(String(b.slice(0, 3))));
-    return [node.namespaceURI, node.tagName, attrs, childrenOf(node).map(signature)];
-  }
-  switch (node.nodeName) {
-    case '#text':
-    case '#comment':
-      return [node.nodeName, 'value' in node ? node.value : 'data' in node ? node.data : ''];
-    case '#documentType':
-      return 'name' in node ? ['#doctype', node.name, node.publicId ?? '', node.systemId ?? ''] : ['#doctype'];
-    case '#document':
-      return ['#document', 'mode' in node ? node.mode : '', childrenOf(node).map(signature)];
-    default:
-      return [node.nodeName, childrenOf(node).map(signature)];
-  }
+  return signature(parseHtml(text, context));
 }

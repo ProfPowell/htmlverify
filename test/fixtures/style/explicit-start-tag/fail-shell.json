@@ -20,12 +20,12 @@
   {
     "rule": "style/explicit-start-tag",
     "severity": "error",
-    "at": "4:1-4:1",
-    "message": "The <body> start tag is missing; the parser implied it at 4:1. Write <body> explicitly."
+    "at": "5:1-5:1",
+    "message": "The <body> start tag is missing; the parser implied it at 5:1. Write <body> explicitly."
   },
   {
     "rule": "a11y/title",
-    "review": "3:1",
+    "review": "4:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

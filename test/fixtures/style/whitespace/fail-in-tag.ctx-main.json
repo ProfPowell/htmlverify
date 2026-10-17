@@ -1,0 +1,33 @@
+[
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "1:18-1:19",
+    "message": "Remove the trailing whitespace (1 line).",
+    "fix": [
+      {
+        "offset": 17,
+        "endOffset": 18,
+        "text": ""
+      }
+    ]
+  },
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "2:1-2:2",
+    "message": "Indent with spaces, not tabs (1 line).",
+    "fix": [
+      {
+        "offset": 19,
+        "endOffset": 20,
+        "text": "  "
+      }
+    ]
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:2",
+    "ask": "Does alt=\"A diagram\" convey what the image shows here?"
+  }
+]

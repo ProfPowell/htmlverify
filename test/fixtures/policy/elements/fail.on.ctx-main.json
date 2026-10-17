@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "policy/elements",
+    "severity": "error",
+    "at": "1:1-1:32",
+    "message": "<iframe> is on this project’s denylist (policy/elements)."
+  },
+  {
+    "rule": "policy/elements",
+    "severity": "error",
+    "at": "2:1-2:64",
+    "message": "<embed> is on this project’s denylist (policy/elements)."
+  }
+]

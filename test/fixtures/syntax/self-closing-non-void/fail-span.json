@@ -2,8 +2,8 @@
   {
     "rule": "syntax/self-closing-non-void",
     "severity": "error",
-    "at": "8:10-8:31",
-    "message": "<span/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <span> stays open and swallows everything up to 8:43. Write <span></span>."
+    "at": "10:10-10:31",
+    "message": "<span/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <span> stays open and swallows everything up to 10:43. Write <span></span>."
   },
   {
     "rule": "a11y/lang",
@@ -12,7 +12,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

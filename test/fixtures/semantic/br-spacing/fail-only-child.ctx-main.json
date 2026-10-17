@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "semantic/br-spacing",
+    "severity": "warning",
+    "at": "1:4-1:10",
+    "message": "A <p> that holds only <br> is an empty line; remove it, and use CSS for spacing."
+  }
+]

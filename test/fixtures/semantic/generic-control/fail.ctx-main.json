@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "semantic/generic-control",
+    "severity": "error",
+    "at": "1:1-1:34",
+    "message": "<span> with role=\"button\" acts as a control; use <button type=\"button\">, which is focusable and keyboard-operable on its own."
+  },
+  {
+    "rule": "semantic/generic-control",
+    "severity": "error",
+    "at": "2:1-2:22",
+    "message": "<span> with onclick acts as a control; use <button type=\"button\">, which is focusable and keyboard-operable on its own."
+  },
+  {
+    "rule": "policy/inline-handler",
+    "severity": "error",
+    "at": "2:7-2:21",
+    "message": "onclick runs inline script; use command and commandfor on buttons, or attach listeners from a script module."
+  },
+  {
+    "rule": "semantic/generic-control",
+    "severity": "error",
+    "at": "3:1-3:34",
+    "message": "<x-card> with role=\"link\" acts as a control; use <a href>, which is focusable and keyboard-operable on its own."
+  }
+]
