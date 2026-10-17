@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/aria-redundant",
+    "severity": "warning",
+    "at": "1:6-1:23",
+    "message": "role=\"navigation\" is redundant on <nav>, which has that role already; remove it."
+  }
+]

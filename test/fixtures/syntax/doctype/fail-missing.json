@@ -12,7 +12,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "4:1",
+    "review": "5:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

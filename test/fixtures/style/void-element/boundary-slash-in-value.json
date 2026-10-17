@@ -2,12 +2,12 @@
   {
     "rule": "style/void-element",
     "severity": "error",
-    "at": "8:4-8:31",
+    "at": "10:4-10:31",
     "message": "Write void elements as <img />.",
     "fix": [
       {
-        "offset": 132,
-        "endOffset": 133,
+        "offset": 220,
+        "endOffset": 221,
         "text": " />"
       }
     ]
@@ -15,12 +15,12 @@
   {
     "rule": "style/attr-quotes",
     "severity": "error",
-    "at": "8:16-8:30",
+    "at": "10:16-10:30",
     "message": "Quote the value with double quotes: src=\"photo.png/\".",
     "fix": [
       {
-        "offset": 122,
-        "endOffset": 132,
+        "offset": 210,
+        "endOffset": 220,
         "text": "\"photo.png/\""
       }
     ]
@@ -32,12 +32,12 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   },
   {
     "rule": "a11y/img-alt",
-    "review": "8:9",
+    "review": "10:9",
     "ask": "Is this image purely decorative? alt=\"\" hides it from screen readers."
   }
 ]

@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "semantic/empty-element",
+    "severity": "warning",
+    "at": "1:1-1:4",
+    "message": "Empty <p>; remove it, and use CSS for spacing."
+  },
+  {
+    "rule": "semantic/empty-element",
+    "severity": "warning",
+    "at": "2:1-2:22",
+    "message": "Empty <span>; remove it, and use CSS for spacing."
+  },
+  {
+    "rule": "semantic/empty-element",
+    "severity": "warning",
+    "at": "3:5-3:9",
+    "message": "Empty <li>; remove it, and use CSS for spacing."
+  }
+]

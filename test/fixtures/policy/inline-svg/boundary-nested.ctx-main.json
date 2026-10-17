@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "policy/inline-svg",
+    "severity": "error",
+    "at": "1:1-1:43",
+    "message": "Use the icon component (<icon-wc name=\"…\">) instead of inline <svg>."
+  }
+]

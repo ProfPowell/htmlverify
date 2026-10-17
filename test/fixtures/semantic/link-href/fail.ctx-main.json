@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "semantic/link-href",
+    "severity": "error",
+    "at": "1:4-1:12",
+    "message": "href=\"#\" goes nowhere: link to a real URL, or use <button type=\"button\"> for an action."
+  },
+  {
+    "rule": "semantic/link-href",
+    "severity": "error",
+    "at": "2:4-2:11",
+    "message": "href=\"\" goes nowhere: link to a real URL, or use <button type=\"button\"> for an action."
+  },
+  {
+    "rule": "semantic/link-href",
+    "severity": "error",
+    "at": "3:1-3:4",
+    "message": "<a> without href isn’t a link: give it href, or use <button type=\"button\"> for an action."
+  }
+]

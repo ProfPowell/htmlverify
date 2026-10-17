@@ -53,6 +53,19 @@ export interface RuleContext {
   signals: Signals;
   lines: LineIndex;
   options: Options;
+  /** Each rule's options: its defaults with the config's values applied. */
+  ruleOptions: Readonly<Record<string, Readonly<Record<string, RuleOptionValue>>>>;
+}
+
+export type RuleOptionValue = number | readonly string[];
+
+export interface RuleOptionSpec {
+  type: 'number' | 'strings';
+  default: RuleOptionValue;
+  summary: string;
+  /** Numbers: only whole numbers, and the smallest allowed (default 0). */
+  integer?: boolean;
+  min?: number;
 }
 
 export interface RuleMeta {
@@ -60,4 +73,6 @@ export interface RuleMeta {
   authority: Authority;
   summary: string;
   ref: string;
+  /** Options the config can set: "bloat/depth": ["warning", { "max": 16 }]. */
+  options?: Readonly<Record<string, RuleOptionSpec>>;
 }

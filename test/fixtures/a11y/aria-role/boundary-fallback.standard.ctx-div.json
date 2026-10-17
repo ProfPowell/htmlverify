@@ -4,5 +4,11 @@
     "severity": "warning",
     "at": "2:6-2:22",
     "message": "role=\"directory\" is deprecated in ARIA."
+  },
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "2:28-2:43",
+    "message": "role=\"listitem\" rebuilds a native element; use <li>, which comes with its behavior."
   }
 ]

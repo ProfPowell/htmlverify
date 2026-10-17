@@ -1,9 +1,27 @@
 [
   {
+    "rule": "policy/prefer-strong-em",
+    "severity": "warning",
+    "at": "10:4-10:7",
+    "message": "Use <strong> for important text; <b> is for keywords and names that need no extra importance."
+  },
+  {
+    "rule": "policy/prefer-strong-em",
+    "severity": "warning",
+    "at": "10:7-10:10",
+    "message": "Use <em> for stress emphasis; <i> is for terms, names, and phrases in another voice or language."
+  },
+  {
+    "rule": "policy/prefer-strong-em",
+    "severity": "warning",
+    "at": "10:7-10:10",
+    "message": "Use <em> for stress emphasis; <i> is for terms, names, and phrases in another voice or language."
+  },
+  {
     "rule": "syntax/misnested",
     "severity": "error",
-    "at": "8:7-8:10",
-    "message": "<i> overlaps </b> at 8:21: the parser closes it there and reopens it, making 2 <i> elements. Close </i> before </b>."
+    "at": "10:7-10:10",
+    "message": "<i> overlaps </b> at 10:21: the parser closes it there and reopens it, making 2 <i> elements. Close </i> before </b>."
   },
   {
     "rule": "a11y/lang",
@@ -12,7 +30,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

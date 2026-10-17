@@ -3,7 +3,7 @@
 
 import { isProfileName, PROFILES, type Profile, type ProfileName } from './profiles.ts';
 import { RULE_BY_ID } from './rules/registry.ts';
-import type { Options, Severity } from './rules/types.ts';
+import type { Options, RuleOptionValue, Severity } from './rules/types.ts';
 
 export const CONFIG_FILE = 'htmlverify.config.json';
 
@@ -11,6 +11,7 @@ export interface Config {
   extends?: ProfileName;
   options?: Partial<Options>;
   rules?: Record<string, Severity | 'off'>;
+  ruleOptions?: Record<string, Record<string, RuleOptionValue>>;
   maxWarnings?: number | null;
 }
 
@@ -63,13 +64,31 @@ export function parseConfig(raw: unknown, source: string): Config {
       case 'rules': {
         if (!isObject(value)) return fail('"rules" must be an object');
         const rules: Record<string, Severity | 'off'> = {};
+        const ruleOptions: Record<string, Record<string, RuleOptionValue>> = {};
         for (const [id, v] of Object.entries(value)) {
-          if (!RULE_BY_ID.has(id)) fail(`unknown rule "${id}"`);
-          if (Array.isArray(v)) fail(`"${id}" takes no options; give a severity`);
-          if (typeof v !== 'string' || !SEVERITIES.has(v)) fail(`"${id}" must be "error", "warning", "info", or "off"`);
-          rules[id] = v as Severity | 'off';
+          const meta = RULE_BY_ID.get(id);
+          if (!meta) return fail(`unknown rule "${id}"`);
+          const [severity, options] = Array.isArray(v) ? v : [v, undefined];
+          if (Array.isArray(v) && (v.length !== 2 || !isObject(options))) fail(`"${id}" must be a severity, or [severity, { options }]`);
+          if (typeof severity !== 'string' || !SEVERITIES.has(severity)) fail(`"${id}" must be "error", "warning", "info", or "off"`);
+          rules[id] = severity as Severity | 'off';
+          if (options === undefined) continue;
+          if (!meta.options) fail(`"${id}" takes no options; give a severity`);
+          for (const [name, option] of Object.entries(options as Record<string, unknown>)) {
+            const spec = meta.options![name];
+            if (!spec) fail(`"${id}" has no option "${name}"; it has ${Object.keys(meta.options!).map((o) => `"${o}"`).join(', ')}`);
+            const min = spec!.min ?? 0;
+            const ok = spec!.type === 'number'
+              ? typeof option === 'number' && Number.isFinite(option) && option >= min && (!spec!.integer || Number.isInteger(option))
+              : Array.isArray(option) && option.every((x) => typeof x === 'string');
+            const want = spec!.type === 'strings' ? 'an array of strings'
+              : spec!.integer ? (min === 0 ? 'a non-negative integer' : `an integer of at least ${min}`) : 'a non-negative number';
+            if (!ok) fail(`"${id}" option "${name}" must be ${want}`);
+            (ruleOptions[id] ??= {})[name] = option as RuleOptionValue;
+          }
         }
         config.rules = rules;
+        config.ruleOptions = ruleOptions;
         break;
       }
       case 'maxWarnings':
@@ -92,5 +111,6 @@ export function resolveProfile(name: ProfileName | undefined, config: Config | n
     severities: { ...base.severities, ...config.rules },
     options: { ...base.options, ...config.options },
     maxWarnings: config.maxWarnings === undefined ? base.maxWarnings : config.maxWarnings,
+    ruleOptions: { ...base.ruleOptions, ...config.ruleOptions },
   };
 }

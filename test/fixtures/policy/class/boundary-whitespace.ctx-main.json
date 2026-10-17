@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "policy/class",
+    "severity": "warning",
+    "at": "1:4-1:15",
+    "message": "Remove the empty class attribute."
+  }
+]

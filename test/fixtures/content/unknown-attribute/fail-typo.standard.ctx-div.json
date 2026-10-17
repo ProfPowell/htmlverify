@@ -1,5 +1,11 @@
 [
   {
+    "rule": "semantic/link-href",
+    "severity": "warning",
+    "at": "1:1-1:23",
+    "message": "<a> without href isn’t a link: give it href, or use <button type=\"button\"> for an action."
+  },
+  {
     "rule": "content/unknown-attribute",
     "severity": "error",
     "at": "1:4-1:22",

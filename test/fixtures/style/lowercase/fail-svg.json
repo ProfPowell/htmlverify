@@ -1,13 +1,19 @@
 [
   {
+    "rule": "policy/inline-svg",
+    "severity": "error",
+    "at": "10:1-10:45",
+    "message": "Use the icon component (<icon-wc name=\"…\">) instead of inline <svg>."
+  },
+  {
     "rule": "style/lowercase",
     "severity": "error",
-    "at": "8:6-8:25",
+    "at": "10:6-10:25",
     "message": "Write viewBox with this exact case; SVG names are case-sensitive.",
     "fix": [
       {
-        "offset": 108,
-        "endOffset": 115,
+        "offset": 196,
+        "endOffset": 203,
         "text": "viewBox"
       }
     ]
@@ -15,17 +21,17 @@
   {
     "rule": "style/lowercase",
     "severity": "error",
-    "at": "8:45-8:62",
+    "at": "10:45-10:62",
     "message": "Write <clipPath> with this exact case; SVG names are case-sensitive.",
     "fix": [
       {
-        "offset": 148,
-        "endOffset": 156,
+        "offset": 236,
+        "endOffset": 244,
         "text": "clipPath"
       },
       {
-        "offset": 166,
-        "endOffset": 174,
+        "offset": 254,
+        "endOffset": 262,
         "text": "clipPath"
       }
     ]
@@ -37,7 +43,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

@@ -8,13 +8,19 @@
   {
     "rule": "style/explicit-end-tag",
     "severity": "error",
-    "at": "7:1-7:7",
+    "at": "8:1-8:7",
     "message": "Close <body> explicitly: add </body> at the end of the file."
+  },
+  {
+    "rule": "semantic/section-heading",
+    "severity": "warning",
+    "at": "10:1-10:10",
+    "message": "<section> has no heading; give it one (h2–h6), or name it with aria-labelledby. A <section> that is only a styling hook isn’t a section; use data-layout on its parent instead."
   },
   {
     "rule": "syntax/unclosed-element",
     "severity": "error",
-    "at": "8:1-8:10",
+    "at": "10:1-10:10",
     "message": "<section> is never closed: it runs to the end of the file. Add </section> where it should end."
   },
   {
@@ -24,7 +30,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

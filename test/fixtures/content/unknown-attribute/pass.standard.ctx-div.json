@@ -1,5 +1,11 @@
 [
   {
+    "rule": "policy/inline-handler",
+    "severity": "warning",
+    "at": "1:55-1:69",
+    "message": "onclick runs inline script; use command and commandfor on buttons, or attach listeners from a script module."
+  },
+  {
     "rule": "a11y/label",
     "severity": "error",
     "at": "2:1-2:65",

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "bloat/wrapper-chain",
+    "severity": "warning",
+    "at": "1:4-1:10",
+    "message": "4 nested wrappers (span > span > span > span) hold nothing else; remove the extra ones."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "error",
+    "at": "1:4-1:36",
+    "message": "href=\"jav\tascript:alert(1)\" contains a tab or line break."
+  },
+  {
+    "rule": "policy/javascript-url",
+    "severity": "error",
+    "at": "1:4-1:36",
+    "message": "href=\"javascript:…\" runs script from a URL; use a <button type=\"button\"> with a listener, or a real URL."
+  }
+]

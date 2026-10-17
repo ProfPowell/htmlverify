@@ -9,6 +9,9 @@
     "rule": "a11y/tabindex",
     "severity": "warning",
     "at": "2:6-2:18",
-    "message": "tabindex=\"0\" makes <div> focusable, but it has no role: use a <button> or <a href>, or give it a role."
+    "message": "tabindex=\"0\" makes <div> focusable, but it has no role: use a <button> or <a href>, or give it a role.",
+    "alsoReportedBy": [
+      "semantic/generic-control"
+    ]
   }
 ]

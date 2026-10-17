@@ -36,6 +36,12 @@
     "message": "max doesn’t apply to <input type=\"text\">; it applies to type=\"date\", type=\"month\", type=\"week\", type=\"time\", type=\"datetime-local\", type=\"number\", or type=\"range\"."
   },
   {
+    "rule": "semantic/link-href",
+    "severity": "warning",
+    "at": "3:1-3:35",
+    "message": "<a> without href isn’t a link: give it href, or use <button type=\"button\"> for an action."
+  },
+  {
     "rule": "content/unknown-attribute",
     "severity": "error",
     "at": "3:4-3:19",

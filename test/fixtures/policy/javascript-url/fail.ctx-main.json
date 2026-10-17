@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "policy/javascript-url",
+    "severity": "error",
+    "at": "1:4-1:29",
+    "message": "href=\"javascript:…\" runs script from a URL; use a <button type=\"button\"> with a listener, or a real URL."
+  },
+  {
+    "rule": "policy/javascript-url",
+    "severity": "error",
+    "at": "2:4-2:31",
+    "message": "href=\"javascript:…\" runs script from a URL; use a <button type=\"button\"> with a listener, or a real URL."
+  },
+  {
+    "rule": "policy/javascript-url",
+    "severity": "error",
+    "at": "3:7-3:33",
+    "message": "action=\"javascript:…\" runs script from a URL; use a <button type=\"button\"> with a listener, or a real URL."
+  }
+]

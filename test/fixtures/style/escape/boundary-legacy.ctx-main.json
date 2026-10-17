@@ -1,0 +1,21 @@
+[
+  {
+    "rule": "style/escape",
+    "severity": "warning",
+    "at": "1:15-1:16",
+    "message": "Escape & as &amp; in href.",
+    "fix": [
+      {
+        "offset": 14,
+        "endOffset": 15,
+        "text": "&amp;"
+      }
+    ]
+  },
+  {
+    "rule": "syntax/parse-error",
+    "severity": "error",
+    "at": "2:9-2:9",
+    "message": "Character reference without \";\"; add the semicolon."
+  }
+]

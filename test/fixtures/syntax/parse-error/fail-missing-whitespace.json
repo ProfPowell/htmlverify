@@ -2,13 +2,13 @@
   {
     "rule": "a11y/link-text",
     "severity": "warning",
-    "at": "8:4-8:26",
+    "at": "10:4-10:26",
     "message": "Link text \"Link\" doesn’t say where the link goes; describe the destination, such as \"Read the pricing guide\" (WCAG 2.4.4)."
   },
   {
     "rule": "syntax/parse-error",
     "severity": "error",
-    "at": "8:16-8:16",
+    "at": "10:16-10:16",
     "message": "Attributes must be separated by whitespace."
   },
   {
@@ -18,7 +18,7 @@
   },
   {
     "rule": "a11y/title",
-    "review": "5:1",
+    "review": "6:1",
     "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

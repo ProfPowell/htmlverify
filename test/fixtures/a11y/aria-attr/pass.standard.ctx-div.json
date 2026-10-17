@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "5:6-5:21",
+    "message": "role=\"checkbox\" rebuilds a native element; use <input type=\"checkbox\">, which comes with its behavior."
+  }
+]

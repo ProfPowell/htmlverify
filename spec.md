@@ -247,11 +247,11 @@ All policy, off in `standard`.
 | `style/explicit-start-tag` | implied `html`, `head`, `body`, `tbody`, `colgroup` | E | yes | 0 |
 | `style/explicit-end-tag` | omitted optional end tag (`</p>`, `</li>`, `</td>`, `</body>`) | E | yes | 0 |
 | `style/doctype` | doctype not exactly `<!doctype html>` | E | yes | 0 |
-| `style/escape` | literal `&`, `<`, `>` in text, or `&` in attribute values, where HTML would accept them | W | yes | 1 |
-| `style/whitespace` | tab indentation, trailing whitespace, missing final newline (outside `pre`, `textarea`, `script`, `style`) | W | yes² | 1 |
+| `style/escape` | literal `&`, `<`, `>` in text, or `&` in attribute values, where HTML would accept them: an `&` the tokenizer reads as a character without a parse error, any `>`, and `<` in `title` and `textarea`; raw text (`script`, `style`, `noscript`, …) excepted | W | yes | 1 |
+| `style/whitespace` | tab indentation, trailing whitespace, and anything but one line break at the end of the file, outside `pre`, `textarea`, `listing`, `plaintext`, `xmp`, `script`, and `style`; option `tabWidth` (default 2) sets the tab stops the fix expands to | W | yes² | 1 |
 
 ¹ Automatic, because boolean attributes compare by presence (§8). HTML itself allows only `""` or the attribute name, so `content/attribute-value` still reports `="true"` on native boolean attributes: at info when `booleanValue` is `"true"` (the `strict` default), and as an error in `standard`. Custom-element attributes have no such restriction. Any other value is an error in both profiles. In particular, `disabled="false"` disables the control, because presence means on.
-² Only between block-level elements (§8).
+² Where the whitespace is inside a tag, in whitespace-only text, or dropped by the parser (§8). Inside other text, comments, and attribute values it is content: the finding lists those lines without a fix. The end of the file is reported only where one line break changes no content, so not after an open `<p>Text` or at the end of a fragment for a phrasing context.
 
 ### 6.3 `content`: HTML conformance
 
@@ -314,13 +314,13 @@ All M1.
 
 | Rule | Detects | Auth | strict | standard |
 | --- | --- | --- | --- | --- |
-| `semantic/generic-control` | `div`, `span`, or custom element acting as a control (`role="button"`, `onclick`, `tabindex="0"`) → `button` or `a` | H | E | W |
+| `semantic/generic-control` | `div`, `span`, or custom element acting as a control (`role="button"` or `"link"`, `onclick`, or for `div` and `span` `tabindex="0"`) → `button` or `a`; `tabindex="0"` alone merges into `a11y/tabindex` | H | E | W |
 | `semantic/link-href` | `a` without `href`, or with `href="#"` or `""` → `button` for actions, a real URL for navigation | H | E | W |
 | `semantic/native-alternative` | ARIA rebuilding a native element: `role="dialog"` → `dialog`, `progressbar` → `progress`, `search` → `search`, an `aria-expanded` disclosure → `details`; text inputs named email, phone, url → matching `type` | H | W | I |
 | `semantic/section-heading` | `section` without a heading (W); `article` without one (review) | S | W | I |
 | `semantic/heading-candidate` | `p` containing only `strong` or `b`, followed by body text → review "a heading?" | H | R | R |
 | `semantic/list-candidate` | three or more consecutive siblings with the same tag and classes → review "a list?" | H | R | – |
-| `semantic/br-spacing` | two or more consecutive `br`, or `br` at the start or end of a block | H | W | I |
+| `semantic/br-spacing` | two or more consecutive `br`, `br` at the start or end of a block, or a block holding only `br` | H | W | I |
 | `semantic/empty-element` | empty `p`, `li`, `span`, or `div` with at most a `class` | H | W | I |
 | `semantic/fragment-link` | `href="#x"` with no `id="x"` (`#` and `#top` excepted) | H | W | W |
 | `semantic/placeholder-content` | lorem ipsum, TODO, `[Your …]`, `example.com` links, unresolved `{{…}}`, `{%…%}`, `<%…%>`, `${…}` | H | W | W |
@@ -331,13 +331,13 @@ Defaults come from the `xhtml-author` skill. All policy, M1.
 
 | Rule | Detects | strict | standard |
 | --- | --- | --- | --- |
-| `policy/no-div` | `div`, except `dl > div` → a semantic element with `data-layout`, a Vanilla Breeze element, or styling the parent | E | – |
+| `policy/no-div` | `div`, except `dl > div` → a semantic element with `data-layout`, a Vanilla Breeze element such as `layout-stack`, or styling the parent | E | – |
 | `policy/single-h1` | a page without exactly one `h1` | E | – |
 | `policy/button-type` | `button` without `type`, which defaults to `submit` | E | – |
 | `policy/inline-handler` | `on*` attributes → `command`/`commandfor` or a script module | E | W |
 | `policy/javascript-url` | `javascript:` URLs | E | E |
 | `policy/inline-style` | `style` attributes | W | – |
-| `policy/inline-svg` | inline `svg` → the icon component (`x-icon`) | E | – |
+| `policy/inline-svg` | inline `svg` → the icon component (`icon-wc`) | E | – |
 | `policy/prefer-strong-em` | `b`, `i` → `strong`, `em` when they mean importance or stress; HTML gives `b` and `i` meanings of their own, so this is policy | W | – |
 | `policy/head` | `meta charset` not first in `head`; no `meta name="viewport"` | E | – |
 | `policy/elements` | elements on the configured denylist (default `iframe`, `object`, `embed`) | – | – |
@@ -345,7 +345,7 @@ Defaults come from the `xhtml-author` skill. All policy, M1.
 
 ### 6.8 `bloat`: structural economy
 
-All policy, warnings, M1; thresholds are configurable. Let *E* be the HTML elements under `body`, hidden ones included and `script`, `style`, and template contents excluded, and *N* = |*E*|. **Generic** elements are `div`, `span`, and custom elements whose declaration gives no role, including Vanilla Breeze's `layout-*` elements. Renaming `div` to `x-wrapper` changes nothing; the attribute form, `data-layout` on a semantic element, adds no element at all.
+All policy, warnings, M1; thresholds are configurable. Let *E* be the HTML elements under `body` (a fragment's top level), hidden ones included and `script`, `style`, and template contents excluded, and *N* = |*E*|. **Generic** elements are `div`, `span`, and custom elements whose declaration gives no role, including Vanilla Breeze's `layout-*` elements. Renaming `div` to `x-wrapper` changes nothing; the attribute form, `data-layout` on a semantic element, adds no element at all.
 
 | Rule | Metric | Default threshold |
 | --- | --- | --- |
@@ -353,7 +353,7 @@ All policy, warnings, M1; thresholds are configurable. Let *E* be the HTML eleme
 | `bloat/wrapper-chain` | longest chain of generic elements in which each is its parent's only element child, with no non-whitespace text beside it | > 3 |
 | `bloat/class-count` | most classes on one element; 95th percentile (ascending, index ⌈0.95 *N*⌉ − 1) when *N* ≥ 20 | > 6; > 4 |
 | `bloat/depth` | deepest element; children of `body` have depth 1 | > 12 |
-| `bloat/size` | *N* per document | > 1500 |
+| `bloat/size` | *N* per file | > 1500 |
 
 Metrics are reported even when under threshold. Bloat never gets automatic fixes, because removing a wrapper or class can break CSS or scripts the checker can't see.
 
@@ -446,7 +446,7 @@ CSS isn't evaluated, so text hidden or generated by CSS is invisible to this com
 
 ## 8. Fixes
 
-- Only **tree-preserving** fixes apply automatically. htmlverify applies the edits in memory, reparses with the same settings, and compares trees: node types, namespaces, names, attributes with exact values, text, comments, child order, document mode. Whitespace-only text between block-level elements may differ, and boolean attributes compare by presence; nothing else may. If the trees differ or a new error appears, the fix is dropped and reported as a suggestion.
+- Only **tree-preserving** fixes apply automatically. htmlverify applies the edits in memory, reparses with the same settings, and compares trees: node types, namespaces, names, attributes with exact values, text, comments, child order, document mode. Two things may differ. Boolean attributes compare by presence. Whitespace-only text outside `pre`, `textarea`, `listing`, `plaintext`, `xmp`, `script`, and `style` may hold other whitespace, but must stay present, except that one such node may appear or disappear at the end of `body`, or of a fragment whose context element isn't phrasing content; under `white-space: normal` none of this renders differently. Nothing else may differ. If the trees differ or a new error appears, the fix is dropped and reported as a suggestion.
 - Fixable: quoting, lowercase names, void-element form, boolean form, doctype form, explicit start and end tags (inserted where the parser placed them), escaping, whitespace between blocks. A boolean's form is visible only to value selectors such as `[disabled=""]` and to `getAttribute` string reads; Vanilla Breeze uses presence selectors and `hasAttribute`.
 - `htmlverify fix page.html` prints a unified diff; `--write` applies it atomically (temp file, then rename). Running it twice changes nothing the second time.
 - Everything else, such as replacing elements, changing roles or heading levels, adding labels or alt text, or removing wrappers or classes, is a suggestion in the message, never an edit.

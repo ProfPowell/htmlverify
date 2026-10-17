@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "policy/no-div",
+    "severity": "error",
+    "at": "1:1-1:19",
+    "message": "Replace <div> with a semantic element (section, article, header, nav, …), put data-layout on a semantic parent, or use a Vanilla Breeze layout element such as <layout-stack>."
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "rule": "policy/inline-handler",
+    "severity": "error",
+    "at": "1:23-1:39",
+    "message": "onclick runs inline script; use command and commandfor on buttons, or attach listeners from a script module."
+  },
+  {
+    "rule": "policy/inline-handler",
+    "severity": "error",
+    "at": "2:26-2:49",
+    "message": "onerror runs inline script; use command and commandfor on buttons, or attach listeners from a script module."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:18",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
+  }
+]

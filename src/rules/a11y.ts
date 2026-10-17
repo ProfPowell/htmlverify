@@ -202,7 +202,7 @@ export function checkA11y(ctx: RuleContext): A11yResult {
       const n = Number(tabindex);
       if (n > 0) report('a11y/tabindex', attrSpan(e, 'tabindex'), `tabindex="${tabindex.trim()}" changes the tab order; use 0 and arrange the source order instead (WCAG 2.4.3).`);
       else if (n === 0 && (role === null || role === 'generic') && isHtml(e) && !focusableNatively(e)) {
-        report('a11y/tabindex', attrSpan(e, 'tabindex'), `tabindex="0" makes ${describeElement(e)} focusable, but it has no role: use a <button> or <a href>, or give it a role.`);
+        report('a11y/tabindex', attrSpan(e, 'tabindex'), `tabindex="0" makes ${describeElement(e)} focusable, but it has no role: use a <button> or <a href>, or give it a role.`, { defect: 'focusable-without-role' });
       }
     }
   }

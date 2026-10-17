@@ -1,0 +1,24 @@
+[
+  {
+    "rule": "semantic/link-href",
+    "severity": "error",
+    "at": "9:78-9:86",
+    "message": "href=\"#\" goes nowhere: link to a real URL, or use <button type=\"button\"> for an action."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "9:119-9:132",
+    "message": "name on <a> is obsolete; use id=\"legacy\" on the element it marks instead."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]
