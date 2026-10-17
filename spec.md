@@ -243,7 +243,7 @@ All policy, off in `standard`.
 | `style/attr-quotes` | value not double-quoted, including bare non-boolean attributes (`<a href>`) | E | yes | 0 |
 | `style/boolean-attr` | presence-based boolean attribute, native or Vanilla Breeze, not in the configured form: `name="true"` (default), `name=""`, or `name="name"`; by default it flags bare `disabled`, `disabled=""`, and `disabled="disabled"` | E | yes¹ | 0 |
 | `style/lowercase` | uppercase HTML names; foreign names not in canonical case (`viewbox` → `viewBox`) | E | yes | 0 |
-| `style/void-element` | void element not in the configured form: `<br/>` (default) or `<br>` | E | yes | 0 |
+| `style/void-element` | void element not in the configured form: `<br />` (`xhtml`, the default), `<br/>` (`tight`), or `<br>` (`html`) | E | yes | 0 |
 | `style/explicit-start-tag` | implied `html`, `head`, `body`, `tbody`, `colgroup` | E | yes | 0 |
 | `style/explicit-end-tag` | omitted optional end tag (`</p>`, `</li>`, `</td>`, `</body>`) | E | yes | 0 |
 | `style/doctype` | doctype not exactly `<!doctype html>` | E | yes | 0 |
@@ -506,7 +506,7 @@ Example, `form/text-field/template.html` in the house style:
 ```html
 <form-field>
   <label for="@input">{{label}}</label>
-  <input id="@input" type="{{type}}" name="{{name}}" autocomplete="{{autocomplete}}" required="{{required}}" aria-describedby="@hint"/>
+  <input id="@input" type="{{type}}" name="{{name}}" autocomplete="{{autocomplete}}" required="{{required}}" aria-describedby="@hint" />
   <template hv-if="hint">
     <output id="@hint" for="@input">{{hint}}</output>
   </template>
@@ -657,7 +657,7 @@ Assembly rules:
 
 ### 9.9 Serializer
 
-- Output satisfies the `strict` style rules by construction: lowercase, double quotes, `name="true"` booleans, the configured void form (`<br/>`), explicit tags, `<!doctype html>`, LF line endings, UTF-8 without BOM, final newline.
+- Output satisfies the `strict` style rules by construction: lowercase, double quotes, `name="true"` booleans, the configured void form (`<br />`), explicit tags, `<!doctype html>`, LF line endings, UTF-8 without BOM, final newline.
 - Layout: an element whose content model isn't phrasing and whose children are all elements is laid out as a block, with each child on its own line, indented 2 spaces. Anything else (phrasing containers, mixed text) is written inline exactly as built, so no whitespace appears where it would render. `pre`, `textarea`, `script`, and `style` are verbatim; content starting with a newline in `pre` or `textarea` gets the extra newline the parser strips.
 - Escaping: `&`, `<`, `>` in text; `&`, `"`, `<`, `>` in attribute values. U+00A0 is written `&nbsp;` so it stays visible in source.
 - Attributes keep template order.
@@ -727,7 +727,7 @@ form/text-field@1  Labeled single-line input. data: label, name, type=text|email
   "extends": "strict",
   "vocabularies": ["vanilla-breeze@0.3.1"],
   "registry": "registry",
-  "options": { "voidElements": "self-closing", "booleanValue": "true", "adHocPrefix": "x-", "linkTextLanguage": "en" },
+  "options": { "voidElements": "xhtml", "booleanValue": "true", "adHocPrefix": "x-", "linkTextLanguage": "en" },
   "rules": { "policy/inline-svg": "off", "bloat/class-count": ["warning", { "max": 8 }] },
   "nu": { "jar": "node_modules/vnu-jar/build/dist/vnu.jar" },
   "maxWarnings": null
@@ -762,7 +762,7 @@ Each result returns the text format as content and the JSON report as `structure
 { "hooks": { "PostToolUse": [ { "matcher": "Write|Edit", "hooks": [ { "type": "command", "command": "npx htmlverify hook claude" } ] } ] } }
 ```
 
-- The existing skills (`xhtml-author`, `forms`, `patterns`, `custom-elements`) keep explaining the house style; htmlverify enforces it. When a skill's prose and the config disagree, the config wins and the skill gets fixed. They disagree today, and both change: the `forms` skill writes bare `required`, while `xhtml-author` prescribes `checked=""` and lists `checked="true"` as wrong. The config's `="true"` wins.
+- The existing skills (`xhtml-author`, `forms`, `patterns`, `custom-elements`) keep explaining the house style; htmlverify enforces it. When a skill's prose and the config disagree, the config wins and the skill gets fixed. They disagree today, and the skills change: the `forms` skill writes bare `required`, while `xhtml-author` prescribes `checked=""`, lists `checked="true"` as wrong, and writes `<br/>`. The config's `="true"` and `<br />` win.
 
 ### 10.5 Library
 
@@ -804,7 +804,7 @@ Findings are results, not exceptions; only invalid arguments throw. Everything w
 | `<b><i>x</b>y</i>` | `syntax/misnested` |
 | `<table><tr><td>1</td></tr><div>x</div></table>` | `style/explicit-start-tag` (`tbody`) and `syntax/reordered` |
 | `<form><form>`, `<table><td>1</td></table>` | `syntax/misplaced-start-tag` (dropped; wrapped in an implied `tr`) |
-| `<br>`, `<br/>`, `</br>`, `<div/>`, `<textarea/>` | `style/void-element` on whichever of the first two the option rejects, `syntax/stray-end-tag`, `syntax/self-closing-non-void` twice (`textarea` swallows the rest of the file) |
+| `<br>`, `<br/>`, `<br />`, `</br>`, `<div/>`, `<textarea/>` | `style/void-element` twice (the default is `<br />`), clean, `syntax/stray-end-tag`, `syntax/self-closing-non-void` twice (`textarea` swallows the rest of the file) |
 | `<icon-element name="star"/>` declared `void: true` | `syntax/self-closing-non-void` |
 | `<accordion-wc indicator="plus">`, `<accordion-wc single="false">` | `component/attribute`: not `plus-minus`, `none`, or `custom`; `="false"` switches `single` on |
 | `<accordion-wc><p>…</p></accordion-wc>` | `component/content`: expected `details` |
@@ -847,6 +847,8 @@ Findings are results, not exceptions; only invalid arguments throw. Everything w
 
 Each brief runs 3 times per condition.
 
+**Drivers.** Each run is driven by a person or by an agent, chosen per run and recorded in its log. A person works the briefs in Claude Code sessions. An agent harness runs them unattended with the same prompts, skills, and tools. Rubric scoring is switchable the same way, between blind human raters and an agent judge. Before its scores count, the agent judge is calibrated against human scores on a shared sample.
+
 **Measures**: status on the first attempt and after the loop; errors per page by family; repair rounds; tokens and wall time; structural variance across the 3 runs (edit distance between element skeletons); a blind human rubric (semantics, accessibility, leanness, scored 1–5) on a sample; for C, the HTML-node count (registry gaps) and finding origins (plan, component, composition).
 
 **Decision**:
@@ -881,7 +883,7 @@ Performance target for M1, without Nu: a 100 KiB page in under 300 ms warm; 100 
 | `family/name` rule IDs | An LLM reads every finding; `style/attr-quotes` explains itself, while `HV-SRC-001` has to be looked up. |
 | UTF-16 line, column, and offset (§4.4) | parse5 and LSP both use them; 1.0's UTF-8 byte offsets needed a conversion layer with no consumer. |
 | Two profiles, `standard` and `strict` | Fragment is an input kind, not a profile; release, migration, and experimental belong to M4. |
-| `strict` follows the `xhtml-author` skill | `<br/>`, no `div`, one `h1`. 1.0 forbade `<br/>` and treated `div` as fine. With `/>` on non-void elements now an error, `<br/>` costs nothing. |
+| `strict` is XHTML-flavored HTML | `<br />`, no `div` (enforced), one `h1`. 1.0 forbade the void slash and treated `div` as fine. Now that `/>` on non-void elements is an error, the slash costs nothing. |
 | Boolean attributes are written `="true"` (§6.2) | It reads better than `=""` or the attribute name. HTML permits only those two, so the departure is reported at info rather than hidden, and `="false"`, which still means on, is always an error. |
 | Vanilla Breeze is the custom-element vocabulary (§7.4) | Its `api.json` registry already carries attribute types, enums, content hints, and output attributes. Its `custom-elements.json` lacks content models and 36 elements. |
 | Custom elements are never void | In `text/html` the parser ignores `/>` on a custom element, so a void declaration describes markup that can't exist. It's rejected when the vocabulary is built. |
@@ -898,12 +900,9 @@ Performance target for M1, without Nu: a 100 KiB page in under 300 ms warm; 100 
 
 ## 16. Open questions
 
-1. **Void form.** `strict` defaults to `<br/>` per `xhtml-author`; 1.0 required `<br>`. Keep `<br/>`?
-2. **`div`.** Keep `policy/no-div` as an error in `strict`, with `dl > div` exempt?
-3. **Publishing the registry.** Can Vanilla Breeze ship its compiled `api.json` registry in the npm package? The `build:api` step already builds it for the docs site. Until then, `vocab update` needs a checkout.
-4. **Manifest gaps.** Should VB retype its opt-out booleans (`carousel-wc[indicators]`, `geo-map[marker]`) as `enum ["true", "false"]` with a `default`? And should its hand-written `.claude/schemas/elements.json` (44 elements, including a void `toggle-thumb`) be retired, or its extra entries folded into `api.json`?
-5. **Approval.** You alone, or a list of reviewers?
-6. **Evaluation runs.** Drive the briefs by hand in Claude Code sessions, or automate them through the API (which needs a key and a budget)?
+1. **Publishing the registry.** Can Vanilla Breeze ship its compiled `api.json` registry in the npm package? The `build:api` step already builds it for the docs site. Until then, `vocab update` needs a checkout.
+2. **Manifest gaps.** Should VB retype its opt-out booleans (`carousel-wc[indicators]`, `geo-map[marker]`) as `enum ["true", "false"]` with a `default`? And should its hand-written `.claude/schemas/elements.json` (44 elements, including a void `toggle-thumb`) be retired, or its extra entries folded into `api.json`?
+3. **Approval.** You alone, or a list of reviewers?
 
 ## References
 
