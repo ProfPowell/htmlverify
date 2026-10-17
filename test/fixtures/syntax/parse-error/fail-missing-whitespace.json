@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/parse-error",
+    "severity": "error",
+    "at": "8:16-8:16",
+    "message": "Attributes must be separated by whitespace."
+  }
+]

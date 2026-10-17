@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "info",
+    "at": "8:36-8:50",
+    "message": "checked=\"true\" follows the house style; no change needed. (HTML itself allows only checked=\"\" or checked=\"checked\"; browsers treat any value as on.)"
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/boolean-attr",
+    "severity": "error",
+    "at": "8:36-8:43",
+    "message": "Write checked=\"true\": the house form for boolean attributes.",
+    "fix": [
+      {
+        "offset": 145,
+        "endOffset": 145,
+        "text": "=\"true\""
+      }
+    ]
+  }
+]

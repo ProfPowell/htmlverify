@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/stray-end-tag",
+    "severity": "error",
+    "at": "8:34-8:42",
+    "message": "<input> is a void element and never has an end tag; delete </input>."
+  }
+]

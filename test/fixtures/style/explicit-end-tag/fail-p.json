@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "style/explicit-end-tag",
+    "severity": "error",
+    "at": "8:1-8:4",
+    "message": "Close <p> explicitly: add </p> before <p> at 9:1."
+  }
+]

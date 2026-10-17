@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "style/explicit-end-tag",
+    "severity": "error",
+    "at": "2:1-2:17",
+    "message": "Close <html> explicitly: add </html> at the end of the file."
+  },
+  {
+    "rule": "style/explicit-end-tag",
+    "severity": "error",
+    "at": "7:1-7:7",
+    "message": "Close <body> explicitly: add </body> at the end of the file."
+  },
+  {
+    "rule": "syntax/unclosed-element",
+    "severity": "error",
+    "at": "8:1-8:22",
+    "message": "<form> is never closed: it runs to the end of the file. Add </form> where it should end."
+  },
+  {
+    "rule": "syntax/self-closing-non-void",
+    "severity": "error",
+    "at": "9:1-9:27",
+    "message": "<textarea/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <textarea> stays open and swallows everything up to the end of the file. Write <textarea></textarea>."
+  }
+]

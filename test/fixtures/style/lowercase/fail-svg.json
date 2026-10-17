@@ -1,0 +1,33 @@
+[
+  {
+    "rule": "style/lowercase",
+    "severity": "error",
+    "at": "8:6-8:25",
+    "message": "Write viewBox with this exact case; SVG names are case-sensitive.",
+    "fix": [
+      {
+        "offset": 108,
+        "endOffset": 115,
+        "text": "viewBox"
+      }
+    ]
+  },
+  {
+    "rule": "style/lowercase",
+    "severity": "error",
+    "at": "8:45-8:62",
+    "message": "Write <clipPath> with this exact case; SVG names are case-sensitive.",
+    "fix": [
+      {
+        "offset": 148,
+        "endOffset": 156,
+        "text": "clipPath"
+      },
+      {
+        "offset": 166,
+        "endOffset": 174,
+        "text": "clipPath"
+      }
+    ]
+  }
+]

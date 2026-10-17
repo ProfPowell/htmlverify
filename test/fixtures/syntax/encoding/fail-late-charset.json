@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/encoding",
+    "severity": "error",
+    "at": "5:1-5:25",
+    "message": "The charset declaration ends at byte 1174; it must be within the first 1024 bytes. Move it to the top of <head>."
+  }
+]

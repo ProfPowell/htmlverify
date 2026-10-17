@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/doctype",
+    "severity": "error",
+    "at": "1:1-1:64",
+    "message": "This doctype puts the page in quirks mode. Use <!doctype html>."
+  }
+]

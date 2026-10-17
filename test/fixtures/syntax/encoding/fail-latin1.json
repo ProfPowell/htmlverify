@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/encoding",
+    "severity": "error",
+    "at": "4:1-4:30",
+    "message": "The page declares \"iso-8859-1\"; HTML requires UTF-8. Write <meta charset=\"utf-8\" />."
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/self-closing-non-void",
+    "severity": "error",
+    "at": "9:1-9:37",
+    "message": "<user-avatar/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <user-avatar> stays open and swallows everything up to 11:1. Write <user-avatar></user-avatar>."
+  }
+]

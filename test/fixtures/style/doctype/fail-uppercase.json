@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/doctype",
+    "severity": "error",
+    "at": "1:1-1:16",
+    "message": "Write the doctype exactly as <!doctype html>.",
+    "fix": [
+      {
+        "offset": 0,
+        "endOffset": 15,
+        "text": "<!doctype html>"
+      }
+    ]
+  }
+]

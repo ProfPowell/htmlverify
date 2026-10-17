@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "syntax/unclosed-element",
+    "severity": "error",
+    "at": "8:4-8:17",
+    "message": "<a> is never closed: the parser closed it at 8:20 when <a> began. Add </a> where it should end."
+  },
+  {
+    "rule": "syntax/stray-end-tag",
+    "severity": "error",
+    "at": "8:40-8:44",
+    "message": "</a> matches nothing: the <a> from 8:4 was already closed at 8:20 when <a> began, because <a> can’t contain it."
+  }
+]

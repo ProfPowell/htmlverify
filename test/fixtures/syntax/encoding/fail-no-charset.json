@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/encoding",
+    "severity": "error",
+    "at": "1:1-1:1",
+    "message": "No character encoding declaration. Add <meta charset=\"utf-8\" /> as the first element in <head>."
+  }
+]

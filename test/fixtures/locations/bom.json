@@ -1,0 +1,28 @@
+[
+  {
+    "rule": "style/doctype",
+    "severity": "error",
+    "at": "1:1-1:16",
+    "message": "Write the doctype exactly as <!doctype html>.",
+    "fix": [
+      {
+        "offset": 0,
+        "endOffset": 15,
+        "text": "<!doctype html>"
+      }
+    ]
+  },
+  {
+    "rule": "style/attr-quotes",
+    "severity": "error",
+    "at": "8:4-8:11",
+    "message": "Quote the value with double quotes: class=\"x\".",
+    "fix": [
+      {
+        "offset": 112,
+        "endOffset": 113,
+        "text": "\"x\""
+      }
+    ]
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "syntax/misplaced-start-tag",
+    "severity": "error",
+    "at": "1:1-1:5",
+    "message": "The parser ignored <tr>: it isn’t allowed inside <div>."
+  },
+  {
+    "rule": "syntax/misplaced-start-tag",
+    "severity": "error",
+    "at": "1:5-1:9",
+    "message": "The parser ignored <td>: it isn’t allowed inside <div>."
+  },
+  {
+    "rule": "syntax/stray-end-tag",
+    "severity": "error",
+    "at": "1:10-1:15",
+    "message": "</td> has no matching <td>; delete it."
+  },
+  {
+    "rule": "syntax/stray-end-tag",
+    "severity": "error",
+    "at": "1:15-1:20",
+    "message": "</tr> has no matching <tr>; delete it."
+  }
+]

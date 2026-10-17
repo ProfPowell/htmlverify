@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact us · Acme</title>
+  <link rel="stylesheet" href="/vanilla-breeze.css" />
+  <script type="module" src="/vanilla-breeze.js"></script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="#main">Skip to content</a></li>
+        <li><a href="/" aria-current="page">Home</a></li>
+      </ul>
+    </nav>
+    <h1>Contact us</h1>
+  </header>
+
+  <main id="main" data-layout="stack">
+    <p>We reply within <strong>one business day</strong>.<br />Usually sooner.</p>
+    <form action="/contact" method="post">
+      <form-field>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" required="true" aria-describedby="email-hint" />
+        <output id="email-hint" for="email">We never share it.</output>
+      </form-field>
+      <form-field>
+        <label for="topic">Topic</label>
+        <select id="topic" name="topic">
+          <option value="sales" selected="true">Sales</option>
+          <option value="support">Support</option>
+        </select>
+      </form-field>
+      <button type="submit">Send message</button>
+    </form>
+    <details open="true">
+      <summary>Office hours</summary>
+      <table>
+        <caption>Hours</caption>
+        <thead>
+          <tr><th scope="col">Day</th><th scope="col">Open</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Monday</td><td><time datetime="09:00">9 am</time></td></tr>
+        </tbody>
+      </table>
+    </details>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h20" /></svg>
+    <template id="row"><tr><td></td></tr></template>
+  </main>
+
+  <footer>
+    <p><small>&copy; 2026 Acme</small></p>
+  </footer>
+</body>
+</html>

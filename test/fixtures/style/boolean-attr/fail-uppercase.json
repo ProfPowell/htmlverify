@@ -1,0 +1,28 @@
+[
+  {
+    "rule": "style/boolean-attr",
+    "severity": "error",
+    "at": "8:36-8:43",
+    "message": "Write checked=\"true\": the house form for boolean attributes.",
+    "fix": [
+      {
+        "offset": 145,
+        "endOffset": 145,
+        "text": "=\"true\""
+      }
+    ]
+  },
+  {
+    "rule": "style/lowercase",
+    "severity": "error",
+    "at": "8:36-8:43",
+    "message": "Write the checked attribute in lowercase.",
+    "fix": [
+      {
+        "offset": 138,
+        "endOffset": 145,
+        "text": "checked"
+      }
+    ]
+  }
+]

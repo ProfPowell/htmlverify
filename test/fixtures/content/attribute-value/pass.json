@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/boolean-attr",
+    "severity": "error",
+    "at": "8:32-8:51",
+    "message": "Write disabled=\"true\": the house form for boolean attributes.",
+    "fix": [
+      {
+        "offset": 142,
+        "endOffset": 153,
+        "text": "=\"true\""
+      }
+    ]
+  }
+]

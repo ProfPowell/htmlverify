@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/attr-quotes",
+    "severity": "error",
+    "at": "8:7-8:11",
+    "message": "href has no value; write href=\"…\".",
+    "fix": [
+      {
+        "offset": 113,
+        "endOffset": 113,
+        "text": "=\"\""
+      }
+    ]
+  }
+]

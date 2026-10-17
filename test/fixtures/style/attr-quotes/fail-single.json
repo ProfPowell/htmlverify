@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/attr-quotes",
+    "severity": "error",
+    "at": "8:4-8:20",
+    "message": "Quote the value with double quotes: title=\"Say &quot;hi&quot;\".",
+    "fix": [
+      {
+        "offset": 112,
+        "endOffset": 122,
+        "text": "\"Say &quot;hi&quot;\""
+      }
+    ]
+  }
+]
