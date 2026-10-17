@@ -30,7 +30,7 @@ const RECONCILED_CODES = new Set([
 
 const SELF_CLOSING_CODE = 'non-void-html-element-start-tag-with-trailing-solidus';
 
-const PARSE_ERROR_MESSAGES: Record<string, string> = {
+export const PARSE_ERROR_MESSAGES: Record<string, string> = {
   'control-character-in-input-stream': 'Control character in the input; remove it.',
   'noncharacter-in-input-stream': 'Unicode noncharacter in the input; remove it.',
   'surrogate-in-input-stream': 'Lone surrogate in the input; remove it.',

@@ -490,13 +490,13 @@ Templates are HTML, parsed by parse5 in the component's `context`. The directive
 | Syntax | Meaning |
 | --- | --- |
 | `{{label}}`, `{{item.href}}` | Insert a parameter. In text it becomes a text node, or parsed nodes for `inline` and `prose`. As a whole attribute value it binds the attribute: an absent optional parameter omits it, and a boolean gives `="true"` or omits it. Inside a longer value it works for text attributes and `class` tokens only. |
-| `<template hv-if="hint">`, `hv-if="!hint"` | Children render when a boolean is true or an optional parameter is present. |
-| `<template hv-each="items" hv-as="item">` | Children repeat for each list item. |
-| `<template hv-slot="fields"></template>` | Child components from the plan go here. |
+| `<template vb-if="hint">`, `vb-if="!hint"` | Children render when a boolean is true or an optional parameter is present. |
+| `<template vb-each="items" vb-as="item">` | Children repeat for each list item. |
+| `<template vb-slot="fields"></template>` | Child components from the plan go here. |
 | `id="@input"`, `for="@input"`, `aria-describedby="@hint @error"` | Local ID symbols, turned into deterministic IDs (§9.6). `@` alone is the instance's own ID, and `href="#@"` links to it. |
-| `<h2 hv-rank>`, `hv-rank="+2"` | A heading whose level comes from where the component sits (§9.6). |
+| `<h2 vb-rank>`, `vb-rank="+2"` | A heading whose level comes from where the component sits (§9.6). |
 
-`<template>` carries the directives because the parser accepts it everywhere, including in `table`, `tbody`, `select`, and `head`, and keeps its contents inert. `<tbody><template hv-each="rows" hv-as="row"><tr>…</tr></template></tbody>` parses as written (verified in the spike). A custom placeholder element in the same spot would be foster-parented out of the table.
+`<template>` carries the directives because the parser accepts it everywhere, including in `table`, `tbody`, `select`, and `head`, and keeps its contents inert. `<tbody><template vb-each="rows" vb-as="row"><tr>…</tr></template></tbody>` parses as written (verified in the spike). A custom placeholder element in the same spot would be foster-parented out of the table.
 
 Compile errors:
 
@@ -505,7 +505,13 @@ Compile errors:
 - Delimiters are found in the raw source, so `&#123;&#123;` stays literal text.
 - Every parameter used is declared, and every declared parameter is used.
 - Every attribute is valid for its element (spec data plus the vocabulary); every bound attribute's parameter type fits its sink (§9.5); every `enum` value is valid for the attribute it binds.
-- Non-page components contain no literal `id` or `h1`–`h6`. They use `@` symbols and `hv-rank`, which keeps them reusable anywhere.
+- Non-page components contain no literal `id` or `h1`–`h6`. They use `@` symbols and `vb-rank`, which keeps them reusable anywhere.
+- The template parses without errors in its context. Its elements are HTML's or the vocabulary's, and its attributes exist on their elements.
+- A directive `<template>` carries exactly one of `vb-if`, `vb-each` (with `vb-as`), or `vb-slot`, and nothing else. `vb-if` takes a boolean or an optional parameter without a default; `vb-each` takes a list, and its `vb-as` name hides no parameter or outer item. A slot appears once, empty, and not inside `vb-each`.
+- `id="@name"` defines a symbol once, outside `vb-each`, and every `@` reference names a defined symbol. Non-page components refer to IDs only through symbols and `ref` parameters. `vb-rank` is empty or `+1` to `+5`.
+- A page component is one whose `context` is `document`; its template is a whole document.
+
+Comments aren't written to the output. Whitespace-only text is dropped where it can't render (§9.9), looking through directives; elsewhere it's kept, and the serializer re-indents it. The file's own leading and trailing whitespace is dropped.
 
 Example, `form/text-field/template.html` in the house style:
 
@@ -513,7 +519,7 @@ Example, `form/text-field/template.html` in the house style:
 <form-field>
   <label for="@input">{{label}}</label>
   <input id="@input" type="{{type}}" name="{{name}}" autocomplete="{{autocomplete}}" required="{{required}}" aria-describedby="@hint" />
-  <template hv-if="hint">
+  <template vb-if="hint">
     <output id="@hint" for="@input">{{hint}}</output>
   </template>
 </form-field>
@@ -552,6 +558,7 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 - A parameter is required unless it has a `default` or `"required": false`.
 - `context` is the parent element for parsing the template and checking fixtures: `body` by default, `tbody` for rows, `ul` for list items.
 - Versions follow semver: removing or retyping a parameter or slot is a major change.
+- Parameter, slot, and record-field names are letters and digits starting with a lowercase letter (`label`, `linkText`); parameters and slots share one namespace. A list's `items` is a scalar type other than `enum`, or a record of fields. Unknown keys are errors, and every problem is reported at once with its JSON Pointer.
 - The digest is SHA-256 over the canonical contract (minus `review`), the template, and the fixtures. When the current digest differs from the reviewed one, the component is **stale**. `strict` rejects stale and unreviewed components; the `draft` option allows them with a warning.
 
 ### 9.5 Parameter types and sinks
@@ -562,18 +569,20 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 | `inline` | restricted phrasing HTML | text positions that accept phrasing content |
 | `prose` | restricted flow HTML | the sole content of a flow container |
 | `url` | string, parsed by WHATWG `URL` against the configured base | `href`, `src`, `action`, `formaction`, `cite`, `poster`, `data` |
-| `boolean` | `true` or `false` | boolean attributes (rendered `name="true"` or omitted), `hv-if` |
+| `boolean` | `true` or `false` | boolean attributes (rendered `name="true"` or omitted), `vb-if` |
 | `enum` | one of `values` | enumerated attributes (values checked against the spec data), `class` |
 | `integer` | number; `min`, `max` | numeric attributes (`width`, `height`, `colspan`, `rows`, …) |
 | `datetime` | HTML date/time microsyntax | `time[datetime]`, `ins[datetime]`, `del[datetime]` |
 | `lang` | well-formed BCP 47 tag | `lang`, `hreflang` |
 | `ref` | `{ "ref": "key/path" }`, another instance's ID | ID-reference attributes (`commandfor`, `popovertarget`, `aria-controls`, …); in `href` it becomes `#id` |
-| `list` | array; `items` is a type or a record of fields; `minItems`, `maxItems` | `hv-each` |
+| `list` | array; `items` is a type or a record of fields; `minItems`, `maxItems` | `vb-each` |
 
 - **URL policy** (configurable): `https`, `http`, `mailto`, `tel`, relative, and fragment URLs. `javascript:` is rejected; `data:` is opt-in for images. Fragment URLs must resolve to an ID in the assembled page. Parsing proves syntax, not trust.
 - **Never bindable**: `on*`, `style`, `srcdoc`, `srcset` and `sizes` (until a dedicated type exists), `script` and `style` contents, element and attribute names. There is no raw-HTML type.
 - **`inline` allowlist**: `a[href hreflang]`, `abbr[title]`, `b`, `bdi`, `br`, `cite`, `code`, `data[value]`, `del`, `dfn`, `em`, `i`, `ins`, `kbd`, `mark`, `q[cite]`, `s`, `samp`, `small`, `span`, `strong`, `sub`, `sup`, `time[datetime]`, `u`, `var`, `wbr`, plus the global `lang`, `dir`, and `title`. No `id`, `class`, `style`, or event attributes.
 - **`prose` allowlist**: the `inline` list plus `p`, `ul`, `ol[start reversed]`, `li`, `dl`, `dt`, `dd`, `blockquote[cite]`, `pre`, `hr`, `h2`–`h6`. Prose headings are relative: the highest-ranked one becomes context + 1, the others keep their offsets, and skipped levels are errors.
+- **Text attributes**: `alt`, `title`, `aria-label`, `aria-description`, `aria-roledescription`, `aria-valuetext`, `placeholder`, `name`, `value`, `content`, `label`, `abbr`, `data-*`, and custom-element attributes the vocabulary types as strings or leaves untyped. Only these and `class` take text around a binding (`title="Fish & {{dish}}"`, `class="card {{variant}}"`); in `class` the binding is an `enum` of single tokens. ARIA states aren't boolean attributes, so `aria-expanded` binds an `enum` of `"true"` and `"false"`. Every `enum` value must be valid for the attribute it binds, by the spec data, the ARIA data, or the vocabulary. `integer` binds attributes whose value type is an integer or a floating-point number, and custom-element attributes typed as numbers.
+- **Values**: strings exclude control characters other than tab and line feed, carriage returns (write `\n`), lone surrogates, and noncharacters. A `url` has no surrounding spaces and passes the same URL syntax check as `content/attribute-value`, so assembly can't produce one that the checker rejects; its scheme is checked after parsing, so `jav&#x09;ascript:` and `JaVaScRiPt:` are caught too.
 - Restricted HTML is **validated, not sanitized**. An element outside the allowlist, a parse repair, or any `strict` error fails assembly, with the location inside the value. Nothing is silently dropped.
 
 ### 9.6 Composition rules
@@ -584,9 +593,9 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 
 **IDs.** In the instance with key path `contact/email`, `@input` becomes `contact-email-input` and `@` becomes `contact-email`. These IDs are readable in CSS and URLs, stable across runs, and unaffected by inserting siblings. A collision anywhere in the output is `assembly/id-collision`; changing a key fixes it.
 
-**Dangling references.** A symbol whose element doesn't render (inside a false `hv-if`) is removed from space-separated reference lists (`aria-describedby`, `aria-labelledby`, `aria-controls`, `headers`), and an emptied attribute is omitted. In a single-ID attribute (`label[for]`, `commandfor`, `popovertarget`, `list`, `form`) it's an error.
+**Dangling references.** A symbol whose element doesn't render (inside a false `vb-if`) is removed from space-separated reference lists (`aria-describedby`, `aria-labelledby`, `aria-controls`, `headers`), and an emptied attribute is omitted. In a single-ID attribute (`label[for]`, `commandfor`, `popovertarget`, `list`, `form`) it's an error.
 
-**Heading ranks.** Instantiation runs in document order and tracks a current rank per instance, starting at the rank the instance received; a page starts at 0. A literal heading (page components only) sets the current rank to its level. An `hv-rank` heading renders at the received rank + 1 (or + n) and sets the current rank to that. A slot's children receive the current rank at the slot's position. A rank above 6 is `assembly/heading-depth`. Heading levels are correct by construction, however deep the nesting.
+**Heading ranks.** Instantiation runs in document order and tracks a current rank per instance, starting at the rank the instance received; a page starts at 0. A literal heading (page components only) sets the current rank to its level. An `vb-rank` heading renders at the received rank + 1 (or + n) and sets the current rank to that. A slot's children receive the current rank at the slot's position. A rank above 6 is `assembly/heading-depth`. Heading levels are correct by construction, however deep the nesting.
 
 **HTML nodes.** A plan node `{ "key": "…", "html": "…" }` inserts hand-written HTML where no component fits. It's parsed in its insertion context, must pass `strict`, and can't contain `script`, `style`, or event attributes. Each one is reported as a registry gap (§13). A project can forbid them with `"htmlNodes": false`.
 
@@ -633,7 +642,7 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 3. Validate each instance's `data` against its parameters and its `slots` against the contract; pre-check slot fit.
 4. Instantiate top-down into an in-memory tree. Every node records its origin: instance key path, component and version, template line and column, data JSON Pointer. Compute heading ranks, allocate IDs, resolve `ref`s, prune dangling reference tokens.
 5. Serialize (§9.9).
-6. Reparse the output and compare it with the in-memory tree, ignoring only whitespace the serializer added. A difference is `assembly/round-trip`, which means an assembler bug.
+6. Reparse the output and compare it with the in-memory tree, ignoring only whitespace the serializer may add or re-indent (§9.9) and trailing whitespace at the end of `body` or of a fragment, where the final line breaks go. Boolean attributes compare by presence; everything else is exact, attribute order included. A difference is `assembly/round-trip`, which means an assembler bug.
 7. Check the output, as a document or as a fragment in the plan's context, under the configured profile.
 8. Map each finding to its origin and classify it:
    - **plan**: wrong data or component choice → fix the plan;
@@ -664,7 +673,8 @@ Assembly rules:
 ### 9.9 Serializer
 
 - Output satisfies the `strict` style rules by construction: lowercase, double quotes, `name="true"` booleans, the configured void form (`<br />`), explicit tags, `<!doctype html>`, LF line endings, UTF-8 without BOM, final newline.
-- Layout: an element whose content model isn't phrasing and whose children are all elements is laid out as a block, with each child on its own line, indented 2 spaces. Anything else (phrasing containers, mixed text) is written inline exactly as built, so no whitespace appears where it would render. `pre`, `textarea`, `script`, and `style` are verbatim; content starting with a newline in `pre` or `textarea` gets the extra newline the parser strips.
+- Layout: an element whose children are all block items, apart from whitespace that can't render, is laid out as a block: each child on its own line, indented 2 spaces, with `head` and `body` kept at the level of `html`. A block item is a comment or an element that isn't inline-level. Inline-level elements are HTML phrasing content (except `script`, `template`, `link`, and `meta`, which draw nothing), custom elements the vocabulary calls phrasing or doesn't know, unknown elements, and the `svg` and `math` roots; inside foreign content nothing is. Anything else is written inline exactly as built, except that whitespace-only text with a line break is re-indented to its depth. So whitespace appears only where it can't render or already was, and trees that differ only in such whitespace serialize alike.
+- `pre`, `textarea`, `listing`, `title`, the raw-text elements (`script`, `style`, …), SVG text elements, and MathML token elements are written exactly; content starting with a newline in `pre`, `textarea`, or `listing` gets the extra newline the parser strips. Foreign elements without children close themselves (`<path />`). A fragment ending in text gets no final newline, which would join that text.
 - Escaping: `&`, `<`, `>` in text; `&`, `"`, `<`, `>` in attribute values. U+00A0 is written `&nbsp;` so it stays visible in source.
 - Attributes keep template order.
 
@@ -673,7 +683,7 @@ Assembly rules:
 | Command | Does |
 | --- | --- |
 | `component new <id>` | scaffolds a contract, a template, and a fixture |
-| `component check <id>` | compiles the template; renders each fixture and checks it in context (`strict` with no errors, plus Nu inside the page shell when available); compares it with the expected output; checks the budget; reports **branch coverage**: each `hv-if` both ways, each `hv-each` with 0 (if allowed), 1, and 2+ items, each optional parameter present and absent, each enum value used |
+| `component check <id>` | compiles the template; renders each fixture and checks it in context (`strict` with no errors, plus Nu inside the page shell when available); compares it with the expected output; checks the budget; reports **branch coverage**: each `vb-if` both ways, each `vb-each` with 0 (if allowed), 1, and 2+ items, each optional parameter present and absent, each enum value used |
 | `component approve <id> --by <name>` | requires a clean check and full coverage; records reviewer, date, and digest |
 | `registry check` | checks every component and flags stale and unreviewed ones; this is the CI gate |
 
@@ -908,7 +918,8 @@ Performance target for M1, without Nu: a 100 KiB page in under 300 ms warm; 100 
 | Boolean attributes are written `="true"` (§6.2) | It reads better than `=""` or the attribute name. HTML permits only those two, so the departure is reported at info rather than hidden, and `="false"`, which still means on, is always an error. |
 | Vanilla Breeze is the custom-element vocabulary (§7.4) | Its `api.json` registry already carries attribute types, enums, content hints, and output attributes. Its `custom-elements.json` lacks content models and 36 elements. |
 | Custom elements are never void | In `text/html` the parser ignores `/>` on a custom element, so a void declaration describes markup that can't exist. It's rejected when the vocabulary is built. |
-| Templates are HTML with `{{…}}` and `<template hv-*>` (§9.3) | Experts write HTML, not IR JSON, and `<template>` parses correctly in every context. 1.0 specified only the IR. |
+| Templates are HTML with `{{…}}` and `<template vb-*>` (§9.3) | Experts write HTML, not IR JSON, and `<template>` parses correctly in every context. 1.0 specified only the IR. |
+| Template directives use the `vb-` prefix (§9.3) | It matches Vanilla Breeze's own naming (`vb-` elements, `data-vb-*` attributes, `--vb-*` properties), so templates read as the house dialect. Nothing in Vanilla Breeze uses `vb-if`, `vb-each`, `vb-as`, `vb-slot`, or `vb-rank`. |
 | Slot fit derived from the content model (§9.6) | Authors don't declare what fits, so the declaration can't be wrong. |
 | Readable deterministic IDs and reference pruning (§9.6) | `contact-email-input` works in CSS and URLs, unlike `hv-` plus 20 hex digits. Collisions are errors, and dangling `aria-describedby` tokens can't happen. |
 | Heading ranks computed from nesting (§9.6) | Removes the most common structural error class by construction. |
