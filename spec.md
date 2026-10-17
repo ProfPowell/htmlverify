@@ -685,10 +685,13 @@ Assembly rules:
 
 | Command | Does |
 | --- | --- |
-| `component new <id>` | scaffolds a contract, a template, and a fixture |
-| `component check <id>` | compiles the template; renders each fixture and checks it in context (`strict` with no errors, plus Nu inside the page shell when available); compares it with the expected output; checks the budget; reports **branch coverage**: each `vb-if` both ways, each `vb-each` with 0 (if allowed), 1, and 2+ items, each optional parameter present and absent, each enum value used |
-| `component approve <id> --by <name>` | requires a clean check and full coverage; records reviewer, date, and digest |
-| `registry check` | checks every component and flags stale and unreviewed ones; this is the CI gate |
+| `component new <id> --author <name>` | scaffolds a contract, a template, a fixture, and a README |
+| `component show <id>` | prints the contract and an example: the basic fixture as a plan instance, and what it renders |
+| `component check <id> [--update] [--nu]` | compiles the template; renders each fixture and checks it in context (`strict` with no errors, plus Nu inside a page shell with `--nu`); compares it with the expected output, which `--update` writes for review; checks the budget; reports **branch coverage**: each `vb-if` both ways, each `vb-each` with 0 (if allowed), 1, and 2+ items, each optional parameter given and left out, each enum value and both booleans used, with list items' fields counted across all items. It passes only when approval would. |
+| `component approve <id> --by <name>` | requires a clean check and full coverage; records reviewer, date, and digest in `provenance.review`, leaving the rest of `component.json` as written |
+| `registry check` | checks every component and requires each to be approved at its current digest; this is the CI gate |
+
+A fixture, `fixtures/<name>.json`, is `{ "data": { … }, "slots": { … } }`, either one optional. It renders as a one-instance plan: the component alone in its `context`, keyed by the fixture's name, so `@input` becomes `basic-input`, and its slots take plan children. A page component's fixture is a page plan. Plan findings point into the fixture file, and `fixtures/` holds nothing else, since all of it is in the digest.
 
 **AI-assisted authoring**: the LLM drafts a component and its fixtures and iterates with `component check` until it's clean; a human reviews and approves it. `aiAssisted` records the assistance, and the approval is the trust boundary.
 
@@ -720,7 +723,9 @@ htmlverify fix page.html [--write]
 htmlverify explain a11y/label
 htmlverify rules [--profile strict] [--format json]
 htmlverify catalog [--query form] [--format text|json]
-htmlverify component show|new|check|approve <id>
+htmlverify component new <id> --author <name>
+htmlverify component show|check <id> [--update] [--nu]
+htmlverify component approve <id> --by <name>
 htmlverify registry check
 htmlverify vocab update vanilla-breeze --from <checkout> [--out file]  # rebuild the vocabulary snapshot (§3.4)
 htmlverify assemble plan.json [--out page.html] [--emit-failed] [--draft] [--format text|json]   # without --out, the page goes to stdout
@@ -731,11 +736,11 @@ htmlverify mcp                                     # MCP server on stdio (§10.3
 
 Results go to stdout, logs to stderr. `check` never modifies files. Globs are expanded by htmlverify in sorted order, and a pattern that matches nothing is an input error.
 
-`catalog` is what the LLM reads before writing a plan, one line per component:
+`catalog` is what the LLM reads before writing a plan, one line per component. `?` marks an optional parameter, `=` an enum's values, parentheses a type other than text or a list's fields, and `[min..max]` a count; a component that isn't approved says so.
 
 ```text
-form/form@1        Form. data: action(url), method=get|post. slots: fields[1..], actions[1..]
-form/text-field@1  Labeled single-line input. data: label, name, type=text|email|tel|url|search|password, autocomplete?, required?, hint?(inline)
+form/form@1        Form. data: action(url), method?=get|post. slots: fields[1..], actions[1..](action/submit).
+form/text-field@1  Labeled single-line input. data: label, name, type?=text|email|tel|url|search|password, autocomplete?=name|email|tel|organization|off, required?(boolean), hint?(inline).
 ```
 
 ### 10.2 Configuration
@@ -790,7 +795,7 @@ Each result returns the text format as content and the JSON report as `structure
 check(input: CheckInput, options?: CheckOptions): Promise<Report>;
 fix(input: CheckInput, options?: FixOptions): Promise<FixResult>;
 assemble(plan: unknown, options: AssembleOptions): Promise<AssemblyResult>;  // plan: parsed JSON or its text; options.registry: a Registry or its directory
-catalog(registry: string, query?: string): Promise<ComponentSummary[]>;
+catalog(registry: string | Registry, query?: string): ComponentSummary[];  // openRegistry(dir, config) loads one to reuse
 explain(rule: string): RuleDoc;
 ```
 

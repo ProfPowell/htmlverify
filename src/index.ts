@@ -2,6 +2,7 @@ export { check, LIMITS } from './report/report.ts';
 export { fix, type FixResult } from './fix/fix.ts';
 export { assemble, type AssembleOptions, type AssemblyResult } from './assemble/assemble.ts';
 export type { Component, Registry, ReviewStatus } from './assemble/registry.ts';
+export { catalog, openRegistry, type ComponentSummary } from './assemble/lifecycle.ts';
 export { unifiedDiff } from './fix/diff.ts';
 export type { CheckInput, CheckOptions, FileReport, Finding, Origin, Report, Status } from './report/report.ts';
 export { canonicalJson } from './report/canonical.ts';

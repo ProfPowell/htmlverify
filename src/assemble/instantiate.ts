@@ -6,6 +6,7 @@
 import { defaultTreeAdapter as tree } from 'parse5';
 import { isElement, isHtml, walk, type ChildNode, type Document, type DocumentFragment, type Element, type Node, type ParentNode, type Template } from '../parse/tree.ts';
 import type { CheckOptions } from '../report/report.ts';
+import type { Coverage } from './coverage.ts';
 import { NS } from '../spec/html.ts';
 import { isObject, type Value, type ValueOptions } from './params.ts';
 import type { PlanHtml, PlanInstance, PlanNode } from './plan.ts';
@@ -42,6 +43,8 @@ export interface Built {
 
 export interface InstantiateOptions {
   values: ValueOptions;
+  /** Records the branches and loops a component check's fixtures exercise. */
+  coverage?: Coverage | null;
   check: CheckOptions;
 }
 
@@ -192,12 +195,15 @@ export class Builder {
         case 'if': {
           const v = this.#lookup(n.path, frame, scope);
           const on = typeof v === 'boolean' ? v : v !== undefined;
+          this.#options.coverage?.branch(frame.component.id, n.loc, on !== n.negate);
           if (on !== n.negate) await this.#nodes(n.children, parent, context, frame, scope);
           break;
         }
         case 'each': {
-          const items = this.#lookup(n.path, frame, scope);
-          for (const item of Array.isArray(items) ? items : []) await this.#nodes(n.children, parent, context, frame, new Map(scope).set(n.as, item));
+          const v = this.#lookup(n.path, frame, scope);
+          const items = Array.isArray(v) ? v : [];
+          this.#options.coverage?.loop(frame.component.id, n.loc, items.length);
+          for (const item of items) await this.#nodes(n.children, parent, context, frame, new Map(scope).set(n.as, item));
           break;
         }
         case 'slot':

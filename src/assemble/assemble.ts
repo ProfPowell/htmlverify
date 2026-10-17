@@ -17,6 +17,7 @@ import { closest } from '../text.ts';
 import { vocabularyBooleans } from '../vocab/booleans.ts';
 import { Vocabulary } from '../vocab/vocabulary.ts';
 import { isPage } from './contract.ts';
+import type { Coverage } from './coverage.ts';
 import { misfit, slotAncestors } from './fit.ts';
 import { Builder, type AssemblyProblem, type Built } from './instantiate.ts';
 import { jsonPointers, offsetOf } from './jsonpos.ts';
@@ -42,6 +43,10 @@ export interface AssembleOptions {
   planPath?: string;
   /** The path the output is reported under. */
   outPath?: string;
+  /** Where the plan in planSource sits in the plan assembled, such as a fixture that is one instance; its pointers are relative to it. */
+  sourcePointer?: string;
+  /** Records the branches and loops rendered, for a component check (spec §9.10). */
+  coverage?: Coverage;
 }
 
 export interface AssemblyResult {
@@ -68,7 +73,7 @@ export async function assemble(input: unknown, options: AssembleOptions): Promis
   const registry = typeof options.registry === 'string' ? loadRegistry(options.registry, vocabulary) : options.registry;
   const planPath = options.planPath ?? 'plan.json';
   const text = typeof input === 'string' ? input : null;
-  const located = new PlanLocator(planPath, options.planSource ?? text);
+  const located = new PlanLocator(planPath, options.planSource ?? text, options.sourcePointer ?? '');
   const fail = (findings: Finding[], extra: Partial<AssemblyResult> = {}): AssemblyResult =>
     ({ status: 'fail', html: null, plan: { path: planPath, findings: inPlanOrder(findings) }, report: null, components: [], gaps: [], ...extra });
 
@@ -161,7 +166,7 @@ export async function assemble(input: unknown, options: AssembleOptions): Promis
 
   // Instantiate and serialize, recording where each element was written.
   const booleans = vocabularyBooleans(vocabulary);
-  const builder = new Builder(components, data, { values: { schemes }, check: { config: options.config ?? null } });
+  const builder = new Builder(components, data, { values: { schemes }, check: { config: options.config ?? null }, coverage: options.coverage ?? null });
   const built = plan.kind === 'page' ? await builder.page(plan.root) : await builder.fragment(plan.context, plan.rank, plan.children);
   for (const p of built.problems) add(p);
   const context = plan.kind === 'page' ? null : plan.context;
@@ -184,7 +189,10 @@ export async function assemble(input: unknown, options: AssembleOptions): Promis
   const reparsed = parseHtml(html, context).root;
   const difference = compareTrees(built.root, reparsed, serializeOptions);
   const origins = new Tracer(built, ranges, difference ? reparsed : null);
-  for (const f of file.findings) f.origin = origins.classify(f);
+  for (const f of file.findings) {
+    f.origin = origins.classify(f);
+    if (f.origin) f.origin.plan = located.local(f.origin.plan);
+  }
   if (difference && !file.findings.some((f) => f.severity === 'error' && RESTRUCTURING.has(f.rule))) {
     add({ rule: 'assembly/round-trip', pointer: plan.kind === 'page' ? '/page' : '/fragment', message: `The output doesn’t parse back to the tree that was built, at ${difference.path}: built ${difference.expected}, parsed ${difference.found}. This is an assembler bug; please report it with the plan.` });
   }
@@ -226,14 +234,22 @@ class PlanLocator {
   readonly #path: string;
   readonly #pointers: Map<string, number> | null;
   readonly #lines: LineIndex | null;
+  readonly #base: string;
 
-  constructor(path: string, source: string | null) {
+  constructor(path: string, source: string | null, base: string) {
     this.#path = path;
     this.#pointers = source === null ? null : jsonPointers(source);
     this.#lines = source === null ? null : new LineIndex(source);
+    this.#base = base;
   }
 
-  finding(rule: string, pointer: string, message: string, severity: Severity = 'error', at?: number): Finding {
+  /** A pointer into the plan assembled, relative to the plan in the source. */
+  local(absolute: string): string {
+    return this.#base && (absolute === this.#base || absolute.startsWith(`${this.#base}/`)) ? absolute.slice(this.#base.length) : absolute;
+  }
+
+  finding(rule: string, absolute: string, message: string, severity: Severity = 'error', at?: number): Finding {
+    const pointer = this.local(absolute);
     const offset = at ?? (this.#pointers ? offsetOf(this.#pointers, pointer) : 0);
     const p = this.#lines ? this.#lines.position(offset) : { line: 1, column: 1 };
     return {
