@@ -22,6 +22,8 @@ export interface RawFinding {
   severity?: Severity;
   evidence?: Record<string, string | number | boolean>;
   fix?: Edit[];
+  /** Offsets of other places the defect shows, such as where the parser closed the element. */
+  alsoAt?: number[];
   /**
    * Names the defect when rules of several families can report it: findings
    * with the same defect at the same location merge into one (spec §5.1).

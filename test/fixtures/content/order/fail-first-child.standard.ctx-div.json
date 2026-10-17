@@ -3,7 +3,7 @@
     "rule": "content/order",
     "severity": "error",
     "at": "1:10-1:13",
-    "message": "<p> is out of order in <details>: expected <summary> here. <details> starts with a <summary>, followed by flow content."
+    "message": "<p> is out of order in <details>: expected <summary> here. Move the <summary> at 1:41 before it. <details> starts with a <summary>, followed by flow content."
   },
   {
     "rule": "content/order",
