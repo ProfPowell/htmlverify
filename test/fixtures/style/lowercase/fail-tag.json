@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "style/lowercase",
+    "severity": "error",
+    "at": "8:1-8:4",
+    "message": "Write <p> in lowercase.",
+    "fix": [
+      {
+        "offset": 104,
+        "endOffset": 105,
+        "text": "p"
+      },
+      {
+        "offset": 110,
+        "endOffset": 111,
+        "text": "p"
+      }
+    ]
+  }
+]

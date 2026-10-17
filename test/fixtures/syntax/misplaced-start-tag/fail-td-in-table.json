@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "style/explicit-start-tag",
+    "severity": "error",
+    "at": "8:8-8:8",
+    "message": "The <tbody> start tag is missing; the parser implied it at 8:8. Write <tbody> explicitly."
+  },
+  {
+    "rule": "syntax/misplaced-start-tag",
+    "severity": "error",
+    "at": "8:8-8:12",
+    "message": "<td> can’t appear directly inside <table>: the parser wrapped it in an implied <tr>. Write the <tr> explicitly."
+  }
+]

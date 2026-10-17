@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/attr-quotes",
+    "severity": "error",
+    "at": "8:15-8:22",
+    "message": "Quote the value with double quotes: class=\"x\".",
+    "fix": [
+      {
+        "offset": 123,
+        "endOffset": 124,
+        "text": "\"x\""
+      }
+    ]
+  }
+]

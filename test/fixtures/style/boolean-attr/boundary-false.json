@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "error",
+    "at": "8:36-8:51",
+    "message": "checked=\"false\" still turns checked on: a boolean attribute is on whenever it’s present. Remove the attribute to turn it off."
+  }
+]

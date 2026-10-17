@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "info",
+    "at": "8:32-8:47",
+    "message": "disabled=\"true\" follows the house style; no change needed. (HTML itself allows only disabled=\"\" or disabled=\"disabled\"; browsers treat any value as on.)"
+  }
+]

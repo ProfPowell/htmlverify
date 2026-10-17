@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/encoding",
+    "severity": "error",
+    "at": "8:7-8:7",
+    "message": "Invalid UTF-8 at byte 109. Save the file as UTF-8."
+  }
+]

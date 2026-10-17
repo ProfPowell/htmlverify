@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "error",
+    "at": "8:32-8:46",
+    "message": "\"yes\" isn’t a value for disabled: the attribute is on whenever it’s present. Write disabled=\"true\", or remove it to turn it off."
+  }
+]

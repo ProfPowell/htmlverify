@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "style/explicit-start-tag",
+    "severity": "error",
+    "at": "2:1-2:1",
+    "message": "The <head> start tag is missing; the parser implied it at 2:1. Write <head> explicitly."
+  },
+  {
+    "rule": "style/explicit-start-tag",
+    "severity": "error",
+    "at": "2:1-2:1",
+    "message": "The <html> start tag is missing; the parser implied it at 2:1. Write <html> explicitly."
+  },
+  {
+    "rule": "style/explicit-start-tag",
+    "severity": "error",
+    "at": "4:1-4:1",
+    "message": "The <body> start tag is missing; the parser implied it at 4:1. Write <body> explicitly."
+  }
+]

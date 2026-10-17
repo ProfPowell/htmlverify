@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "error",
+    "at": "8:32-8:48",
+    "message": "disabled=\"false\" still turns disabled on: a boolean attribute is on whenever it’s present. Remove the attribute to turn it off."
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/reordered",
+    "severity": "error",
+    "at": "7:1-7:43",
+    "message": "<meta> is outside <head> in the source, so the parser moved it into <head>. Put it inside <head>…</head>."
+  }
+]

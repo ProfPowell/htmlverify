@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/reordered",
+    "severity": "error",
+    "at": "10:1-10:4",
+    "message": "<p> sits inside a <table> but outside any cell, so the parser moved it before the table. Put it in a cell or caption, or move it out of the table."
+  }
+]

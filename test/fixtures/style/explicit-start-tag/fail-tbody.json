@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "style/explicit-start-tag",
+    "severity": "error",
+    "at": "9:1-9:1",
+    "message": "The <tbody> start tag is missing; the parser implied it at 9:1. Write <tbody> explicitly."
+  }
+]

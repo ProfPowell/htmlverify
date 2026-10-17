@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "info",
+    "at": "26:74-26:89",
+    "message": "required=\"true\" follows the house style; no change needed. (HTML itself allows only required=\"\" or required=\"required\"; browsers treat any value as on.)"
+  },
+  {
+    "rule": "content/attribute-value",
+    "severity": "info",
+    "at": "32:33-32:48",
+    "message": "selected=\"true\" follows the house style; no change needed. (HTML itself allows only selected=\"\" or selected=\"selected\"; browsers treat any value as on.)"
+  },
+  {
+    "rule": "content/attribute-value",
+    "severity": "info",
+    "at": "38:14-38:25",
+    "message": "open=\"true\" follows the house style; no change needed. (HTML itself allows only open=\"\" or open=\"open\"; browsers treat any value as on.)"
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "error",
+    "at": "8:32-8:47",
+    "message": "disabled=\"true\" isn’t valid HTML: a boolean attribute’s value must be empty or \"disabled\". Write disabled=\"\"."
+  }
+]

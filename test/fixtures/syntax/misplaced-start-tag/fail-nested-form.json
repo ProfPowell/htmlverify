@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "syntax/misplaced-start-tag",
+    "severity": "error",
+    "at": "9:1-9:19",
+    "message": "The parser ignored <form>: a <form> can’t contain another <form>."
+  },
+  {
+    "rule": "syntax/stray-end-tag",
+    "severity": "error",
+    "at": "12:1-12:8",
+    "message": "</form> matches nothing: the <form> from 8:1 was already closed by </form> at 11:1. Delete one of them."
+  }
+]

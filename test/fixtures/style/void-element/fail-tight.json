@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/void-element",
+    "severity": "error",
+    "at": "8:7-8:12",
+    "message": "Write void elements as <br />.",
+    "fix": [
+      {
+        "offset": 112,
+        "endOffset": 114,
+        "text": " />"
+      }
+    ]
+  }
+]
