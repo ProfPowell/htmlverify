@@ -7,12 +7,15 @@ export function formatText(report: Report): string {
   const out: string[] = [];
   for (const file of report.files) {
     out.push(file.path);
-    const rows = file.findings.map((f) => ({
-      pos: `${f.line}:${f.column}`,
-      severity: f.severity,
-      rule: f.rule,
-      message: f.fix ? `${f.message}  [fix]` : f.message,
-    }));
+    const rows = [
+      ...file.findings.map((f) => ({
+        pos: `${f.line}:${f.column}`,
+        severity: f.severity as string,
+        rule: f.rule,
+        message: f.fix ? `${f.message}  [fix]` : f.message,
+      })),
+      ...file.reviews.map((r) => ({ pos: `${r.line}:${r.column}`, severity: 'review', rule: r.rule, message: r.ask })),
+    ];
     const posWidth = Math.max(0, ...rows.map((r) => r.pos.length));
     const ruleWidth = Math.max(0, ...rows.map((r) => r.rule.length));
     for (const r of rows) out.push(`  ${r.pos.padEnd(posWidth)}  ${r.severity.padEnd(7)}  ${r.rule.padEnd(ruleWidth)}  ${r.message}`);

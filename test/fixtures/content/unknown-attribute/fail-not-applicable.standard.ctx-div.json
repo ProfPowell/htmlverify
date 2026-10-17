@@ -1,5 +1,11 @@
 [
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "1:1-1:58",
+    "message": "<input type=\"checkbox\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
     "rule": "content/unknown-attribute",
     "severity": "error",
     "at": "1:24-1:43",
@@ -10,6 +16,12 @@
     "severity": "error",
     "at": "1:44-1:57",
     "message": "maxlength doesn’t apply to <input type=\"checkbox\">; it applies to type=\"text\", type=\"search\", type=\"tel\", type=\"url\", type=\"email\", or type=\"password\"."
+  },
+  {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "2:1-2:36",
+    "message": "<input type=\"text\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
   },
   {
     "rule": "content/unknown-attribute",
@@ -24,6 +36,12 @@
     "message": "max doesn’t apply to <input type=\"text\">; it applies to type=\"date\", type=\"month\", type=\"week\", type=\"time\", type=\"datetime-local\", type=\"number\", or type=\"range\"."
   },
   {
+    "rule": "semantic/link-href",
+    "severity": "warning",
+    "at": "3:1-3:35",
+    "message": "<a> without href isn’t a link: give it href, or use <button type=\"button\"> for an action."
+  },
+  {
     "rule": "content/unknown-attribute",
     "severity": "error",
     "at": "3:4-3:19",
@@ -34,6 +52,12 @@
     "severity": "error",
     "at": "3:20-3:34",
     "message": "rel doesn’t apply to <a> without href."
+  },
+  {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "4:1-4:34",
+    "message": "<input type=\"file\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
   },
   {
     "rule": "content/unknown-attribute",

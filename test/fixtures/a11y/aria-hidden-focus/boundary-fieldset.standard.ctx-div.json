@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/aria-hidden-focus",
+    "severity": "error",
+    "at": "1:55-1:77",
+    "message": "<button> is focusable inside aria-hidden=\"true\" (at 1:1): keyboard users reach it, screen readers don’t. Remove aria-hidden, or make it unfocusable (tabindex=\"-1\", disabled, or inert)."
+  }
+]

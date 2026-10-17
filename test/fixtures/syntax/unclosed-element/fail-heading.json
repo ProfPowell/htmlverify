@@ -2,13 +2,23 @@
   {
     "rule": "syntax/unclosed-element",
     "severity": "error",
-    "at": "8:1-8:5",
-    "message": "<h1> is never closed: the parser closed it at 8:10 when <h2> began. Add </h1> where it should end."
+    "at": "9:1-9:5",
+    "message": "<h1> is never closed: the parser closed it at 9:10 when <h2> began. Add </h1> where it should end."
   },
   {
     "rule": "syntax/stray-end-tag",
     "severity": "error",
-    "at": "8:27-8:32",
-    "message": "</h1> matches nothing: the <h1> from 8:1 was already closed at 8:10 when <h2> began, because <h1> can’t contain it."
+    "at": "9:27-9:32",
+    "message": "</h1> matches nothing: the <h1> from 9:1 was already closed at 9:10 when <h2> began, because <h1> can’t contain it."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

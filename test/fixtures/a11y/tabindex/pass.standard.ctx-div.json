@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "semantic/generic-control",
+    "severity": "warning",
+    "at": "2:1-2:33",
+    "message": "<div> with role=\"button\" acts as a control; use <button type=\"button\">, which is focusable and keyboard-operable on its own."
+  }
+]

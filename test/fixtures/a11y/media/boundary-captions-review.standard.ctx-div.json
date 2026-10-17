@@ -1,0 +1,7 @@
+[
+  {
+    "rule": "a11y/media",
+    "review": "1:1",
+    "ask": "Does this video have speech or meaningful sound? Then it needs captions: add <track kind=\"captions\">."
+  }
+]

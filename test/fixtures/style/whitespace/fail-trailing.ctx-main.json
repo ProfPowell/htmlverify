@@ -1,0 +1,21 @@
+[
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "1:11-1:14",
+    "message": "Remove the trailing whitespace (1 line).",
+    "fix": [
+      {
+        "offset": 10,
+        "endOffset": 13,
+        "text": ""
+      }
+    ]
+  },
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "2:7-2:9",
+    "message": "Remove the trailing whitespace on line 2: it’s inside text, which a fix won’t change, so edit it by hand."
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "error",
+    "at": "2:89-2:119",
+    "message": "A <select> without multiple can have only one selected <option>; the first is at 2:25. Remove selected from the others, or add multiple."
+  }
+]

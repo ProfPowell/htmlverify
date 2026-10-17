@@ -2,7 +2,34 @@
   {
     "rule": "style/explicit-start-tag",
     "severity": "error",
-    "at": "9:1-9:1",
-    "message": "The <tbody> start tag is missing; the parser implied it at 9:1. Write <tbody> explicitly."
+    "at": "11:1-11:1",
+    "message": "The <tbody> start tag is missing; the parser implied it at 11:1. Write <tbody> explicitly.",
+    "fix": [
+      {
+        "offset": 199,
+        "endOffset": 199,
+        "text": "<tbody>"
+      },
+      {
+        "offset": 219,
+        "endOffset": 219,
+        "text": "</tbody>"
+      }
+    ]
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  },
+  {
+    "rule": "a11y/table",
+    "review": "10:1",
+    "ask": "Is this table used for layout? Use CSS for layout; if it holds data, add <th> header cells."
   }
 ]

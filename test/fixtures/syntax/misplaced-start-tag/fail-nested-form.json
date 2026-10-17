@@ -2,13 +2,29 @@
   {
     "rule": "syntax/misplaced-start-tag",
     "severity": "error",
-    "at": "9:1-9:19",
+    "at": "11:1-11:19",
     "message": "The parser ignored <form>: a <form> can’t contain another <form>."
+  },
+  {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "12:1-12:31",
+    "message": "<input type=\"text\" name=\"q\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
   },
   {
     "rule": "syntax/stray-end-tag",
     "severity": "error",
-    "at": "12:1-12:8",
-    "message": "</form> matches nothing: the <form> from 8:1 was already closed by </form> at 11:1. Delete one of them."
+    "at": "14:1-14:8",
+    "message": "</form> matches nothing: the <form> from 10:1 was already closed by </form> at 13:1. Delete one of them."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

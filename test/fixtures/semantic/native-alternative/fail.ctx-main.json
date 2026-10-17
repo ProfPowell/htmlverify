@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "warning",
+    "at": "1:4-1:17",
+    "message": "role=\"dialog\" rebuilds a native element; use <dialog>, which comes with its behavior."
+  },
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "warning",
+    "at": "2:7-2:25",
+    "message": "role=\"progressbar\" rebuilds a native element; use <progress>, which comes with its behavior."
+  },
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "warning",
+    "at": "3:34-3:79",
+    "message": "This input collects an email address; use type=\"email\" for the right keyboard and validation."
+  },
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "warning",
+    "at": "4:1-4:66",
+    "message": "This aria-expanded button toggles a region; <details> and <summary> do that natively, keyboard and state included."
+  }
+]

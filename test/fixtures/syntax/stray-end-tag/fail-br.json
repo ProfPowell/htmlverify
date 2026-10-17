@@ -2,7 +2,17 @@
   {
     "rule": "syntax/stray-end-tag",
     "severity": "error",
-    "at": "8:7-8:12",
+    "at": "10:7-10:12",
     "message": "</br> isn’t an end tag in HTML: the parser turns it into a <br>. Delete it, or write <br /> for a line break."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

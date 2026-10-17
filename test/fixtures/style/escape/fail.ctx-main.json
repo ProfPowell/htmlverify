@@ -1,0 +1,38 @@
+[
+  {
+    "rule": "style/escape",
+    "severity": "warning",
+    "at": "1:9-1:10",
+    "message": "Escape & as &amp; and > as &gt; in text.",
+    "fix": [
+      {
+        "offset": 8,
+        "endOffset": 9,
+        "text": "&amp;"
+      },
+      {
+        "offset": 19,
+        "endOffset": 20,
+        "text": "&gt;"
+      },
+      {
+        "offset": 30,
+        "endOffset": 31,
+        "text": "&amp;"
+      }
+    ]
+  },
+  {
+    "rule": "style/escape",
+    "severity": "warning",
+    "at": "2:24-2:25",
+    "message": "Escape & as &amp; in href.",
+    "fix": [
+      {
+        "offset": 61,
+        "endOffset": 62,
+        "text": "&amp;"
+      }
+    ]
+  }
+]

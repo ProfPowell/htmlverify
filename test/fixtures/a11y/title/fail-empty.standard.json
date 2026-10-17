@@ -1,0 +1,16 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "5:1-5:8",
+    "message": "<title> must contain text.",
+    "alsoReportedBy": [
+      "a11y/title"
+    ]
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  }
+]

@@ -17,7 +17,7 @@ export function explain(rule: string): RuleInfo {
     const near = closest(rule, RULES.map((r) => r.id));
     throw new RangeError(`unknown rule "${rule}"${near ? `; did you mean "${near}"?` : ''}`);
   }
-  const { context: _context, ...text } = doc;
+  const { context: _context, external: _external, ...text } = doc;
   return {
     ...meta,
     ...text,
@@ -30,6 +30,7 @@ export function formatExplain(info: RuleInfo): string {
     ? `${info.severities.strict} in strict and standard`
     : `${info.severities.strict} in strict, ${info.severities.standard} in standard`;
   const indent = (s: string) => s.split('\n').map((line) => `  ${line}`).join('\n');
+  const options = Object.entries(info.options ?? {}).map(([name, o]) => `  ${name}, default ${JSON.stringify(o.default)}: ${o.summary}`);
   return [
     `${info.id} · ${info.authority} · ${severity}`,
     `${info.summary}.`,
@@ -42,6 +43,7 @@ export function formatExplain(info: RuleInfo): string {
     'Passes:',
     indent(info.passes),
     '',
+    ...(options.length > 0 ? ['Options, set as ["warning", { … }] in the config:', ...options, ''] : []),
     `Reference: ${info.ref}`,
     '',
   ].join('\n');

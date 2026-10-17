@@ -1,0 +1,18 @@
+[
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "11:4-11:19",
+    "message": "itemprop names a property of an item, but no element with itemscope contains this one; add itemscope to the item, or reference this element from its itemref."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]

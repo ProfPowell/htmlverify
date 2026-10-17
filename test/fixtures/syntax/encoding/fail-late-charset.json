@@ -4,5 +4,15 @@
     "severity": "error",
     "at": "5:1-5:25",
     "message": "The charset declaration ends at byte 1174; it must be within the first 1024 bytes. Move it to the top of <head>."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "7:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

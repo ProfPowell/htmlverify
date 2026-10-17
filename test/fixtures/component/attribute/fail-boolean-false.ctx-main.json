@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/attribute",
+    "severity": "error",
+    "at": "1:15-1:29",
+    "message": "single=\"false\" still turns single on: <accordion-wc> reads it by presence. Remove the attribute to turn it off."
+  }
+]

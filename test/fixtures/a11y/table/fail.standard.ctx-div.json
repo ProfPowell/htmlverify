@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/table",
+    "severity": "warning",
+    "at": "1:1-1:8",
+    "message": "This data table has no header cells; mark row or column headers with <th> (WCAG 1.3.1)."
+  }
+]

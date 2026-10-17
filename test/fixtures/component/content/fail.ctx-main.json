@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "component/content",
+    "severity": "error",
+    "at": "1:1-1:15",
+    "message": "<accordion-wc> needs a <details> child for each panel."
+  },
+  {
+    "rule": "component/content",
+    "severity": "error",
+    "at": "1:15-1:18",
+    "message": "<accordion-wc> accepts <details> children, not <p>."
+  }
+]

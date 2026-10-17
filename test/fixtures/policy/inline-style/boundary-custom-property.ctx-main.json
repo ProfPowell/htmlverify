@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "policy/inline-style",
+    "severity": "warning",
+    "at": "1:4-1:25",
+    "message": "Move inline styles to a stylesheet, or to a class or data-layout attribute."
+  }
+]

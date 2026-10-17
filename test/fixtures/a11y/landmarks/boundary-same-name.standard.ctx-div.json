@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/landmarks",
+    "severity": "warning",
+    "at": "2:1-2:24",
+    "message": "This <nav> landmark has the same name as the one at 1:1 (\"Menu\"); give each a distinct aria-label."
+  }
+]

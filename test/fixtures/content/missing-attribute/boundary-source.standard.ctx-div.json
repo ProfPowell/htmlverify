@@ -22,5 +22,10 @@
     "severity": "error",
     "at": "2:16-2:30",
     "message": "srcset doesn’t apply to <source> in <audio>."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "1:48",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
   }
 ]

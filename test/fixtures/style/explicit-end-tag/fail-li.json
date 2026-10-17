@@ -2,13 +2,37 @@
   {
     "rule": "style/explicit-end-tag",
     "severity": "error",
-    "at": "8:5-8:9",
-    "message": "Close <li> explicitly: add </li> before <li> at 8:12."
+    "at": "10:5-10:9",
+    "message": "Close <li> explicitly: add </li> before <li> at 10:12.",
+    "fix": [
+      {
+        "offset": 202,
+        "endOffset": 202,
+        "text": "</li>"
+      }
+    ]
   },
   {
     "rule": "style/explicit-end-tag",
     "severity": "error",
-    "at": "8:12-8:16",
-    "message": "Close <li> explicitly: add </li> before </ul> at 8:19."
+    "at": "10:12-10:16",
+    "message": "Close <li> explicitly: add </li> before </ul> at 10:19.",
+    "fix": [
+      {
+        "offset": 209,
+        "endOffset": 209,
+        "text": "</li>"
+      }
+    ]
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

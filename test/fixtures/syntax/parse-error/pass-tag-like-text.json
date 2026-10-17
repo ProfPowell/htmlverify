@@ -1,1 +1,46 @@
-[]
+[
+  {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "13:1-13:23",
+    "message": "<textarea name=\"note\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
+    "rule": "style/escape",
+    "severity": "warning",
+    "at": "13:37-13:38",
+    "message": "Escape < as &lt; and > as &gt; in text.",
+    "fix": [
+      {
+        "offset": 413,
+        "endOffset": 414,
+        "text": "&lt;"
+      },
+      {
+        "offset": 415,
+        "endOffset": 416,
+        "text": "&gt;"
+      },
+      {
+        "offset": 419,
+        "endOffset": 420,
+        "text": "&lt;"
+      },
+      {
+        "offset": 422,
+        "endOffset": 423,
+        "text": "&gt;"
+      }
+    ]
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]

@@ -16,5 +16,14 @@
     "severity": "error",
     "at": "3:13-3:32",
     "message": "<span> can’t be inside <a>, which must not contain elements with tabindex."
+  },
+  {
+    "rule": "a11y/tabindex",
+    "severity": "warning",
+    "at": "3:19-3:31",
+    "message": "tabindex=\"0\" makes <span> focusable, but it has no role: use a <button> or <a href>, or give it a role.",
+    "alsoReportedBy": [
+      "semantic/generic-control"
+    ]
   }
 ]

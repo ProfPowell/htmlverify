@@ -12,6 +12,12 @@
     "message": "<data> needs value."
   },
   {
+    "rule": "a11y/name",
+    "severity": "error",
+    "at": "3:1-3:8",
+    "message": "<meter> with role meter has no accessible name: add aria-label or aria-labelledby (WCAG 4.1.2)."
+  },
+  {
     "rule": "content/missing-attribute",
     "severity": "error",
     "at": "3:1-3:8",

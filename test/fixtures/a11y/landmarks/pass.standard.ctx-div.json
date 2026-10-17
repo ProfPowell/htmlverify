@@ -1,0 +1,7 @@
+[
+  {
+    "rule": "semantic/section-heading",
+    "review": "4:7",
+    "ask": "This <article> has no heading; would one help readers and screen reader users find it?"
+  }
+]

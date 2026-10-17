@@ -4,6 +4,8 @@ import { compile, Matcher, parseGrammar, tokenKey, type Nfa, type Token } from '
 import { attr, has, inCategory, kindOf, modelOf, nameOf, textInCategory, variantOf, type Env, type Forbid, type Variant } from '../spec/model.ts';
 import { isTimeValue } from '../spec/values.ts';
 import { closest, words } from '../text.ts';
+import { Vocabulary } from '../vocab/vocabulary.ts';
+import { flowOnly } from './component.ts';
 import type { RawFinding, RuleContext } from './types.ts';
 import { at, describe, spanOf } from './util.ts';
 
@@ -49,6 +51,11 @@ function nfaFor(variant: Variant, inherited: Inherited): Nfa {
 
 const acceptsText = (t: Token) => t.kind === 'text' || (t.kind === 'category' && textInCategory(t.name));
 
+/** A vocabulary element that is flow content but not phrasing content. */
+function acceptsFlow(child: Element, flow: boolean) {
+  return (t: Token) => (t.kind === 'element' ? nameOf(child) === t.name : t.kind === 'category' && ((t.name === 'flow' && flow) || t.name === 'palpable'));
+}
+
 function acceptsElement(child: Element, ancestors: readonly Element[]) {
   return (t: Token) => (t.kind === 'element' ? nameOf(child) === t.name : t.kind === 'category' && inCategory(child, t.name, ancestors));
 }
@@ -65,8 +72,8 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
   const notes = new Set<'foreign' | 'noscript'>();
   const document = ctx.parsed.kind === 'document';
 
-  const report = (rule: string, node: ChildNode, message: string, evidence?: RawFinding['evidence']) => {
-    findings.push({ rule, ...spanOf(node, ctx.text), message, ...(evidence ? { evidence } : {}) });
+  const report = (rule: string, node: ChildNode, message: string, evidence?: RawFinding['evidence'], defect?: string) => {
+    findings.push({ rule, ...spanOf(node, ctx.text), message, ...(evidence ? { evidence } : {}), ...(defect ? { defect } : {}) });
   };
 
   /** Checks an element's children against its model; `env` is null at a scope root. */
@@ -129,7 +136,13 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
         lastOrderFailure = matcher.key();
         const expected = matcher.expected();
         const where = expected.length ? `expected ${describeTokens(expected)} here` : `nothing more is allowed after ${previous(child, children)}`;
-        report('content/order', child, `${what} is out of order in ${name}: ${where}.${hint}`);
+        // The expected element further on, such as a <summary> after other content.
+        const names = new Set(expected.flatMap((t) => (t.kind === 'element' ? [t.name] : [])));
+        const index = children.indexOf(child);
+        const later = index < 0 ? undefined : children.slice(index + 1).find((c): c is Element => isElement(c) && names.has(nameOf(c) ?? ''));
+        const offset = later ? spanOf(later, ctx.text).offset : null;
+        const move = offset === null ? '' : ` Move the ${describe(later!)} at ${at(ctx, offset)} before it.`;
+        findings.push({ rule: 'content/order', ...spanOf(child, ctx.text), message: `${what} is out of order in ${name}: ${where}.${move}${hint}`, ...(offset === null ? {} : { alsoAt: [offset] }) });
         return;
       }
       const allowed = nfa.tokens.length === 0 ? 'which must be empty' : `which accepts only ${describeTokens(nfa.tokens)}`;
@@ -151,6 +164,22 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
       place(child, element, ancestors, children, skip ? null : { matcher, fail, from: transparent ? inherited.from : element }, active);
     }
 
+    if (isHtml(element) && element.tagName === 'select') {
+      const options = children.flatMap((c) => (isElement(c) && c.tagName === 'option' ? [c] : isElement(c) && c.tagName === 'optgroup' ? c.childNodes.filter((o): o is Element => isElement(o) && o.tagName === 'option') : []));
+      // A required single-choice <select> needs a placeholder first, or required can never fail.
+      if (has(element, 'required') && !has(element, 'multiple') && Number(attr(element, 'size') ?? '1') <= 1) {
+        const first = options[0];
+        const value = first ? attr(first, 'value') ?? first.childNodes.filter(isText).map((t) => t.value).join('').replace(/[\t\n\f\r ]+/g, ' ').trim() : null;
+        if (first && (value !== '' || first.parentNode !== element)) {
+          report('content/child', first, 'A required <select> must start with a placeholder option, <option value="">Choose…</option>, directly inside it; otherwise the first option is selected from the start and required never fails.');
+        }
+      }
+      // Without multiple, only one option can start selected.
+      const selected = has(element, 'multiple') ? [] : options.filter((o) => has(o, 'selected'));
+      for (const extra of selected.slice(1)) {
+        report('content/attribute-value', extra, `A <select> without multiple can have only one selected <option>; the first is at ${at(ctx, spanOf(selected[0]!, ctx.text).offset)}. Remove selected from the others, or add multiple.`);
+      }
+    }
     if (!failed && isHtml(element) && element.tagName === 'time' && !has(element, 'datetime')) {
       const value = children.filter(isText).map((t) => t.value).join('').trim();
       if (!isTimeValue(value)) {
@@ -160,13 +189,14 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
     if (!failed && !matcher.accepting()) {
       report('content/child', element, model.missing
         ? `<${element.tagName}> ${model.missing}.`
-        : `${name} is incomplete: expected ${describeTokens(matcher.expected())} before </${element.tagName}>.${hint}`);
+        : `${name} is incomplete: expected ${describeTokens(matcher.expected())} before </${element.tagName}>.${hint}`,
+      undefined, isHtml(element) && element.tagName === 'title' ? 'title-empty' : undefined);
     }
     if (model.counts && document) {
       for (const [child, [min, max]] of Object.entries(model.counts)) {
         const found = counted.get(child) ?? [];
         if (found.length < min) {
-          report('content/order', element, `<${element.tagName}> needs ${min === max ? 'exactly' : 'at least'} one <${child}>; it has none.${hint}`);
+          report('content/order', element, `<${element.tagName}> needs ${min === max ? 'exactly' : 'at least'} one <${child}>; it has none.${hint}`, undefined, `${child}-missing`);
         }
         for (const extra of found.slice(max)) {
           report('content/order', extra, `<${element.tagName}> can have only one <${child}>; the first is at ${at(ctx, spanOf(found[0]!, ctx.text).offset)}.`);
@@ -211,6 +241,11 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
       return;
     }
     const accepts = acceptsElement(child, ancestors);
+    // HTML takes every custom element as phrasing content; the vocabulary may say otherwise.
+    const entry = kind === 'custom' ? ctx.vocabulary.get(child.tagName) : null;
+    if (entry && flowOnly(entry) && slot.matcher.canStep(accepts) && !slot.matcher.canStep(acceptsFlow(child, entry.element.flow))) {
+      report('component/content', child, `<${child.tagName}> isn’t phrasing content: ${Vocabulary.label(entry.source)} declares it flow content only, so it can’t be in ${describe(parent!)} here, where only phrasing content is allowed.`);
+    }
     if (slot.matcher.step(accepts)) {
       visit(child, env, { tokens: slot.matcher.expected(), from: slot.from }, prohibitions);
       return;

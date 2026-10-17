@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/aria-role",
+    "severity": "warning",
+    "at": "1:41-1:58",
+    "message": "<a href> is inside role=\"img\" (at 1:1), whose children are presentational: assistive technology won’t expose it. Move it out."
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/unknown-element",
+    "severity": "error",
+    "at": "5:1-5:33",
+    "message": "<tour-step> isn’t declared in Vanilla Breeze 0.3.1. It’s part of <page-tour>; use it inside one."
+  }
+]

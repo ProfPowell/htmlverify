@@ -22,3 +22,21 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+
+  # The Nu cross-check and differential (spec §12.3), which skip without a vnu.jar.
+  nu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci
+      - run: npm install --no-save --ignore-scripts vnu-jar@26.10.12
+      - run: test -f node_modules/vnu-jar/build/dist/vnu.jar
+      - run: node --test test/nu.test.ts

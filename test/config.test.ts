@@ -32,8 +32,15 @@ test('parseConfig rejects unknown keys, rules, severities, and options', () => {
     [{ options: { voidElements: 'xml' } }, /"options.voidElements" must be/],
     [{ options: { quotes: 'double' } }, /unknown option "quotes"/],
     [{ maxWarnings: -1 }, /"maxWarnings" must be/],
-    [{ vocabularies: ['vanilla-breeze@0.3.1'] }, /isn’t supported yet \(M1d\)/],
-    [{ options: { linkTextLanguage: 'en' } }, /isn’t supported yet \(M1b\)/],
+    [{ vocabularies: ['vanilla-breeze@9.9.9'] }, /no vocabulary snapshot "vanilla-breeze@9.9.9"; available: "vanilla-breeze@0.3.1"/],
+    [{ vocabularies: 'vanilla-breeze@0.3.1' }, /"vocabularies" must be an array/],
+    [{ registry: '' }, /"registry" must be a directory path/],
+    [{ nu: {} }, /"nu" must be \{ "jar": "path\/to\/vnu.jar" \}/],
+    [{ nu: { jar: 'vnu.jar', port: 8888 } }, /unknown key "nu.port"/],
+    [{ options: { linkTextLanguage: 'fr' } }, /"options.linkTextLanguage" must be "en"/],
+    [{ options: { adHocPrefix: 'X_' } }, /"options.adHocPrefix" must be a prefix such as "x-", or null/],
+    [{ rules: { 'style/whitespace': ['warning', { tabWidth: 0 }] } }, /"tabWidth" must be an integer of at least 1/],
+    [{ rules: { 'bloat/depth': ['warning', { max: 2.5 }] } }, /"max" must be a non-negative integer/],
   ];
   for (const [raw, error] of cases) assert.throws(() => parseConfig(raw, 'test.json'), error, JSON.stringify(raw));
 });

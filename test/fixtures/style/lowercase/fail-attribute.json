@@ -2,14 +2,24 @@
   {
     "rule": "style/lowercase",
     "severity": "error",
-    "at": "8:4-8:17",
+    "at": "10:4-10:17",
     "message": "Write the class attribute in lowercase.",
     "fix": [
       {
-        "offset": 106,
-        "endOffset": 111,
+        "offset": 194,
+        "endOffset": 199,
         "text": "class"
       }
     ]
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

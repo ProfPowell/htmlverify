@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "a11y/aria-hidden-focus",
+    "severity": "error",
+    "at": "1:25-1:37",
+    "message": "<a href> is focusable inside aria-hidden=\"true\" (at 1:1): keyboard users reach it, screen readers don’t. Remove aria-hidden, or make it unfocusable (tabindex=\"-1\", disabled, or inert)."
+  },
+  {
+    "rule": "a11y/aria-hidden-focus",
+    "severity": "error",
+    "at": "1:46-1:68",
+    "message": "<button> is focusable inside aria-hidden=\"true\" (at 1:1): keyboard users reach it, screen readers don’t. Remove aria-hidden, or make it unfocusable (tabindex=\"-1\", disabled, or inert)."
+  },
+  {
+    "rule": "a11y/aria-hidden-focus",
+    "severity": "error",
+    "at": "2:1-2:42",
+    "message": "<button> has aria-hidden=\"true\" but is focusable: keyboard users reach it, screen readers don’t. Remove aria-hidden, or make it unfocusable."
+  }
+]

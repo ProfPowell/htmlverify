@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/form-group",
+    "severity": "warning",
+    "at": "1:1-1:40",
+    "message": "The 2 radio buttons named \"size\" need a group label: wrap them in <fieldset> with a <legend> (WCAG 1.3.1)."
+  }
+]

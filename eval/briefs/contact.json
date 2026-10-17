@@ -1,0 +1,71 @@
+{
+  "id": "contact",
+  "type": "contact",
+  "title": "Contact page",
+  "content": "Contact Larkspur Supply Co..\n\nVisit: 214 Alder Street, Port Wren, WA 98301. Phone: (360) 555-0142. Email: hello@larkspur.coop.\nHours: Monday–Saturday 9:00–19:00, Sunday 10:00–17:00.\n\nContact form: Your name (required), Email (required), Topic (Membership, Rentals, Repairs, Something else), Message (required), and a checkbox \"Send me a copy\". A Send message button.\nResponse time: We answer within one business day.\n\nGetting here: Bus routes 4 and 11 stop at Alder and 3rd. Free bike parking out front; paid parking in the Harbor Street garage.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "form",
+      "text": "a contact form",
+      "selector": "form",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "email",
+      "text": "an email input",
+      "selector": "input[type=email]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "textarea",
+      "text": "a message textarea",
+      "selector": "textarea",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "labels",
+      "text": "labels for the fields",
+      "selector": "label",
+      "count": [
+        4,
+        null
+      ]
+    },
+    {
+      "id": "required",
+      "text": "required fields marked required",
+      "selector": "[required]",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "address",
+      "text": "the address in an address element",
+      "selector": "address",
+      "count": [
+        1,
+        null
+      ]
+    }
+  ]
+}

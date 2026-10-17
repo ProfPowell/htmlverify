@@ -1,0 +1,3 @@
+Build the web page described in brief.md as one complete HTML document, saved as page.html in the current directory.
+Use the brief's content as given, and don't add other content. Use Vanilla Breeze, its custom elements and data-layout attributes, where it helps; its stylesheet is at /vb/vanilla-breeze.css and its script at /vb/vanilla-breeze.js.
+Follow the house skills. When page.html is finished, reply with one line: DONE.

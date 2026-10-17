@@ -6,6 +6,18 @@
     "message": "for=\"emial\" matches no id in this document. Did you mean \"email\"?"
   },
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "9:1-9:32",
+    "message": "<input type=\"text\" id=\"email\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "9:1-9:32",
+    "message": "This input collects an email address; use type=\"email\" for the right keyboard and validation."
+  },
+  {
     "rule": "content/idref",
     "severity": "error",
     "at": "9:19-9:31",
@@ -30,6 +42,12 @@
     "message": "headers=\"c1\" points to <td> at 13:12, but headers must name <th> cells in the same table."
   },
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "14:1-14:53",
+    "message": "<input type=\"text\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
     "rule": "content/idref",
     "severity": "error",
     "at": "14:8-14:37",
@@ -46,5 +64,25 @@
     "severity": "error",
     "at": "15:18-15:33",
     "message": "usemap=\"#nomap\" matches no <map name=\"nomap\">."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  },
+  {
+    "rule": "a11y/table",
+    "review": "13:1",
+    "ask": "Is this table used for layout? Use CSS for layout; if it holds data, add <th> header cells."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "15:34",
+    "ask": "Does alt=\"Map\" convey what the image shows here?"
   }
 ]

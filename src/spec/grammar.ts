@@ -166,6 +166,14 @@ export class Matcher {
     return true;
   }
 
+  /** Whether the next child could be consumed, without consuming it. */
+  canStep(accepts: (token: Token) => boolean): boolean {
+    for (const s of this.current) {
+      if (this.nfa.states[s]!.edges.some((edge) => accepts(edge.token))) return true;
+    }
+    return false;
+  }
+
   /** Tokens that could match the next child, in grammar order. */
   expected(): Token[] {
     const keys = new Set([...this.current].flatMap((s) => this.nfa.states[s]!.edges.map((e) => tokenKey(e.token))));

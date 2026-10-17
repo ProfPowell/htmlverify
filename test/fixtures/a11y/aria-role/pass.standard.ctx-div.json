@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "3:6-3:17",
+    "message": "role=\"list\" rebuilds a native element; use <ul> or <ol>, which comes with its behavior."
+  },
+  {
+    "rule": "semantic/native-alternative",
+    "severity": "info",
+    "at": "3:23-3:38",
+    "message": "role=\"listitem\" rebuilds a native element; use <li>, which comes with its behavior."
+  }
+]

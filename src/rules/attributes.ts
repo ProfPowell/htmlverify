@@ -54,7 +54,7 @@ export function checkAttributes(ctx: RuleContext): RawFinding[] {
   return out;
 }
 
-type AttributeFinding = Pick<RawFinding, 'rule' | 'message' | 'severity' | 'evidence'>;
+type AttributeFinding = Pick<RawFinding, 'rule' | 'message' | 'severity' | 'evidence' | 'defect'>;
 
 /**
  * HTML's "obsolete but conforming" features: vestigial markup that has no
@@ -177,6 +177,7 @@ function valueFinding(element: Element, name: string, value: string, row: Attrib
     rule: 'content/attribute-value',
     message: `${name}=${quote(value)} ${problem.text}${/[.?!]$/.test(problem.text) ? '' : '.'}`,
     ...(problem.severity ? { severity: problem.severity } : {}),
+    ...(name === 'lang' ? { defect: 'lang-value' } : {}),
     evidence: { value },
   };
 }
@@ -195,8 +196,14 @@ function missing(element: Element): string[] {
       if (usesWidthDescriptors(attr(element, 'srcset') ?? '')) need('sizes', ', because its srcset uses width descriptors');
       break;
     case 'source':
-      if (parent === 'picture') need('srcset', ' in <picture>');
-      else if (parent === 'audio' || parent === 'video') need('src', ` in <${parent}>`);
+      if (parent === 'picture') {
+        need('srcset', ' in <picture>');
+        // Unless the <img> after it sizes itself: loading="lazy" with sizes="auto…".
+        const siblings = element.parentNode!.childNodes;
+        const img = siblings.slice(siblings.indexOf(element) + 1).find((c): c is Element => isElement(c) && c.tagName === 'img');
+        const autoSized = img && attr(img, 'loading')?.toLowerCase() === 'lazy' && /^auto(?:,|$)/i.test((attr(img, 'sizes') ?? '').trim());
+        if (usesWidthDescriptors(attr(element, 'srcset') ?? '') && !autoSized) need('sizes', ', because its srcset uses width descriptors');
+      } else if (parent === 'audio' || parent === 'video') need('src', ` in <${parent}>`);
       break;
     case 'link': {
       if (!has(element, 'href') && !has(element, 'imagesrcset')) out.push('<link> needs href (or imagesrcset).');

@@ -1,0 +1,28 @@
+[
+  {
+    "rule": "style/boolean-attr",
+    "severity": "error",
+    "at": "1:15-1:21",
+    "message": "Write single=\"true\": the house form for boolean attributes.",
+    "fix": [
+      {
+        "offset": 20,
+        "endOffset": 20,
+        "text": "=\"true\""
+      }
+    ]
+  },
+  {
+    "rule": "style/boolean-attr",
+    "severity": "error",
+    "at": "5:25-5:37",
+    "message": "Write data-trigger=\"true\": the house form for boolean attributes.",
+    "fix": [
+      {
+        "offset": 141,
+        "endOffset": 141,
+        "text": "=\"true\""
+      }
+    ]
+  }
+]

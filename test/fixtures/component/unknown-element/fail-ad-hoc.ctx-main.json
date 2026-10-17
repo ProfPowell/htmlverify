@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/unknown-element",
+    "severity": "warning",
+    "at": "1:1-1:10",
+    "message": "<x-panel> is ad hoc: Vanilla Breeze 0.3.1 doesn’t declare it. Declare it in the registry’s elements.json, or use a Vanilla Breeze element."
+  }
+]

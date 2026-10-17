@@ -1,0 +1,48 @@
+[
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "4:1-4:2",
+    "message": "Indent with spaces, not tabs (3 lines).",
+    "fix": [
+      {
+        "offset": 40,
+        "endOffset": 41,
+        "text": "  "
+      },
+      {
+        "offset": 66,
+        "endOffset": 67,
+        "text": "  "
+      },
+      {
+        "offset": 138,
+        "endOffset": 139,
+        "text": "  "
+      }
+    ]
+  },
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "11:8-11:8",
+    "message": "End the file with a newline.",
+    "fix": [
+      {
+        "offset": 209,
+        "endOffset": 209,
+        "text": "\n"
+      }
+    ]
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:2",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]

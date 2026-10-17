@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/attribute",
+    "severity": "error",
+    "at": "3:35-3:58",
+    "message": "data-placement=\"middle\" isn’t a value of data-placement on <tour-step> in <page-tour>: use \"top\", \"bottom\", \"left\", \"right\", or \"auto\"."
+  }
+]

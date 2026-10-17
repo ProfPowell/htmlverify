@@ -16,5 +16,15 @@
     "severity": "info",
     "at": "38:14-38:25",
     "message": "open=\"true\" follows the house style; no change needed. (HTML itself allows only open=\"\" or open=\"open\"; browsers treat any value as on.)"
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:3",
+    "ask": "Does the title \"Contact us · Acme\" describe the page’s topic or purpose?"
   }
 ]

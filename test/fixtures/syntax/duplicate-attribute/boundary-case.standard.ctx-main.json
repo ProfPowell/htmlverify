@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/duplicate-attribute",
+    "severity": "error",
+    "at": "1:14-1:23",
+    "message": "Duplicate class attribute: the parser keeps the first (class=\"a\") and drops this one. Merge them into one attribute."
+  }
+]

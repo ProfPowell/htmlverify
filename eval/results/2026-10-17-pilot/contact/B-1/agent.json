@@ -1,0 +1,191 @@
+{
+  "duration_api_ms": 23731,
+  "stop_reason": "end_turn",
+  "session_id": "75fa6dcd-0adb-4981-b825-78231c3b43dd",
+  "total_cost_usd": 0.122352,
+  "usage": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 13711,
+    "cache_read_input_tokens": 357182,
+    "output_tokens": 3161,
+    "output_tokens_details": {
+      "thinking_tokens": 91
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 13711,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 41304,
+        "cache_creation_input_tokens": 501,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 501
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 20,
+      "outputTokens": 3161,
+      "cacheReadInputTokens": 357182,
+      "cacheCreationInputTokens": 13711,
+      "webSearchRequests": 0,
+      "costUSD": 0.12221219999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 91,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_012fZ7s7BerDhrRRqhJCBHJH",
+      "tool_input": {
+        "skill": "xhtml-author"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01GacHeKrQrkKgDnPaStGKDG",
+      "tool_input": {
+        "skill": "forms"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_018GddU534SYDXqDerzNnzJp",
+      "tool_input": {
+        "command": "cat htmlverify.config.json; ls .claude/skills/*; grep -o 'form-field[^{]*{' /vb/vanilla-breeze.css | head -5; grep -o 'data-layout=[^]]*' /vb/vanilla-breeze.css | sort -u | head -20"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01G55bujndgMAXHWzMeBf6z4",
+      "tool_input": {
+        "command": "cd /home/user/htmlverify/eval/results/2026-10-17-pilot/contact/B-1/work && npx htmlverify fix page.html --write; sed -i 's|<div data-layout=\"stack\">|<layout-stack>|; s|</div>|</layout-stack>|' page.html && npx htmlverify check page.html"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01Pody95239Ncr55ybxes9vC",
+      "tool_input": {
+        "command": "npx --prefix /home/user/htmlverify/eval/results/2026-10-17-pilot/contact/B-1/work htmlverify fix /home/user/htmlverify/eval/results/2026-10-17-pilot/contact/B-1/work/page.html --write"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 21,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1654,
+  "type": "result",
+  "duration_ms": 27152,
+  "uuid": "a17e4455-edd2-4494-9036-1743e128f38a",
+  "ttft_stream_ms": 1253,
+  "time_to_request_ms": 302,
+  "time_to_request_phases_ms": {
+    "other": 30,
+    "system_prompt": 141,
+    "resume_other": 0,
+    "process_user_input": 5,
+    "input_attachments": 20,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 7,
+    "engine_pickup": 2,
+    "message_prep": 2,
+    "model_config_wait": 42,
+    "autocompact": 7,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 27,
+    "message_normalization": 2,
+    "client_creation": 2,
+    "request_build": 8
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 75,
+  "time_to_request_cpu_ms": 283,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 240,
+  "process_anon_mib_turn_start": 123,
+  "process_rss_mib_result": 247,
+  "process_anon_mib_result": 127,
+  "process_peak_rss_mib": 248,
+  "process_cpu_ms_turn": 2549,
+  "process_wall_ms_turn": 27152,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 15,
+    "cpu_ms": 20,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1253,
+  "time_to_request_from_spawn_ms": 11137624,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792267839586.956,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

@@ -1,0 +1,44 @@
+{
+  "id": "legal",
+  "type": "legal",
+  "title": "Privacy policy",
+  "content": "Privacy policy for Larkspur Supply Co.. Last updated 1 September 2026.\n\nTable of contents linking to each section below.\n\nSections:\n1. What we collect: your name, email, and address when you join; what you buy, so we can calculate your dividend; and rental records.\n2. How we use it: to run your membership, process orders and rentals, and send the newsletter if you ask for it.\n3. Who we share it with: our payment processor and our shipping carrier, only as needed. We never sell personal data.\n4. How long we keep it: purchase records for seven years, as tax law requires; everything else until you ask us to delete it.\n5. Your rights: you can ask for a copy of your data, a correction, or deletion. Email privacy@larkspur.coop.\n6. Cookies: we use one cookie to keep you signed in, and no tracking cookies.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "sections",
+      "text": "the six sections with second-level headings",
+      "selector": "h2",
+      "count": [
+        6,
+        null
+      ]
+    },
+    {
+      "id": "toc",
+      "text": "a table of contents with in-page links",
+      "selector": "nav a[href^='#']",
+      "count": [
+        6,
+        null
+      ]
+    },
+    {
+      "id": "updated",
+      "text": "the update date as a time element",
+      "selector": "time[datetime]",
+      "count": [
+        1,
+        null
+      ]
+    }
+  ]
+}

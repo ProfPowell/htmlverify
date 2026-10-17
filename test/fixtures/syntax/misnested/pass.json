@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "rule": "policy/prefer-strong-em",
+    "severity": "warning",
+    "at": "10:4-10:7",
+    "message": "Use <strong> for important text; <b> is for keywords and names that need no extra importance."
+  },
+  {
+    "rule": "policy/prefer-strong-em",
+    "severity": "warning",
+    "at": "10:7-10:10",
+    "message": "Use <em> for stress emphasis; <i> is for terms, names, and phrases in another voice or language."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]

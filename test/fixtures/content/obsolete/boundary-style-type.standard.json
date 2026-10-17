@@ -10,5 +10,15 @@
     "severity": "warning",
     "at": "7:9-7:30",
     "message": "language=\"javascript\" on <script> is obsolete and does nothing; remove it."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

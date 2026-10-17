@@ -10,5 +10,10 @@
     "severity": "error",
     "at": "2:27-2:32",
     "message": "<col> isn’t allowed in <colgroup span>, which must be empty."
+  },
+  {
+    "rule": "a11y/table",
+    "review": "2:1",
+    "ask": "Is this table used for layout? Use CSS for layout; if it holds data, add <th> header cells."
   }
 ]

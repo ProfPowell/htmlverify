@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "policy/button-type",
+    "severity": "error",
+    "at": "1:1-1:9",
+    "message": "Add type=\"button\" (or type=\"submit\" in a form): a <button> without type submits its form."
+  }
+]

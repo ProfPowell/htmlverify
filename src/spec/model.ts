@@ -181,6 +181,12 @@ export function inCategory(element: Element, category: string, ancestors: readon
   return test !== undefined && test(element, ancestors);
 }
 
+/** Whether an HTML element is in a category under some condition, without testing the condition. */
+export function mayBeInCategory(element: Element, category: string): boolean {
+  const name = nameOf(element);
+  return name !== null && (STATIC.get(category)?.has(name) === true || CONDITIONAL.get(category)?.has(name) === true);
+}
+
 export function textInCategory(category: string): boolean {
   return category === 'flow' || category === 'phrasing';
 }

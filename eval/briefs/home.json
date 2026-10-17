@@ -1,0 +1,62 @@
+{
+  "id": "home",
+  "type": "home",
+  "title": "Home page",
+  "content": "Larkspur Supply Co. is a member-owned outdoor gear cooperative at 214 Alder Street, Port Wren. This is its home page.\n\nSite navigation: Shop, Rentals, Workshops, About, Contact.\n\nHeadline: Gear for every season, owned by the people who use it.\nLead: We sell, rent, and repair equipment for hiking, paddling, and winter travel. Members get a dividend every spring.\nCall to action: Become a member (links to /join).\n\nFeatured this week (three items, each with a photo, name, price, and link):\n- Ridgeline 40 L pack, $189, /shop/ridgeline-40 (photo: a green backpack on a granite ledge)\n- Tidewater touring kayak rental, $55 per day, /rentals/tidewater (photo: a yellow kayak on a calm bay)\n- Hearth canister stove, $74, /shop/hearth-stove (photo: a small stove boiling water)\n\nUpcoming workshops: Map and compass basics (Saturday 8 November 2026, 10:00), Winter layering (Thursday 13 November 2026, 18:30).\n\nFooter: address, phone (360) 555-0142, opening hours Monday–Saturday 9:00–19:00, Sunday 10:00–17:00, and a copyright line: © 2026 Larkspur Supply Co..\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "nav",
+      "text": "a navigation landmark with at least 5 links",
+      "selector": "nav a[href]",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "main",
+      "text": "a main landmark",
+      "selector": "main",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "featured-imgs",
+      "text": "three featured items with images that have alt text",
+      "selector": "main img[alt]",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "footer",
+      "text": "a footer",
+      "selector": "footer",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "time",
+      "text": "workshop dates as time elements",
+      "selector": "time[datetime]",
+      "count": [
+        2,
+        null
+      ]
+    }
+  ]
+}

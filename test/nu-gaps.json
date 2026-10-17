@@ -1,0 +1,83 @@
+{
+  "about": "Nu messages that no htmlverify rule matches (spec §12.3): what htmlverify doesn't check yet (gap), and what it accepts on purpose (disagreement). Each example, checked under standard, must still produce its message unmatched; test/nu.test.ts checks that and the corpus against this list.",
+  "nu": "26.10.12",
+  "gaps": [
+    {
+      "message": "^Table columns? (?:\\d+|in range \\d+…\\d+) established by element “t[dh]” ha(?:s|ve) no cells beginning in (?:it|them)\\.$",
+      "severity": "error",
+      "kind": "gap",
+      "reason": "htmlverify doesn't run HTML's table model, which places cells by colspan and rowspan; a11y/table checks headers only.",
+      "example": "<table><caption>Plans</caption><tr><th scope=\"col\" colspan=\"2\">Plan</th></tr><tr><td>Basic</td></tr></table>"
+    },
+    {
+      "message": "^Table cell spans past the end of its row group established by a “(?:thead|tbody|tfoot|table)” element; clipped to the end of the row group\\.$",
+      "severity": "error",
+      "kind": "gap",
+      "reason": "htmlverify doesn't run HTML's table model, so it doesn't see a rowspan that runs past its row group.",
+      "example": "<table><caption>Plans</caption><thead><tr><th scope=\"col\">Plan</th></tr></thead><tbody><tr><td rowspan=\"3\">Basic</td></tr></tbody></table>"
+    },
+    {
+      "message": "^A table row was \\d+ columns? wide and exceeded the column count established by the first row \\(\\d+\\)\\.$",
+      "severity": "warning",
+      "kind": "gap",
+      "reason": "htmlverify doesn't count table columns.",
+      "example": "<table><caption>Plans</caption><tr><th scope=\"col\">Plan</th></tr><tr><td>Basic</td><td>Free</td></tr></table>"
+    },
+    {
+      "message": "^A table row was \\d+ columns? wide, which is less than the column count established by the first row \\(\\d+\\)\\.$",
+      "severity": "warning",
+      "kind": "gap",
+      "reason": "htmlverify doesn't count table columns.",
+      "example": "<table><caption>Plans</caption><tr><th scope=\"col\">Plan</th><th scope=\"col\">Price</th></tr><tr><td>Basic</td></tr></table>"
+    },
+    {
+      "message": "^Bad value “[^”]*” for attribute “media” on element “[a-z]+”: ",
+      "severity": "error",
+      "kind": "gap",
+      "reason": "Media queries are CSS, which htmlverify leaves to CSS tools.",
+      "example": "<picture><source srcset=\"/a.avif\" media=\"screen and (\" type=\"image/avif\" /><img src=\"/a.jpg\" alt=\"A photo\" /></picture>"
+    },
+    {
+      "message": "^Element “[^”]+” not allowed as child of element “(?:svg|math)” in this context\\. \\(Suppressing further errors from this subtree\\.\\)$",
+      "severity": "error",
+      "kind": "gap",
+      "reason": "htmlverify doesn't model SVG or MathML content; there it checks only attribute case and accessible names.",
+      "example": "<svg viewBox=\"0 0 1 1\" aria-hidden=\"true\"><rectangle width=\"1\" height=\"1\" /></svg>"
+    },
+    {
+      "message": "^The “[^”]+” element is a completely-unknown element that is not allowed anywhere in any (?:SVG|MathML) content\\.$",
+      "severity": "error",
+      "kind": "gap",
+      "reason": "htmlverify doesn't model SVG or MathML content; there it checks only attribute case and accessible names.",
+      "example": "<p><math><mfoo>x</mfoo></math></p>"
+    },
+    {
+      "message": "^The document is not mappable to XML 1\\.0 due to two consecutive hyphens in a comment\\.$",
+      "severity": "warning",
+      "kind": "gap",
+      "reason": "HTML allows -- inside a comment and XML doesn't; htmlverify checks HTML's comment syntax only.",
+      "example": "<!-- a -- b -->"
+    },
+    {
+      "message": "^Attribute “slot” not allowed on element “svg” at this point\\.$",
+      "severity": "error",
+      "kind": "disagreement",
+      "reason": "DOM gives any element, SVG included, a slot attribute that assigns it to a shadow root's slot; Nu's SVG schema lacks it. Vanilla Breeze components slot SVG icons and charts this way.",
+      "example": "<p><svg slot=\"icon\" viewBox=\"0 0 1 1\" aria-hidden=\"true\"><rect width=\"1\" height=\"1\" /></svg> Text</p>"
+    },
+    {
+      "message": "^When the “srcset” attribute has any image candidate string with a width descriptor, the “sizes” attribute must also be specified — unless the following “img” element has a “loading” attribute set to “lazy” and a “sizes” attribute value starting with “auto”\\.$",
+      "severity": "error",
+      "kind": "disagreement",
+      "reason": "Nu reports a <source> whose own srcset has no width descriptors when the <img> after it has them. HTML requires sizes only for an element's own width descriptors; htmlverify reports a <source> or <img> that needs it (content/missing-attribute).",
+      "example": "<picture><source srcset=\"/a.avif 1x, /a@2x.avif 2x\" type=\"image/avif\" /><img src=\"/a.jpg\" srcset=\"/a-480.jpg 480w, /a-960.jpg 960w\" sizes=\"50vw\" alt=\"A photo\" /></picture>"
+    },
+    {
+      "message": "^Consider using the “h1” element as a top-level heading only",
+      "severity": "warning",
+      "kind": "disagreement",
+      "reason": "An h1 is a level-1 heading wherever it sits; htmlverify checks levels (a11y/headings) and, in strict, allows one h1 per page (policy/single-h1), which covers Nu's note there.",
+      "example": "<section aria-labelledby=\"s\"><h1 id=\"s\">Section title</h1></section>"
+    }
+  ]
+}

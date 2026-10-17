@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/lowercase",
+    "severity": "error",
+    "at": "1:4-1:19",
+    "message": "Write the data-userid attribute in lowercase.",
+    "fix": [
+      {
+        "offset": 3,
+        "endOffset": 14,
+        "text": "data-userid"
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/escape",
+    "severity": "warning",
+    "at": "1:37-1:38",
+    "message": "Escape < as &lt; in text.",
+    "fix": [
+      {
+        "offset": 36,
+        "endOffset": 37,
+        "text": "&lt;"
+      }
+    ]
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/stray-end-tag",
+    "severity": "error",
+    "at": "1:29-1:33",
+    "message": "</p> has no matching <p>; delete it. The parser inserted an empty <p> here."
+  }
+]

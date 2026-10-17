@@ -6,6 +6,12 @@
     "message": "<h2> can’t be inside <address>, which must not contain heading content."
   },
   {
+    "rule": "a11y/landmarks",
+    "severity": "warning",
+    "at": "2:9-2:17",
+    "message": "More than one top-level <header> (banner); the first is at 2:1. Keep one, or move this one into a section."
+  },
+  {
     "rule": "content/descendant",
     "severity": "error",
     "at": "2:9-2:17",

@@ -1,8 +1,24 @@
 [
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "10:4-10:34",
+    "message": "<input type=\"text\" name=\"q\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
     "rule": "syntax/stray-end-tag",
     "severity": "error",
-    "at": "8:34-8:42",
+    "at": "10:34-10:42",
     "message": "<input> is a void element and never has an end tag; delete </input>."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

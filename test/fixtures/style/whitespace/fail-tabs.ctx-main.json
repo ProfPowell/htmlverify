@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "style/whitespace",
+    "severity": "warning",
+    "at": "2:1-2:2",
+    "message": "Indent with spaces, not tabs (2 lines).",
+    "fix": [
+      {
+        "offset": 5,
+        "endOffset": 6,
+        "text": "  "
+      },
+      {
+        "offset": 19,
+        "endOffset": 20,
+        "text": "  "
+      }
+    ]
+  }
+]

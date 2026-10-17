@@ -1,0 +1,205 @@
+{
+  "duration_api_ms": 14427,
+  "stop_reason": "end_turn",
+  "session_id": "e1445754-8ccf-4a88-b849-b3882f7cf0cd",
+  "total_cost_usd": 0.0686731,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 7576,
+    "cache_read_input_tokens": 196653,
+    "output_tokens": 1854,
+    "output_tokens_details": {
+      "thinking_tokens": 74
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 7576,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 34329,
+        "cache_creation_input_tokens": 1341,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1341
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 1854,
+      "cacheReadInputTokens": 196653,
+      "cacheCreationInputTokens": 7576,
+      "webSearchRequests": 0,
+      "costUSD": 0.06853329999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 74,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_011rYsavpq9W3JDDLXK9ADdA",
+      "tool_input": {
+        "skill": "xhtml-author"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01WYdkfGZSQweFv3dozJpxJU",
+      "tool_input": {
+        "skill": "forms"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01VXyV9ZKr9o81kBCBb7us1g",
+      "tool_input": {
+        "skill": "custom-elements"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_013H3dJKDZAPbGpyrtPqDHom",
+      "tool_input": {
+        "command": "find / -path /proc -prune -o \\( -name SKILL.md -o -name \"*.md\" -path \"*skills*\" \\) -print 2>/dev/null | grep -v node_modules | head -20; ls /vb"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01HeNpXnMKgbzyzoLpNuxSAZ",
+      "tool_input": {
+        "command": "ls /vb .claude/skills ~/.claude/skills 2>&1; grep -o 'form-field\\|data-layout=\"[a-z-]*\"\\|<[a-z]*-[a-z-]*' /vb/vanilla-breeze.js | sort | uniq -c | sort -rn | head -30"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01B5abJRY26JPWhvGwXU3qCL",
+      "tool_input": {
+        "skill": "xhtml-author"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01JbV64JnxUDUqLGMGCdet57",
+      "tool_input": {
+        "command": "ls /vb"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 10,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1988,
+  "type": "result",
+  "duration_ms": 15585,
+  "uuid": "e902eccf-a8ee-4d21-80bf-4d9dfc793bc6",
+  "ttft_stream_ms": 1584,
+  "time_to_request_ms": 260,
+  "time_to_request_phases_ms": {
+    "other": 29,
+    "system_prompt": 107,
+    "resume_other": 0,
+    "process_user_input": 5,
+    "input_attachments": 23,
+    "input_hooks": 4,
+    "tool_pool_refresh": 2,
+    "init_message": 5,
+    "engine_pickup": 2,
+    "message_prep": 1,
+    "model_config_wait": 40,
+    "autocompact": 2,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 25,
+    "message_normalization": 3,
+    "client_creation": 4,
+    "request_build": 7
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 95,
+  "time_to_request_cpu_ms": 271,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 237,
+  "process_anon_mib_turn_start": 120,
+  "process_rss_mib_result": 240,
+  "process_anon_mib_result": 120,
+  "process_peak_rss_mib": 246,
+  "process_cpu_ms_turn": 1573,
+  "process_wall_ms_turn": 15584,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 17,
+    "cpu_ms": 24,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1585,
+  "time_to_request_from_spawn_ms": 11137616,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792267839536.8076,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

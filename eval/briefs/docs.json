@@ -1,0 +1,53 @@
+{
+  "id": "docs",
+  "type": "docs page",
+  "title": "Documentation page: rental API",
+  "content": "Developer docs: \"Checking rental availability\" (part of the Rental API guide).\n\nSidebar navigation: Getting started, Authentication, Checking availability (current page), Creating a booking, Errors.\nOn this page: Request, Response, Errors.\n\nContent:\nTo check whether an item is free, send a GET request to /v1/items/{id}/availability with start and end dates.\n\nRequest example:\nGET /v1/items/kayak-tidewater/availability?start=2026-11-08&end=2026-11-09\nAuthorization: Bearer <token>\n\nResponse example:\n{ \"available\": true, \"units\": 3 }\n\nParameters: start (date, required), end (date, required), units (integer, optional, default 1).\nErrors: 404 if the item doesn't exist; 422 if end is before start.\nNext page: Creating a booking.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "nav",
+      "text": "sidebar navigation",
+      "selector": "nav a[href]",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "code",
+      "text": "code examples in pre and code",
+      "selector": "pre code, pre",
+      "count": [
+        2,
+        null
+      ]
+    },
+    {
+      "id": "params",
+      "text": "the parameters as a table or description list",
+      "selector": "table th, dl > dt",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "sections",
+      "text": "headed sections",
+      "selector": "h2",
+      "count": [
+        3,
+        null
+      ]
+    }
+  ]
+}

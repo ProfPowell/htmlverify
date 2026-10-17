@@ -26,7 +26,7 @@
       <h1>Title</h1>
       <p>Subtitle</p>
     </hgroup>
-    <p>Posted <time datetime="2026-10-17T09:30Z">this morning</time> by <a href="mailto:jo@example.org">Jo</a>.</p>
+    <p>Posted <time datetime="2026-10-17T09:30Z">this morning</time> by <a href="mailto:jo@acme.co">Jo</a>.</p>
     <p><time>2026-10-17</time> <time>PT2H30M</time> <data value="42">forty-two</data></p>
     <figure>
       <picture>
@@ -50,8 +50,9 @@
       <tbody><tr><td headers="h-name">Jo</td><td headers="h-score">9</td></tr></tbody>
       <tfoot><tr><td colspan="2">Total</td></tr></tfoot>
     </table>
-    <p><meter value="0.6" min="0" max="1">60%</meter> <progress value="3" max="10">3 of 10</progress></p>
-    <blockquote cite="https://example.org/source"><p>Quote</p></blockquote>
+    <p><label for="storage">Storage</label> <meter id="storage" value="0.6" min="0" max="1">60%</meter>
+      <label for="upload">Upload</label> <progress id="upload" value="3" max="10">3 of 10</progress></p>
+    <blockquote cite="https://www.w3.org/standards/"><p>Quote</p></blockquote>
     <p><abbr title="HyperText Markup Language">HTML</abbr>, <kbd>Ctrl</kbd>+<kbd>C</kbd>, <ruby>漢<rp>(</rp><rt>kan</rt><rp>)</rp></ruby>.</p>
     <p lang="fr">Bonjour, <bdo dir="rtl">abc</bdo>.</p>
   </article>
@@ -85,11 +86,11 @@
     </form>
     <input form="contact" type="hidden" name="token" value="abc">
   </section>
-  <dialog id="help" closedby="any"><p>Help text</p><button type="button" commandfor="help" command="close">Close</button></dialog>
+  <dialog id="help" closedby="any" aria-labelledby="help-title"><h2 id="help-title">Help</h2><p>Help text</p><button type="button" commandfor="help" command="close">Close</button></dialog>
   <div popover="" id="tip">A tip</div>
   <template id="row"><tr><td>cell</td></tr></template>
   <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0h24v24H0z"></path></svg>
-  <my-widget mode="compact"><span>slot content</span></my-widget>
+  <layout-stack data-layout-gap="s"><span>slot content</span></layout-stack>
   <video controls="" width="640" height="360" poster="/poster.jpg">
     <source src="/movie.webm" type="video/webm">
     <track kind="captions" src="/captions.vtt" srclang="en" label="English" default="">
@@ -97,7 +98,7 @@
   </video>
   <map name="m" id="m"><area shape="rect" coords="0,0,10,10" href="/x" alt="X"></map>
   <img src="/map.png" usemap="#m" alt="Map">
-  <iframe src="https://example.org/embed" title="Embed" loading="lazy" sandbox="allow-scripts" allow="fullscreen" referrerpolicy="no-referrer"></iframe>
+  <iframe src="https://www.openstreetmap.org/export/embed.html" title="Embed" loading="lazy" sandbox="allow-scripts" allow="fullscreen" referrerpolicy="no-referrer"></iframe>
   <ol reversed="" start="3" type="i"><li value="3">Three</li></ol>
   <search><form role="search" action="/search"><input type="search" name="q" aria-label="Search" enterkeyhint="search"></form></search>
 </main>

@@ -52,6 +52,31 @@ function float({ above, min }: { above?: number; min?: number } = {}): Check {
   };
 }
 
+/**
+ * <meter> and <progress> numbers in order: value, low, high, and optimum
+ * within min and max, low at most high (HTML's inequalities). A missing min
+ * or max takes its default; an invalid one is reported on its own.
+ */
+function ordered(check: Check): Check {
+  return (value, element, name) => {
+    const problem = check(value, element, name);
+    if (problem) return problem;
+    const n = Number(value);
+    const bound = (a: string, fallback: number | null): { n: number; text: string } | null => {
+      const v = attr(element, a);
+      if (v === null) return fallback === null ? null : { n: fallback, text: `the default ${a}, ${fallback}` };
+      return FLOAT.test(v) ? { n: Number(v), text: `${a} (${v})` } : null;
+    };
+    const min = name === 'min' || element.tagName === 'progress' ? null : bound('min', 0);
+    const max = bound('max', 1);
+    const high = name === 'low' ? bound('high', null) : null;
+    if (min && n < min.n) return `must be at least ${min.text}`;
+    if (high && n > high.n) return `must be at most ${high.text}`;
+    if (max && n > max.n) return `must be at most ${max.text}`;
+    return null;
+  };
+}
+
 // --- Tokens and keywords ---------------------------------------------------
 
 function duplicate(list: readonly string[], fold = false): string | null {
@@ -601,7 +626,12 @@ const BY_ELEMENT: Record<string, Check> = {
   'td rowspan': integer({ min: 0, max: 65534 }),
   'th rowspan': integer({ min: 0, max: 65534 }),
   'progress max': float({ above: 0 }),
-  'progress value': float({ min: 0 }),
+  'progress value': ordered(float({ min: 0 })),
+  'meter value': ordered(float()),
+  'meter min': ordered(float()),
+  'meter low': ordered(float()),
+  'meter high': ordered(float()),
+  'meter optimum': ordered(float()),
   'meta charset': none, // syntax/encoding
   'ol type': keywords(['1', 'a', 'A', 'i', 'I'], { caseSensitive: true }),
   'a rel': rel,

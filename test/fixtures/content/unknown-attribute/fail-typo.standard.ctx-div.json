@@ -1,5 +1,11 @@
 [
   {
+    "rule": "semantic/link-href",
+    "severity": "warning",
+    "at": "1:1-1:23",
+    "message": "<a> without href isn’t a link: give it href, or use <button type=\"button\"> for an action."
+  },
+  {
     "rule": "content/unknown-attribute",
     "severity": "error",
     "at": "1:4-1:22",
@@ -22,5 +28,10 @@
     "severity": "error",
     "at": "3:6-3:15",
     "message": "href isn’t an attribute of <div>. It applies to <a>, <area>, <link>, and <base>."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:18",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
   }
 ]

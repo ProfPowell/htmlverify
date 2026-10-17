@@ -1,0 +1,13 @@
+[
+  {
+    "rule": "a11y/lang",
+    "severity": "error",
+    "at": "2:7-2:14",
+    "message": "lang on <html> is empty; name the page’s language, such as lang=\"en\" (WCAG 3.1.1)."
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]

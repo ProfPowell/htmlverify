@@ -1,0 +1,7 @@
+[
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:23",
+    "ask": "Does alt=\"Sales by month\" convey what the image shows here?"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "rule": "a11y/img-alt",
+    "review": "1:18",
+    "ask": "alt=\"IMG_2041.jpg\" doesn’t describe anything; what does the image show, or is it decorative?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:18",
+    "ask": "alt=\"image\" doesn’t describe anything; what does the image show, or is it decorative?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "3:18",
+    "ask": "Is this image purely decorative? alt=\"\" hides it from screen readers."
+  }
+]

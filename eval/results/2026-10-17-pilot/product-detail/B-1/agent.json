@@ -1,0 +1,192 @@
+{
+  "duration_api_ms": 24579,
+  "stop_reason": "end_turn",
+  "session_id": "5d246425-0920-4e99-ad8a-cfbf15e29bbc",
+  "total_cost_usd": 0.1904172,
+  "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 29519,
+    "cache_read_input_tokens": 378754,
+    "output_tokens": 3429,
+    "output_tokens_details": {
+      "thinking_tokens": 308
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 29519,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 99,
+        "cache_read_input_tokens": 55843,
+        "cache_creation_input_tokens": 1770,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1770
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 3429,
+      "cacheReadInputTokens": 378754,
+      "cacheCreationInputTokens": 29519,
+      "webSearchRequests": 0,
+      "costUSD": 0.19027740000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 308,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01BG3TJSw4WXPHDDhDKMKqEr",
+      "tool_input": {
+        "skill": "xhtml-author"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01WDxwZ3ue1WjicTpkEoxoCR",
+      "tool_input": {
+        "skill": "patterns"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01EQQw8eBMFHntK2kjoBP1dw",
+      "tool_input": {
+        "command": "cd /home/user/htmlverify/eval/results/2026-10-17-pilot/product-detail/B-1/work; cat htmlverify.config.json; ls .claude/skills/*; ls /vb; grep -o 'data-layout=\"[a-z-]*\"' -r /vb/*.css | sort -u | head -30"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_0179wqL5tWFVD5zs1ZdGabLT",
+      "tool_input": {
+        "command": "ls /vb; grep -oE 'data-layout=\"?[a-z-]+' /vb/vanilla-breeze.css | sort -u | head -30; grep -oE '^[a-z]+-[a-z-]+' /vb/vanilla-breeze.css | sort -u | head -40"
+      }
+    },
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_01Lgm455e3oGQtsn6wbzac22",
+      "tool_input": {
+        "file_path": "/vb/vanilla-breeze.css",
+        "limit": 150
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 19,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE\n\nThe two review items are still open for you: whether `lang=\"en\"` matches the page's language, and whether the title \"Ridgeline 40 L pack\" describes the page. htmlverify passes with 0 errors. The photos section shows only the four view names as captions, because the brief gave no image files or alt text.",
+  "ttft_ms": 1785,
+  "type": "result",
+  "duration_ms": 31008,
+  "uuid": "905e958e-a4ed-439b-bd90-1aa318049638",
+  "ttft_stream_ms": 1398,
+  "time_to_request_ms": 196,
+  "time_to_request_phases_ms": {
+    "other": 26,
+    "system_prompt": 15,
+    "resume_other": 1,
+    "process_user_input": 4,
+    "input_attachments": 25,
+    "input_hooks": 5,
+    "tool_pool_refresh": 4,
+    "init_message": 10,
+    "engine_pickup": 2,
+    "message_prep": 2,
+    "model_config_wait": 45,
+    "autocompact": 3,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 39,
+    "message_normalization": 3,
+    "client_creation": 2,
+    "request_build": 9
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 146,
+  "time_to_request_cpu_ms": 223,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 240,
+  "process_anon_mib_turn_start": 123,
+  "process_rss_mib_result": 251,
+  "process_anon_mib_result": 131,
+  "process_peak_rss_mib": 263,
+  "process_cpu_ms_turn": 2699,
+  "process_wall_ms_turn": 31007,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 19,
+    "cpu_ms": 26,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1398,
+  "time_to_request_from_spawn_ms": 11165880,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792267868065.9739,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

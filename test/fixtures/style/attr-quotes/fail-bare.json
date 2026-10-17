@@ -1,15 +1,31 @@
 [
   {
+    "rule": "semantic/link-href",
+    "severity": "error",
+    "at": "10:7-10:11",
+    "message": "href=\"\" goes nowhere: link to a real URL, or use <button type=\"button\"> for an action."
+  },
+  {
     "rule": "style/attr-quotes",
     "severity": "error",
-    "at": "8:7-8:11",
+    "at": "10:7-10:11",
     "message": "href has no value; write href=\"…\".",
     "fix": [
       {
-        "offset": 113,
-        "endOffset": 113,
+        "offset": 201,
+        "endOffset": 201,
         "text": "=\"\""
       }
     ]
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

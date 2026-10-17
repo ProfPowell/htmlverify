@@ -1,0 +1,24 @@
+[
+  {
+    "rule": "semantic/fragment-link",
+    "severity": "warning",
+    "at": "9:23-9:34",
+    "message": "href=\"#faq\" matches no id=\"faq\" on this page."
+  },
+  {
+    "rule": "semantic/fragment-link",
+    "severity": "warning",
+    "at": "9:46-9:61",
+    "message": "href=\"#contcat\" matches no id=\"contcat\" on this page. Did you mean \"#contact\"?"
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]

@@ -1,0 +1,157 @@
+{
+  "brief": "product-detail",
+  "condition": "A",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "page": true,
+  "status": {
+    "first": "fail",
+    "final": "fail"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "errors": {
+    "style": 5,
+    "semantic": 3,
+    "policy": 2
+  },
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 7,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "submit",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "selects",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "specs",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "breadcrumb",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "imgs",
+        "met": false,
+        "found": 0
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "header",
+    "nav",
+    "ol",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "main",
+    "article",
+    "h1",
+    "section",
+    "h2",
+    "div",
+    "figure",
+    "figcaption",
+    "figure",
+    "figcaption",
+    "figure",
+    "figcaption",
+    "figure",
+    "figcaption",
+    "section",
+    "h2",
+    "p",
+    "strong",
+    "p",
+    "p",
+    "form",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "option",
+    "option",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "option",
+    "form-field",
+    "label",
+    "input",
+    "div",
+    "button",
+    "button",
+    "section",
+    "h2",
+    "dl",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "section",
+    "h2",
+    "figure",
+    "blockquote",
+    "p",
+    "figcaption",
+    "figure",
+    "blockquote",
+    "p",
+    "figcaption"
+  ],
+  "tokens": {
+    "input": 14,
+    "output": 2690,
+    "cacheRead": 233597,
+    "cacheWrite": 8976
+  },
+  "costUsd": 0.08633150000000002,
+  "wallMs": 24431,
+  "turns": 13
+}

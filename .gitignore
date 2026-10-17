@@ -1,2 +1,6 @@
 node_modules/
 .htmlverify/
+
+# Evaluation runs keep their outputs, not the project scaffolding each run starts from.
+eval/results/**/work/*
+!eval/results/**/work/page.html
