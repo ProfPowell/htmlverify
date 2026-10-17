@@ -1,0 +1,17 @@
+{
+  "id": "form/text-field",
+  "version": "1.0.0",
+  "summary": "Labeled single-line input with an optional hint.",
+  "use": "Single-line text, email, phone, URL, search, or password input.",
+  "context": "form",
+  "params": {
+    "label": { "type": "text", "minLength": 1 },
+    "name": { "type": "text", "pattern": "^[a-z][a-z0-9_-]*$" },
+    "type": { "type": "enum", "values": ["text", "email", "tel", "url", "search", "password"], "default": "text" },
+    "autocomplete": { "type": "enum", "values": ["name", "email", "tel", "organization", "off"], "required": false },
+    "required": { "type": "boolean", "default": false },
+    "hint": { "type": "inline", "required": false }
+  },
+  "budget": { "elements": 4 },
+  "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
+}

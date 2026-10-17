@@ -1,12 +1,14 @@
 import { childrenOf, isComment, isElement, isHtml, isText, isWhitespaceText, type ChildNode, type Element, type Node } from '../parse/tree.ts';
 import { isBooleanAttribute } from '../spec/html.ts';
 import type { Vocabulary } from '../vocab/vocabulary.ts';
-import { preservesWhitespace, whitespaceIgnorable } from './layout.ts';
+import { insignificant, preservesWhitespace } from './layout.ts';
 
 export interface CompareOptions {
   vocabulary: Vocabulary | null;
   /** Presence booleans beyond HTML's, such as the vocabulary's. */
   isBoolean?: (element: Element, name: string) => boolean;
+  /** A fragment's context element, which decides whether whitespace at its edges can render. */
+  context?: Element | null;
 }
 
 /** Where two trees first differ: a path like /html/body/main[2]/p[1], and what each side has there. */
@@ -61,11 +63,11 @@ function compare(a: Node, b: Node, path: string, preserve: boolean, trimEnd: boo
 
 /** Children that count: whitespace-only text is dropped where it can't render, and at the end when trimming. */
 function significant(node: Node, preserve: boolean, trimEnd: boolean, options: CompareOptions): ChildNode[] {
-  let kids = childrenOf(node);
-  if (preserve) return kids;
-  const parent = isElement(node) ? node : null;
-  if (whitespaceIgnorable(parent, kids, options.vocabulary)) kids = kids.filter((c) => !isWhitespaceText(c));
-  else if (trimEnd && kids.length > 0 && isWhitespaceText(kids.at(-1)!)) kids = kids.slice(0, -1);
+  const all = childrenOf(node);
+  if (preserve) return all;
+  const parent = isElement(node) ? node : node.nodeName === '#document-fragment' ? options.context ?? null : null;
+  let kids = all.filter((_, i) => !insignificant(all, i, parent, options.vocabulary));
+  if (trimEnd && kids.length > 0 && isWhitespaceText(kids.at(-1)!)) kids = kids.slice(0, -1);
   return kids;
 }
 

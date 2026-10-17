@@ -15,8 +15,12 @@ export interface Config {
   vocabularies?: string[];
   /** The registry directory as written, relative to the config file; its elements.json is read in M1d, components in M2. */
   registry?: string;
+  /** The registry directory, resolved against the config file's; the loader fills it in. */
+  registryDir?: string;
   /** The registry's elements.json, parsed; the loader fills it in. */
   elements?: Record<string, VocabElement>;
+  /** False forbids HTML nodes in plans (spec §9.6). */
+  htmlNodes?: boolean;
   /** The Nu Html Checker for --nu: the jar, relative to the config file, and optionally java. */
   nu?: { jar: string; java?: string };
   options?: Partial<Options>;
@@ -77,6 +81,7 @@ export function parseConfig(raw: unknown, source: string): Config {
           const [severity, options] = Array.isArray(v) ? v : [v, undefined];
           if (Array.isArray(v) && (v.length !== 2 || !isObject(options))) fail(`"${id}" must be a severity, or [severity, { options }]`);
           if (typeof severity !== 'string' || !SEVERITIES.has(severity)) fail(`"${id}" must be "error", "warning", "info", or "off"`);
+          if (meta.fixed && severity !== 'error') fail(`"${id}" is always an error: the assembler can’t build correct output without it`);
           rules[id] = severity as Severity | 'off';
           if (options === undefined) continue;
           if (!meta.options) fail(`"${id}" takes no options; give a severity`);
@@ -120,6 +125,10 @@ export function parseConfig(raw: unknown, source: string): Config {
       case 'registry':
         if (typeof value !== 'string' || value.trim() === '') fail('"registry" must be a directory path');
         config.registry = value as string;
+        break;
+      case 'htmlNodes':
+        if (typeof value !== 'boolean') fail('"htmlNodes" must be true or false');
+        config.htmlNodes = value as boolean;
         break;
       case 'maxWarnings':
         if (value !== null && !(Number.isInteger(value) && (value as number) >= 0)) fail('"maxWarnings" must be a non-negative integer or null');

@@ -1,0 +1,9 @@
+{
+  "id": "action/jump",
+  "version": "1.0.0",
+  "summary": "A link to another instance on the page.",
+  "use": "Links within the page, such as back to a form.",
+  "context": "p",
+  "params": { "label": { "type": "text", "minLength": 1 }, "target": { "type": "ref" } },
+  "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
+}

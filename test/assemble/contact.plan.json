@@ -1,0 +1,29 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": { "lang": "en", "title": "Contact us · Acme", "description": "How to reach Acme support.", "heading": "Contact us" },
+    "slots": {
+      "header": [
+        { "use": "nav/primary", "key": "nav", "data": { "label": "Main", "items": [
+          { "text": "Home", "href": "/" },
+          { "text": "Contact", "href": "/contact", "current": "page" }
+        ] } }
+      ],
+      "main": [
+        { "use": "content/prose", "key": "intro", "data": { "html": "<p>We reply within <strong>one business day</strong>.</p>" } },
+        { "use": "content/section", "key": "write", "data": { "title": "Write to us" }, "slots": { "body": [
+          { "use": "form/form", "key": "contact", "data": { "action": "/contact" }, "slots": {
+            "fields": [
+              { "use": "form/text-field", "key": "name", "data": { "label": "Name", "name": "name", "autocomplete": "name", "required": true } },
+              { "use": "form/text-field", "key": "email", "data": { "label": "Email", "name": "email", "type": "email", "autocomplete": "email", "required": true, "hint": "We <em>never</em> share it." } }
+            ],
+            "actions": [ { "use": "action/submit", "key": "send", "data": { "label": "Send message" } } ]
+          } }
+        ] } }
+      ],
+      "footer": [
+        { "use": "action/jump", "key": "back", "data": { "label": "Write to us", "target": { "ref": "write" } } }
+      ]
+    }
+  }
+}

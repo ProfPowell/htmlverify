@@ -1,0 +1,9 @@
+{
+  "id": "content/prose",
+  "version": "1.0.0",
+  "summary": "Paragraphs, lists, and quotes from restricted HTML.",
+  "use": "Running text with links and emphasis.",
+  "params": { "html": { "type": "prose" } },
+  "budget": { "elements": 40 },
+  "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
+}

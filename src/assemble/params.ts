@@ -144,6 +144,9 @@ function parseSpec(raw: unknown, pointer: string, problems: Problem[]): ParamSpe
       if (!(PARAM_TYPES as readonly string[]).includes(items) || items === 'list' || items === 'enum') {
         problem(at(pointer, 'items'), 'must be a scalar type other than enum (text, url, boolean, …) or a record of fields; for a list of enums, use a record with one field');
       } else spec.items = items as ParamType;
+    } else if (isObject(items) && typeof items['type'] === 'string' && Object.values(items).every((v) => !isObject(v))) {
+      // { "type": "text" } reads as a record whose one field is named "type".
+      problem(at(pointer, 'items'), `for a list of ${items['type']} values, write "items": "${items['type']}"; a record of fields is { "name": { "type": … }, … }`);
     } else if (isObject(items) && Object.keys(items).length > 0) {
       spec.items = parseParams(items, at(pointer, 'items'), problems);
     } else problem(at(pointer, 'items'), 'must be a type name or a record of field declarations');

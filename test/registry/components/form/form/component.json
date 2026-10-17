@@ -1,0 +1,13 @@
+{
+  "id": "form/form",
+  "version": "1.0.0",
+  "summary": "Form.",
+  "use": "Any form; fields and actions go in its slots.",
+  "context": "body",
+  "params": {
+    "action": { "type": "url" },
+    "method": { "type": "enum", "values": ["get", "post"], "default": "post" }
+  },
+  "slots": { "fields": { "min": 1 }, "actions": { "min": 1, "accepts": ["action/submit"] } },
+  "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
+}

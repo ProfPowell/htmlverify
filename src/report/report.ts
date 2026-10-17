@@ -54,13 +54,31 @@ export interface Finding {
   endOffset: number;
   evidence?: Record<string, string | number | boolean>;
   fix: { edits: Edit[] } | null;
-  origin: null;
+  /** For assembled output, where the finding comes from and whose fix it is (spec §9.8). */
+  origin: Origin | null;
   /** Rules of later families that reported the same defect here (spec §5.1). */
   alsoReportedBy?: string[];
   /** Other places the defect shows, such as where the parser closed the element. */
   alsoAt?: { line: number; column: number }[];
   /** Other checkers' messages about this spot, such as Nu's (spec §6.9). */
   related?: { source: string; message: string; line: number; column: number }[];
+}
+
+/**
+ * Where an assembled page's finding comes from (spec §9.8): `plan` findings
+ * are fixed in the plan, `component` ones in the component (which then needs
+ * re-review), and `composition` ones by choosing other components or slots.
+ */
+export interface Origin {
+  kind: 'plan' | 'component' | 'composition';
+  /** "form/text-field@1.0.0", or "html" for an HTML node. */
+  component: string;
+  /** "template.html:3:3", or null outside a template. */
+  template: string | null;
+  /** The instance's key path, such as "contact/email"; "" for the page. */
+  instance: string;
+  /** JSON Pointer into the plan. */
+  plan: string;
 }
 
 /** A judgment left to a person; never counted as a pass or a failure (spec §5.2). */

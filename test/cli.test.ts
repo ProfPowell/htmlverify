@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, test } from 'node:test';
@@ -231,4 +231,57 @@ test('hook claude logs each round and stops blocking after HTMLVERIFY_HOOK_MAX_R
     delete process.env['HTMLVERIFY_HOOK_LOG'];
     delete process.env['HTMLVERIFY_HOOK_MAX_ROUNDS'];
   }
+});
+
+test('assemble writes the page only when it passes, and reports each output finding with its origin', async () => {
+  const project = join(dir, 'assemble');
+  mkdirSync(project, { recursive: true });
+  const config = join(project, 'htmlverify.config.json');
+  writeFileSync(config, JSON.stringify({ registry: join(ROOT, 'test/registry') }));
+  const plan = join(ROOT, 'test/assemble/contact.plan.json');
+  const golden = readFileSync(join(ROOT, 'test/assemble/contact.html'), 'utf8');
+  const out = join(project, 'site/contact.html');
+
+  const ok = await run(['assemble', plan, '--out', out, '--draft', '--config', config]);
+  assert.equal(ok.code, 0);
+  assert.equal(readFileSync(out, 'utf8'), golden);
+  assert.match(ok.stdout, /^test\/assemble\/contact\.plan\.json\n {2}3:12 +warning +assembly\/component +\/page\/use: page\/basic@1\.0\.0 hasn’t been approved/);
+  assert.match(ok.stdout, /info +content\/attribute-value +required="true" follows the house style.*\[plan: \/page\/slots\/main\/1\/slots\/body\/0\/slots\/fields\/0 · form\/text-field@1\.0\.0 template\.html:3:3\]/);
+  assert.match(ok.stdout, /✓ pass · wrote \S*site\/contact\.html · 8 components · 0 gaps\n$/);
+
+  // Strict assembles only approved components, and a failure writes nothing.
+  rmSync(out);
+  const strict = await run(['assemble', plan, '--out', out, '--config', config]);
+  assert.equal(strict.code, 1);
+  assert.equal(existsSync(out), false);
+  assert.match(strict.stdout, /✗ fail · 8 errors in the plan, so the output wasn’t checked · wrote nothing/);
+
+  // Without --out the page goes to stdout and the report to stderr; JSON carries both.
+  const piped = await run(['assemble', '-', '--draft', '--config', config], readFileSync(plan, 'utf8'));
+  assert.equal(piped.code, 0);
+  assert.equal(piped.stdout, golden);
+  assert.match(piped.stderr, /^<stdin>\n/);
+  const json = JSON.parse((await run(['assemble', plan, '--draft', '--config', config, '--format', 'json'])).stdout);
+  assert.equal(json.status, 'pass');
+  assert.equal(json.html, golden);
+  assert.equal(json.written, null);
+  assert.equal(json.components.length, 8);
+
+  // --emit-failed keeps what was built for a plan that failed, beside the target.
+  const broken = join(project, 'broken.json');
+  writeFileSync(broken, readFileSync(plan, 'utf8').replace('"ref": "write"', '"ref": "nowhere"'));
+  const failed = await run(['assemble', broken, '--out', out, '--draft', '--emit-failed', '--config', config]);
+  assert.equal(failed.code, 1);
+  assert.match(failed.stdout, /assembly\/ref +\/page\/slots\/footer\/0\/data\/target: \{ "ref": "nowhere" \} names no instance/);
+  assert.equal(existsSync(out), false);
+  assert.match(readFileSync(join(project, 'site/contact.failed.html'), 'utf8'), /<footer><a>Write to us<\/a><\/footer>/);
+
+  // Invalid JSON is a plan finding, located; a missing registry and --emit-failed without --out are usage errors.
+  writeFileSync(broken, '{ "page": { "use": "page/basic", } }');
+  assert.match((await run(['assemble', broken, '--config', config])).stderr, /broken\.json\n {2}1:34 +error +assembly\/plan +\/: isn’t valid JSON: Expected double-quoted property name\./);
+  writeFileSync(join(project, 'empty.json'), '{}');
+  const none = await run(['assemble', plan, '--config', join(project, 'empty.json')]);
+  assert.equal(none.code, 2);
+  assert.match(none.stderr, /assemble needs a component registry; set "registry" in htmlverify\.config\.json/);
+  assert.equal((await run(['assemble', plan, '--emit-failed', '--config', config])).code, 2);
 });

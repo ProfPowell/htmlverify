@@ -5,8 +5,10 @@ import { BASE, MUTATIONS, mutants } from './corpus.ts';
 
 // Each mutant (test/corpus.ts) must trigger its rule: recall must be 100%.
 
-// Rules that a single defect can't express: review-only judgments, the opt-in denylist, Nu, and page-wide ratios.
+// Rules that a single defect can't express: review-only judgments, the opt-in denylist, Nu, page-wide ratios,
+// and the assembly rules, which check plans (test/assemble.test.ts).
 const EXEMPT = new Set(['semantic/heading-candidate', 'semantic/list-candidate', 'policy/elements', 'conformance/nu', 'bloat/generic-ratio']);
+const exempt = (id: string) => EXEMPT.has(id) || id.startsWith('assembly/');
 
 test('the base page has no errors under strict', async () => {
   const [file] = (await check({ path: 'house.html', source: BASE }, { profile: 'strict' })).files;
@@ -15,7 +17,7 @@ test('the base page has no errors under strict', async () => {
 
 test('every deterministic rule has a mutation', () => {
   const covered = new Set(MUTATIONS.map(([rule]) => rule));
-  assert.deepEqual(RULES.map((r) => r.id).filter((id) => !covered.has(id) && !EXEMPT.has(id)), []);
+  assert.deepEqual(RULES.map((r) => r.id).filter((id) => !covered.has(id) && !exempt(id)), []);
 });
 
 test('each mutant triggers its rule: 100% recall', async () => {

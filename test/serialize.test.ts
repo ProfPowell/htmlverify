@@ -71,9 +71,9 @@ test('whitespace that can’t render is dropped, so formatting doesn’t change 
 
 test('booleans and void elements take the configured forms', () => {
   const html = '<input name="a" required="" disabled><br><accordion-wc single></accordion-wc>';
-  assert.equal(write(html), '<input name="a" required="true" disabled="true" /><br /><accordion-wc single="true"></accordion-wc>\n');
-  assert.equal(write(html, 'body', { booleanValue: 'empty', voidElements: 'html' }), '<input name="a" required="" disabled=""><br><accordion-wc single=""></accordion-wc>\n');
-  assert.equal(write(html, 'body', { booleanValue: 'name', voidElements: 'tight' }), '<input name="a" required="required" disabled="disabled"/><br/><accordion-wc single="single"></accordion-wc>\n');
+  assert.equal(write(html), '<input name="a" required="true" disabled="true" /><br />\n<accordion-wc single="true"></accordion-wc>\n');
+  assert.equal(write(html, 'body', { booleanValue: 'empty', voidElements: 'html' }), '<input name="a" required="" disabled=""><br>\n<accordion-wc single=""></accordion-wc>\n');
+  assert.equal(write(html, 'body', { booleanValue: 'name', voidElements: 'tight' }), '<input name="a" required="required" disabled="disabled"/><br/>\n<accordion-wc single="single"></accordion-wc>\n');
 });
 
 test('escaping: text, attributes, raw text, and no-break spaces', () => {

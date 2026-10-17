@@ -1,0 +1,9 @@
+{
+  "id": "action/submit",
+  "version": "1.0.0",
+  "summary": "The button that submits its form.",
+  "use": "A form's main action.",
+  "context": "form",
+  "params": { "label": { "type": "text", "minLength": 1 } },
+  "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
+}
