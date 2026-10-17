@@ -1,0 +1,38 @@
+[
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "1:26-1:36",
+    "message": "border=\"0\" on <img> is obsolete and does nothing; remove it."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "2:26-2:36",
+    "message": "border on <img> is obsolete. Use CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "3:31-3:44",
+    "message": "maxlength on <input type=\"number\"> is obsolete and does nothing; remove it."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "3:45-3:53",
+    "message": "size on <input type=\"number\"> is obsolete and does nothing; remove it."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "4:4-4:14",
+    "message": "name on <a> is obsolete; use id=\"top\" on the element it marks instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "5:4-5:11",
+    "message": "name on <a> is obsolete. Use the id attribute instead."
+  }
+]

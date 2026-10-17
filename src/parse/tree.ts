@@ -33,7 +33,8 @@ function isTemplate(node: Node): node is Template {
 
 /** Child nodes, reading a template's contents in place of its (empty) children. */
 export function childrenOf(node: Node): ChildNode[] {
-  if (isTemplate(node)) return node.content.childNodes;
+  // A fragment's context element is created without contents.
+  if (isTemplate(node)) return node.content?.childNodes ?? node.childNodes;
   return 'childNodes' in node ? node.childNodes : [];
 }
 

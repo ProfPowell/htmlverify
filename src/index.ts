@@ -1,6 +1,8 @@
 export { check, LIMITS } from './report/report.ts';
 export type { CheckInput, CheckOptions, FileReport, Finding, Report, Status } from './report/report.ts';
 export { canonicalJson } from './report/canonical.ts';
+export { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from './config.ts';
+export { explain, listRules, type RuleInfo, type RuleRow } from './explain.ts';
 export { formatText } from './report/text.ts';
 export { PROFILES, type Profile, type ProfileName } from './profiles.ts';
 export { RULES } from './rules/registry.ts';

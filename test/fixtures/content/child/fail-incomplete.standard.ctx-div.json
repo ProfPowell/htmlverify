@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "1:1-1:10",
+    "message": "<details> is incomplete: expected <summary> before </details>. <details> starts with a <summary>, followed by flow content."
+  },
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "2:1-2:10",
+    "message": "<picture> is incomplete: expected <source> or <img> before </picture>. <picture> holds <source> elements followed by one <img>."
+  },
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "3:5-3:10",
+    "message": "<div> in <dl> is incomplete: expected <dt> or <dd> before </div>. A <div> in a <dl> holds one or more <dt> followed by one or more <dd>."
+  }
+]

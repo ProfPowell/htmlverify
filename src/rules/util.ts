@@ -1,4 +1,4 @@
-import { isElement, isHtml, walk, type Element, type Node } from '../parse/tree.ts';
+import { isElement, isHtml, walk, type ChildNode, type Element, type Node } from '../parse/tree.ts';
 import type { RuleContext } from './types.ts';
 
 export function at(ctx: RuleContext, offset: number): string {
@@ -91,4 +91,27 @@ export function openElementAt(ctx: RuleContext, offset: number): Element | null 
 
 export function htmlName(element: Element | null): string | null {
   return element && isHtml(element) ? element.tagName : null;
+}
+
+/**
+ * Where to report a node: an element's start tag, a text node without its
+ * surrounding whitespace, or for an implied element its first located
+ * descendant (the start of the input when it has none).
+ */
+export function spanOf(node: ChildNode, text: string): { offset: number; endOffset: number } {
+  if (isElement(node)) {
+    const tag = node.sourceCodeLocation?.startTag;
+    if (tag) return { offset: tag.startOffset, endOffset: tag.endOffset };
+    for (const { node: d } of walk(node)) {
+      if (d !== node && d.sourceCodeLocation) return spanOf(d as ChildNode, text);
+    }
+    return { offset: 0, endOffset: 0 };
+  }
+  const loc = node.sourceCodeLocation;
+  if (!loc) return { offset: 0, endOffset: 0 };
+  let s = loc.startOffset;
+  let e = loc.endOffset;
+  while (s < e && /[\t\n\f\r ]/.test(text[s]!)) s++;
+  while (e > s && /[\t\n\f\r ]/.test(text[e - 1]!)) e--;
+  return { offset: s, endOffset: e };
 }

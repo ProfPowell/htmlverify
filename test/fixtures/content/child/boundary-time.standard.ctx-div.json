@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "4:1-4:7",
+    "message": "<time> without datetime must contain a machine-readable date or time, such as 2026-10-17 or 14:30. To show other text, put the value in datetime=\"…\"."
+  }
+]

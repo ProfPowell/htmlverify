@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "1:1-1:9",
+    "message": "<center> is obsolete. Use appropriate elements or CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "2:4-2:22",
+    "message": "<font> is obsolete. Use appropriate elements or CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "2:37-2:42",
+    "message": "<big> is obsolete. Use appropriate elements or CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "2:56-2:60",
+    "message": "<tt> is obsolete. Use appropriate elements or CSS instead."
+  }
+]

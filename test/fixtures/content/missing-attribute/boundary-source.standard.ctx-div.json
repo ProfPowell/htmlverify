@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "1:10-1:31",
+    "message": "<source> needs srcset in <picture>."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:18-1:30",
+    "message": "src doesn’t apply to <source> in <picture>; use srcset."
+  },
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "2:8-2:31",
+    "message": "<source> needs src in <audio>."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "2:16-2:30",
+    "message": "srcset doesn’t apply to <source> in <audio>."
+  }
+]

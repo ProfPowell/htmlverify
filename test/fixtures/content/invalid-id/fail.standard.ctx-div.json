@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/invalid-id",
+    "severity": "error",
+    "at": "1:4-1:9",
+    "message": "id is empty: give it a value, or remove it."
+  },
+  {
+    "rule": "content/invalid-id",
+    "severity": "error",
+    "at": "2:4-2:18",
+    "message": "id=\"two words\" contains whitespace, so nothing can reference it. Use hyphens: id=\"two-words\"."
+  }
+]

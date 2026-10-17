@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "content/descendant",
+    "severity": "error",
+    "at": "1:10-1:14",
+    "message": "<h2> can’t be inside <address>, which must not contain heading content."
+  },
+  {
+    "rule": "content/descendant",
+    "severity": "error",
+    "at": "2:9-2:17",
+    "message": "<header> can’t be inside <header>, which must not contain <header> or <footer> elements."
+  },
+  {
+    "rule": "content/descendant",
+    "severity": "error",
+    "at": "3:9-3:13",
+    "message": "<h3> can’t be inside <dt>, which must not contain heading content."
+  }
+]

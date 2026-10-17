@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "6:1-6:25",
+    "message": "<meta> needs one of name, http-equiv, charset, or itemprop."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "6:7-6:24",
+    "message": "content doesn’t apply to <meta> without name, http-equiv, or itemprop."
+  },
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "7:1-7:21",
+    "message": "<link> needs rel (or itemprop)."
+  },
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "8:1-8:40",
+    "message": "<link> needs as with rel=\"preload\"."
+  }
+]

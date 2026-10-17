@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/unknown-element",
+    "severity": "error",
+    "at": "1:1-1:10",
+    "message": "<sectoin> isn’t an HTML element. Did you mean <section>?"
+  }
+]

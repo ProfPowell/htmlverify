@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "6:8-6:23",
+    "message": "type=\"text/css\" on <style> is obsolete and does nothing; remove it."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "7:9-7:30",
+    "message": "language=\"javascript\" on <script> is obsolete and does nothing; remove it."
+  }
+]

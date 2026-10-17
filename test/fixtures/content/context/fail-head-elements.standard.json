@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "9:1-9:38",
+    "message": "<link> belongs in <head>: in the body, a <link> needs itemprop, or a rel of only dns-prefetch, modulepreload, pingback, preconnect, prefetch, preload, or stylesheet; here its parent is <body>."
+  },
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "10:1-10:48",
+    "message": "<meta> belongs in <head>; here its parent is <body>."
+  },
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "11:1-11:8",
+    "message": "<title> belongs in <head>; here its parent is <body>."
+  },
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "12:18-12:25",
+    "message": "<style> must be in <head>, or be the first child of its parent; here its parent is <div>."
+  }
+]

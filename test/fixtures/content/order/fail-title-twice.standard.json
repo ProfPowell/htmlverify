@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/order",
+    "severity": "error",
+    "at": "6:1-6:8",
+    "message": "<head> can have only one <title>; the first is at 5:1."
+  },
+  {
+    "rule": "content/order",
+    "severity": "error",
+    "at": "8:1-8:22",
+    "message": "<head> can have only one <base>; the first is at 7:1."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "3:3-3:8",
+    "message": "<div> isn’t allowed in <ul>, which accepts only <li>."
+  },
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "4:3-4:8",
+    "message": "Text isn’t allowed in <ul>, which accepts only <li>."
+  }
+]

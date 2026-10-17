@@ -1,7 +1,8 @@
 import type { RuleMeta } from './types.ts';
 
-const PARSING = 'https://html.spec.whatwg.org/multipage/parsing.html';
-const SYNTAX = 'https://html.spec.whatwg.org/multipage/syntax.html';
+const HTML = 'https://html.spec.whatwg.org/multipage';
+const PARSING = `${HTML}/parsing.html`;
+const SYNTAX = `${HTML}/syntax.html`;
 
 /** Rules implemented in this version. */
 export const RULES: readonly RuleMeta[] = [
@@ -22,7 +23,19 @@ export const RULES: readonly RuleMeta[] = [
   { id: 'style/explicit-start-tag', authority: 'policy', summary: 'Implied html, head, body, tbody, or colgroup', ref: `${SYNTAX}#optional-tags` },
   { id: 'style/explicit-end-tag', authority: 'policy', summary: 'Omitted optional end tag', ref: `${SYNTAX}#optional-tags` },
   { id: 'style/doctype', authority: 'policy', summary: 'Doctype not written <!doctype html>', ref: `${SYNTAX}#the-doctype` },
-  { id: 'content/attribute-value', authority: 'standard', summary: 'Invalid attribute value (boolean attributes in M0)', ref: 'https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes' },
+  { id: 'content/unknown-element', authority: 'standard', summary: 'Neither an HTML element nor a valid custom element name', ref: `${HTML}/indices.html#elements-3` },
+  { id: 'content/obsolete', authority: 'standard', summary: 'Obsolete element or attribute', ref: `${HTML}/obsolete.html#non-conforming-features` },
+  { id: 'content/unknown-attribute', authority: 'standard', summary: 'Attribute not allowed on the element, or not applicable here', ref: `${HTML}/indices.html#attributes-3` },
+  { id: 'content/attribute-value', authority: 'standard', summary: 'Invalid attribute value', ref: `${HTML}/indices.html#attributes-3` },
+  { id: 'content/missing-attribute', authority: 'standard', summary: 'Required attribute absent', ref: `${HTML}/dom.html#element-definitions` },
+  { id: 'content/child', authority: 'standard', summary: 'Child the parent’s content model doesn’t allow, or a required child missing', ref: `${HTML}/dom.html#content-models` },
+  { id: 'content/order', authority: 'standard', summary: 'Child out of order, or the wrong number of a child', ref: `${HTML}/dom.html#content-models` },
+  { id: 'content/descendant', authority: 'standard', summary: 'Descendant the ancestor’s content model forbids', ref: `${HTML}/dom.html#content-models` },
+  { id: 'content/context', authority: 'standard', summary: 'Element outside the contexts it can be used in', ref: `${HTML}/dom.html#element-definitions` },
+  { id: 'content/duplicate-id', authority: 'standard', summary: 'ID used more than once in a scope', ref: `${HTML}/dom.html#the-id-attribute` },
+  { id: 'content/invalid-id', authority: 'standard', summary: 'Empty ID, or one containing whitespace', ref: `${HTML}/dom.html#the-id-attribute` },
+  { id: 'content/idref', authority: 'standard', summary: 'ID reference that doesn’t resolve, or names the wrong kind of element', ref: `${HTML}/dom.html#the-id-attribute` },
+  { id: 'content/document', authority: 'standard', summary: 'More than one visible main, or more than one encoding declaration', ref: `${HTML}/grouping-content.html#the-main-element` },
 ];
 
 export const RULE_BY_ID: ReadonlyMap<string, RuleMeta> = new Map(RULES.map((r) => [r.id, r]));

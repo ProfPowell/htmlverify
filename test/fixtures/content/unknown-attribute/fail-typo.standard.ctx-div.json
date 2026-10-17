@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:4-1:22",
+    "message": "herf isn’t an attribute of <a>. Did you mean href?"
+  },
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "2:1-2:26",
+    "message": "<img> needs src (or srcset)."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "2:6-2:17",
+    "message": "scr isn’t an attribute of <img>. Did you mean src?"
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "3:6-3:15",
+    "message": "href isn’t an attribute of <div>. It applies to <a>, <area>, <link>, and <base>."
+  }
+]

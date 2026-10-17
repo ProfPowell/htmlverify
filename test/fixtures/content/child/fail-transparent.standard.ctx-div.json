@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "1:19-1:24",
+    "message": "<div> isn’t allowed in <a> here: it’s transparent, so it takes its content model from <span>, which accepts only phrasing content."
+  }
+]

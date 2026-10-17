@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valid page</title>
+<link rel="stylesheet" href="/site.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+<link rel="preload" href="/font.woff2" as="font" type="font/woff2" crossorigin="">
+<script type="module" src="/app.js"></script>
+<script type="importmap">{"imports": {}}</script>
+<style>body { margin: 0; }</style>
+</head>
+<body>
+<header>
+  <nav aria-label="Main">
+    <ul>
+      <li><a href="/" aria-current="page">Home</a></li>
+      <li><a href="/about.html" hreflang="en-GB">About</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="content">
+  <article>
+    <hgroup>
+      <h1>Title</h1>
+      <p>Subtitle</p>
+    </hgroup>
+    <p>Posted <time datetime="2026-10-17T09:30Z">this morning</time> by <a href="mailto:jo@example.org">Jo</a>.</p>
+    <p><time>2026-10-17</time> <time>PT2H30M</time> <data value="42">forty-two</data></p>
+    <figure>
+      <picture>
+        <source srcset="/a.avif 1x, /a@2x.avif 2x" type="image/avif">
+        <img src="/a.jpg" srcset="/a-480.jpg 480w, /a-960.jpg 960w" sizes="(max-width: 600px) 100vw, 50vw" alt="A photo" width="960" height="640" loading="lazy" decoding="async">
+      </picture>
+      <figcaption>A caption</figcaption>
+    </figure>
+    <details name="faq" open="">
+      <summary>Question?</summary>
+      <p>Answer.</p>
+    </details>
+    <dl>
+      <div><dt>Term</dt><dd>Definition</dd></div>
+      <div><dt>Other</dt><dd>Value</dd></div>
+    </dl>
+    <table>
+      <caption>Scores</caption>
+      <colgroup><col span="2"></colgroup>
+      <thead><tr><th id="h-name" scope="col">Name</th><th id="h-score" scope="col">Score</th></tr></thead>
+      <tbody><tr><td headers="h-name">Jo</td><td headers="h-score">9</td></tr></tbody>
+      <tfoot><tr><td colspan="2">Total</td></tr></tfoot>
+    </table>
+    <p><meter value="0.6" min="0" max="1">60%</meter> <progress value="3" max="10">3 of 10</progress></p>
+    <blockquote cite="https://example.org/source"><p>Quote</p></blockquote>
+    <p><abbr title="HyperText Markup Language">HTML</abbr>, <kbd>Ctrl</kbd>+<kbd>C</kbd>, <ruby>漢<rp>(</rp><rt>kan</rt><rp>)</rp></ruby>.</p>
+    <p lang="fr">Bonjour, <bdo dir="rtl">abc</bdo>.</p>
+  </article>
+  <section aria-labelledby="form-heading">
+    <h2 id="form-heading">Contact</h2>
+    <form action="/send" method="post" id="contact">
+      <fieldset>
+        <legend>Your details</legend>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" required="" aria-describedby="email-hint">
+        <p id="email-hint">We reply within a day.</p>
+        <label>Phone <input type="tel" name="phone" autocomplete="shipping tel" pattern="[0-9 ]+"></label>
+        <label for="when">When</label>
+        <input type="date" id="when" name="when" min="2026-01-01" max="2026-12-31" step="1">
+        <label for="topic">Topic</label>
+        <input id="topic" name="topic" list="topics">
+        <datalist id="topics"><option value="Sales"></option><option value="Support"></option></datalist>
+        <label for="size">Size</label>
+        <select id="size" name="size">
+          <optgroup label="Small"><option value="s">S</option></optgroup>
+          <option value="m" selected="">M</option>
+        </select>
+        <label for="msg">Message</label>
+        <textarea id="msg" name="msg" rows="4" cols="40" maxlength="500"></textarea>
+        <input type="checkbox" id="agree" name="agree" value="yes"><label for="agree">I agree</label>
+        <output name="total" for="when topic">0</output>
+      </fieldset>
+      <button type="submit">Send</button>
+      <button type="button" commandfor="help" command="show-modal">Help</button>
+      <button type="button" popovertarget="tip">Tip</button>
+    </form>
+    <input form="contact" type="hidden" name="token" value="abc">
+  </section>
+  <dialog id="help" closedby="any"><p>Help text</p><button type="button" commandfor="help" command="close">Close</button></dialog>
+  <div popover="" id="tip">A tip</div>
+  <template id="row"><tr><td>cell</td></tr></template>
+  <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0h24v24H0z"></path></svg>
+  <my-widget mode="compact"><span>slot content</span></my-widget>
+  <video controls="" width="640" height="360" poster="/poster.jpg">
+    <source src="/movie.webm" type="video/webm">
+    <track kind="captions" src="/captions.vtt" srclang="en" label="English" default="">
+    <p>Your browser can’t play this video. <a href="/movie.webm" download="">Download it</a>.</p>
+  </video>
+  <map name="m" id="m"><area shape="rect" coords="0,0,10,10" href="/x" alt="X"></map>
+  <img src="/map.png" usemap="#m" alt="Map">
+  <iframe src="https://example.org/embed" title="Embed" loading="lazy" sandbox="allow-scripts" allow="fullscreen" referrerpolicy="no-referrer"></iframe>
+  <ol reversed="" start="3" type="i"><li value="3">Three</li></ol>
+  <search><form role="search" action="/search"><input type="search" name="q" aria-label="Search" enterkeyhint="search"></form></search>
+</main>
+<footer><address><a href="tel:+15551234567">Call us</a></address><p><small>© 2026</small></p></footer>
+</body>
+</html>

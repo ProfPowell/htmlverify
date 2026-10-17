@@ -1,0 +1,50 @@
+[
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "8:8-8:19",
+    "message": "for=\"emial\" matches no id in this document. Did you mean \"email\"?"
+  },
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "9:19-9:31",
+    "message": "list=\"email\" points to <input> at 9:1, which isn’t a <datalist>."
+  },
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "11:23-11:42",
+    "message": "popovertarget=\"tip\" points to <p> at 10:1, which has no popover attribute."
+  },
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "12:23-12:39",
+    "message": "commandfor=\"tip\" points to <p> at 10:1, but command=\"show-modal\" needs a <dialog>."
+  },
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "13:34-13:46",
+    "message": "headers=\"c1\" points to <td> at 13:12, but headers must name <th> cells in the same table."
+  },
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "14:8-14:37",
+    "message": "aria-describedby names \"hint\", which matches no id in this document."
+  },
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "14:38-14:52",
+    "message": "form=\"nowhere\" matches no id in this document."
+  },
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "15:18-15:33",
+    "message": "usemap=\"#nomap\" matches no <map name=\"nomap\">."
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:24-1:43",
+    "message": "placeholder doesn’t apply to <input type=\"checkbox\">; it applies to type=\"text\", type=\"search\", type=\"tel\", type=\"url\", type=\"email\", type=\"password\", or type=\"number\"."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:44-1:57",
+    "message": "maxlength doesn’t apply to <input type=\"checkbox\">; it applies to type=\"text\", type=\"search\", type=\"tel\", type=\"url\", type=\"email\", or type=\"password\"."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "2:20-2:27",
+    "message": "min doesn’t apply to <input type=\"text\">; it applies to type=\"date\", type=\"month\", type=\"week\", type=\"time\", type=\"datetime-local\", type=\"number\", or type=\"range\"."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "2:28-2:35",
+    "message": "max doesn’t apply to <input type=\"text\">; it applies to type=\"date\", type=\"month\", type=\"week\", type=\"time\", type=\"datetime-local\", type=\"number\", or type=\"range\"."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "3:4-3:19",
+    "message": "target doesn’t apply to <a> without href."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "3:20-3:34",
+    "message": "rel doesn’t apply to <a> without href."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "4:20-4:33",
+    "message": "value doesn’t apply to <input type=\"file\">."
+  }
+]

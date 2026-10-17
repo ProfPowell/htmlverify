@@ -1,5 +1,8 @@
-// Hand-written M0 subset of WHATWG HTML data. M1 replaces it with tables
-// generated from a pinned spec snapshot (spec §3.4).
+// Parser-level HTML facts: namespaces, void elements, and the optional-tag
+// rules. Element, attribute, and category data come from data/html.json
+// (spec §3.4) through data.ts.
+
+import { attributeRow, isBooleanRow } from './data.ts';
 
 export const NS = {
   html: 'http://www.w3.org/1999/xhtml',
@@ -12,33 +15,9 @@ export const VOID_ELEMENTS: ReadonlySet<string> = new Set([
   'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr',
 ]);
 
-// Boolean attributes from the attribute index:
-// https://html.spec.whatwg.org/multipage/indices.html#attributes-3
-const GLOBAL_BOOLEANS = ['autofocus', 'inert', 'itemscope'];
-const ELEMENT_BOOLEANS: Record<string, string[]> = {
-  audio: ['autoplay', 'controls', 'disableremoteplayback', 'loop', 'muted'],
-  button: ['disabled', 'formnovalidate'],
-  details: ['open'],
-  dialog: ['open'],
-  fieldset: ['disabled'],
-  form: ['novalidate'],
-  iframe: ['allowfullscreen'],
-  img: ['ismap'],
-  input: ['alpha', 'checked', 'disabled', 'formnovalidate', 'multiple', 'readonly', 'required'],
-  link: ['disabled'],
-  ol: ['reversed'],
-  optgroup: ['disabled'],
-  option: ['disabled', 'selected'],
-  script: ['async', 'defer', 'nomodule'],
-  select: ['disabled', 'multiple', 'required'],
-  template: ['shadowrootclonable', 'shadowrootdelegatesfocus', 'shadowrootserializable'],
-  textarea: ['disabled', 'readonly', 'required'],
-  track: ['default'],
-  video: ['autoplay', 'controls', 'disablepictureinpicture', 'disableremoteplayback', 'loop', 'muted', 'playsinline'],
-};
-
+/** Boolean attributes, from the attribute index. */
 export function isBooleanAttribute(element: string, attribute: string): boolean {
-  return GLOBAL_BOOLEANS.includes(attribute) || (ELEMENT_BOOLEANS[element]?.includes(attribute) ?? false);
+  return isBooleanRow(attributeRow(element, attribute));
 }
 
 // Elements whose start tag may be omitted. The conditions in §13.1.2.4 are not

@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:6-1:21",
+    "message": ":class isn’t an attribute of <div>. It looks like template syntax; check the rendered HTML instead."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:22-1:37",
+    "message": "@click isn’t an attribute of <div>. It looks like template syntax; check the rendered HTML instead."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:38-1:50",
+    "message": "v-if isn’t an attribute of <div>. It looks like template syntax; check the rendered HTML instead."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "2:6-2:21",
+    "message": "ng-click isn’t an attribute of <div>. It looks like template syntax; check the rendered HTML instead."
+  }
+]

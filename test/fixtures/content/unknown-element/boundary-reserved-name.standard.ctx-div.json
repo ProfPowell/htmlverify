@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/unknown-element",
+    "severity": "error",
+    "at": "1:1-1:12",
+    "message": "<font-face> isn’t an HTML element, and its name is reserved for SVG and MathML, so it can’t be a custom element."
+  },
+  {
+    "rule": "content/unknown-element",
+    "severity": "error",
+    "at": "2:1-2:16",
+    "message": "<missing-glyph> isn’t an HTML element, and its name is reserved for SVG and MathML, so it can’t be a custom element."
+  }
+]
