@@ -135,6 +135,11 @@ test('a check fails on a fixture that doesn’t assemble or whose output fails s
   ]);
   assert.deepEqual(c.written, [], 'nothing that fails is written as expected output');
   assert.match(formatComponentCheck(c), /✗ fail · 2 fixtures failing\n$/);
+
+  const broken = registryDir({ 'content/broken': { template: '<p>{{missing}}</p>', fixtures: { basic: {} } } });
+  const b = await checkComponent(openRegistry(broken), 'content/broken');
+  assert.deepEqual(b.problems, [{ file: 'template.html', message: '1:4: {{missing}}: "missing" isn’t declared in component.json.' }]);
+  assert.match(formatComponentCheck(b), /^content\/broken\n {2}template\.html: 1:4: \{\{missing\}\}: "missing" isn’t declared in component\.json\.\n✗ fail · 1 file problem\n$/);
 });
 
 test('an output that differs from its expected file fails, with the diff', async () => {

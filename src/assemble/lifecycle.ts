@@ -4,7 +4,7 @@
 // writes a plan.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative, sep } from 'node:path';
 import { resolveProfile, type Config } from '../config.ts';
 import type { NuOptions } from '../nu/nu.ts';
 import { check, type Finding } from '../report/report.ts';
@@ -377,5 +377,5 @@ function range(min: number, max: number | null): string {
 }
 
 function relativeTo(dir: string, file: string): string {
-  return file.startsWith(`${dir}/`) ? file.slice(dir.length + 1) : file;
+  return relative(dir, file).split(sep).join('/');
 }
