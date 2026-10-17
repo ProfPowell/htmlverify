@@ -1,0 +1,12 @@
+[
+  {
+    "rule": "a11y/img-alt",
+    "review": "1:21",
+    "ask": "Does alt=\"The support team at the 2026 offsite\" convey what the image shows here?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:24",
+    "ask": "Is this image purely decorative? alt=\"\" hides it from screen readers."
+  }
+]

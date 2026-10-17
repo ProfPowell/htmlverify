@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "warning",
+    "at": "1:6-1:26",
+    "message": "aria-grabbed is deprecated in ARIA; remove it."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "warning",
+    "at": "2:4-2:23",
+    "message": "aria-invalid is deprecated as a global attribute, and role paragraph doesn’t support it."
+  },
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "3:1-3:30",
+    "message": "<option> must be inside <select>, <datalist>, or <optgroup>; here its parent is <div>."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "warning",
+    "at": "3:9-3:29",
+    "message": "Avoid aria-selected on <option>: HTML provides it natively (ARIA in HTML)."
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/aria-role",
+    "severity": "warning",
+    "at": "2:6-2:22",
+    "message": "role=\"directory\" is deprecated in ARIA."
+  }
+]

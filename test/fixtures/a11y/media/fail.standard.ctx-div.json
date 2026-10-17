@@ -1,0 +1,19 @@
+[
+  {
+    "rule": "a11y/media",
+    "severity": "warning",
+    "at": "1:24-1:35",
+    "message": "<video autoplay> plays sound without being asked; add muted, or remove autoplay (WCAG 1.4.2)."
+  },
+  {
+    "rule": "a11y/media",
+    "severity": "warning",
+    "at": "2:24-2:35",
+    "message": "<audio autoplay> plays sound without being asked; add muted, or remove autoplay (WCAG 1.4.2)."
+  },
+  {
+    "rule": "a11y/media",
+    "review": "1:1",
+    "ask": "Does this video have speech or meaningful sound? Then it needs captions: add <track kind=\"captions\">."
+  }
+]

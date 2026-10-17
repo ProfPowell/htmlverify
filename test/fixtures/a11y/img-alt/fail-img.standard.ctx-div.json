@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "a11y/img-alt",
+    "severity": "error",
+    "at": "1:1-1:21",
+    "message": "<img> needs alt: describe the image, or write alt=\"\" if it’s decorative (WCAG 1.1.1)."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "severity": "error",
+    "at": "2:1-2:34",
+    "message": "<input type=\"image\"> needs alt that says what the button does (WCAG 1.1.1)."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "severity": "error",
+    "at": "3:15-3:61",
+    "message": "<area href> needs alt that names the link target (WCAG 1.1.1)."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "severity": "error",
+    "at": "4:1-4:17",
+    "message": "role=\"img\" needs a name: add aria-label or aria-labelledby (WCAG 1.1.1)."
+  }
+]

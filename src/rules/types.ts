@@ -21,6 +21,19 @@ export interface RawFinding {
   severity?: Severity;
   evidence?: Record<string, string | number | boolean>;
   fix?: Edit[];
+  /**
+   * Names the defect when rules of several families can report it: findings
+   * with the same defect at the same location merge into one (spec §5.1).
+   */
+  defect?: string;
+}
+
+/** A judgment the tool can't make, asked of a person (spec §5.2). */
+export interface RawReview {
+  rule: string;
+  offset: number;
+  endOffset: number;
+  ask: string;
 }
 
 export interface Options {
@@ -28,6 +41,8 @@ export interface Options {
   voidElements: 'xhtml' | 'tight' | 'html';
   /** The house form of boolean attributes; null when no house form applies. */
   booleanValue: 'true' | 'empty' | 'name' | null;
+  /** Language of the generic link texts a11y/link-text looks for. */
+  linkTextLanguage: 'en';
 }
 
 export interface RuleContext {

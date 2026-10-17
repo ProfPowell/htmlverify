@@ -1,0 +1,19 @@
+[
+  {
+    "rule": "a11y/lang",
+    "severity": "error",
+    "at": "2:1-2:21",
+    "message": "<html> needs lang, such as lang=\"en\": assistive technology uses it to pick a language (WCAG 3.1.1)."
+  },
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "2:7-2:20",
+    "message": "xml:lang needs a lang attribute with the same value; or remove xml:lang, which does nothing in HTML."
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  }
+]

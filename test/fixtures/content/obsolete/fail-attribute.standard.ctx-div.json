@@ -40,5 +40,15 @@
     "severity": "warning",
     "at": "3:39-3:49",
     "message": "border=\"0\" on <img> is obsolete and does nothing; remove it."
+  },
+  {
+    "rule": "a11y/table",
+    "review": "1:1",
+    "ask": "Is this table used for layout? Use CSS for layout; if it holds data, add <th> header cells."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "3:18",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
   }
 ]

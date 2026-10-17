@@ -22,5 +22,10 @@
     "severity": "error",
     "at": "3:6-3:15",
     "message": "href isn’t an attribute of <div>. It applies to <a>, <area>, <link>, and <base>."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:18",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
   }
 ]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/name",
+    "severity": "error",
+    "at": "4:1-4:22",
+    "message": "<input type=\"button\"> has no accessible name: give it text, or aria-label for an icon button (WCAG 4.1.2)."
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:31",
+    "ask": "Does alt=\"Home\" convey what the image shows here?"
+  }
+]

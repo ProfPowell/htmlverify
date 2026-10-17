@@ -65,8 +65,8 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
   const notes = new Set<'foreign' | 'noscript'>();
   const document = ctx.parsed.kind === 'document';
 
-  const report = (rule: string, node: ChildNode, message: string, evidence?: RawFinding['evidence']) => {
-    findings.push({ rule, ...spanOf(node, ctx.text), message, ...(evidence ? { evidence } : {}) });
+  const report = (rule: string, node: ChildNode, message: string, evidence?: RawFinding['evidence'], defect?: string) => {
+    findings.push({ rule, ...spanOf(node, ctx.text), message, ...(evidence ? { evidence } : {}), ...(defect ? { defect } : {}) });
   };
 
   /** Checks an element's children against its model; `env` is null at a scope root. */
@@ -160,13 +160,14 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
     if (!failed && !matcher.accepting()) {
       report('content/child', element, model.missing
         ? `<${element.tagName}> ${model.missing}.`
-        : `${name} is incomplete: expected ${describeTokens(matcher.expected())} before </${element.tagName}>.${hint}`);
+        : `${name} is incomplete: expected ${describeTokens(matcher.expected())} before </${element.tagName}>.${hint}`,
+      undefined, isHtml(element) && element.tagName === 'title' ? 'title-empty' : undefined);
     }
     if (model.counts && document) {
       for (const [child, [min, max]] of Object.entries(model.counts)) {
         const found = counted.get(child) ?? [];
         if (found.length < min) {
-          report('content/order', element, `<${element.tagName}> needs ${min === max ? 'exactly' : 'at least'} one <${child}>; it has none.${hint}`);
+          report('content/order', element, `<${element.tagName}> needs ${min === max ? 'exactly' : 'at least'} one <${child}>; it has none.${hint}`, undefined, `${child}-missing`);
         }
         for (const extra of found.slice(max)) {
           report('content/order', extra, `<${element.tagName}> can have only one <${child}>; the first is at ${at(ctx, spanOf(found[0]!, ctx.text).offset)}.`);

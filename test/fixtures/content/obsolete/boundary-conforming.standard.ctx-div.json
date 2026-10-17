@@ -12,6 +12,12 @@
     "message": "border on <img> is obsolete. Use CSS instead."
   },
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "3:1-3:54",
+    "message": "<input type=\"number\" name=\"n\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
     "rule": "content/obsolete",
     "severity": "warning",
     "at": "3:31-3:44",
@@ -34,5 +40,15 @@
     "severity": "error",
     "at": "5:4-5:11",
     "message": "name on <a> is obsolete. Use the id attribute instead."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "1:18",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:18",
+    "ask": "Does alt=\"B\" convey what the image shows here?"
   }
 ]

@@ -1,6 +1,6 @@
 Experiments in hacking a tool together to check HTML for problems and reassemble it a proper semantic manner.  Trying to prove or disprove that we can actually predictably build something as simple as a web page with LLMs with actual quality
 
-The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules) and M1a (spec data, the content-model engine, and the `content` rules).
+The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), and M1b (ARIA data, accessible names, and the `a11y` rules).
 
 ## Usage
 
@@ -31,24 +31,29 @@ Unknown keys, rules, and severities are errors; keys the spec reserves for later
 - `syntax/*`: parse errors, plus the repairs parse5 makes silently. It compares the tag tokens with the tree to find implied elements, missing and stray end tags, dropped start tags, misnested formatting, and content moved out of tables.
 - `style/*` (strict profile): double-quoted attributes, `name="true"` booleans, lowercase names, `<br />`, explicit start and end tags, `<!doctype html>`. Mechanical fixes come with each finding and are verified to leave the parsed tree unchanged.
 - `content/*`: HTML conformance against a pinned WHATWG snapshot. Child grammars (with transparent content), order and counts, descendant prohibitions, contexts, unknown and obsolete elements and attributes, attribute values (keywords, numbers, URLs, dates, language tags, `srcset`, `sizes`, `autocomplete`, …), required attributes, and IDs and ID references.
+- `a11y/*`: static accessibility against WAI-ARIA and ARIA in HTML. Page language and title, image alternatives, inline `svg`, accessible names and form labels (with the source of each computed name), roles and `aria-*` attributes, focusable content under `aria-hidden`, `tabindex`, heading levels, landmarks, link text, radio and checkbox groups, data tables, and media. A failure is evidence; a pass is never a WCAG claim. What only a person can judge, such as whether an alt text is accurate, becomes a review item.
 
-The `component`, `a11y`, `semantic`, `policy`, and `bloat` families come in later M1 steps and are reported as untested until then. Content inside `<svg>`, `<math>`, and `<noscript>` isn't modeled, and coverage says so.
+When several rules report one defect (a missing title is `content/order` and `a11y/title`), the earliest family keeps it and lists the others in `alsoReportedBy`.
+
+The `component`, `semantic`, `policy`, and `bloat` families come in later M1 steps and are reported as untested until then. Content inside `<svg>`, `<math>`, and `<noscript>` isn't modeled, and coverage says so.
 
 ## Spec data
 
-`data/html.json` is generated from a checkout of [whatwg/html](https://github.com/whatwg/html) and records its commit:
+Each data file is generated from a checkout of its spec's repository and records the commit:
 
 ```sh
-node tools/extract/html.ts ../whatwg-html             # rewrites data/html.json
-npm test                                               # fails if an element’s spec text changed
+node tools/extract/html.ts ../whatwg-html             # data/html.json from whatwg/html
+node tools/extract/aria.ts ../aria                    # data/aria.json from w3c/aria (the editor's draft)
+node tools/extract/html-aria.ts ../html-aria          # data/html-aria.json from w3c/html-aria
+npm test                                               # fails if hand-encoded spec text changed
 ```
 
-When the test names changed elements, review their models in `src/spec/model.ts`, then run `UPDATE_GOLDEN=1 npm test` to pin the new text in `data/overlay-basis.json`.
+When a test names changed elements or rows, review them in `src/spec/model.ts` or `src/spec/html-aria.ts`, then run `UPDATE_GOLDEN=1 npm test` to pin the new text in `data/overlay-basis.json` and `data/html-aria-basis.json`.
 
 ## Development
 
 ```sh
-npm test                    # fixtures, unit, docs, config, and CLI tests
+npm test                    # fixtures, unit, ARIA, docs, config, and CLI tests
 npm run typecheck
 UPDATE_GOLDEN=1 npm test    # rewrite test/fixtures/**/*.json after an intended change; review the diff
 ```

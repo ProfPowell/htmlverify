@@ -4,5 +4,15 @@
     "severity": "error",
     "at": "8:1-8:4",
     "message": "Close <p> explicitly: add </p> before <p> at 9:1."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

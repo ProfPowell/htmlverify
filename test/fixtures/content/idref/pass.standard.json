@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "rule": "a11y/name",
+    "severity": "error",
+    "at": "15:1-15:16",
+    "message": "<dialog> with role dialog has no accessible name: add aria-label or aria-labelledby (WCAG 4.1.2)."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "19:30",
+    "ask": "Does alt=\"Map\" convey what the image shows here?"
+  }
+]

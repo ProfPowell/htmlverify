@@ -10,5 +10,15 @@
     "severity": "error",
     "at": "2:1-2:70",
     "message": "<img> needs sizes, because its srcset uses width descriptors."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "1:6",
+    "ask": "alt=\"Logo\" doesn’t describe anything; what does the image show, or is it decorative?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:58",
+    "ask": "alt=\"Photo\" doesn’t describe anything; what does the image show, or is it decorative?"
   }
 ]

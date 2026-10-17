@@ -51,17 +51,35 @@ const CONTENT = {
   'content/document': 'error',
 } as const;
 
+const A11Y = {
+  'a11y/lang': 'error',
+  'a11y/title': 'error',
+  'a11y/img-alt': 'error',
+  'a11y/svg': 'error',
+  'a11y/name': 'error',
+  'a11y/label': 'error',
+  'a11y/aria-role': 'error',
+  'a11y/aria-attr': 'error',
+  'a11y/aria-redundant': 'warning',
+  'a11y/aria-hidden-focus': 'error',
+  'a11y/headings': 'error',
+  'a11y/landmarks': 'warning',
+  'a11y/link-text': 'warning',
+  'a11y/form-group': 'warning',
+  'a11y/table': 'warning',
+  'a11y/media': 'warning',
+} as const;
+
 const M1 = 'not implemented until M1';
 
 export const PROFILES: Readonly<Record<ProfileName, Profile>> = {
   strict: {
     name: 'strict',
-    severities: { ...SYNTAX, ...STYLE, ...CONTENT },
-    options: { voidElements: 'xhtml', booleanValue: 'true' },
+    severities: { ...SYNTAX, ...STYLE, ...CONTENT, ...A11Y, 'a11y/tabindex': 'error' },
+    options: { voidElements: 'xhtml', booleanValue: 'true', linkTextLanguage: 'en' },
     maxWarnings: null,
     untested: [
       { check: 'component/*', reason: M1 },
-      { check: 'a11y/*', reason: M1 },
       { check: 'semantic/*', reason: M1 },
       { check: 'policy/*', reason: M1 },
       { check: 'bloat/*', reason: M1 },
@@ -71,12 +89,11 @@ export const PROFILES: Readonly<Record<ProfileName, Profile>> = {
   },
   standard: {
     name: 'standard',
-    severities: { ...SYNTAX, ...Object.fromEntries(Object.keys(STYLE).map((id) => [id, 'off'])), ...CONTENT },
-    options: { voidElements: 'xhtml', booleanValue: null },
+    severities: { ...SYNTAX, ...Object.fromEntries(Object.keys(STYLE).map((id) => [id, 'off'])), ...CONTENT, ...A11Y, 'a11y/tabindex': 'warning' },
+    options: { voidElements: 'xhtml', booleanValue: null, linkTextLanguage: 'en' },
     maxWarnings: null,
     untested: [
       { check: 'component/*', reason: M1 },
-      { check: 'a11y/*', reason: M1 },
       { check: 'semantic/*', reason: M1 },
     ],
   },

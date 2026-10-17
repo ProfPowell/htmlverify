@@ -54,7 +54,7 @@ export function checkAttributes(ctx: RuleContext): RawFinding[] {
   return out;
 }
 
-type AttributeFinding = Pick<RawFinding, 'rule' | 'message' | 'severity' | 'evidence'>;
+type AttributeFinding = Pick<RawFinding, 'rule' | 'message' | 'severity' | 'evidence' | 'defect'>;
 
 /**
  * HTML's "obsolete but conforming" features: vestigial markup that has no
@@ -177,6 +177,7 @@ function valueFinding(element: Element, name: string, value: string, row: Attrib
     rule: 'content/attribute-value',
     message: `${name}=${quote(value)} ${problem.text}${/[.?!]$/.test(problem.text) ? '' : '.'}`,
     ...(problem.severity ? { severity: problem.severity } : {}),
+    ...(name === 'lang' ? { defect: 'lang-value' } : {}),
     evidence: { value },
   };
 }

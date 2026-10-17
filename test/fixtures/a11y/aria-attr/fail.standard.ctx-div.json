@@ -1,0 +1,50 @@
+[
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "1:6-1:25",
+    "message": "aria-expanded isn’t supported on <div> (role generic)."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "1:6-1:25",
+    "message": "aria-expanded=\"yes\" must be \"false\", \"true\", or \"undefined\"."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "2:6-2:18",
+    "message": "aria-foo isn’t an ARIA attribute."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "3:7-3:35",
+    "message": "aria-label isn’t allowed on <span> (role generic), which can’t be named; use a different element, or put the text in the content."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "4:6-4:21",
+    "message": "role=\"checkbox\" needs aria-checked (\"false\", \"mixed\", or \"true\")."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "5:31-5:50",
+    "message": "Don’t use aria-checked on <input type=\"checkbox\">; the checked attribute sets the state (ARIA in HTML)."
+  },
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "6:1-6:47",
+    "message": "<meta> belongs in <head>; here its parent is <div>."
+  },
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "6:28-6:46",
+    "message": "<meta> can’t have aria-* attributes (ARIA in HTML)."
+  }
+]

@@ -11,7 +11,8 @@ import { applyEdits, treeSignature } from './helpers.ts';
  * expected findings in <case>[.<flag>…].json. Flags: `standard` selects the
  * standard profile; `ctx-<tag>` checks the file as a fragment inside <tag>.
  * A `fail-` case must report its rule and a `pass` case must not; `boundary-`
- * cases rely on the golden file alone. Run with UPDATE_GOLDEN=1 to rewrite
+ * cases rely on the golden file alone. Review items follow the findings.
+ * Run with UPDATE_GOLDEN=1 to rewrite
  * the golden files, then review the diff.
  */
 
@@ -39,20 +40,26 @@ for (const file of htmlFiles(ROOT)) {
     const [result] = (await check({ path: rel, source: bytes, context }, { profile })).files;
     assert.ok(result);
 
+    // A finding merged into another family's still counts for its rule.
+    const reports = (f: (typeof result.findings)[number]) => f.rule === rule || (f.alsoReportedBy ?? []).includes(rule ?? '');
     if (rule && caseName.startsWith('fail-')) {
-      assert.ok(result.findings.some((f) => f.rule === rule), `expected a ${rule} finding`);
+      assert.ok(result.findings.some(reports), `expected a ${rule} finding`);
     }
     if (rule && caseName.startsWith('pass')) {
-      assert.ok(!result.findings.some((f) => f.rule === rule), `unexpected ${rule} finding`);
+      assert.ok(!result.findings.some(reports), `unexpected ${rule} finding`);
     }
 
-    const actual = `${JSON.stringify(result.findings.map((f) => ({
-      rule: f.rule,
-      severity: f.severity,
-      at: `${f.line}:${f.column}-${f.endLine}:${f.endColumn}`,
-      message: f.message,
-      ...(f.fix ? { fix: f.fix.edits } : {}),
-    })), null, 2)}\n`;
+    const actual = `${JSON.stringify([
+      ...result.findings.map((f) => ({
+        rule: f.rule,
+        severity: f.severity,
+        at: `${f.line}:${f.column}-${f.endLine}:${f.endColumn}`,
+        message: f.message,
+        ...(f.alsoReportedBy ? { alsoReportedBy: f.alsoReportedBy } : {}),
+        ...(f.fix ? { fix: f.fix.edits } : {}),
+      })),
+      ...result.reviews.map((r) => ({ rule: r.rule, review: `${r.line}:${r.column}`, ask: r.ask })),
+    ], null, 2)}\n`;
     const golden = file.replace(/\.html$/, '.json');
     if (UPDATE) writeFileSync(golden, actual);
     else {

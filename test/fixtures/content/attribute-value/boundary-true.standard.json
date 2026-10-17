@@ -1,8 +1,24 @@
 [
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "8:4-8:50",
+    "message": "<input type=\"text\" name=\"q\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
     "rule": "content/attribute-value",
     "severity": "error",
     "at": "8:32-8:47",
     "message": "disabled=\"true\" isn’t valid HTML: a boolean attribute’s value must be empty or \"disabled\". Write disabled=\"\"."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

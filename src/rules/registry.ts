@@ -1,6 +1,8 @@
 import type { RuleMeta } from './types.ts';
 
 const HTML = 'https://html.spec.whatwg.org/multipage';
+const WCAG = 'https://www.w3.org/TR/WCAG22/';
+const ARIA_IN_HTML = 'https://www.w3.org/TR/html-aria/';
 const PARSING = `${HTML}/parsing.html`;
 const SYNTAX = `${HTML}/syntax.html`;
 
@@ -36,6 +38,23 @@ export const RULES: readonly RuleMeta[] = [
   { id: 'content/invalid-id', authority: 'standard', summary: 'Empty ID, or one containing whitespace', ref: `${HTML}/dom.html#the-id-attribute` },
   { id: 'content/idref', authority: 'standard', summary: 'ID reference that doesn’t resolve, or names the wrong kind of element', ref: `${HTML}/dom.html#the-id-attribute` },
   { id: 'content/document', authority: 'standard', summary: 'More than one visible main, or more than one encoding declaration', ref: `${HTML}/grouping-content.html#the-main-element` },
+  { id: 'a11y/lang', authority: 'standard', summary: 'Page language missing, or a lang value that isn’t well-formed', ref: `${WCAG}#language-of-page` },
+  { id: 'a11y/title', authority: 'standard', summary: 'Page title missing or empty', ref: `${WCAG}#page-titled` },
+  { id: 'a11y/img-alt', authority: 'standard', summary: 'Image without a text alternative', ref: `${WCAG}#non-text-content` },
+  { id: 'a11y/svg', authority: 'standard', summary: 'Inline svg that is neither hidden nor a named image', ref: `${WCAG}#non-text-content` },
+  { id: 'a11y/name', authority: 'standard', summary: 'Link, button, frame, dialog, or widget without an accessible name', ref: `${WCAG}#name-role-value` },
+  { id: 'a11y/label', authority: 'standard', summary: 'Form control without a programmatic label', ref: `${WCAG}#labels-or-instructions` },
+  { id: 'a11y/aria-role', authority: 'standard', summary: 'Unknown, abstract, or disallowed role, or a role outside its required parent', ref: `${ARIA_IN_HTML}#docconformance` },
+  { id: 'a11y/aria-attr', authority: 'standard', summary: 'Unknown, deprecated, disallowed, or invalid aria-* attribute, or a missing required state', ref: `${ARIA_IN_HTML}#docconformance` },
+  { id: 'a11y/aria-redundant', authority: 'standard', summary: 'Explicit role equal to the implicit one', ref: `${ARIA_IN_HTML}#docconformance` },
+  { id: 'a11y/aria-hidden-focus', authority: 'standard', summary: 'Focusable element inside aria-hidden="true"', ref: `${WCAG}#name-role-value` },
+  { id: 'a11y/tabindex', authority: 'policy', summary: 'Positive tabindex, or tabindex="0" on an element with no role', ref: `${WCAG}#focus-order` },
+  { id: 'a11y/headings', authority: 'standard', summary: 'Empty heading, skipped heading level, or a page that doesn’t start with h1', ref: `${WCAG}#info-and-relationships` },
+  { id: 'a11y/landmarks', authority: 'heuristic', summary: 'Repeated landmarks without distinct names; more than one top-level header or footer', ref: 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/' },
+  { id: 'a11y/link-text', authority: 'heuristic', summary: 'Generic link text such as "click here"', ref: `${WCAG}#link-purpose-in-context` },
+  { id: 'a11y/form-group', authority: 'heuristic', summary: 'Radio buttons or checkboxes sharing a name without a group label', ref: `${WCAG}#info-and-relationships` },
+  { id: 'a11y/table', authority: 'heuristic', summary: 'Data table without header cells', ref: `${WCAG}#info-and-relationships` },
+  { id: 'a11y/media', authority: 'standard', summary: 'Autoplaying sound; video captions to review', ref: `${WCAG}#audio-control` },
 ];
 
 export const RULE_BY_ID: ReadonlyMap<string, RuleMeta> = new Map(RULES.map((r) => [r.id, r]));

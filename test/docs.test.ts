@@ -9,8 +9,9 @@ for (const rule of RULES) {
     const doc = RULE_DOCS[rule.id];
     assert.ok(doc, `${rule.id} has no doc in src/rules/docs.ts`);
     const context = doc.context === undefined ? 'div' : doc.context;
+    // A deduplicated finding still counts for the rules it absorbed.
     const rulesIn = async (source: string) =>
-      (await check({ path: 'example.html', source, context }, { profile: 'strict' })).files[0]!.findings.map((f) => f.rule);
+      (await check({ path: 'example.html', source, context }, { profile: 'strict' })).files[0]!.findings.flatMap((f) => [f.rule, ...(f.alsoReportedBy ?? [])]);
     assert.ok((await rulesIn(doc.fails)).includes(rule.id), `the failing example doesn’t report ${rule.id}`);
     assert.ok(!(await rulesIn(doc.passes)).includes(rule.id), `the passing example reports ${rule.id}`);
     assert.equal(explain(rule.id).id, rule.id);

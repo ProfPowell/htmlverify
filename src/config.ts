@@ -20,6 +20,7 @@ const SEVERITIES = new Set(['error', 'warning', 'info', 'off']);
 const OPTION_VALUES: Record<keyof Options, readonly (string | null)[]> = {
   voidElements: ['xhtml', 'tight', 'html'],
   booleanValue: ['true', 'empty', 'name', null],
+  linkTextLanguage: ['en'],
 };
 /** Keys the spec defines that later milestones implement. */
 const LATER: Record<string, string> = {
@@ -27,7 +28,6 @@ const LATER: Record<string, string> = {
   registry: 'M2',
   nu: 'M1e',
   'options.adHocPrefix': 'M1d',
-  'options.linkTextLanguage': 'M1b',
 };
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);

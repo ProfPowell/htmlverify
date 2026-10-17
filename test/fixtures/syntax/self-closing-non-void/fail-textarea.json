@@ -18,9 +18,25 @@
     "message": "<form> is never closed: it runs to the end of the file. Add </form> where it should end."
   },
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "9:1-9:27",
+    "message": "<textarea name=\"message\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
     "rule": "syntax/self-closing-non-void",
     "severity": "error",
     "at": "9:1-9:27",
     "message": "<textarea/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <textarea> stays open and swallows everything up to the end of the file. Write <textarea></textarea>."
+  },
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "5:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

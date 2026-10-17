@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "rule": "a11y/img-alt",
+    "review": "1:49",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
+  }
+]

@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "rule": "a11y/lang",
+    "review": "2:7",
+    "ask": "Does lang=\"en\" match the language of the page’s content?"
+  },
+  {
+    "rule": "a11y/title",
+    "review": "6:1",
+    "ask": "Does the title \"Valid page\" describe the page’s topic or purpose?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "34:108",
+    "ask": "Does alt=\"A photo\" convey what the image shows here?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "100:35",
+    "ask": "Does alt=\"Map\" convey what the image shows here?"
+  }
+]

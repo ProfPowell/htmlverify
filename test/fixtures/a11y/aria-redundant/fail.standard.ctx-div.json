@@ -1,0 +1,25 @@
+[
+  {
+    "rule": "a11y/aria-redundant",
+    "severity": "warning",
+    "at": "1:23-1:36",
+    "message": "role=\"button\" is redundant on <button>, which has that role already; remove it."
+  },
+  {
+    "rule": "a11y/aria-redundant",
+    "severity": "warning",
+    "at": "2:6-2:23",
+    "message": "role=\"navigation\" is redundant on <nav>, which has that role already; remove it."
+  },
+  {
+    "rule": "a11y/aria-redundant",
+    "severity": "warning",
+    "at": "3:26-3:36",
+    "message": "role=\"img\" is redundant on <img>, which has that role already; remove it."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "3:18",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
+  }
+]

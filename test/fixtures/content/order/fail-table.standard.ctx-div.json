@@ -10,5 +10,15 @@
     "severity": "error",
     "at": "2:35-2:59",
     "message": "<source> is out of order in <picture>: nothing more is allowed after <img>. <picture> holds <source> elements followed by one <img>."
+  },
+  {
+    "rule": "a11y/table",
+    "review": "1:1",
+    "ask": "Is this table used for layout? Use CSS for layout; if it holds data, add <th> header cells."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:27",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
   }
 ]

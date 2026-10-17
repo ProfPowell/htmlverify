@@ -33,7 +33,8 @@ test('parseConfig rejects unknown keys, rules, severities, and options', () => {
     [{ options: { quotes: 'double' } }, /unknown option "quotes"/],
     [{ maxWarnings: -1 }, /"maxWarnings" must be/],
     [{ vocabularies: ['vanilla-breeze@0.3.1'] }, /isn’t supported yet \(M1d\)/],
-    [{ options: { linkTextLanguage: 'en' } }, /isn’t supported yet \(M1b\)/],
+    [{ options: { linkTextLanguage: 'fr' } }, /"options.linkTextLanguage" must be "en"/],
+    [{ options: { adHocPrefix: 'x-' } }, /isn’t supported yet \(M1d\)/],
   ];
   for (const [raw, error] of cases) assert.throws(() => parseConfig(raw, 'test.json'), error, JSON.stringify(raw));
 });

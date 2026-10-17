@@ -1,0 +1,32 @@
+[
+  {
+    "rule": "a11y/aria-role",
+    "severity": "error",
+    "at": "1:6-1:18",
+    "message": "role=\"buton\" isn’t an ARIA role. Did you mean \"button\"?"
+  },
+  {
+    "rule": "a11y/aria-role",
+    "severity": "error",
+    "at": "2:6-2:19",
+    "message": "role=\"widget\" is an abstract role for the ARIA ontology; authors must not use it."
+  },
+  {
+    "rule": "a11y/aria-role",
+    "severity": "error",
+    "at": "3:5-3:18",
+    "message": "role=\"button\" isn’t allowed on <ul> (ARIA in HTML)."
+  },
+  {
+    "rule": "a11y/aria-role",
+    "severity": "error",
+    "at": "4:6-4:16",
+    "message": "role=\"tab\" must be inside an element with role tablist."
+  },
+  {
+    "rule": "a11y/aria-role",
+    "severity": "error",
+    "at": "5:7-5:22",
+    "message": "role=\"listitem\" must be inside an element with role directory or list."
+  }
+]

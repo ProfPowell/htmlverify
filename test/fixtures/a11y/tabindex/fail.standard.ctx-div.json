@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "a11y/tabindex",
+    "severity": "warning",
+    "at": "1:23-1:35",
+    "message": "tabindex=\"2\" changes the tab order; use 0 and arrange the source order instead (WCAG 2.4.3)."
+  },
+  {
+    "rule": "a11y/tabindex",
+    "severity": "warning",
+    "at": "2:6-2:18",
+    "message": "tabindex=\"0\" makes <div> focusable, but it has no role: use a <button> or <a href>, or give it a role."
+  }
+]

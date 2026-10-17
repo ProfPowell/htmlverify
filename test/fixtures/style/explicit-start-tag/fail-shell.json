@@ -1,5 +1,11 @@
 [
   {
+    "rule": "a11y/lang",
+    "severity": "error",
+    "at": "1:1-1:1",
+    "message": "<html> needs lang, such as lang=\"en\": assistive technology uses it to pick a language (WCAG 3.1.1)."
+  },
+  {
     "rule": "style/explicit-start-tag",
     "severity": "error",
     "at": "2:1-2:1",
@@ -16,5 +22,10 @@
     "severity": "error",
     "at": "4:1-4:1",
     "message": "The <body> start tag is missing; the parser implied it at 4:1. Write <body> explicitly."
+  },
+  {
+    "rule": "a11y/title",
+    "review": "3:1",
+    "ask": "Does the title \"Fixture\" describe the page’s topic or purpose?"
   }
 ]

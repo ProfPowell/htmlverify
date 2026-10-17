@@ -1,9 +1,21 @@
 [
   {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "1:34-1:53",
+    "message": "<input type=\"text\" name=\"last\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
+  },
+  {
     "rule": "content/descendant",
     "severity": "error",
     "at": "1:34-1:53",
     "message": "<input> can’t be inside <label>, which already labels <input> at 1:13; a label contains only the control it labels."
+  },
+  {
+    "rule": "a11y/label",
+    "severity": "error",
+    "at": "2:26-2:44",
+    "message": "<input type=\"text\" id=\"other\"> has no label. Add <label for=\"…\">…</label> or wrap it in a label (WCAG 1.3.1, 4.1.2)."
   },
   {
     "rule": "content/descendant",
