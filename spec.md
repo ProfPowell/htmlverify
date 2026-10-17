@@ -1,882 +1,888 @@
-# HTMLVerify
+# htmlverify specification
 
-## Requirements specification for rigorous HTML verification and assembly
+**Version** 0.2, implementation draft · **Date** 2026-10-17 · **Replaces** the 1.0 proposal (commit `d99d631`); §15 lists what changed and why.
 
-**Document version:** 1.0 — proposed implementation contract  
-**Research date:** 17 October 2026  
-**Primary use case:** helping LLMs and humans produce deliberate, concise, semantic, accessible HTML through verification and reuse of reviewed components.
+htmlverify lets an LLM build HTML the way you build with Lego. It picks expert-reviewed bricks (components), snaps them together through typed connection points (slots and parameters), and a deterministic assembler writes the markup. A strict checker verifies each brick, each connection, and the finished page against the HTML standard, accessibility requirements, and the house style. The same checker works on hand-written HTML, so the LLM can also repair markup it wrote itself.
 
-This document specifies a tool to build; the commands, APIs, rule identifiers, schemas, and thresholds below are proposed HTMLVerify interfaces, not claims that an implementation already exists. `MUST`, `SHOULD`, and `MAY` describe requirements on HTMLVerify unless explicitly attributed to an external standard. A `SHOULD` permits a documented engineering exception; a `MUST` is a release acceptance requirement for its assigned stage.
+The project tests the hypothesis in the README: **an LLM produces web pages predictably, with real quality, when it composes verified parts instead of generating markup freely.** §13 defines how the experiment proves or disproves it.
 
-**Navigation:** [Standards](#2-standards-authority-and-evidence-model) · [Profiles](#3-inputs-profiles-and-truthful-outcomes) · [Authoring rules](#4-strict-authoring-policy) · [Accessibility](#7-accessibility-verification) · [Assembly](#10-template-and-fragment-assembly) · [Architecture](#11-deterministic-engine-and-architecture) · [Diagnostics](#12-rule-contracts-and-diagnostics) · [Scoring](#14-scoring-and-acceptance-gates) · [Interfaces](#15-cli-configuration-and-api) · [Tests](#17-test-fixtures-and-verification-strategy) · [Acceptance](#18-acceptance-criteria) · [Roadmap](#19-staged-roadmap)
+## 1. Scope
 
-## 1. Product intent and boundaries
+### 1.1 The Lego model
 
-HTMLVerify SHALL combine two capabilities:
+| Lego | htmlverify | § |
+| --- | --- | --- |
+| Brick | Component: versioned template and typed contract, approved by a human | 9.3–9.4 |
+| Studs | Slots and parameters; what fits a slot is derived from the HTML content model | 9.5–9.6 |
+| Printing on the brick | Typed data: text, URLs, restricted inline HTML | 9.5 |
+| Instructions | Assembly plan (JSON), written by the LLM | 9.7 |
+| Clutch check | Assembly-time type checks, then full verification of the output | 9.8 |
+| Factory QA | `component check`: fixtures, branch coverage, approval bound to a digest | 9.10 |
 
-1. **Verification:** inspect authored source, the parsed tree, and, where requested, rendered behavior; produce reproducible findings with evidence and repair guidance.
-2. **Assembly:** construct HTML from versioned, reviewed templates and fragments through typed contracts, then verify the complete result in its actual context.
+### 1.2 Goals
 
-The desired outcome is HTML whose structure expresses its meaning, whose source makes author intent explicit, whose interactions use appropriate native elements, and whose extra elements and attributes have a reason to exist. Passing a browser parser or a conformance checker alone is insufficient.
+1. **Check** any HTML document or fragment: syntax as the browser parses it, authored form, content model, static accessibility, semantics, house style, structural bloat.
+2. **Assemble** pages from components with guarantees by construction: escaping, IDs, heading levels, content-model fit.
+3. **Talk to an LLM**: compact findings with exact locations and fixes, and a component catalog to choose from.
+4. **Be deterministic**: the same input, config, and registry give byte-identical output and reports.
 
-The tool MUST keep these independent questions visible:
+### 1.3 Non-goals for v1
 
-- Does the source conform to the selected HTML standard and related specifications?
-- Does it satisfy the project's stricter authoring policy?
-- Does it express the intended meaning and relationships?
-- What accessibility checks passed, failed, or still need evidence?
-- Is its structural complexity justified?
-- Was its assembly safe, reproducible, and valid at the insertion sites?
+- Certifying WCAG conformance. Static checks establish failures, never a pass; reports list what remains for runtime or human review.
+- Rendering-dependent checks (contrast, focus visibility, target size, keyboard behavior) before M4.
+- Browser-support data (Baseline). Features are checked against the pinned spec snapshot; the house decides what to use.
+- Linting CSS or JavaScript, or reading framework sources (JSX, Vue, server templates). Check their HTML output.
+- Sanitizing untrusted HTML. Restricted-HTML parameters are validated and rejected, never cleaned.
+- XML parsing. "XHTML style" here means an authored form of `text/html`, parsed by the HTML parser.
 
-### 1.1 In scope
+## 2. Principles
 
-UTF-8 `text/html` documents; contextual HTML fragments; the HTML namespace with namespace-aware SVG/MathML integration; reviewed template libraries; final static output from frameworks; optional browser testing of declared routes and interaction states; editor, CLI, library, and CI integrations.
+1. **The browser's parser is ground truth.** Checks run on the tree the WHATWG algorithm builds and on the source tokens that built it. A checker with its own parser disagrees with browsers (§4.3).
+2. **Construct, don't generate.** The LLM chooses components and supplies content and intent; code writes markup.
+3. **Truthful outcomes.** A check that didn't run is `untested`, never a pass. Judgments the tool can't make (is this alt text accurate?) become review items.
+4. **Labeled authority.** Each rule is `standard` (HTML, ARIA, or WCAG requirement), `policy` (house rule), or `heuristic` (likely problem). Policy is never reported as an HTML error.
+5. **Actionable.** Each finding says where, what, why, and how to fix it, in one line when possible.
+6. **Platform first.** Output uses native elements and attributes (`button`, `details`, `dialog`, `popover`, `command`/`commandfor`) before scripted widgets. The tool uses Node built-ins before packages.
 
-### 1.2 Explicit limits
+## 3. Architecture
 
-- HTMLVerify is not an XML well-formedness checker for `text/html`. XHTML requires a separate adapter and profile.
-- JSX, TSX, Vue, Svelte, server templates, and other source languages require adapters or compilation. They MUST NOT be silently parsed as final HTML.
-- No score establishes WCAG conformance, legal compliance, semantic correctness, security, or usability. Manual assessment and application context remain necessary.
-- Static analysis cannot prove arbitrary JavaScript behavior, all dynamically generated states, all CSS dependencies, or assistive-technology interoperability.
-- Valid markup is not sanitization. Safe assembly is limited to its declared input types and sinks; arbitrary third-party HTML needs a separately specified sanitization boundary.
-- Minimal markup means removing unnecessary structure while preserving meaning and behavior. It does not mean minimizing bytes or deleting useful labels, headings, captions, or grouping elements.
+### 3.1 Pipelines
 
-## 2. Standards authority and evidence model
+```text
+check     bytes → decode → parse5 (tree + token log) → reconcile tokens with tree
+          → indexes (ids, references, names, headings, landmarks, metrics)
+          → rules → findings + reviews + coverage → status, score → text | json
 
-Use the [WHATWG HTML Living Standard][html] for contemporary HTML, rather than treating a historical W3C HTML edition as the current vocabulary. Use W3C accessibility specifications alongside it. W3C and WHATWG have a [collaboration agreement for a single HTML and DOM development stream][html-collaboration].
+assemble  plan → validate → resolve components → instantiate (types, slots, ranks, ids, refs)
+          → serialize → reparse and compare → check in context
+          → map findings to plan or template → html + report
+```
 
-### 2.1 Classify every rule on separate axes
+### 3.2 Technology
 
-| Axis | Required values or meaning |
+| Concern | Choice | Why |
+| --- | --- | --- |
+| Runtime | Node ≥ 22.18, ES modules | Runs TypeScript directly (type stripping); verified on 22.22 |
+| Language | TypeScript, erasable syntax only | No build step in development; `tsc --noEmit` checks types; JS is emitted only for npm publishing, because Node won't strip types inside `node_modules` |
+| HTML parser | `parse5` 8, the only direct runtime dependency (it brings `entities`) | WHATWG tree construction, fragment parsing with context, source locations |
+| CLI, tests, hashes, globs, URLs | `util.parseArgs`, `node:test`, `node:crypto`, `fs.glob`, WHATWG `URL` | Built-ins |
+| Schemas | JSON Schema files, validated by an in-repo validator for the subset used | The same schemas serve as MCP tool input schemas |
+| Conformance cross-check | Nu Html Checker (`vnu.jar`), optional, needs Java | Independent oracle (§6.8) |
+| Runtime accessibility (M4) | Playwright and axe-core, optional | Rendered-state checks |
+
+### 3.3 Modules
+
+| Module | Responsibility |
 | --- | --- |
-| Authority | `standard`: normative author or conformance-checker requirement/recommendation; `guidance`: non-normative advice; `policy`: HTMLVerify/project restriction; `heuristic`: evidence suggesting a review |
-| Requirement strength | Preserve the source's MUST, MUST NOT, SHOULD, SHOULD NOT, MAY, or equivalent language; independent of severity |
-| Evidence mode | `source`, `tree`, `computed`, `interaction`, `manual`, or a declared combination |
-| Result | `pass`, `fail`, `notApplicable`, `cantTell`, `untested` |
-| Severity | `error`, `warning`, `review`, `info`; independent of authority |
-| Confidence | `certain`, `probable`, `contextRequired`; never fabricated numerical certainty |
-| Availability | Required stage and engine capabilities; missing support produces `untested`, never `pass` |
+| `parse` | decoding, limits, parse5 wrapper, token log, reconciliation |
+| `spec` | element, attribute, and ARIA data; content-model engine |
+| `analysis` | ID and reference index, accessible names, heading outline, landmarks, metrics |
+| `rules` | rule functions and their docs |
+| `report` | findings, deduplication, status, score, formats |
+| `fix` | edit planning and reparse verification |
+| `assembly` | template compiler, contracts, plans, instantiation, serializer, origins |
+| `registry` | component discovery, digests, review status, catalog |
+| `cli`, `mcp`, `hook` | interfaces; the only modules that touch the filesystem or process |
 
-A semantic requirement can be normative even when detecting its violation requires human judgment. Conversely, a deterministic test can enforce a project preference rather than a standard. Rule metadata MUST preserve both distinctions. Result vocabulary is informed by the [ACT Rules Format][act]; adopting it does not imply that every HTMLVerify rule is a W3C-approved ACT rule.
+The core (everything except the interfaces) is pure functions over strings, so it also runs in a browser or a worker.
 
-### 2.2 Source registry and update policy
+### 3.4 Specification data
 
-Each rule MUST cite a specific section, identify whether it is normative, and record the edition or retrieved revision used to implement it. The standard registry SHALL include:
+`data/` holds JSON generated by `tools/extract/` from pinned snapshots of WHATWG HTML (element, attribute, and category indices), WAI-ARIA 1.2 (roles, states, properties), and ARIA in HTML (implicit roles, allowed roles and attributes). Each file records its source URL, snapshot date, and SHA-256. Exact child grammars and descendant prohibitions, which the indices only summarize, are hand-written overlays that cite their spec sections. Updating data is an explicit command whose diff is reviewed; checks never fetch anything.
 
-| Source | Intended use |
-| --- | --- |
-| WHATWG HTML | Syntax, parsing, elements, attributes, content models, semantics, obsolete features |
-| WCAG 2.2 | Accessibility success criteria and conformance requirements; default target A and AA |
-| WAI-ARIA 1.2 and ARIA in HTML | Role/state/property constraints and their permitted use on HTML |
-| Accessible Name and Description Computation | Versioned accessible-name algorithm and declared engine behavior |
-| HTML-AAM | Mapping reference, with publication maturity recorded |
-| WAI tutorials, WCAG Understanding/Techniques, APG | Explanations, examples, interaction patterns; not interchangeable with normative requirements |
-| ACT Rules Format and published ACT rules | Test structure, applicability, assumptions, expectations, and outcome mappings |
+## 4. Input and parsing
 
-At research time, [WCAG 2.2][wcag22] and [WAI-ARIA 1.2][aria12] are Recommendations. [ARIA in HTML, 11 August 2026][aria-html] is a Recommendation. [Accessible Name 1.2][accname12] and [HTML-AAM 1.0][html-aam] are Working Drafts; [Accessible Name 1.1][accname11] is a Recommendation. Implementations MUST label draft dependencies and pin the actual algorithm implemented by the chosen accessibility engine. They MUST NOT claim that a familiar version number implies Recommendation status.
+### 4.1 Input kinds
 
-`htmlverify.lock.json` MUST record tool/rule-pack versions, parser build, conformance-checker artifact digest, accessibility-engine version, specification revisions or snapshot hashes, browser builds, template digests, and effective profile hash. Do not fetch evolving standards during ordinary checks. An explicit update command produces a reviewed lockfile diff, changed-rule report, and fixture results. Retain upstream licensing and attribution for copied test data or schema material.
-
-## 3. Inputs, profiles, and truthful outcomes
-
-### 3.1 Input contracts
-
-- **Document:** original bytes, logical path, MIME type, encoding, and optional build source map.
-- **Fragment:** original bytes plus a context descriptor: namespace, context element and attributes, relevant ancestor chain, document mode, document URL/base, scripting flag, and available ID/landmark/form environment. A bare fragment without sufficient context receives limited syntax results and `cantTell` for context-dependent checks.
-- **Assembly:** a versioned plan, locked registry, typed data, and an explicit final document or fragment context.
-- **Rendered run:** approved local artifact or URL, exact browser build, viewport, locale, color scheme, resource fixtures, and an ordered scenario manifest.
-
-Do not infer the input kind solely from file extension or the presence of `<html>`. Reject conflicting declarations. Report unsupported syntax explicitly.
-
-### 3.2 Built-in profiles
-
-| Profile | Required work | Intended use |
+| Kind | Meaning | Parsed with |
 | --- | --- | --- |
-| `strict-static` | Source policy, parsing, document conformance, content constraints, static accessibility, semantic review signals, complexity metrics | Default generated-HTML feedback loop |
-| `release` | `strict-static` plus declared runtime scenarios and required manual evidence | Release evaluation for specified pages and states |
-| `fragment` | Source policy and contextual fragment checks; complete-document status remains unevaluated until insertion | Component development |
-| `migration` | Same raw findings, plus baseline/new-debt comparison and explicit accepted exceptions | Existing sites; never presented as strict conformance |
-| `experimental` | Explicitly named candidate features and tests, separate score/profile identity | Exploring newer platform capabilities |
+| `document` | complete page | `parse()` |
+| `fragment` | partial markup inside a context element | `parseFragment(context, …)` |
+| `template` | component template | fragment parsing in the component's `context` (§9.4) |
+| `plan` | assembly plan | JSON and its schema |
 
-P1 ships `strict-static` for documents. Later stages add assembly, certified contextual fragment support, and the full `release` profile. Requesting an unavailable profile MUST fail explicitly; a partial implementation MUST NOT silently emulate it.
+The command and its flags decide the kind; file extensions and content don't. Fragment context is a tag (`--context tbody`) or a descriptor:
 
-Each versioned profile MUST publish an exhaustive subcheck manifest. Rows name a rule/subcheck ID, required evidence, availability stage, and disposition: `required`, `advisory`, or `outOfScope`. Mixed rule families use stable subcheck identifiers such as `HV-A11Y-002/name-static` and `HV-A11Y-002/name-computed`; the parent ID remains the score-cap identity. P1 requires source-resolvable checks and creation of review obligations. Computed-name conclusions, runtime interactions, and manual resolutions are explicitly outside its automated gate. They remain untested/deferred, never recorded as passes. Missing evidence for an actually required static subcheck produces incomplete analysis.
+```json
+{ "parent": "tbody", "ancestors": ["table", "main", "body"], "ids": ["email-hint"] }
+```
 
-For example, label-reference resolution is required in `strict-static`; computed exposure/name evaluation is required for applicable declared `release` states; meaningful-label review is advisory for the static gate and mandatory when applicable to release. The manifest is part of the profile hash. Implementers may not silently change dispositions to improve coverage or scores.
+`ancestors` feed transparent-content and descendant checks; `ids` let references resolve against the host page. Document-level rules (title, `lang`, single `main` and `h1`) are `untested` for fragments.
 
-### 3.3 Report status
+### 4.2 Decoding and limits
 
-Every report MUST distinguish:
+UTF-8 only, decoded with `TextDecoder("utf-8", { fatal: true })`; invalid bytes stop analysis with `syntax/encoding`. A BOM is accepted and preserved by fixes. Limits are configurable: 5 MiB per file, 100,000 elements, depth 512. Exceeding one gives status `incomplete`.
 
-- `executionStatus`: `complete`, `partial`, or `failed`.
-- `gateStatus`: `pass`, `passWithExceptions`, `fail`, or `incomplete`.
-- Separate HTML-conformance, source-policy, accessibility, semantic-review, and assembly summaries.
-- Tested scope, excluded scope, applicable rule counts, completed checks, untested checks, and unresolved reviews.
+### 4.3 Reconciling tokens with the tree
 
-Gate precedence: known blocking violations produce `fail`; otherwise missing required evidence or phases produces `incomplete`; otherwise permitted active waivers produce `passWithExceptions`; otherwise `pass`. Operational failure also controls the exit code. A fragment can pass its fragment contract without passing a full document's conformance gate.
+parse5 reports tokenizer errors but performs most tree-construction repairs silently. In the spike (parse5 8.0.1) it reported nothing for content foster-parented out of a table, misnested formatting, `</p>` with no open `p`, `</br>`, a nested `<form>`, an `<h1>` closed by `<h2>`, or `<tr>` dropped in a `div` context. htmlverify therefore logs every start and end tag token the tree builder consumes, by wrapping the parser's `onStartTag` and `onEndTag`. That also yields correct tokenizer states for `script`, `textarea`, and foreign content. The log is reconciled with the tree:
 
-## 4. Strict authoring policy
-
-HTML permits unquoted attribute values and certain omitted tags. HTMLVerify deliberately chooses a stricter authored form. Those preferences MUST be reported as policy findings rather than misrepresented as HTML errors. HTML has void elements whose end tags are forbidden; foreign-content syntax must be handled separately. [HTML syntax][html-syntax]
-
-The default generated form is lowercase HTML tag/attribute names, double-quoted attribute values, explicit permitted end tags, no trailing solidus on HTML void elements, UTF-8, and `<!doctype html>`. Foreign names such as SVG `viewBox` retain their required spelling. Existing single-quoted values satisfy the quote requirement; double quotes are a serializer convention.
-
-### 4.1 Source rules
-
-All rules below are required for P1 unless stated otherwise. `S` = standard, `P` = policy, `G` = guidance, `H` = heuristic. Mixed rows MUST separate subchecks and their authority in actual rule metadata.
-
-| Rule ID | Requirement and detection | Basis | Default |
-| --- | --- | --- | --- |
-| `HV-SRC-001` | Every authored attribute has `=` and a quoted value, including empty values. `<input disabled="">` passes; bare `disabled` and `class=card` fail this policy. | P | error |
-| `HV-SRC-002` | Every authored non-void HTML element has explicit start/end tags, including otherwise optional tags. Every implied HTML element inside the checked source scope needs an authored start tag. Exclude synthetic fragment context and the document node. | P | error |
-| `HV-SRC-003` | No end tags for HTML void elements; no self-closing syntax for ordinary non-void HTML elements. Native foreign self-closing syntax remains supported. | S | error |
-| `HV-SRC-004` | No trailing `/` on HTML void start tags in this profile. | P | warning |
-| `HV-SRC-005` | No duplicate attributes, stray end tags, malformed tokens, or parser-reported syntax errors. Preserve duplicates before the parser discards them. | S | error |
-| `HV-SRC-006` | No authored nesting that relies on implicit closure, ignored tokens, foster parenting, or reconstruction of misnested formatting. Report the source cause and resulting tree. | P; underlying errors also S | error |
-| `HV-SRC-007` | Lowercase names in the HTML namespace; do not mechanically lowercase SVG/MathML names or attribute values. | P | warning |
-| `HV-SRC-008` | Full documents use the short doctype and explicit `html`, `head`, and `body`. No XML declaration in the generated HTML profile. | P | error |
-| `HV-SRC-009` | Boolean attributes use the empty quoted form when present and are absent when false. Reject invalid HTML boolean values separately. Enumerated attributes are not treated as booleans. | P + S subchecks | error |
-| `HV-SRC-010` | Reject decoding errors, NUL, unresolved compiler placeholders, and unsupported template-language input. Record original line endings and byte positions. | P; some syntax cases S | error |
-| `HV-SRC-011` | Encode actual character references correctly and with terminating semicolons. Do not reject every literal ampersand with a regex; classify its tokenizer context. | P + S subchecks | error |
-| `HV-SRC-012` | Require a UTF-8 declaration wholly within the first 1,024 bytes of complete generated documents, document language, and a nonempty title. Review title meaning separately. Keep special document contexts explicit. | P; related conformance checks separate | error |
-
-Boolean presence means true; string values `"true"` and `"false"` are not valid boolean-attribute values. Enumerated attributes such as `contenteditable`, `draggable`, `hidden`, and `popover` require their own value definitions. [Common microsyntaxes][html-microsyntax]
-
-For `HV-SRC-002`, a `<table><tr>…</tr></table>` source needs explicit `<tbody>` in the strict profile even where the HTML parser legitimately inserts it. That is a strict authoring choice, not proof that the original source violated HTML. Use source locations and tree-construction evidence, not a naive tag stack. Normal text-node merging and mandated newline normalization are not failures of source intent.
-
-The source scanner MUST understand comments, raw text, escapable raw text, character references, namespaces, and scripting-dependent `noscript` handling. Strings that resemble tags inside scripts or styles MUST NOT be treated as markup. Parser error absence alone does not demonstrate that all optional tags were authored. [HTML parsing][html-parsing] The document metadata checks also consult the element-specific [metadata requirements][html-metadata].
-
-Unresolved-placeholder detection requires a declared compiler/assembly adapter or reserved marker contract. Literal braces or template examples in ordinary content are not sufficient evidence of an unresolved placeholder.
-
-## 5. Conformance and content-model verification
-
-### 5.1 Use an independent checker
-
-Integrate a local, pinned [Nu Html Checker][nu] as the initial full-document conformance backend. Preserve its raw findings and engine identity. Do not depend on a public hosted validator for routine checks or send user documents there by default. The current upstream release process uses a moving `latest` release; lock downloaded bytes by digest rather than relying on that label alone. [Nu upstream][nu-repo]
-
-A parser establishes a tree; it does not establish all author conformance requirements. HTMLVerify's constraint index supplies contextual diagnostics and assembly checks, while Nu provides independent coverage. Unknown backend messages MUST remain visible as `HV-CON-000` with raw message, severity, location, and engine version. Text matching MUST NOT be used to silently discard unrecognized errors.
-
-When checker and rule pack disagree about a newer feature, report a version conflict and mark affected conclusions `cantTell`. Do not silently whitelist the feature or label it universally invalid.
-
-### 5.2 Content-model engine
-
-Implement a versioned constraint model with:
-
-- Namespace-aware element identity and context-dependent category membership.
-- Ordered child grammars: sequences, choices, repetitions, minimum/maximum occurrence, and permitted text.
-- Element-specific attribute predicates and conditional content rules.
-- Transparent models resolved through the insertion ancestry.
-- Ancestor and descendant prohibitions, including constraints that cross fragment boundaries.
-- Required parent/context rules, unique-element constraints, document-level references, and form ownership.
-- Attribute-value microsyntax validation and cross-attribute dependencies.
-- Distinct document, ordinary template-content, shadow-tree, and foreign-content scopes.
-
-HTML categories are overlapping and can depend on attributes. Transparent content inherits surrounding restrictions; it does not mean unrestricted children. Ordinary template contents have special conformance treatment before instantiation, so template-contract validation is an additional policy. [Content models and semantics][html-dom]
-
-### 5.3 Required rule families
-
-| Rule ID | Required checks | Default |
+| Signal | Detection | Finding |
 | --- | --- | --- |
-| `HV-CON-001` | Complete local checker results: illegal elements/attributes, required attributes, bad values, invalid document structure | error for checker errors |
-| `HV-CON-002` | Child grammar, order, count, category, and permitted-text constraints | error |
-| `HV-CON-003` | Ancestor/descendant restrictions and transparent-model context | error |
-| `HV-CON-004` | Duplicate IDs in the relevant scope; invalid IDs and unresolved required IDREF/IDREFS relationships, using attribute-specific rules | error |
-| `HV-CON-005` | Table structure and cell/header references; do not require every legitimate table to use the same header technique | error or review by subcheck |
-| `HV-CON-006` | Form ownership, valid label targets, forbidden form nesting, applicable input-attribute combinations | error |
-| `HV-CON-007` | Obsolete/nonconforming features and obsolete-but-conforming features, classified separately | error / warning |
-| `HV-CON-008` | Namespace/integration-point handling and required adapter coverage for SVG/MathML | error or untested |
+| Implied element | element without a source location | `style/explicit-start-tag` for `html`, `head`, `body`, `tbody`, `colgroup`, whose start tags are optional; any other implied element is reported with the token that caused it: `syntax/stray-end-tag` (`p` from `</p>`, `br` from `</br>`) or `syntax/misplaced-start-tag` (the `tr` around a `td` placed directly in `table`) |
+| Missing end tag | non-void element without an end-tag location | `style/explicit-end-tag` where the optional-tag rules (HTML §13.1.2.4) allow omission; `syntax/unclosed-element` otherwise |
+| Dropped start tag | start token that no element owns | `syntax/misplaced-start-tag` |
+| Stray end tag | end token that no element owns | `syntax/stray-end-tag` |
+| Cloned element | two elements share one start token | `syntax/misnested` |
+| Moved content | source offsets decrease in document order | `syntax/reordered` |
 
-The rule pack MUST include regression cases for paragraphs containing flow-only elements, list membership, description-list groupings, tables, nested links, button descendants, labels, picture/source ordering, details/summary, and context-sensitive select content. Do not implement a universal “no interactive descendant” rule: each element has its own restrictions. See [text-level semantics][html-text], [grouping content][html-grouping], [tables][html-tables], and [form elements][html-forms].
+Messages name the cause: "`</p>` at 4:21 has no open `<p>`. The `<p>` from 4:1 was closed at 4:9 by `<div>`, which `p` can't contain."
 
-Do not freeze `select` to an old `option`/`optgroup`-only model. Current HTML includes customizable-select structures; accept only what the pinned standard and checker jointly support, with compatibility assessed separately. [The select element][html-select]
+**Why this matters.** The `custom-elements` skill documents void custom elements: `<icon-element name="star"/>`, `<user-avatar src="/a.jpg" alt="Jo"/>`. In `text/html` the `/` is ignored, so the parser leaves them open and they swallow what follows. In the spike the avatar became the parent of the next link. A validator that trusts `void: true` metadata accepts this; browsers don't. → `syntax/self-closing-non-void`.
 
-No fragment is globally “valid everywhere.” A table row fragment, for example, needs an appropriate table-section context. Use the [HTML fragment parsing algorithm][html-fragments]. A synthetic document wrapper is an adapter technique, not evidence that the real integration is valid. Wrapper findings MUST be attributable and excluded only by source ownership, never broad message filters. Always check the final assembled document.
+### 4.4 Locations
 
-## 6. Semantic quality audits
+Positions are parse5's: `line` and `column` are 1-based in UTF-16 code units; `offset` and `endOffset` are 0-based indexes into the decoded string, counting CR. That is the LSP default encoding, so editors need no conversion. Fixes edit the decoded string and re-encode it as UTF-8 with the original BOM and line endings.
 
-The audit asks what content and controls mean before suggesting elements. Class names such as `card`, `header`, or `button` are weak clues, never sufficient proof. Correct semantics can require information absent from markup; record a review instead of inventing intent.
+## 5. Findings, reports, status
 
-| Rule ID | Test or review | Authority / default |
-| --- | --- | --- |
-| `HV-SEM-001` | A declared navigation action should use an anchor with a real destination; a declared command should use a button or another appropriate native control. Without declared intent, report candidates for review. | P based on element semantics / warning or review |
-| `HV-SEM-002` | Audit heading hierarchy and descriptive headings. Flag skipped ranks for review; do not declare exactly one `h1` or no skipped ranks a universal HTML/WCAG requirement. | G/P / warning |
-| `HV-SEM-003` | Audit `main`, `nav`, `header`, `footer`, `aside`, `article`, `section`, and `search` against their actual purpose and context. Avoid creating landmarks solely to replace wrappers. | S where misuse is established; otherwise H / review |
-| `HV-SEM-004` | Suggest lists for declared collections, description lists for name/value or term/description groups, and tables for genuinely tabular relationships. Do not infer from indentation alone. | G/H / review |
-| `HV-SEM-005` | Review meaningful use of `em`, `strong`, `cite`, `blockquote`, `q`, `time`, `address`, `figure`, and `figcaption`. Do not replace style wrappers blindly. | S/G with contextual evidence / review |
-| `HV-SEM-006` | Detect repeated `<br>` or empty elements apparently used for spacing. Allow legitimate poetry, addresses, and deliberate empty states. | H / warning |
-| `HV-SEM-007` | Detect explicit roles that duplicate implicit roles, preserving contextual mapping and documented compatibility exceptions. | S (SHOULD / NOT RECOMMENDED); stricter P optional / warning |
-| `HV-SEM-008` | Produce a semantic outline and intent-to-element report; compare assembly intent contracts with actual output. | P / error for contract mismatch |
-
-Semantic misuse is not always merely stylistic: HTML assigns meanings to elements and imposes author requirements. The tool MUST distinguish a proven misuse from a speculative recommendation. [HTML semantics][html-dom]
-
-Redundant-role checking is supported by a normative checker recommendation in [ARIA in HTML][aria-html], rather than only a style preference. [WAI-ARIA's host-language guidance][aria-host] also recommends using equivalent native features where there is no compelling reason to repurpose others. Record the source strength and any compatibility justification; neither recommendation makes every custom widget automatically invalid.
-
-For new complete pages, the project policy SHOULD ask for a clear primary heading and main-content region. It MUST support legitimate exceptions, embedded documents, and application states. Heading and landmark reviews must use contextual semantics rather than counting tag names alone. [WAI page structure guidance][wai-structure]
-
-## 7. Accessibility verification
-
-Target WCAG 2.2 A/AA by default. Keep a success-criterion coverage matrix showing automated evidence, assumptions, uncovered states, and manual work. A failed local check can support a criterion-level finding; a passed local check does not establish that the entire criterion or page conforms. WCAG conformance also includes scope and process considerations beyond a single HTML file. [WCAG conformance][wcag-conformance]
-
-### 7.1 Static and computed checks
-
-| Rule ID | Requirement | Evidence / default |
-| --- | --- | --- |
-| `HV-A11Y-001` | Document language is present and syntactically valid; review whether it matches content and whether language changes need markup. | source + manual / error or review |
-| `HV-A11Y-002` | Controls, links, and other name-requiring roles have an accessible name in applicable exposed states. Report its source and references. Inert templates and unavailable states create deferred obligations or coverage gaps. | tree/computed / error when determinable |
-| `HV-A11Y-003` | Controls have appropriate labels and instructions. Accept explicit and implicit native labels; apply native-label association tests only to labelable elements. Exclude hidden inputs, but retain custom-widget naming requirements. | tree + manual / error or review |
-| `HV-A11Y-004` | Non-text content has appropriate alternatives. For `img`, generated-content policy requires explicit `alt`, including cases HTML may except; empty alt can be correct. Use element-appropriate mechanisms for SVG and other content. Review descriptive accuracy and decorative intent. | source + manual / error or review |
-| `HV-A11Y-005` | Roles and ARIA properties are permitted for the actual HTML element/context; values, required properties, name prohibitions, and relationships are valid. | tree/computed / error |
-| `HV-A11Y-006` | ID references for names/descriptions/controls/ownership resolve under their defined scoping rules. Do not assume every IDREF has identical semantics. | tree/computed / error |
-| `HV-A11Y-007` | Detect forbidden `aria-hidden` use and focusable descendants hidden from accessibility APIs; account for inert/hidden ancestors and state. | tree/computed / error or cantTell |
-| `HV-A11Y-008` | Positive `tabindex` violates the default navigation policy. Values `0` and `-1` remain available for justified interaction patterns. | P / warning |
-| `HV-A11Y-009` | Table header relationships are available and appropriate to complexity; caption quality and layout-table misuse need review. | tree + manual / error or review |
-| `HV-A11Y-010` | Landmark names, heading names, link purpose, visible-label/name consistency, and duplicate control names are reviewed in context. | computed + manual / error only with sufficient evidence |
-| `HV-A11Y-011` | Form grouping, instructions, error identification, required-state communication, and status messages are checked across relevant states. | tree/interaction/manual / error or review |
-| `HV-A11Y-012` | Media alternatives and relevant audio/video requirements generate explicit automated and manual tasks. | source/manual / error or review |
-
-An accessible name is not synonymous with an `aria-label` attribute. Native text, associated labels, and other permitted mechanisms can supply it. Compute names with a pinned algorithm; never demand redundant ARIA on a correctly named native element. Hidden referenced content and role-specific naming rules require algorithmic treatment. [Accessible Name 1.1][accname11], [Accessible Name 1.2 draft][accname12], [ARIA in HTML][aria-html]
-
-Never fabricate alt text, mark an image decorative automatically, substitute a placeholder for a label, or assume that nonempty text is meaningful. Alternative text and labels need purpose-sensitive evaluation. [WAI images tutorial][wai-images], [WAI labels tutorial][wai-labels]
-
-### 7.2 Runtime and manual evidence
-
-P3 SHALL run a pinned accessibility engine such as [axe-core][axe] within a browser and preserve its passes, violations, incomplete results, and inapplicability results. Map engine rules to HTMLVerify IDs without claiming complete WCAG coverage. Engine-reported impact levels remain separate from the project's severity.
-
-Declared scenarios MUST exercise, where applicable:
-
-- Keyboard reachability, activation, focus order, visible focus, focus restoration, and escape routes.
-- Dialog open/close behavior, focus containment where modal, disclosure and popover states, tabs, menus, and composite widgets.
-- Validation errors, expanded controls, async loading, status announcements, and disabled states.
-- Computed contrast, zoom/reflow, content obscured by overlays, motion preferences, and target sizing where relevant.
-- Responsive layouts, navigation mechanisms, language variants, and shadow-root content supported by the runner.
-
-Use pinned viewports, fixtures, and explicit readiness assertions; never make “sleep for a second” the sole definition of a settled state. Missing resources, engine timeouts, inaccessible cross-origin frames, or uninspectable closed shadow roots produce coverage gaps. Browser DOM serialization is not the original authored source and cannot satisfy quote or omitted-tag checks.
-
-Manual evidence SHALL include reviewer, date, tested content/scenario hashes, browser/assistive-technology versions where relevant, outcome, and notes. Changes to relevant content invalidate the evidence. `release` requires all declared mandatory review tasks to be resolved; `strict-static` reports them as outstanding without pretending to complete a release assessment.
-
-The [ARIA Authoring Practices Guide][apg] informs widget patterns and keyboard expectations; it is guidance, not a replacement for normative ARIA and WCAG. Prefer built-in behavior where it matches intent. A native element still needs correct naming, context, styling, and testing.
-
-WCAG 2.2 removed success criterion 4.1.1 Parsing. HTML syntax and duplicate-ID defects remain important, and some can break other accessibility requirements, but HTMLVerify MUST NOT automatically report every markup error as a WCAG 2.2 parsing failure. [W3C explanation of the removal][wcag-parsing]
-
-### 7.3 Initial criterion-to-evidence map
-
-These are starting mappings for rule authors, not a complete WCAG coverage claim. Each atomic subcheck must specify whether failure establishes a criterion violation or only contributes evidence; a passing subcheck never completes the entire row automatically. Linked Understanding documents explain the criteria but are informative.
-
-| Criterion | HTMLVerify evidence | Remaining assessment |
-| --- | --- | --- |
-| [3.1.1 Language of Page][wcag-language] | `HV-A11Y-001`: language declaration and syntax | Actual predominant language |
-| [1.1.1 Non-text Content][wcag-nontext] | `HV-A11Y-004`: element-appropriate alternative mechanisms | Purpose, accuracy, exceptions, complex explanations |
-| [1.3.1 Info and Relationships][wcag-relations] | `HV-A11Y-003/009`, structural audits | Whether presented relationships are conveyed |
-| [4.1.2 Name, Role, Value][wcag-name-role] | `HV-A11Y-002/005/006`, runtime state tests | Dynamic behavior and accessibility exposure |
-| [2.5.3 Label in Name][wcag-label-name] | `HV-A11Y-010`: visible label versus computed name | Reliable label extraction and applicability |
-| [2.1.1 Keyboard][wcag-keyboard] | Declared activation and navigation scenarios | All relevant functionality and exceptions |
-| [2.4.11 Focus Not Obscured (Minimum)][wcag-focus-obscured] | Rendered focus/overlay scenarios | Untested states and author-created obstructions |
-| [2.5.8 Target Size (Minimum)][wcag-target-size] | Rendered target geometry and spacing | Applicable exceptions and responsive states |
-
-## 8. Anti-bloat and maintainability policy
-
-HTML advises using `div` when no more suitable element applies. That does not make `div` intrinsically wrong. Classes are a legitimate mechanism; no standard establishes a maximum class count. HTMLVerify's numerical limits below are configurable project policy. [The div element][html-div], [The class attribute][html-class]
-
-### 8.1 Defined metrics
-
-Compute metrics separately for each complete document, component instance, inert template body, and inspectable shadow tree. For the main document, let `E` be authored HTML-namespace elements descended from `body`, excluding `script`, `style`, `template`, and ordinary template contents. Include hidden authored markup so hiding content cannot avoid complexity accounting. Foreign trees have separate node budgets. Let `N = |E|`.
-
-| Metric | Exact calculation | Initial warning threshold |
-| --- | --- | --- |
-| `genericRatio` | Number of `div` and `span` elements in `E`, divided by `N`; null when `N = 0` | `> 0.35` when `N >= 20` |
-| `maxGenericChain` | Longest direct parent-child chain of `div`/`span`, with exactly one element child at each nonterminal node and no non-whitespace text beside that child | `> 3` |
-| `maxClassesPerElement` | Maximum number of distinct ASCII-whitespace-separated class tokens on an element in `E` | `> 6` |
-| `p95ClassesPerElement` | Sorted counts including zero; element at index `ceil(0.95 × N) - 1`; null for no elements | `> 4` when `N >= 20` |
-| `maxDepth` | Maximum element depth within `E`; direct children of body have depth 1 | `> 12` |
-| `elementBudget` | `N` and per-component element counts | `> 1500` document / declared component budget |
-| `wrapperCandidates` | Generic single-element-child nodes with no non-whitespace direct text; list candidates and known dependencies | review, no universal limit |
-| `markupBytes` | Original/output UTF-8 byte length, reported separately from node metrics | project-specific |
-
-All thresholds are initial engineering defaults for calibration, not research-backed universal boundaries. A chart, editor, dense data view, utility-CSS project, or third-party widget can need a different budget. Small fragments must not be judged by unstable ratios.
-
-For components and standalone fragments, include all owned output roots and their descendants, with roots at depth 1; publish both exclusive counts (excluding nested component instances) and inclusive counts (including them). Budgets apply to inclusive counts unless explicitly declared otherwise. For template bodies and shadow trees, use their fragment roots at depth 1. Apply the same exclusions and sample limits in every scope. HTML descendants within foreign-content integration points join the HTML metrics when they are otherwise in scope, but depth follows actual element ancestry; foreign nodes also count toward the separate total-node budget. Never jump across a foreign parent when detecting a direct generic chain. Report the scope/ownership policy alongside each metric.
-
-### 8.2 Rules and safeguards
-
-- `HV-BLOAT-001`: report generic-element ratio and the most concentrated subtrees.
-- `HV-BLOAT-002`: report deep generic wrapper chains with source locations.
-- `HV-BLOAT-003`: report class-count excess and duplicate/empty class tokens; token duplication is a separate deterministic finding.
-- `HV-BLOAT-004`: report depth/node-budget excess and changes against a comparable baseline.
-- `HV-BLOAT-005`: propose wrapper/class review only with evidence about CSS selectors, script queries, layout, event delegation, IDs, microdata, accessibility, and component boundaries.
-- `HV-BLOAT-006`: compare assembled output with declared template budgets and flag unexplained expansion.
-
-Do not convert all `div`s to `section`s, create invented semantics to improve ratios, collapse meaningful groups, or move class strings into `style`/`data-*` to game a score. Track these substitutions in before/after review. Structural equivalence in a DOM snapshot is insufficient to prove behavior is unchanged.
-
-CSS/JavaScript analysis can find dependencies, but missing references are not proof that a class or wrapper is unused when dynamic code, external styles, or runtime composition exists. Deletion remains a reviewed refactor unless the whole supported dependency boundary is proven and tested. A utility-CSS profile MAY use larger class budgets; it must have its own profile identity and retain semantic/a11y gates.
-
-## 9. Modern HTML and compatibility
-
-Reject obsolete nonconforming markup and separately warn about obsolete-but-conforming usage using a pinned list, rather than a hand-maintained blacklist with no provenance. [Obsolete features][html-obsolete]
-
-`HV-MOD-001` SHALL detect candidates for native features from declared intent: disclosure → `details`/`summary`; dialog → `dialog`; command/navigation → button/anchor; constrained input → appropriate input type; search region → `search` or a supported equivalent; output/progress/measurement → the suitable native element when its semantics fit.
-
-`HV-MOD-002` SHALL track three independent states for each proposed feature: specified by the selected standards snapshot, implemented by target browsers, and adequately supported in the project's accessibility testing. “Modern” does not mean “present in one browser” or “automatically accessible.” Prefer progressive enhancement when a baseline experience can remain useful.
-
-For example, `dialog` is subject to specific author and focus behavior requirements, while `popover` is an enumerated facility and does not by itself implement a complete custom menu's interaction model. Inspect each feature's actual requirements. [Interactive elements][html-interactive], [Popover][html-popover]
-
-Requirements:
-
-- Compatibility targets MUST be explicit and versioned; checks MUST NOT rely on a changing ambient “latest browser.”
-- A newer feature MUST NOT be rejected merely because an obsolete validator does not know it; report a tooling-version conflict.
-- Custom elements require declarations for supported usage, properties, slots, states, and accessibility behavior. A hyphenated name is not evidence of a valid or accessible implementation.
-- Ordinary `<template>`, declarative shadow DOM, and instantiated shadow trees require distinct handling. Unsupported construction or inaccessible internals must appear in coverage.
-- Do not require legacy shims, redundant MIME attributes, or ARIA duplicating native semantics without a documented target need.
-
-The initial strict profile SHOULD prohibit inline event-handler attributes and executable URL schemes as project policy (`HV-MOD-003`), while allowing scripts through explicitly reviewed application boundaries. This is not a claim of complete security analysis.
-
-## 10. Template and fragment assembly
-
-### 10.1 Assembly model
-
-Prefer **select → bind → compose → verify** over unconstrained synthesis. The LLM selects reviewed components and supplies typed content/intent; the deterministic assembler controls HTML construction. Generating a new template is a separate reviewable operation.
-
-Registry entries MUST contain immutable ID/version, content digest, author/reviewer provenance, compatible rule-pack versions, input schema, context preconditions, output shape, slot contracts, ID policy, dependency list, accessibility obligations, supported states, complexity budgets, and fixtures. “Reviewed” is scoped to versions and use cases, not a permanent accessibility certificate.
-
-The assembler MUST:
-
-1. Resolve the entire dependency graph from the lockfile; reject missing versions, hash mismatches, cycles, and duplicate instance keys.
-2. Validate plan and input schemas before rendering; reject unknown properties by default.
-3. Construct a typed internal tree through a restricted intermediate representation (IR).
-4. Validate insertion preconditions, sibling order, ancestor restrictions, cardinalities, and slot outputs.
-5. Allocate deterministic scoped IDs and rewrite only declared references.
-6. Serialize using the strict authoring policy.
-7. Reparse and verify final output; compare the intended tree with the actual parsed structure using namespace and attribute semantics.
-8. Emit HTML, a source/provenance map, lockfile references, report, and output digest atomically.
-
-Complete-document assembly defaults to `strict-static`; standalone fragments use the `fragment` profile and retain their document-level obligations. Normal output publication requires `executionStatus=complete` and `gateStatus=pass` or an explicitly permitted `passWithExceptions`. Unresolved parameters, low-score gate failures, missing required phases, and operational errors all block publication. Diagnostic builds MAY preserve failed/incomplete output in an explicitly marked quarantine location for inspection.
-
-### 10.2 Slot types and escaping
-
-| Type | Required behavior |
-| --- | --- |
-| `text` | Insert a text node; serialize with context-appropriate escaping. Strings are never interpreted as markup. |
-| `attributeText` | Bind to a fixed reviewed plain-text attribute name; quote and escape its value. It cannot target URL, ID/IDREF, boolean, enumerated, event-handler, style, srcdoc, or script-data sinks. |
-| `url` | Parse and resolve with the declared base; apply an attribute-specific scheme/origin policy; then attribute-escape. Escaping alone does not make a URL acceptable. |
-| `boolean` | Require a JSON boolean; true emits the declared empty-valued boolean attribute, false omits it. |
-| `enum` | Select a declared value; useful for enumerated HTML attributes and fixed tag/heading variants. |
-| `id` / `idref` / `idrefs` | Use typed symbols resolved through the instance namespace and document reference graph. |
-| `component` / `componentList` | Accept locked component references and typed data, subject to the destination slot's grammar. |
-| `reviewedFragment` | Accept only a registry artifact with verified digest, compatible context contract, and provenance. Revalidate after insertion. |
-
-Use a [WHATWG URL][url] parser, followed by project policy; URL parsing is not a trust decision. Navigation, image, and form-action URLs may need different policies. Reject unsupported multi-URL sinks such as `srcset` unless a dedicated typed adapter is implemented. The initial safe registry does not offer `rawHTML`, arbitrary tag names, arbitrary attribute names, executable expressions, or dynamic script/style bodies. A reviewed script resource is a dependency, not a string interpolation slot.
-
-The template compiler MUST enforce a versioned namespace/element/attribute-to-slot-type matrix. A template author cannot choose `attributeText` for `href`, `src`, or `action` to bypass URL policy, or use a generic string to bypass symbolic-ID handling. Unknown sinks fail registration. Static literals at sensitive sinks undergo the same validation as bound parameters. A `text` node is supported only in explicitly permitted normal-text/RCDATA contexts; script/style and other special data contexts require dedicated serializers and are unsupported for arbitrary data in v1.
-
-### 10.3 Minimal IR and component contract
-
-The core IR SHALL support only `element`, `text`, `slot`, `component`, `if`, and `each` nodes. `element` has a fixed namespace/tag and fixed attribute names; values are literals or typed parameter references. `if` tests a boolean parameter. `each` traverses an input array in order and requires a stable key. There is no JavaScript evaluation. Extension nodes require separately reviewed plugins and capability declarations.
-
-Complete-document assembly has a document envelope outside this node union: it emits the fixed `<!doctype html>` and exactly one HTML-namespace `html` root with explicit `head` and `body`. Fragments have no envelope. Doctypes cannot be injected through a text slot. The serializer MUST use token-context-specific escaping; preserve whitespace-sensitive text and avoid inserting indentation into mixed content. Attribute order is stable by declared template order, with generated attributes added in a fixed documented order.
-
-For new registry entries, define an element tree or compile a template into this IR. Do not invent a regex replacement language for placeholders inside arbitrary HTML. Importing an existing HTML template requires parsing and validation before registration.
-
-Example contract body (JSON; registry digest/reviewer metadata is stored alongside it; names and schema are proposed):
+### 5.1 Finding
 
 ```json
 {
-  "schemaVersion": "1.0",
-  "id": "native.action",
-  "version": "1.0.0",
-  "intent": "command",
-  "context": {
-    "namespace": "http://www.w3.org/1999/xhtml",
-    "requiredCategory": "phrasing",
-    "constraints": ["button-permitted-at-insertion-site"]
-  },
-  "parameters": {
-    "label": { "type": "text", "minLength": 1 },
-    "disabled": { "type": "boolean", "default": false }
-  },
-  "tree": {
-    "kind": "element",
-    "tag": "button",
-    "attributes": {
-      "type": { "literal": "button" },
-      "disabled": { "parameter": "disabled" }
-    },
-    "children": [{ "kind": "text", "parameter": "label" }]
-  },
-  "budgets": { "elements": 1, "classesPerElement": 0 },
-  "reviewObligations": ["label-describes-command", "command-behavior-tested"]
+  "rule": "a11y/label",
+  "severity": "error",
+  "authority": "standard",
+  "message": "<input name=\"email\"> has no label. Add <label for=\"…\">…</label> or wrap the input in a label.",
+  "path": "contact.html",
+  "line": 14, "column": 5, "endLine": 14, "endColumn": 40, "offset": 391, "endOffset": 426,
+  "evidence": { "name": "", "placeholder": "Email" },
+  "ref": "https://www.w3.org/TR/WCAG22/#labels-or-instructions",
+  "related": [],
+  "fix": null,
+  "origin": null
 }
 ```
 
-The namespace defaults only where declared by the contract. `requiredCategory` alone is insufficient: the insertion constraint consults the full parent/ancestor rules. A nonempty label passes structural checks but still needs a meaningful-label review.
+- `severity`: `error` fails the gate; `warning` and `info` don't.
+- `evidence`: rule-specific facts, such as the computed name and its source, raw attribute text, metric values.
+- `fix`: tree-preserving edits (§8), or `null`. Fixes never invent content such as alt text or labels.
+- `origin`: where an assembled node came from (§9.8).
 
-### 10.4 Assembly plan and deterministic identity
+**Deduplication.** When several rules report one defect at one location (a missing title: `content/order` and `a11y/title`), the report keeps the finding from the first family in the order syntax, content, a11y, semantic, policy, style, bloat, and lists the others in `alsoReportedBy`. A syntax finding absorbs the style findings it explains: there is no separate `style/explicit-end-tag` for the `<p>` behind a stray `</p>`.
+
+### 5.2 Review items
+
+Judgments the tool can't make are listed apart from findings and never counted as passes or failures:
+
+```json
+{ "rule": "a11y/img-alt", "line": 9, "column": 5, "ask": "Does alt=\"Team photo\" convey what the image shows here?" }
+```
+
+Examples: alt accuracy, whether `alt=""` is really decorative, whether a heading describes its section, link purpose in context, whether `lang` matches the content, component review obligations.
+
+### 5.3 Coverage
+
+`coverage.untested` lists every applicable check that didn't run, with the reason: `conformance/nu (java not found)`, `a11y/contrast (runtime, M4)`, `content rules for <math> (not modeled)`, document-level rules for a fragment.
+
+### 5.4 Status and exit codes
+
+| Status | Condition | Exit |
+| --- | --- | --- |
+| `pass` | no errors; all required checks ran | 0 |
+| `fail` | at least one error | 1 |
+| none | usage, config, or input error (unknown flag, unreadable file, invalid plan JSON) | 2 |
+| `incomplete` | a required check couldn't run (limit exceeded, engine crash); known findings are kept | 3 |
+
+For several files the exit code is the first of 2, 3, 1, 0 that occurred. Warnings fail only when the config sets `maxWarnings`.
+
+### 5.5 Score (for benchmarks only)
+
+The score compares runs in §13; it never overrides the status.
+
+- Penalties: error 10, warning 3, info 0. Each rule contributes at most its 3 largest penalties, so clean padding can't dilute a defect and one repeated mistake can't sink the page.
+- Dimension score = max(0, 100 − penalties). Weights: syntax and style 20, content 25, a11y 25, semantic and policy 20, bloat 10. Overall = round(Σ weight × dimension ÷ 100).
+- A dimension with an `untested` required check scores `null`, and so does overall.
+
+### 5.6 Output formats
+
+`--format text` is the default: one line per item, sized for an LLM's context window.
+
+```text
+contact.html
+  3:7    error    style/attr-quotes   Quote the value: class="hero".  [fix]
+  14:5   error    a11y/label          <input name="email"> has no label. Add <label for="…">…</label> or wrap it in a label.
+  22:3   warning  a11y/headings       <h4> follows <h2>; use <h3>.
+  9:5    review   a11y/img-alt        Does alt="Team photo" convey what the image shows here?
+✗ fail · 2 errors · 1 warning · 1 review · strict · untested: conformance/nu (java not found)
+```
+
+`--format json` is the canonical report: findings, reviews, coverage, metrics, score, tool and data versions, profile name and config hash, input SHA-256. Canonical means sorted keys, no insignificant whitespace, UTF-8, relative POSIX paths, findings sorted by path, then offset, then rule, and no timestamps. `--timing` prints durations to stderr.
+
+## 6. Checker rules
+
+IDs are `family/name` and never change meaning; a renamed rule keeps its old ID as an alias. `htmlverify explain <rule>` prints what the rule checks, why, its authority and spec reference, a failing and a passing example, and how to fix it. Documentation examples run as test fixtures.
+
+Severity columns give the **strict** and **standard** defaults: E error, W warning, I info, R review, – off. Auth: S standard, P policy, H heuristic. M: milestone.
+
+### 6.1 `syntax`: the browser builds a different tree than the source suggests
+
+All standard, error in both profiles, M0, no automatic fix.
+
+| Rule | Detects |
+| --- | --- |
+| `syntax/parse-error` | parse5 errors not covered below, with the spec's error code (`eof-in-tag`, `missing-whitespace-between-attributes`, `unexpected-null-character`, …) |
+| `syntax/duplicate-attribute` | repeated attribute; the parser keeps the first |
+| `syntax/self-closing-non-void` | `/>` on a non-void element (`<div/>`, `<textarea/>`, `<icon-element/>`); the element stays open |
+| `syntax/unclosed-element` | element closed by end of file, a parent's end tag, or a start tag it can't contain, where its end tag isn't optional |
+| `syntax/stray-end-tag` | end tag that matches nothing: ignored, or turned into an element |
+| `syntax/misplaced-start-tag` | start tag the parser dropped (nested `form`, `tr` outside a table, a second `body`) or wrapped in an implied element (`td` directly in `table` gets a `tr`) |
+| `syntax/misnested` | overlapping elements repaired by cloning (`<b><i></b></i>`) |
+| `syntax/reordered` | content the parser moved (foster-parented out of a table) |
+| `syntax/doctype` | missing or non-conforming doctype; quirks or limited-quirks mode |
+| `syntax/encoding` | invalid UTF-8; charset declaration missing from the first 1024 bytes or not `utf-8` |
+
+### 6.2 `style`: authored form; the tree is the same either way
+
+All policy, off in `standard`.
+
+| Rule | Detects | strict | Fix | M |
+| --- | --- | --- | --- | --- |
+| `style/attr-quotes` | value not double-quoted, including bare non-boolean attributes (`<a href>`) | E | yes | 0 |
+| `style/boolean-attr` | boolean attribute not written `name=""` (`disabled`, `disabled="disabled"`) | E | yes¹ | 0 |
+| `style/lowercase` | uppercase HTML names; foreign names not in canonical case (`viewbox` → `viewBox`) | E | yes | 0 |
+| `style/void-element` | void element not in the configured form: `<br/>` (default) or `<br>` | E | yes | 0 |
+| `style/explicit-start-tag` | implied `html`, `head`, `body`, `tbody`, `colgroup` | E | yes | 0 |
+| `style/explicit-end-tag` | omitted optional end tag (`</p>`, `</li>`, `</td>`, `</body>`) | E | yes | 0 |
+| `style/doctype` | doctype not exactly `<!doctype html>` | E | yes | 0 |
+| `style/escape` | literal `&`, `<`, `>` in text, or `&` in attribute values, where HTML would accept them | W | yes | 1 |
+| `style/whitespace` | tab indentation, trailing whitespace, missing final newline (outside `pre`, `textarea`, `script`, `style`) | W | yes² | 1 |
+
+¹ Bare `disabled` → `disabled=""` is automatic. `disabled="disabled"` → `disabled=""` changes the string seen by `[disabled="disabled"]` and `getAttribute`, so it's only a suggestion.
+² Only between block-level elements (§8).
+
+### 6.3 `content`: HTML conformance
+
+All standard, error in both profiles, M1.
+
+| Rule | Detects |
+| --- | --- |
+| `content/unknown-element` | neither an HTML element nor a declared custom element (§7.4); an undeclared but valid custom-element name is a warning |
+| `content/obsolete` | obsolete elements and attributes (`center`, `font`, `align`, `bgcolor`, …), with the replacement |
+| `content/unknown-attribute` | attribute not allowed on the element, with JSX hints (`className` → `class`, `htmlFor` → `for`) |
+| `content/attribute-value` | invalid enumerated, boolean, numeric, date/time, BCP 47, `autocomplete`, `command`, or URL-syntax value; note that `disabled="false"` still disables |
+| `content/missing-attribute` | required attribute absent (`img[src]`, `optgroup[label]`, `link[rel]`, `link[href]`, `track[src]`, …) |
+| `content/child` | child element or text the parent's content model doesn't allow |
+| `content/order` | ordered models and counts: `summary` first, `figcaption` first or last, `legend` first, table parts in order, exactly one `title`, at most one `base`, `caption`, `thead`, `tfoot` |
+| `content/descendant` | forbidden descendants: interactive content or `[tabindex]` in `a` or `button`, `form` in `form`, `label` in `label`, `header`/`footer`/`main` in `header`/`footer`, headings or sectioning content in `address`, `th`, `dt` |
+| `content/context` | element outside its contexts: `li` outside `ul`/`ol`/`menu`, `dt`/`dd` outside `dl`, `figcaption` outside `figure`, `main` not hierarchically correct |
+| `content/duplicate-id` | duplicate `id` in one scope (the document, each template's contents, each shadow root) |
+| `content/invalid-id` | empty `id`, or one containing whitespace |
+| `content/idref` | `for`, `form`, `list`, `headers`, `aria-*` references, `popovertarget`, `commandfor`, `itemref`, `usemap` that don't resolve or name the wrong kind of element (`for` → labelable, `list` → `datalist`, `popovertarget` → `[popover]`, `headers` → `th` in the same table) |
+| `content/document` | more than one visible `main`; more than one `meta charset` |
+
+### 6.4 `a11y`: static accessibility
+
+The target is WCAG 2.2 A and AA. A failure is evidence of a criterion failure; a pass is never reported as conformance. Parse errors aren't mapped to the removed SC 4.1.1. All M1.
+
+| Rule | Detects | Auth | strict | standard |
+| --- | --- | --- | --- | --- |
+| `a11y/lang` | `html[lang]` missing; any `lang` value not well-formed BCP 47 (3.1.1); review: matches the content | S | E | E |
+| `a11y/title` | title missing or empty (2.4.2); review: describes the page | S | E | E |
+| `a11y/img-alt` | `img`, `input[type=image]`, `area[href]` without `alt`; `role="img"` without a name (1.1.1); every alt gets a review item | S | E | E |
+| `a11y/svg` | inline `svg` that is neither `aria-hidden="true"` nor `role="img"` with a name | S | E | E |
+| `a11y/name` | name-requiring role without a computed name (§7.5): links, buttons, `iframe`, `dialog`, ARIA widgets (4.1.2); evidence shows the name and its source | S | E | E |
+| `a11y/label` | form control without a programmatic label; placeholder only → E, title only → W (1.3.1, 3.3.2) | S | E | E |
+| `a11y/aria-role` | unknown or abstract role; role not allowed on the element (ARIA in HTML) | S | E | E |
+| `a11y/aria-attr` | unknown, deprecated, or disallowed `aria-*`; wrong value type; missing required state (`role="checkbox"` without `aria-checked`); a name on a role that prohibits one (`aria-label` on `div`, `span`, `p`) | S | E | E |
+| `a11y/aria-redundant` | explicit role equal to the implicit one (ARIA in HTML: SHOULD NOT), with an allowlist for known workarounds such as `ul role="list"` | S | W | W |
+| `a11y/aria-hidden-focus` | `aria-hidden="true"` on or above a focusable element | S | E | E |
+| `a11y/tabindex` | positive `tabindex`; `tabindex="0"` on an element with no role | P | E | W |
+| `a11y/headings` | empty heading (E); skipped level (W); first heading of a page isn't `h1` (W) | S/H | E | E |
+| `a11y/landmarks` | repeated `nav`, `aside`, or named `section` without distinct names; more than one top-level `header` or `footer` | H | W | W |
+| `a11y/link-text` | generic link names ("click here", "read more", "more", "here") in the configured language | H | W | W |
+| `a11y/form-group` | two or more radios or checkboxes sharing a `name`, outside `fieldset` + `legend` or a named group | H | W | W |
+| `a11y/table` | data table without `th`; a table that looks like layout → review | H | W | W |
+| `a11y/media` | `video` without a captions `track` (review); `autoplay` without `muted` (W) | S | W | W |
+
+### 6.5 `semantic`: meaning and native features
+
+All M1.
+
+| Rule | Detects | Auth | strict | standard |
+| --- | --- | --- | --- | --- |
+| `semantic/generic-control` | `div`, `span`, or custom element acting as a control (`role="button"`, `onclick`, `tabindex="0"`) → `button` or `a` | H | E | W |
+| `semantic/link-href` | `a` without `href`, or with `href="#"` or `""` → `button` for actions, a real URL for navigation | H | E | W |
+| `semantic/native-alternative` | ARIA rebuilding a native element: `role="dialog"` → `dialog`, `progressbar` → `progress`, `search` → `search`, an `aria-expanded` disclosure → `details`; text inputs named email, phone, url → matching `type` | H | W | I |
+| `semantic/section-heading` | `section` without a heading (W); `article` without one (review) | S | W | I |
+| `semantic/heading-candidate` | `p` containing only `strong` or `b`, followed by body text → review "a heading?" | H | R | R |
+| `semantic/list-candidate` | three or more consecutive siblings with the same tag and classes → review "a list?" | H | R | – |
+| `semantic/br-spacing` | two or more consecutive `br`, or `br` at the start or end of a block | H | W | I |
+| `semantic/empty-element` | empty `p`, `li`, `span`, or `div` with at most a `class` | H | W | I |
+| `semantic/fragment-link` | `href="#x"` with no `id="x"` (`#` and `#top` excepted) | H | W | W |
+| `semantic/placeholder-content` | lorem ipsum, TODO, `[Your …]`, `example.com` links, unresolved `{{…}}`, `{%…%}`, `<%…%>`, `${…}` | H | W | W |
+
+### 6.6 `policy`: house rules
+
+Defaults come from the `xhtml-author` skill. All policy, M1.
+
+| Rule | Detects | strict | standard |
+| --- | --- | --- | --- |
+| `policy/no-div` | `div`, except `dl > div` → a semantic element, styling the parent, or a declared custom element | E | – |
+| `policy/single-h1` | a page without exactly one `h1` | E | – |
+| `policy/button-type` | `button` without `type`, which defaults to `submit` | E | – |
+| `policy/inline-handler` | `on*` attributes → `command`/`commandfor` or a script module | E | W |
+| `policy/javascript-url` | `javascript:` URLs | E | E |
+| `policy/inline-style` | `style` attributes | W | – |
+| `policy/inline-svg` | inline `svg` → the icon component (`x-icon`) | E | – |
+| `policy/prefer-strong-em` | `b`, `i` → `strong`, `em` when they mean importance or stress; HTML gives `b` and `i` meanings of their own, so this is policy | W | – |
+| `policy/head` | `meta charset` not first in `head`; no `meta name="viewport"` | E | – |
+| `policy/custom-element` | custom element neither declared in `elements.json` nor using the ad-hoc prefix (`x-`) | E | – |
+| `policy/elements` | elements on the configured denylist (default `iframe`, `object`, `embed`) | – | – |
+| `policy/class` | empty `class`; duplicate class tokens | W | I |
+
+### 6.7 `bloat`: structural economy
+
+All policy, warnings, M1; thresholds are configurable. Let *E* be the HTML elements under `body`, hidden ones included and `script`, `style`, and template contents excluded, and *N* = |*E*|. **Generic** elements are `div`, `span`, and custom elements whose declaration gives no role, so renaming `div` to `x-wrapper` changes nothing.
+
+| Rule | Metric | Default threshold |
+| --- | --- | --- |
+| `bloat/generic-ratio` | generic ÷ *N*; skipped when *N* < 20 | > 0.35 |
+| `bloat/wrapper-chain` | longest chain of generic elements in which each is its parent's only element child, with no non-whitespace text beside it | > 3 |
+| `bloat/class-count` | most classes on one element; 95th percentile (ascending, index ⌈0.95 *N*⌉ − 1) when *N* ≥ 20 | > 6; > 4 |
+| `bloat/depth` | deepest element; children of `body` have depth 1 | > 12 |
+| `bloat/size` | *N* per document | > 1500 |
+
+Metrics are reported even when under threshold. Bloat never gets automatic fixes, because removing a wrapper or class can break CSS or scripts the checker can't see.
+
+### 6.8 Nu cross-check
+
+- `--nu` runs a pinned `vnu.jar` with `--format json` on documents. Nu messages that match a local finding (same line, same family) are attached to it as related evidence. The rest become `conformance/nu` findings, verbatim, with the Nu version and Nu's severity.
+- Measured on 2026-10-17 (vnu 26.10.12, Java 21): about 1.4 s per run, mostly JVM startup. Batch runs keep one Nu server alive on localhost (`nu.validator.servlet.Main`).
+- Nu stops at its first fatal error ("Cannot recover after last error" after foster parenting), checks only documents, and knows nothing of house style or most accessibility rules. It complements local rules; it doesn't replace them.
+- Without Java, `conformance/nu` is `untested` and the status comes from local rules. Registry CI requires Nu.
+
+## 7. Content model, vocabulary, names
+
+### 7.1 Element data
+
+```ts
+type ElementSpec = {
+  name: string;                                               // HTML-namespace local name
+  void?: true;
+  categories: Category[];                                     // "flow", "phrasing", "interactive", ...
+  categoriesWhen?: Record<Condition, Category[]>;             // a: { "[href]": ["interactive"] }
+  content: Grammar;                                           // §7.2
+  contentWhen?: Record<Condition, Grammar>;                   // colgroup: { "[span]": "empty" }
+  contexts?: string[];                                        // li: ["ul", "ol", "menu"]
+  forbidDescendants?: Selector[];                             // a: ["@interactive", "a", "[tabindex]"]
+  counts?: Record<string, [min: number, max: number | null]>; // head: { title: [1, 1], base: [0, 1] }
+  attributes: Record<string, AttrSpec>;                       // element-specific; globals live in one table
+  obsolete?: { use?: string };
+  ref: string;                                                // spec URL with anchor
+};
+```
+
+### 7.2 Child grammars
+
+A grammar is a regular expression over child elements: element names, `@category`, `#text`, `%transparent`, sequence (space), `|`, `?`, `*`, `+`, parentheses, and the keywords `empty` and `text`. Inter-element whitespace and comments always match; `script` and `template` are skipped where the spec says "optionally intermixed with script-supporting elements".
+
+| Element | Grammar |
+| --- | --- |
+| `table` | `caption? colgroup* thead? (tbody* \| tr+) tfoot?` |
+| `dl` | `(dt+ dd+)* \| div+` |
+| `details` | `summary @flow*` |
+| `figure` | `figcaption @flow* \| @flow* figcaption?` |
+| `picture` | `source* img` |
+| `hgroup` | `p* @heading p*` |
+| `ul`, `ol`, `menu` | `li*` |
+
+Grammars compile to small NFAs. A failed match names the first child with no transition and what would have been accepted: "expected `li`, found `div`".
+
+### 7.3 Context rules
+
+- **Transparent** elements (`a`, `ins`, `del`, `map`, `object`, `audio`, `video`, `canvas`, `slot`) are checked as if replaced by their children, against the nearest non-transparent ancestor, including the fragment context.
+- **Descendant prohibitions** walk ancestors, so they apply across component boundaries and fragment contexts.
+- **Template contents** and **declarative shadow roots** are separate scopes with their own IDs and metrics and no inherited context.
+- **Foreign content** (`svg`, `math`): namespaces and case are handled; internal content models aren't modeled in v1 and appear in coverage as `untested`. The a11y rules for `svg` still apply.
+- Elements missing from the data leave content rules `untested` for that subtree.
+- Evolving models, such as customizable `select`, follow the pinned snapshot.
+
+### 7.4 Custom elements
+
+Project custom elements come from an `elements.json` in the html-validate metadata subset that the existing skills use (`flow`, `phrasing`, `void`, `permittedContent`, `attributes` with `required`, `enum`, `boolean`), plus two fields: `role`, which is what assistive technology sees (default `generic`), and `description`.
+
+- `void: true` means "no content". It never permits `/>`: custom elements can't be void in `text/html`, so they're written `<icon-element name="star"></icon-element>`.
+- Ad-hoc elements with the configured prefix (`x-`) are accepted as flow and phrasing content with any children, and count as generic.
+- Custom elements name intent for authors and CSS; assistive technology sees `generic` unless script assigns a role. Components therefore put native semantics inside them: `<faq-question><h3>…</h3></faq-question>`, `<form-field><label>…</label>…</form-field>`.
+
+### 7.5 Accessible names
+
+A static subset of Accessible Name 1.2 for HTML:
+
+1. Skip hidden content (`hidden`, `aria-hidden="true"`, template contents) unless it's reached through `aria-labelledby`.
+2. `aria-labelledby`: concatenated text of the referenced elements.
+3. `aria-label`, trimmed, if non-empty.
+4. Native sources: `label` (explicit `for` and wrapping), `alt`, `value` or the default label of `input` buttons, `legend`, `caption`, `figcaption`, `summary`, `iframe[title]`, `svg > title`.
+5. Content, for roles named from content (`button`, `link`, `heading`, `cell`, `tab`, `option`, …), including the `alt` of nested images.
+6. `title`, then `placeholder`. Both are computed, and `a11y/label` still flags them.
+
+CSS isn't evaluated, so text hidden or generated by CSS is invisible to this computation; the M4 runtime check closes that gap. Each name finding carries the computed name and the step that supplied it.
+
+## 8. Fixes
+
+- Only **tree-preserving** fixes apply automatically. htmlverify applies the edits in memory, reparses with the same settings, and compares trees: node types, namespaces, names, attributes with exact values, text, comments, child order, document mode. Whitespace-only text between block-level elements may differ; nothing else may. If the trees differ or a new error appears, the fix is dropped and reported as a suggestion.
+- Fixable: quoting, lowercase names, void-element form, doctype form, explicit start and end tags (inserted where the parser placed them), escaping, whitespace between blocks.
+- `htmlverify fix page.html` prints a unified diff; `--write` applies it atomically (temp file, then rename). Running it twice changes nothing the second time.
+- Everything else, such as replacing elements, changing roles or heading levels, adding labels or alt text, or removing wrappers or classes, is a suggestion in the message, never an edit.
+- For assembled output, fixes target the plan or the component, never the generated HTML (§9.8).
+
+## 9. Assembler
+
+### 9.1 Roles
+
+- **Component authors** are experts, optionally assisted by AI. They write and test components, and a human approves each version.
+- **The LLM** (or a person) reads the catalog, writes a plan, assembles it, and repairs the plan from findings.
+- **The assembler** owns the markup: escaping, IDs, heading ranks, attribute forms, formatting.
+
+### 9.2 Registry layout
+
+```text
+registry/
+  elements.json              custom-element vocabulary (§7.4)
+  components/
+    form/text-field/
+      component.json         contract (§9.4)
+      template.html          template (§9.3)
+      fixtures/basic.json    data for one rendering
+      fixtures/basic.html    expected output
+      README.md              when to use it, and when not
+      style.css, script.js   optional page dependencies, listed in the assembly report; not checked
+```
+
+A component's ID is its path under `components/`. A component without parameters is a snippet: fixed, reviewed markup. Compiled templates are cached by digest in `.htmlverify/cache/`; these are the preprocessed bricks.
+
+### 9.3 Template language
+
+Templates are HTML, parsed by parse5 in the component's `context`. The directives are few on purpose:
+
+| Syntax | Meaning |
+| --- | --- |
+| `{{label}}`, `{{item.href}}` | Insert a parameter. In text it becomes a text node, or parsed nodes for `inline` and `prose`. As a whole attribute value it binds the attribute: an absent optional parameter omits it, and a boolean gives `=""` or omits it. Inside a longer value it works for text attributes and `class` tokens only. |
+| `<template hv-if="hint">`, `hv-if="!hint"` | Children render when a boolean is true or an optional parameter is present. |
+| `<template hv-each="items" hv-as="item">` | Children repeat for each list item. |
+| `<template hv-slot="fields"></template>` | Child components from the plan go here. |
+| `id="@input"`, `for="@input"`, `aria-describedby="@hint @error"` | Local ID symbols, turned into deterministic IDs (§9.6). `@` alone is the instance's own ID, and `href="#@"` links to it. |
+| `<h2 hv-rank>`, `hv-rank="+2"` | A heading whose level comes from where the component sits (§9.6). |
+
+`<template>` carries the directives because the parser accepts it everywhere, including in `table`, `tbody`, `select`, and `head`, and keeps its contents inert. `<tbody><template hv-each="rows" hv-as="row"><tr>…</tr></template></tbody>` parses as written (verified in the spike). A custom placeholder element in the same spot would be foster-parented out of the table.
+
+Compile errors:
+
+- Paths are `name` or `name.field`; there are no expressions, filters, or helpers.
+- No interpolation in `script`, `style`, comments, tag or attribute names, or in `on*`, `style`, and `srcdoc` attributes.
+- Delimiters are found in the raw source, so `&#123;&#123;` stays literal text.
+- Every parameter used is declared, and every declared parameter is used.
+- Every attribute is valid for its element (spec data plus `elements.json`); every bound attribute's parameter type fits its sink (§9.5); every `enum` value is valid for the attribute it binds.
+- Non-page components contain no literal `id` or `h1`–`h6`. They use `@` symbols and `hv-rank`, which keeps them reusable anywhere.
+
+Example, `form/text-field/template.html` in the house style:
+
+```html
+<form-field>
+  <label for="@input">{{label}}</label>
+  <input id="@input" type="{{type}}" name="{{name}}" autocomplete="{{autocomplete}}" required="{{required}}" aria-describedby="@hint"/>
+  <template hv-if="hint">
+    <output id="@hint" for="@input">{{hint}}</output>
+  </template>
+</form-field>
+```
+
+Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-describedby` (§9.6), so the reference can't dangle.
+
+### 9.4 Contract
 
 ```json
 {
-  "schemaVersion": "1.0",
-  "document": {
-    "template": "page.basic@1.0.0",
-    "key": "save-page",
-    "data": { "title": "Save changes", "lang": "en", "heading": "Save changes" },
+  "id": "form/text-field",
+  "version": "1.0.0",
+  "summary": "Labeled single-line input with an optional hint.",
+  "use": "Single-line text, email, phone, URL, search, or password input. For choices use form/choice-group.",
+  "context": "form",
+  "params": {
+    "label": { "type": "text", "minLength": 1 },
+    "name": { "type": "text", "pattern": "^[a-z][a-z0-9_-]*$" },
+    "type": { "type": "enum", "values": ["text", "email", "tel", "url", "search", "password"], "default": "text" },
+    "autocomplete": { "type": "enum", "values": ["name", "email", "tel", "organization", "street-address", "postal-code", "username", "current-password", "new-password", "off"], "required": false },
+    "required": { "type": "boolean", "default": false },
+    "hint": { "type": "inline", "required": false }
+  },
+  "slots": {},
+  "budget": { "elements": 4 },
+  "obligations": ["The label names the expected input."],
+  "provenance": {
+    "authors": ["…"],
+    "aiAssisted": true,
+    "review": { "by": "…", "date": "2026-10-20", "digest": "sha256-…" }
+  }
+}
+```
+
+- A parameter is required unless it has a `default` or `"required": false`.
+- `context` is the parent element for parsing the template and checking fixtures: `body` by default, `tbody` for rows, `ul` for list items.
+- Versions follow semver: removing or retyping a parameter or slot is a major change.
+- The digest is SHA-256 over the canonical contract (minus `review`), the template, and the fixtures. When the current digest differs from the reviewed one, the component is **stale**. `strict` rejects stale and unreviewed components; the `draft` option allows them with a warning.
+
+### 9.5 Parameter types and sinks
+
+| Type | Value | Allowed sinks |
+| --- | --- | --- |
+| `text` | string; `minLength`, `maxLength`, `pattern` | text, RCDATA (`title`, `textarea`), plain-text attributes (`alt`, `title`, `aria-label`, `placeholder`, `name`, `value`, `content`, `label`, `data-*`) |
+| `inline` | restricted phrasing HTML | text positions that accept phrasing content |
+| `prose` | restricted flow HTML | the sole content of a flow container |
+| `url` | string, parsed by WHATWG `URL` against the configured base | `href`, `src`, `action`, `formaction`, `cite`, `poster`, `data` |
+| `boolean` | `true` or `false` | boolean attributes, `hv-if` |
+| `enum` | one of `values` | enumerated attributes (values checked against the spec data), `class` |
+| `integer` | number; `min`, `max` | numeric attributes (`width`, `height`, `colspan`, `rows`, …) |
+| `datetime` | HTML date/time microsyntax | `time[datetime]`, `ins[datetime]`, `del[datetime]` |
+| `lang` | well-formed BCP 47 tag | `lang`, `hreflang` |
+| `ref` | `{ "ref": "key/path" }`, another instance's ID | ID-reference attributes (`commandfor`, `popovertarget`, `aria-controls`, …); in `href` it becomes `#id` |
+| `list` | array; `items` is a type or a record of fields; `minItems`, `maxItems` | `hv-each` |
+
+- **URL policy** (configurable): `https`, `http`, `mailto`, `tel`, relative, and fragment URLs. `javascript:` is rejected; `data:` is opt-in for images. Fragment URLs must resolve to an ID in the assembled page. Parsing proves syntax, not trust.
+- **Never bindable**: `on*`, `style`, `srcdoc`, `srcset` and `sizes` (until a dedicated type exists), `script` and `style` contents, element and attribute names. There is no raw-HTML type.
+- **`inline` allowlist**: `a[href hreflang]`, `abbr[title]`, `b`, `bdi`, `br`, `cite`, `code`, `data[value]`, `del`, `dfn`, `em`, `i`, `ins`, `kbd`, `mark`, `q[cite]`, `s`, `samp`, `small`, `span`, `strong`, `sub`, `sup`, `time[datetime]`, `u`, `var`, `wbr`, plus the global `lang`, `dir`, and `title`. No `id`, `class`, `style`, or event attributes.
+- **`prose` allowlist**: the `inline` list plus `p`, `ul`, `ol[start reversed]`, `li`, `dl`, `dt`, `dd`, `blockquote[cite]`, `pre`, `hr`, `h2`–`h6`. Prose headings are relative: the highest-ranked one becomes context + 1, the others keep their offsets, and skipped levels are errors.
+- Restricted HTML is **validated, not sanitized**. An element outside the allowlist, a parse repair, or any `strict` error fails assembly, with the location inside the value. Nothing is silently dropped.
+
+### 9.6 Composition rules
+
+**Slots.** What fits a slot comes from its position in the template, via the content model: a slot inside `<ul>` takes components whose roots are `li`; a slot inside `<p>` takes phrasing roots. A contract can narrow a slot further with `accepts` (component IDs), `min`, and `max`. The assembler pre-checks each child's root categories against the slot for an early, specific error; the full check of the output (§9.8) has the final word.
+
+**Keys.** Every component instance in a plan has a `key` matching `[a-z][a-z0-9-]*`, unique among all children of its parent instance, across slots.
+
+**IDs.** In the instance with key path `contact/email`, `@input` becomes `contact-email-input` and `@` becomes `contact-email`. These IDs are readable in CSS and URLs, stable across runs, and unaffected by inserting siblings. A collision anywhere in the output is `assembly/id-collision`; changing a key fixes it.
+
+**Dangling references.** A symbol whose element doesn't render (inside a false `hv-if`) is removed from space-separated reference lists (`aria-describedby`, `aria-labelledby`, `aria-controls`, `headers`), and an emptied attribute is omitted. In a single-ID attribute (`label[for]`, `commandfor`, `popovertarget`, `list`, `form`) it's an error.
+
+**Heading ranks.** Instantiation runs in document order and tracks a current rank per instance, starting at the rank the instance received; a page starts at 0. A literal heading (page components only) sets the current rank to its level. An `hv-rank` heading renders at the received rank + 1 (or + n) and sets the current rank to that. A slot's children receive the current rank at the slot's position. A rank above 6 is `assembly/heading-depth`. Heading levels are correct by construction, however deep the nesting.
+
+**HTML nodes.** A plan node `{ "key": "…", "html": "…" }` inserts hand-written HTML where no component fits. It's parsed in its insertion context, must pass `strict`, and can't contain `script`, `style`, or event attributes. Each one is reported as a registry gap (§13). A project can forbid them with `"htmlNodes": false`.
+
+### 9.7 Plan
+
+```json
+{
+  "page": {
+    "use": "page/basic",
+    "data": { "lang": "en", "title": "Contact us · Acme", "description": "How to reach Acme support.", "heading": "Contact us" },
     "slots": {
+      "header": [
+        { "use": "nav/primary", "key": "nav", "data": { "label": "Main", "items": [
+          { "text": "Home", "href": "/" },
+          { "text": "Contact", "href": "/contact", "current": true }
+        ] } }
+      ],
       "main": [
-        {
-          "component": "native.action@1.0.0",
-          "key": "save-command",
-          "data": { "label": "Save changes", "disabled": false }
-        }
+        { "use": "content/prose", "key": "intro", "data": { "html": "<p>We reply within <strong>one business day</strong>.</p>" } },
+        { "use": "form/form", "key": "contact", "data": { "action": "/contact", "method": "post" }, "slots": {
+          "fields": [
+            { "use": "form/text-field", "key": "name", "data": { "label": "Name", "name": "name", "autocomplete": "name", "required": true } },
+            { "use": "form/text-field", "key": "email", "data": { "label": "Email", "name": "email", "type": "email", "autocomplete": "email", "required": true } },
+            { "use": "form/textarea-field", "key": "message", "data": { "label": "Message", "name": "message", "required": true } }
+          ],
+          "actions": [
+            { "use": "action/submit", "key": "send", "data": { "label": "Send message" } }
+          ]
+        } }
       ]
     }
   }
 }
 ```
 
-`page.basic@1.0.0` is a required P2 starter template: explicit document shell, metadata, title, language, one primary heading, and a `main` content slot. Its definition and fixtures are registry artifacts. P2 also requires native action, navigation list, labeled field, disclosure, and table templates with static variants and declared runtime obligations. P3 adds a dialog template and the required interaction/state evidence for all interactive templates.
+- `use` can pin a version (`@1.0.0`) or a major (`@1`); without a pin, the registry's current version is used. Reports record the exact version and digest of every component.
+- A fragment plan has `"fragment": { "context": "main", "children": [ … ] }` instead of `page`.
+- Unknown properties are errors at every level, so typos fail loudly.
 
-For generated IDs, use `hv-` followed by the first 20 hex characters of SHA-256 over the canonical array `[assemblyRootKey, instanceKeyPath, localSymbol]`. The logical instance path uses keys, not array indices. Detect collisions across the complete output and fail rather than silently accepting them. Explicit exported IDs use a separate declared export map. IDREF rewriting MUST include only supported typed references; never perform string-wide substitutions through CSS, JavaScript, or arbitrary text.
+### 9.8 Assembly algorithm
 
-A source map links output ranges to template nodes, plan instance keys, data JSON pointers, and imported fragment spans. It must identify one source template reused at many insertion sites and preserve call-site context in each diagnostic.
-
-### 10.5 Fragment obligations
-
-Record unresolved obligations such as “requires a surrounding list,” “requires a matching label target,” or “heading rank supplied by parent.” Assembly must discharge them or fail. Validate duplicate IDs, accessible-name references, heading relationships, form ownership, and content constraints across component boundaries.
-
-Ordinary inert template content is not evaluated as if it were already in the live document. Validate its syntax and contract separately; evaluate actual instances in their final contexts. Do not inflate live-document metrics by counting template definitions as instantiated output. [Template element][html-template]
-
-## 11. Deterministic engine and architecture
-
-### 11.1 Pipeline
-
-```text
-Original bytes / typed assembly plan
-    -> input classification + immutable configuration lock
-    -> lossless token/CST view + WHATWG-compatible parser
-    -> parsed tree + source/tree correspondence
-    -> conformance adapter + constraint/reference indexes
-    -> source, semantic, accessibility, and complexity rules
-    -> optional browser scenarios + manual evidence
-    -> deduplicated findings + coverage + gates + score
-    -> text / JSON / SARIF / editor diagnostics
-    -> proposed edits -> reparse -> reverify -> atomic write
-```
-
-Keep authored tokens and the repaired parsed tree. The first reveals omitted quotes/tags and duplicates; the second reveals browser interpretation. A DOM-only tool loses evidence. An XML parser or regex-based tag scanner cannot substitute for the HTML parsing model.
-
-### 11.2 Modules
-
-| Module | Responsibility |
-| --- | --- |
-| `input` | Classification, UTF-8 decoding, limits, original byte storage |
-| `source` | Lossless tokens, raw lexemes, quote style, duplicates, original offsets |
-| `parser` | WHATWG tree construction, source locations, fragment contexts, parser errors |
-| `standards` | Versioned vocabulary, constraints, source registry, feature maturity |
-| `conformance` | Local Nu process/service adapter; raw and normalized diagnostics |
-| `analysis` | Reference, context, semantic, accessibility, and dependency indexes |
-| `rules` | Pure evaluators with declared inputs and capability requirements |
-| `assembly` | Registry, IR, contracts, scoped IDs, serialization, provenance |
-| `runtime` | Browser fixtures, state transitions, engine adapters, screenshots/evidence |
-| `reporting` | Deduplication, findings, fingerprints, policy gates, scoring, formats |
-| `fixes` | Guarded edit planning, overlap detection, equivalence checks, rollback |
-| `interfaces` | CLI, library API, editor protocol adapter, optional local service |
-
-A practical initial implementation is a TypeScript library and CLI, with a pinned HTML parser such as [parse5][parse5], a local Nu backend, and an optional isolated browser runner. These are replaceable adapters, not grounds for weakening semantics. Confirm parser support through fixtures; an API accepting HTML is not evidence of complete source fidelity or current-feature support.
-
-### 11.3 Determinism contract
-
-For identical input bytes, effective configuration, lockfile, and evidence fixtures, static canonical JSON MUST be byte-identical across runs and supported operating systems. Sort findings by logical path, start byte, rule ID, and discriminator. Sort schema-defined sets; preserve semantically ordered arrays. Normalize logical paths to relative POSIX form. Exclude wall-clock timestamps, process IDs, random IDs, absolute machine paths, and duration measurements from canonical content; these may appear in a separate execution envelope. Publish a canonical encoding algorithm with golden byte fixtures: sorted object keys, stable number/string escaping, UTF-8 without BOM, and no insignificant whitespace. Use that same encoding for configuration and identity hashes; reject non-finite numbers rather than emitting implementation-specific values.
-
-Cache keys MUST include input, context, config, rule-pack, dependency, and engine digests. A template change invalidates dependent assemblies; a context change invalidates fragment results. Run rules without ambient network, locale, current time, random values, or undeclared filesystem access. Any time-sensitive waiver decision uses an explicit `evaluationDate`.
-
-Runtime results are reproducible within a declared environment, not promised bit-identical across browsers or platforms. Record readiness, retries, failures, resources, fonts, and environmental differences. Retrying a flaky failure does not erase it; classify it as unstable evidence.
-
-### 11.4 Operational constraints
-
-Static mode MUST NOT execute scripts or fetch resources. Runtime mode requires explicit invocation and uses an isolated browser profile with approved network origins, no ambient credentials, and bounded resource use. Registry imports are data, never executable instructions. Plugins have declared capabilities and are pinned; do not run arbitrary repository hooks implicitly.
-
-Enforce configurable limits for file size, element count, tree depth, total assembly expansion, process memory, checker time, and browser time. Defaults: 5 MiB per source file, 100,000 parsed elements, depth 512, 20 MiB per assembly, 30 seconds per conformance input, and 60 seconds per browser scenario. Exceeding limits produces an explicit incomplete/error result without a success score; implementations must avoid crashing on malicious depth.
-
-## 12. Rule contracts and diagnostics
-
-### 12.1 Rule metadata
-
-Every rule definition MUST include stable ID, version, title, category, authority, source references and maturity, applicability, required capabilities, algorithm/expectation, assumptions, severity, confidence rules, examples, failure evidence, dependencies, fix policy, score dimension, and fixtures. Review heuristics MUST expose their triggering evidence and uncertainty. Rule IDs are never reassigned to unrelated meanings.
-
-Metadata additionally includes `requirementStrength` and versioned subcheck definitions, including each subcheck's disposition in supported profiles. Broad rule-family descriptions in this document do not replace these executable applicability/expectation contracts.
-
-Rules return typed findings, not free-form pass/fail prose. Standards mapping must distinguish “test failure establishes this requirement violation” from “test supplies partial supporting evidence.” This follows the distinction between test expectations and accessibility conformance interpretation in [ACT][act].
-
-### 12.2 Finding example
-
-For `component.html` containing the ASCII source `<div class=card></div>`:
+1. Validate the plan against its schema; errors carry JSON Pointers.
+2. Resolve components and check their review status against the profile.
+3. Validate each instance's `data` against its parameters and its `slots` against the contract; pre-check slot fit.
+4. Instantiate top-down into an in-memory tree. Every node records its origin: instance key path, component and version, template line and column, data JSON Pointer. Compute heading ranks, allocate IDs, resolve `ref`s, prune dangling reference tokens.
+5. Serialize (§9.9).
+6. Reparse the output and compare it with the in-memory tree, ignoring only whitespace the serializer added. A difference is `assembly/round-trip`, which means an assembler bug.
+7. Check the output, as a document or as a fragment in the plan's context, under the configured profile.
+8. Map each finding to its origin and classify it:
+   - **plan**: wrong data or component choice → fix the plan;
+   - **component**: a defect inside one component → the component needs repair and re-review, and no plan change fixes it;
+   - **composition**: components that don't fit together → pick different components or slots.
+9. Write the HTML only when the status is `pass`. Otherwise write nothing and return the report; `--emit-failed` writes `name.failed.html` for inspection.
 
 ```json
-{
-  "schemaVersion": "1.0",
-  "ruleId": "HV-SRC-001",
-  "ruleVersion": "1.0.0",
-  "authority": "policy",
-  "severity": "error",
-  "outcome": "fail",
-  "confidence": "certain",
-  "message": "Quote the value of the class attribute.",
-  "location": {
-    "path": "component.html",
-    "startByte": 11,
-    "endByte": 15,
-    "startLine": 1,
-    "startColumn": 12,
-    "endLine": 1,
-    "endColumn": 16
-  },
-  "evidence": {
-    "attribute": "class",
-    "rawValue": "card",
-    "parsedValue": "card"
-  },
-  "explanation": "HTML permits this unquoted value; the strict authoring profile requires quotes.",
-  "suggestion": "Write class=\"card\".",
-  "fix": {
-    "safety": "conditional",
-    "edits": [{ "startByte": 11, "endByte": 15, "replacement": "\"card\"" }],
-    "preconditions": ["source-digest-matches", "tree-equivalence", "no-new-findings"]
-  },
-  "references": [
-    { "title": "HTML attribute syntax", "url": "https://html.spec.whatwg.org/multipage/syntax.html#attributes-2" }
-  ]
-}
+"origin": { "kind": "component", "component": "form/text-field@1.0.0", "template": "template.html:3:3", "instance": "contact/email", "plan": "/page/slots/main/1/slots/fields/1" }
 ```
 
-Production findings additionally carry a stable fingerprint, context/state ID, raw engine attribution when applicable, related locations, assembly provenance, and waiver/baseline disposition. Offsets are zero-based UTF-8 byte offsets with an exclusive end; line/column values are one-based Unicode scalar positions in original source. CRLF counts as one line break. Adapters for UTF-16 editor protocols MUST convert explicitly. Do not mix parser offsets and byte offsets without a mapping.
+Assembly rules:
 
-Fingerprint version 1 hashes rule ID, normalized logical path, template/instance identity if present, a canonical source-token neighborhood, and an occurrence discriminator. Include an algorithm version. Whitespace-only shifts SHOULD preserve identity; ambiguous matches MUST request re-baselining rather than silently suppressing a different defect.
+| Rule | Error |
+| --- | --- |
+| `assembly/plan` | the plan violates its schema |
+| `assembly/component` | unknown component or version; unreviewed or stale under `strict` |
+| `assembly/data` | parameter missing, unknown, of the wrong type, or out of its constraints |
+| `assembly/slot` | unknown slot, wrong count, or a child that doesn't fit |
+| `assembly/key` | key missing, malformed, or duplicated |
+| `assembly/ref` | `ref` to a missing instance, or to one without an `@` ID |
+| `assembly/id-collision` | two elements end up with the same ID |
+| `assembly/heading-depth` | a heading would need rank 7 or more |
+| `assembly/restricted-html` | an `inline`, `prose`, or HTML-node value breaks its allowlist or `strict` |
+| `assembly/budget` | an instance exceeds its component's element budget |
+| `assembly/round-trip` | the reparsed output differs from the built tree |
 
-### 12.3 Deduplication and suppression
+### 9.9 Serializer
 
-Group a parser error, checker error, and local rule describing the same defect under a primary finding with related evidence. Retain raw engine output. Count a defect once per score dimension using a declared deduplication key; independent consequences may remain separate findings.
+- Output satisfies the `strict` style rules by construction: lowercase, double quotes, `name=""` booleans, the configured void form (`<br/>`), explicit tags, `<!doctype html>`, LF line endings, UTF-8 without BOM, final newline.
+- Layout: an element whose content model isn't phrasing and whose children are all elements is laid out as a block, with each child on its own line, indented 2 spaces. Anything else (phrasing containers, mixed text) is written inline exactly as built, so no whitespace appears where it would render. `pre`, `textarea`, `script`, and `style` are verbatim; content starting with a newline in `pre` or `textarea` gets the extra newline the parser strips.
+- Escaping: `&`, `<`, `>` in text; `&`, `"`, `<`, `>` in attribute values. U+00A0 is written `&nbsp;` so it stays visible in source.
+- Attributes keep template order.
 
-Waivers MUST name the rule/fingerprint or tightly bounded instance scope, reason, owner, expiration, and profile. No wildcard “ignore all” in strict/release profiles. Expired and unmatched waivers are visible findings. Waivers do not change raw conformance status or raw quality score; they can affect a policy gate only where the profile permits it. Strict source/conformance errors, unresolved assembly contracts, and missing required phases are non-waivable in `strict-static` and `release`.
+### 9.10 Component lifecycle
 
-Baselines track existing debt; they do not assert that it passed. Newly introduced errors always fail the migration gate. Reports MUST show total debt, new debt, accepted exceptions, and fixed items separately.
+| Command | Does |
+| --- | --- |
+| `component new <id>` | scaffolds a contract, a template, and a fixture |
+| `component check <id>` | compiles the template; renders each fixture and checks it in context (`strict` with no errors, plus Nu inside the page shell when available); compares it with the expected output; checks the budget; reports **branch coverage**: each `hv-if` both ways, each `hv-each` with 0 (if allowed), 1, and 2+ items, each optional parameter present and absent, each enum value used |
+| `component approve <id> --by <name>` | requires a clean check and full coverage; records reviewer, date, and digest |
+| `registry check` | checks every component and flags stale and unreviewed ones; this is the CI gate |
 
-## 13. Autofixes and assisted refactoring
+**AI-assisted authoring**: the LLM drafts a component and its fixtures and iterates with `component check` until it's clean; a human reviews and approves it. `aiAssisted` records the assistance, and the approval is the trust boundary.
 
-### 13.1 Safety classes
+### 9.11 Starter registry (M2)
 
-- `safe`: proven within the tool's stated dependency boundary, suitable for explicitly requested automatic application.
-- `conditional`: requires named preconditions and post-fix equivalence checks; offered as a diff by default.
-- `review`: changes meaning, structure, interaction, or uncertain dependencies; never silently applied.
-- `none`: no reliable repair proposal.
+Enough to build the page set in §13, using the house custom elements where they exist:
 
-Potential conditional fixes include quoting a lexically valid unquoted value, lowercasing an HTML tag name, and removing a void-element trailing slash where it is not part of an attribute value. Preserve character-reference meaning and reparse. Do not blindly wrap an unquoted value when a trailing slash is part of that value. Changing `disabled="disabled"` to `disabled=""` preserves boolean state but changes the attribute string observable by CSS/JavaScript; default that normalization to review unless the relevant dependency boundary is proven.
+| Group | Components |
+| --- | --- |
+| page | `page/basic`: charset first, viewport, title, description, `lang`, skip link, header/main/footer slots, `h1` |
+| navigation | `nav/primary`, `nav/breadcrumb`, `nav/pagination`, `nav/toc` |
+| content | `content/section` (ranked heading, anchor), `content/prose`, `content/figure`, `content/image`, `content/callout`, `content/card-list`, `content/faq` (`details`/`summary`), `content/quote` |
+| data | `data/table` (caption, column headers, rows), `data/description-list` |
+| forms | `form/form`, `form/text-field`, `form/textarea-field`, `form/select-field`, `form/choice-group` (`fieldset` and `legend`), `form/checkbox` |
+| actions | `action/button` (`command`/`commandfor`), `action/submit`, `action/link-button` |
+| overlays | `disclosure/details`, `dialog/modal` (`dialog`, heading, close command; runtime checks in M4) |
+| site | `site/footer` |
 
-Adding omitted closing tags is conditional only when the exact insertion preserves the intended parsed tree and token context; otherwise it is review-only. Removing duplicate attributes requires a decision about author intent. Class deduplication may alter exact-string selectors or script reads and therefore is not universally safe.
+## 10. Interfaces
 
-The following are always review-only in v1: replacing `div` with semantic elements, changing links/buttons, unwrapping nodes, removing classes, changing heading ranks, renaming IDs, adding ARIA, deleting ARIA with uncertain behavior, changing focus management, inventing label/alt text, or choosing decorative-image treatment.
-
-### 13.2 Edit transaction
-
-`fix` defaults to a preview. `--apply` explicitly writes eligible fixes. Each edit includes original source digest, preconditions, affected ranges, dependencies, and expected effects. Reject overlapping/conflicting edits unless a single planner resolves them deterministically. Never edit a generated artifact when a valid source map indicates that the template/data is the actual repair target without making the choice explicit.
-
-Apply in memory, reparse, run required checks, verify no new blocking findings, and test the relevant equivalence boundary. Then write atomically. On failure preserve original files and emit the rejected patch. A second fix pass MUST produce no changes. Preserve comments, whitespace-sensitive text, entities, raw-text payloads, and source provenance. HTML tree equality alone does not prove identical CSS, script, accessibility, or application behavior.
-
-### 13.3 Tree-equivalence contract
-
-For assembly round trips and conditional syntax fixes, compare node kind, namespace URI, local name, attribute namespace/name and exact parsed string value, ordered children, and exact text/comment data. Compare doctypes and document mode for documents. Attribute ordering and adjacent text-node boundaries may be canonicalized; arbitrary whitespace trimming, implied-node removal, role substitution, and boolean-string normalization may not. Template content and supported shadow roots are compared as explicit separate scopes. Source-backed node correspondence must still reveal reparenting and implied elements.
-
-For a fix, compare the before/after trees parsed with identical settings. For assembly, compare the intended IR tree with parsed output after only documented IR normalization. The serializer must compensate for parser handling of leading newlines in `pre`/`textarea` and carriage returns in text rather than dropping meaningful data. Round-trip fixtures must cover these cases. Separate dependency/behavior checks are still required where a proposed change can affect observations outside this tree comparison.
-
-## 14. Scoring and acceptance gates
-
-### 14.1 Scores support diagnosis, not certification
-
-Return a vector and a composite **automated quality score**. Also return coverage and gate status. A score of 100 means no scored findings in the completed selected profile; it does not mean “perfect HTML” or “100% accessible.”
-
-| Dimension | Weight | Rules |
-| --- | ---: | --- |
-| Authored-source clarity | 20 | `HV-SRC-*` |
-| HTML conformance | 25 | `HV-CON-*` |
-| Semantic/modern practice | 20 | `HV-SEM-*`, `HV-MOD-*` |
-| Automated accessibility | 25 | `HV-A11Y-*` and mapped runtime checks |
-| Structural economy | 10 | `HV-BLOAT-*` |
-
-For each dimension `d`:
-
-```text
-penalty(error) = 10
-penalty(warning) = 3
-penalty(review) = 0
-penalty(info) = 0
-
-P[d] = sum over enabled scored rules r in d:
-       sum of the three largest penalties among r's deduplicated findings
-D[d] = max(0, 100 - P[d])
-overall = round_half_up(sum(weight[d] * D[d]) / 100)
-```
-
-With fewer than three findings for a rule, use those present. Counts and gates still include every occurrence, even after the score cap. For a single `HV-SRC-001` error and no other findings, source score is 90 and the composite is 98, but the strict gate fails. This illustrates why scores cannot override errors.
-
-N/A rules add no penalty only after applicability was evaluated. If a required automated phase or rule cannot be evaluated, affected dimensions and overall are `null`; report provisional observed deductions separately. Unresolved manual reviews do not reduce the automated score but remain explicit and can block `release`.
-
-Do not reward extra elements, attributes, ARIA, templates, or passing test counts. Appending clean nodes must not dilute a finding's penalty. Ratios can still be gamed, so report absolute metrics and baseline changes alongside them. Waivers and baselines do not erase raw penalties. A changed rule set, severity policy, standard revision, or budget creates a different profile hash; scores are comparable only under matching profiles and scopes.
-
-### 14.2 Default gates
-
-- `strict-static`: all required static phases complete; no error findings; minimum composite 90 and every dimension at least 80. Outstanding manual reviews remain visible.
-- `release`: strict gate plus required browser scenarios complete, no blocking runtime errors, and all mandatory manual evidence accepted for the current content/state hashes.
-- `fragment`: fragment contract met; no errors in supported required checks; document-level claims remain untested until assembly.
-- `migration`: fail new errors and configured regressions; retain existing debt and explicitly label the result as migration status.
-
-Warnings may become blocking through a documented profile; mandatory rules cannot be disabled while retaining a built-in strict/release profile name. A custom profile MUST have a distinct identity.
-
-## 15. CLI, configuration, and API
-
-### 15.1 CLI contract
+### 10.1 CLI
 
 ```sh
-htmlverify check page.html --profile strict-static
-htmlverify check "dist/**/*.html" --format json --output report.json
-htmlverify check - --stdin-filename generated.html --format json
-htmlverify check row.html --profile fragment --context context.json
-htmlverify assemble page.plan.json --registry components --output-dir build
-htmlverify audit build/index.html --profile release --scenarios states.json
-htmlverify fix page.html --preview
-htmlverify fix page.html --apply --safety safe
-htmlverify explain HV-CON-003 --format json
-htmlverify rules --profile strict-static --format json
-htmlverify templates list --registry components
-htmlverify templates verify --registry components
-htmlverify baseline create --report report.json --output baseline.json
-htmlverify standards update --review
+htmlverify check page.html [more.html …] [--profile strict|standard] [--config file] [--nu] [--format text|json]
+htmlverify check - --stdin-name page.html          # read from stdin
+htmlverify check row.html --context tbody          # a context makes it a fragment
+htmlverify fix page.html [--write]
+htmlverify explain a11y/label
+htmlverify rules [--profile strict] [--format json]
+htmlverify catalog [--query form] [--format text|json]
+htmlverify component show|new|check|approve <id>
+htmlverify registry check
+htmlverify assemble plan.json --out page.html [--format text|json]
+htmlverify init [--claude]                         # config; with --claude, also the skill and hook
+htmlverify hook claude                             # Claude Code hook adapter (§10.4)
+htmlverify mcp                                     # MCP server on stdio (§10.3)
 ```
 
-`check` never modifies source. Globs are resolved by HTMLVerify in sorted order; no matches is an input error unless explicitly allowed. `-` reads stdin. JSON output goes exclusively to stdout or the requested output file; progress/logs go to stderr. `--format` accepts `text`, `json`, or `sarif`. `explain` returns authority, exact applicability, examples, fixes, and source links for LLM use.
+Results go to stdout, logs to stderr. `check` never modifies files. Globs are expanded by htmlverify in sorted order, and a pattern that matches nothing is an input error.
 
-Exit codes: `0` gate passes, including explicitly reported accepted exceptions; `1` completed analysis fails a quality gate; `2` invalid input/configuration or requested unsupported feature; `3` required analysis incomplete or operational engine failure. A known quality failure plus a required engine failure returns `3` and retains both results. Multiple files use precedence `2`, then `3`, then `1`, then `0`.
+`catalog` is what the LLM reads before writing a plan, one line per component:
 
-### 15.2 Configuration example
+```text
+form/form@1        Form. data: action(url), method=get|post. slots: fields[1..], actions[1..]
+form/text-field@1  Labeled single-line input. data: label, name, type=text|email|tel|url|search|password, autocomplete?, required?, hint?(inline)
+```
+
+### 10.2 Configuration
+
+`htmlverify.config.json` is read from the working directory or its nearest ancestor; home-directory and global configs are never read.
 
 ```json
 {
-  "schemaVersion": "1.0",
-  "profile": "strict-static",
-  "lockfile": "htmlverify.lock.json",
-  "evaluationDate": "2026-10-17",
-  "input": { "encoding": "utf-8", "kind": "document" },
-  "conformance": { "backend": "nu", "network": "off" },
-  "budgets": {
-    "genericRatio": 0.35,
-    "minimumRatioSample": 20,
-    "maxGenericChain": 3,
-    "maxClassesPerElement": 6,
-    "p95ClassesPerElement": 4,
-    "maxDepth": 12,
-    "elements": 1500
-  },
-  "gate": { "minimumScore": 90, "minimumDimensionScore": 80 },
-  "waivers": [],
-  "runtime": { "enabled": false },
-  "report": { "format": "json", "canonical": true }
+  "extends": "strict",
+  "elements": ".claude/schemas/elements.json",
+  "registry": "registry",
+  "options": { "voidElements": "self-closing", "adHocPrefix": "x-", "linkTextLanguage": "en" },
+  "rules": { "policy/inline-svg": "off", "bloat/class-count": ["warning", { "max": 8 }] },
+  "nu": { "jar": "node_modules/vnu-jar/build/dist/vnu.jar" },
+  "maxWarnings": null
 }
 ```
 
-Configuration precedence: built-in profile → explicitly named config file → explicit CLI overrides. Do not read undeclared global configuration. Reject unknown keys, invalid severity names, impossible budgets, conflicting input kinds, and disabled mandatory rules. Always emit the resolved configuration and its hash. Publish versioned JSON Schemas for config, lockfile, plans, registry entries, contexts, scenarios, waivers, and reports.
+Unknown keys, unknown rules, and invalid severities are errors. Every report includes the resolved config's hash, and scores are comparable only between equal hashes.
 
-### 15.3 Library API
+**Profiles.** `standard` runs the syntax, content, a11y, and semantic rules, which are fair to any HTML. `strict` adds the style and policy rules with the house defaults. Custom profiles extend either one.
+
+### 10.3 MCP server (M3)
+
+JSON-RPC over stdio, written directly (`initialize`, `tools/list`, `tools/call`; about 200 lines). If protocol churn makes upkeep costly, swap in the official SDK. Tools accept HTML as a string or a path, so they work without a shared filesystem:
+
+| Tool | Input → output |
+| --- | --- |
+| `check_html` | `{ html \| path, context?, profile? }` → report |
+| `fix_html` | `{ html \| path }` → fixed HTML and remaining findings |
+| `list_components` | `{ query? }` → catalog |
+| `get_component` | `{ id }` → contract, example plan, rendered example |
+| `assemble` | `{ plan, out? }` → HTML and report |
+| `explain_rule` | `{ rule }` → explanation |
+
+Each result returns the text format as content and the JSON report as `structuredContent`.
+
+### 10.4 Claude Code integration (M1)
+
+- **Skill**: `.claude/skills/htmlverify/SKILL.md` holds the workflow in §11, how to read findings, and the rules of engagement: fix the cause, not the rule; never disable rules, add waivers, or invent alt text, labels, or review answers.
+- **Hook**: a `PostToolUse` hook runs after every write and checks any `.html` file that changed. On failure it exits 2 with the text report on stderr, which Claude Code shows to the model, so verification doesn't depend on the model remembering to run it.
+
+```json
+{ "hooks": { "PostToolUse": [ { "matcher": "Write|Edit", "hooks": [ { "type": "command", "command": "npx htmlverify hook claude" } ] } ] } }
+```
+
+- The existing skills (`xhtml-author`, `forms`, `patterns`, `custom-elements`) keep explaining the house style; htmlverify enforces it. When a skill's prose and the config disagree, the config wins and the skill gets fixed. They disagree today: the `forms` skill writes bare `required`, which `xhtml-author` forbids.
+
+### 10.5 Library
 
 ```ts
-type Input =
-  | { kind: "document"; path: string; bytes: Uint8Array }
-  | { kind: "fragment"; path: string; bytes: Uint8Array; context: FragmentContext };
-
-interface HTMLVerify {
-  verify(input: Input, options: VerifyOptions): Promise<VerificationReport>;
-  assemble(plan: AssemblyPlan, options: AssemblyOptions): Promise<AssemblyResult>;
-  audit(target: AuditTarget, scenarios: ScenarioManifest,
-        options: AuditOptions): Promise<VerificationReport>;
-  planFixes(report: VerificationReport, options: FixOptions): Promise<FixPlan>;
-  applyFixes(plan: FixPlan, options: ApplyOptions): Promise<FixResult>;
-  explain(ruleId: string): RuleExplanation;
-  listRules(profile: string): RuleDefinition[];
-}
+check(input: CheckInput, options?: CheckOptions): Promise<Report>;
+fix(input: CheckInput, options?: FixOptions): Promise<FixResult>;
+assemble(plan: unknown, options: AssembleOptions): Promise<AssemblyResult>;
+catalog(registry: string, query?: string): Promise<ComponentSummary[]>;
+explain(rule: string): RuleDoc;
 ```
 
-The named types MUST be published and align with the JSON Schemas. Analysis returns reports rather than throwing for ordinary validation findings. Invalid API arguments throw typed usage errors; operational engine failures are represented in report execution status when a run has begun. Support cancellation, bounded concurrency, streaming progress separate from final results, and in-memory operation without filesystem writes.
+Findings are results, not exceptions; only invalid arguments throw. Everything works in memory without writing files.
 
-An optional P4 local service exposes `POST /v1/verify`, `/assemble`, `/audit`, and `/fix-plan`, plus `GET /v1/rules/{id}`. It uses the same schemas and does not write caller files. Bind locally by default; deployments add authentication, request limits, and resource policy. A submitted HTML failure is an analysis result, not HTTP 500. Unsupported input is 400/422; operational service failure is 5xx.
+## 11. LLM workflow
 
-### 15.4 Report envelope
+1. Read `htmlverify catalog`.
+2. Write a plan with the fewest components that express the content and intent, and supply content as typed data.
+3. Run `htmlverify assemble`. Fix **plan** findings in the plan; pick other components for **composition** findings; report **component** findings to the user, since the brick itself is defective.
+4. Where nothing fits, use a minimal HTML node and mention the gap.
+5. When editing existing HTML instead: `check`, `fix --write` for mechanical issues, edit the rest, `check` again.
+6. Stop after 3 repair rounds, or when the same finding survives two rounds, and report what remains.
+7. Hand back the result with its status and open review items.
 
-Required top-level fields: `schemaVersion`, `tool`, `inputDigests`, `profile`, `lockDigest`, `executionStatus`, `gateStatus`, `scope`, `coverage`, `findings`, `reviews`, `metrics`, `scores`, `conformance`, `assembly`, `artifacts`, and `effectiveConfig`. Optional execution metadata is separate from canonical content.
+## 12. Testing
 
-SARIF output SHALL conform to [SARIF 2.1.0][sarif], map stable rule IDs and source regions, attach related locations and fix previews, and retain authority/coverage details in properties. JSON remains the lossless native format.
+### 12.1 Fixtures
 
-## 16. LLM workflow and repair protocol
+`test/fixtures/<family>/<rule>/<case>.html` with `<case>.json` holding the expected canonical findings. Every rule has at least one failing, one passing, and one boundary case. `UPDATE_GOLDEN=1` rewrites expectations, which are then reviewed in the diff.
 
-1. Read the project profile, rule capabilities, and approved template catalog.
-2. State content/interaction intent in an assembly plan; select the smallest appropriate reviewed components.
-3. Bind typed content. Generate a new fragment only where the catalog cannot express the requirement.
-4. Assemble and run `strict-static` checks.
-5. Address errors by source/contract location; request `explain(ruleId)` for unfamiliar rules.
-6. Review semantic/bloat candidates with their evidence; do not replace elements just to raise a score.
-7. Apply eligible mechanical edits or propose a reviewed structural change, then rerun.
-8. Run declared runtime scenarios and obtain required human evidence for release.
-9. Return artifacts with the profile, lock digest, gate, score vector, coverage, and unresolved reviews.
+### 12.2 Regression matrix
 
-The loop MUST have an explicit budget, defaulting to three repair iterations. Repeated identical fingerprints or oscillating patches stop automatic repair and produce a concise unresolved report. The LLM must not disable rules, add blanket waivers, fabricate review evidence, or change semantics solely to obtain a pass. An optional LLM critic emits advisory proposals with model/prompt provenance; it cannot authoritatively override deterministic evidence or make static runs nondeterministic.
-
-## 17. Test fixtures and verification strategy
-
-### 17.1 Fixture format
-
-Each rule MUST have passing, failing, boundary, and non-applicable fixtures, plus `cantTell`/`untested` cases where relevant. Include original bytes, context, profile/lock reference, expected rule IDs/ranges, parsed-tree evidence, score/gate, and expected fix or explicit no-fix decision. Runtime fixtures additionally include resources, scenarios, environment, and expected accessibility evidence.
-
-Golden tests compare canonical reports. Rule unit tests isolate the evaluator; integration fixtures check the full pipeline. Import selected parser/platform cases from [web-platform-tests][wpt] and the parser/checker projects with pinned revisions and license attribution; an imported fixture must state what HTMLVerify behavior it validates.
-
-### 17.2 Minimum regression matrix
-
-| Fixture | Expected distinction |
+| Case | Expected |
 | --- | --- |
-| `class=card` versus `class="card"` | Policy failure versus pass; HTML may conform in both |
-| Bare `disabled`, `disabled=""`, `disabled="false"` | Quote/boolean policy versus invalid boolean value; false string does not disable the attribute |
-| Omitted `li`, `p`, `html`, `head`, or `body` tags | Strict source failure even if allowed by HTML |
-| `<br>`, `<br />`, `</br>`, `<div />` | Void policy, forbidden/invalid syntax, and non-void slash behavior differ |
-| `<svg><path /></svg>`; `viewBox` | Namespace rules preserved |
-| Explicit table rows without `tbody` | Implicit node detected as strict policy, not automatically HTML error |
-| Block content inside a paragraph | Browser repair and content violation remain visible |
-| Misnested formatting and table foster parenting | Original and repaired structures both available |
-| Duplicate attributes with conflicting values | No lost evidence; no guessed autofix |
-| Tag-like strings inside script/style/comment | No false tag or omitted-close report |
-| Leading newline in `pre`/`textarea`; carriage returns in typed text | Serializer round trip preserves intended text |
-| Transparent anchor inside paragraph, nested anchor, button descendant | Context and element-specific restrictions |
-| Traditional and newer conforming select structures | Snapshot-aware result; no stale blanket grammar |
-| `tr` fragment under `tbody` versus under `div` | Context affects parsing/validity |
-| Two fragments exporting the same ID | Assembly-level collision detected |
-| Native button with text and no `aria-label` | Accessible name accepted |
-| Implicit label, explicit label, placeholder-only control | Correct association versus insufficient labeling |
-| Decorative image with empty alt, missing alt, misleading alt | Syntax/policy versus manual quality distinction |
-| Heading rank skip, multiple `h1`s | Guidance/policy classification, no invented universal WCAG failure |
-| `tabindex="-1"`, positive tabindex, hidden/inert state | Navigation policy separated from focus/visibility behavior |
-| Prohibited ARIA name/role on native element | Current ARIA-in-HTML table applied |
-| Inert template definition versus instantiated fragment | Different obligations and scopes |
-| Open/closed shadow root and slotted content | Declared coverage; no hidden false pass |
-| Existing literal entity, URL with ampersand, malicious text slot | Escaping preserves text/URL meaning; no markup injection |
-| Duplicate instance keys, registry cycle, hash mismatch, bad slot | Assembly fails before output release |
-| Dialog open/closed and form error state | State coverage required; static pass does not imply interaction pass |
-| Tool crash, timeout, missing engine, missing resources | Incomplete/failed execution, null score, nonzero exit |
-| UTF-8 multibyte, emoji, CRLF, BOM | Correct byte and editor-coordinate mapping |
-| Expired/unmatched waiver; baseline fingerprint collision | Visible disposition; no silent suppression |
-| Wrong MIME kind or JSX source | Explicit unsupported input, no misleading HTML report |
+| `class=card`, `class='card'`, `class="card"` | `style/attr-quotes` twice, then clean; all three trees are identical |
+| `disabled`, `disabled="disabled"`, `disabled=""`, `disabled="false"` | `style/boolean-attr` twice, clean, `content/attribute-value` (and the control *is* disabled) |
+| `<p>a<p>b`, `<ul><li>a<li>b</ul>` | only `style/explicit-end-tag`; both are valid HTML |
+| `<p>a<div>b</div>c</p>` | one `syntax/stray-end-tag` explaining the implicit close; no separate style finding |
+| `<h1>a<h2>b</h2></h1>`, `<a>x<a>y</a></a>` | `syntax/unclosed-element` and `syntax/stray-end-tag` |
+| `<b><i>x</b>y</i>` | `syntax/misnested` |
+| `<table><tr><td>1</td></tr><div>x</div></table>` | `style/explicit-start-tag` (`tbody`) and `syntax/reordered` |
+| `<form><form>`, `<table><td>1</td></table>` | `syntax/misplaced-start-tag` (dropped; wrapped in an implied `tr`) |
+| `<br>`, `<br/>`, `</br>`, `<div/>`, `<textarea/>` | `style/void-element` on whichever of the first two the option rejects, `syntax/stray-end-tag`, `syntax/self-closing-non-void` twice (`textarea` swallows the rest of the file) |
+| `<icon-element name="star"/>` declared `void: true` | `syntax/self-closing-non-void` |
+| `<svg viewbox="…"><path/></svg>` | `style/lowercase` (`viewBox`); `/>` is fine in foreign content |
+| JSX leftovers: `className`, `htmlFor`, `onClick` | `content/unknown-attribute` with hints; `policy/inline-handler` |
+| `<span><div>`, `<button><a href>` | `content/child`, `content/descendant` |
+| `tr` fragment with context `tbody` vs. `div` | clean vs. `syntax/misplaced-start-tag` |
+| tag-like text in `script`, `style`, comments | nothing |
+| text button; icon button with `aria-label`; icon button with neither | clean, clean, `a11y/name` |
+| explicit label, wrapping label, placeholder only, title only | clean, clean, error, warning |
+| `alt=""`, no `alt`, `alt="image"` | review, `a11y/img-alt`, review |
+| CRLF, an emoji before a finding, a BOM | correct line and column; fixes keep CRLF and BOM |
+| `{{name}}`, "Lorem ipsum", `href="#"` | `semantic/placeholder-content` twice, `semantic/link-href` |
+| Java missing with `--nu` | `conformance/nu` untested; status from local rules |
 
-### 17.3 Properties and adversarial tests
+### 12.3 Corpora and properties
 
-- Assemble → serialize → parse preserves the intended supported tree.
-- Fix application is idempotent and cannot introduce new blocking findings.
-- Canonical reports are stable under repeated runs and worker scheduling changes.
-- Adding unrelated clean markup does not dilute fixed-rule penalties.
-- Invalid data cannot escape its typed text/attribute/URL/fragment boundary.
-- Changing a dependency/context invalidates cached results and dependent review evidence.
-- Source edits applied through provenance maps identify the right template and all affected instances.
-- Arbitrary malformed inputs terminate within limits; no script execution, undeclared network, or out-of-root writes occur.
-- Equivalent cases from independent parser/checker fixtures are compared; disagreements become regression tests, not suppressed noise.
+- **Known-good**: hand-checked pages with zero errors under `standard`.
+- **Mutation**: single defects injected into known-good pages (drop an `alt`, unquote a value, nest a `div` in a `span`, duplicate an ID, add a positive `tabindex`, …). Each mutant must trigger the intended rule. Target recall for deterministic rules: 100%.
+- **Nu differential**: every Nu error on a corpus page matches a local finding or is listed in `test/nu-gaps.json` with a reason. That list is the content-model coverage gap.
+- **Assembler properties**: plans generated from the starter registry with random in-contract data always pass `strict`, round-trip, and serialize byte-identically twice.
+- **Injection corpus** for `text`, `url`, `inline`, `prose`: `</title><script>`, `" onfocus="`, `javascript:`, `jav&#x09;ascript:`, pre-escaped `&amp;`, NUL, bidi controls, NBSP, CRLF. Values never leave their sink, and invalid values fail with a located error.
+- **Determinism**: canonical JSON is identical across runs and on Linux, macOS, and Windows in CI.
+- **Fixes**: idempotent, and they never introduce errors.
 
-## 18. Acceptance criteria
+## 13. Evaluation: prove or disprove
 
-The following are release gates for the stage implementing each capability, not promises that all stages ship together.
+**Briefs.** 20 briefs, each with fixed content (real text, so writing quality isn't a variable) and a checklist of semantic expectations. The `patterns` skill's page types: home, about, product list, product detail, contact, FAQ, press release, legal. Added: article, pricing, sign-up, settings form, data report, event, 404, search results, docs page, team, newsletter landing, checkout address form.
 
-| ID | Measurable acceptance criterion |
+**Conditions**, with the same model and house skills throughout:
+
+| | Condition |
 | --- | --- |
-| `AC-01` | Every shipped rule has authority, applicability, sources, coverage requirements, severity, fix class, and positive/negative/boundary fixtures. All required fixtures pass. |
-| `AC-02` | Source policy catches unquoted values, omitted optional tags, inserted wrappers, duplicate attributes, and non-void slash misuse without losing original locations. |
-| `AC-03` | The local conformance adapter preserves all backend errors, reports its digest, and distinguishes unavailable coverage from success. |
-| `AC-04` | P1 document fixtures cover sequence, category, transparency, ancestor restrictions, text rules, attribute conditions, and namespaces. P2 additionally covers public fragment-context contracts and insertion obligations. |
-| `AC-05` | Named native controls and correct implicit labels pass; missing names and prohibited ARIA fail when determinable; alt quality and heading appropriateness remain explicit reviews. |
-| `AC-06` | No WCAG 2.2 report uses removed criterion 4.1.1 as an automatic markup-failure mapping; no automated report claims complete WCAG conformance. |
-| `AC-07` | Complexity metrics match hand-calculated fixtures, including zero/small denominators and p95 boundaries; legitimate `div` and utility-CSS cases can be reviewed without forced semantic rewrites. |
-| `AC-08` | The same assembly plan and lockfile produce byte-identical HTML and provenance; ID collisions, invalid slots, dependency cycles, and context failures block release. |
-| `AC-09` | A hostile text/attribute/URL test corpus cannot escape the declared assembly sinks; unsupported sinks fail explicitly. |
-| `AC-10` | All automatic fixes are idempotent, preserve declared equivalence, pass post-fix checks, and roll back atomically on failure. Review-only fixes are never auto-applied. |
-| `AC-11` | P1 canonical static JSON matches across two runs on each supported OS; Unicode/CRLF byte-to-editor-coordinate conversion has unit fixtures. P4 verifies those conversions through actual editor adapters. |
-| `AC-12` | JSON examples and schemas validate, CLI/API outcomes agree, exit-code precedence is tested, and SARIF validates against its schema. |
-| `AC-13` | Missing mandatory checks yield partial/failed execution and no overall score; the gate is incomplete unless a known blocking violation makes it fail. Severe findings cannot be compensated by clean-markup padding or waivers. |
-| `AC-14` | Runtime reports enumerate all declared scenarios and inaccessible regions; timeouts/flakiness are retained and cannot become silent passes. |
-| `AC-15` | P2 starter templates include document shell, native action, labeled input, navigation list, disclosure, and table with static variants and runtime obligations. P3 adds dialog and completes required interaction/state fixtures. |
-| `AC-16` | Baseline and waiver fixtures demonstrate expiry, narrow matching, raw-debt visibility, and failure on new errors. |
+| A | free-form HTML |
+| B | free-form HTML with the htmlverify check loop (hook, at most 3 rounds) |
+| C | assembler and catalog with the check loop |
 
-Performance targets are provisional engineering budgets: on a declared CI reference machine, warm static verification including the local checker SHOULD finish a 100 KiB/2,000-element page within 2 seconds at p95; a 100-page corpus within 30 seconds at bounded concurrency; peak resident memory below 512 MiB for the coordinator, with checker/browser processes budgeted separately. Publish cold-start and warm measurements, hardware, corpus, engine builds, and exclusions. Failure to meet a target requires a measured design decision, not a correctness shortcut.
+Each brief runs 3 times per condition.
 
-## 19. Staged roadmap
+**Measures**: status on the first attempt and after the loop; errors per page by family; repair rounds; tokens and wall time; structural variance across the 3 runs (edit distance between element skeletons); a blind human rubric (semantics, accessibility, leanness, scored 1–5) on a sample; for C, the HTML-node count (registry gaps) and finding origins (plan, component, composition).
 
-| Stage | Deliverables | Exit condition |
+**Decision**:
+
+- **Supported** if C passes on at least 90% of runs with a median of at most 1 repair round, varies less than A and B, and rates at least as well as B.
+- **Checker-only value** if B clearly beats A but C doesn't beat B: the verification loop is the win, and the registry isn't worth its cost yet.
+- **Not supported** if C fails mostly on gaps or composition errors that a larger catalog wouldn't fix.
+
+Results, raw outputs, and the failure analysis go in `eval/results/`.
+
+## 14. Milestones
+
+| Milestone | Deliverables | Exit criteria |
 | --- | --- | --- |
-| **P0 — foundations** | Schemas, result/authority model, standards registry, source-location model, parser and Nu experiments, fixture harness | Demonstrate quotes/omissions/repairs/namespace/context distinctions with accurate source locations; record architectural decisions |
-| **P1 — rigorous document checks** | `check`, `explain`, `rules`; strict source rules, local conformance, initial constraint indexes, static a11y, semantic reviews, bloat metrics, canonical JSON/text, scoring/gates | AC-01–07, AC-11, relevant AC-12–13; documented automated-coverage matrix; useful LLM loop on a curated corpus |
-| **P2 — deterministic assembly** | Registry, restricted IR, typed slots, contextual fragments, scoped IDs, provenance, starter static templates, guarded fixes, baseline/waiver support | AC-08–10, AC-16, P2 portions of AC-04/15; final-document revalidation; reproducible assembly and context-sensitive fixtures |
-| **P3 — rendered accessibility and release evidence** | Browser scenarios, pinned a11y engine, focus/state checks, shadow coverage, review evidence, dialog and other interactive templates, full `release` profile | AC-14–15; all release-profile capabilities implemented and documented, with no false completeness claims |
-| **P4 — ecosystem and maintenance** | SARIF/editor integration, framework/source-map adapters, optional service, plugin API, compatibility datasets, standards-update workflow, benchmark/calibration corpus | Full AC-11/12, public compatibility/coverage matrix, reviewed rule updates, measured false-positive and performance reports |
+| **M0 Foundations** | repo setup; decoding and limits; parsing and token reconciliation; `syntax` and M0 `style` rules; report model; text and JSON output; `check`; fixture harness | the syntax and style rows of §12.2 pass with exact locations; canonical JSON is byte-identical across two runs |
+| **M1 Checker** | spec data and extract scripts; content-model engine; ID and reference index; accessible names; `content`, `a11y`, `semantic`, `policy`, `bloat` rules; profiles, config, `elements.json`; status and score; `explain`, `rules`, `fix`, `init`; Nu adapter; Claude skill and hook; evaluation harness with A and B | each rule has fail, pass, and boundary fixtures; 100% mutation recall on deterministic rules; zero errors on the known-good corpus under `standard`; Nu gaps listed; first A-vs-B results |
+| **M2 Assembler** | template compiler; contracts; parameter types and sinks; slots, keys, IDs, ranks, refs, HTML nodes; serializer; round-trip; origins; `assemble`, `catalog`, `component *`, `registry check`; starter registry | starter components approved with full branch coverage; assembler properties and injection corpus pass; the same plan and registry give byte-identical HTML |
+| **M3 Evaluation** | MCP server; condition C; full run and write-up | `eval/results/` committed with the §13 decision |
+| **M4 Runtime and adoption**, only if M3 justifies it | Playwright and axe-core scenarios (keyboard, focus, contrast, dialog and disclosure states); waivers with owner, reason, and expiry; baselines for existing sites; SARIF | defined after M3 |
 
-P1 is the first useful deliverable, not a complete implementation of the assembly/release vision. Each stage SHALL advertise supported capabilities; future commands/profile names must return explicit unsupported-feature errors until implemented. Avoid making an LLM dependency part of the deterministic core.
+Performance target for M1, without Nu: a 100 KiB page in under 300 ms warm; 100 pages in under 10 s.
 
-After the first corpus evaluation, review bloat thresholds, semantic heuristic precision, diagnostic deduplication, and fixer acceptance rates. Publish counts of confirmed defects, false positives, unresolved cases, and unsupported cases by rule. Do not combine them into an unexplained “accuracy” percentage.
+## 15. Decisions and changes from the 1.0 proposal
 
-## 20. Research references and maintenance notes
+| Decision | Why |
+| --- | --- |
+| The hypothesis and its evaluation are part of the spec (§13) | The README's goal is to prove or disprove the idea; 1.0 defined no measurement. |
+| Scope cut to what tests the hypothesis | Browser runtime, manual-evidence records, waivers, baselines, the migration profile, fingerprints, SARIF, the editor protocol, the HTTP service, and the standards lockfile move to M4 or are dropped. They serve compliance programs, not this experiment. |
+| Token reconciliation instead of parser error lists (§4.3) | The spike showed parse5 silently repairs most tree-construction errors. 1.0 asked for "tree-construction evidence" without saying how to get it. |
+| Local rules first, Nu optional (§6.8) | Nu takes about 1.4 s per call, stops at the first fatal error, can't check fragments, and doesn't know the house style. |
+| One direct runtime dependency (§3.2) | Node 22.18+ runs TypeScript directly, and built-ins cover the CLI, tests, hashing, globbing, and URLs. |
+| `family/name` rule IDs | An LLM reads every finding; `style/attr-quotes` explains itself, while `HV-SRC-001` has to be looked up. |
+| UTF-16 line, column, and offset (§4.4) | parse5 and LSP both use them; 1.0's UTF-8 byte offsets needed a conversion layer with no consumer. |
+| Two profiles, `standard` and `strict` | Fragment is an input kind, not a profile; release, migration, and experimental belong to M4. |
+| `strict` follows the `xhtml-author` skill | `<br/>`, `disabled=""`, no `div`, one `h1`. 1.0 forbade `<br/>` and treated `div` as fine. With `/>` on non-void elements now an error, `<br/>` costs nothing. |
+| Templates are HTML with `{{…}}` and `<template hv-*>` (§9.3) | Experts write HTML, not IR JSON, and `<template>` parses correctly in every context. 1.0 specified only the IR. |
+| Slot fit derived from the content model (§9.6) | Authors don't declare what fits, so the declaration can't be wrong. |
+| Readable deterministic IDs and reference pruning (§9.6) | `contact-email-input` works in CSS and URLs, unlike `hv-` plus 20 hex digits. Collisions are errors, and dangling `aria-describedby` tokens can't happen. |
+| Heading ranks computed from nesting (§9.6) | Removes the most common structural error class by construction. |
+| `inline` and `prose` restricted-HTML parameters (§9.5) | Content with links and emphasis, without a raw-HTML hole; validated, never sanitized. |
+| HTML nodes allowed and counted as gaps (§9.6) | The experiment needs an outlet where the catalog falls short, and a measure of how often that happens. |
+| Approval bound to a digest; AI assistance recorded (§9.4) | "Reviewed" means this exact version. |
+| Only tree-preserving fixes apply automatically, proven by reparse (§8) | One verifiable criterion replaces 1.0's four safety classes. |
+| Custom elements without a role count as generic (§6.7) | Renaming `div` to `x-wrapper` can't game the bloat metrics. |
+| Review items and coverage instead of a per-finding outcome enum | Keeps the truthful-outcome principle with less machinery. |
 
-The references below were consulted for this specification. Living standards and drafts can change; implementation must pin the revisions actually used. Linked guidance should be read in its full context rather than converted wholesale into hard failures. The architecture, profiles, rule IDs, numerical budgets, scoring model, and API contracts in this document are original HTMLVerify design decisions.
+## 16. Open questions
 
-- [WHATWG HTML Living Standard][html] — primary HTML authority.
-- [W3C/WHATWG collaboration agreement][html-collaboration] — context for the shared HTML/DOM standards process.
-- [HTML syntax][html-syntax], [parsing][html-parsing], and [fragment parsing][html-fragments] — authored syntax versus parsed interpretation.
-- [HTML content models and semantics][html-dom], [grouping content][html-grouping], [text-level semantics][html-text], [tables][html-tables], and [forms][html-forms] — context and element requirements.
-- [HTML div][html-div], [class][html-class], [template][html-template], [select][html-select], [interactive elements][html-interactive], [popover][html-popover], and [obsolete features][html-obsolete] — targeted policy and modern-feature references.
-- [WCAG 2.2][wcag22], [conformance requirements][wcag-conformance], and [Parsing removal explanation][wcag-parsing] — accessibility target and limits.
-- [WAI-ARIA 1.2][aria12], [ARIA in HTML][aria-html], [Accessible Name 1.1][accname11], [Accessible Name 1.2 draft][accname12], and [HTML-AAM draft][html-aam] — semantics, names, and mappings with explicit maturity.
-- [ACT Rules Format][act], [APG][apg], and WAI tutorials for [page structure][wai-structure], [images][wai-images], and [labels][wai-labels] — test design and interpretive guidance.
-- [Nu documentation][nu] and [upstream repository][nu-repo], [parse5][parse5], and [axe-core][axe] — implementation candidates, not substitutes for standards.
-- [WHATWG URL][url], [SARIF 2.1.0][sarif], and [web-platform-tests][wpt] — URL parsing, interchange, and external test material.
+1. **Void form.** `strict` defaults to `<br/>` per `xhtml-author`; 1.0 required `<br>`. Keep `<br/>`?
+2. **`div`.** Keep `policy/no-div` as an error in `strict`, with `dl > div` exempt?
+3. **Custom-element vocabulary.** Should `.claude/schemas/elements.json` (html-validate format) be the source of truth? Its void custom elements (`icon-element`, `user-avatar`, `loading-spinner`) need end tags in their documentation.
+4. **Starter components.** Build them on your custom elements (`form-field`, `faq-list`, `product-card`, `x-icon`)? If so, where do their definitions and CSS live?
+5. **Approval.** You alone, or a list of reviewers?
+6. **Evaluation runs.** Drive the briefs by hand in Claude Code sessions, or automate them through the API (which needs a key and a budget)?
 
-[html]: https://html.spec.whatwg.org/multipage/
-[html-collaboration]: https://www.w3.org/2019/04/WHATWG-W3C-MOU.html
-[html-syntax]: https://html.spec.whatwg.org/multipage/syntax.html
-[html-metadata]: https://html.spec.whatwg.org/multipage/semantics.html
-[html-microsyntax]: https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
-[html-parsing]: https://html.spec.whatwg.org/multipage/parsing.html
-[html-fragments]: https://html.spec.whatwg.org/multipage/parsing.html#parsing-html-fragments
-[html-dom]: https://html.spec.whatwg.org/multipage/dom.html#content-models
-[html-text]: https://html.spec.whatwg.org/multipage/text-level-semantics.html
-[html-grouping]: https://html.spec.whatwg.org/multipage/grouping-content.html
-[html-tables]: https://html.spec.whatwg.org/multipage/tables.html
-[html-forms]: https://html.spec.whatwg.org/multipage/form-elements.html
-[html-select]: https://html.spec.whatwg.org/multipage/form-elements.html#the-select-element
-[html-div]: https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element
-[html-class]: https://html.spec.whatwg.org/multipage/dom.html#classes
-[html-interactive]: https://html.spec.whatwg.org/multipage/interactive-elements.html
-[html-popover]: https://html.spec.whatwg.org/multipage/popover.html
-[html-template]: https://html.spec.whatwg.org/multipage/scripting.html#the-template-element
-[html-obsolete]: https://html.spec.whatwg.org/multipage/obsolete.html
-[wcag22]: https://www.w3.org/TR/WCAG22/
-[wcag-conformance]: https://www.w3.org/TR/WCAG22/#conformance
-[wcag-parsing]: https://www.w3.org/WAI/WCAG22/Understanding/parsing.html
-[wcag-language]: https://www.w3.org/WAI/WCAG22/Understanding/language-of-page.html
-[wcag-nontext]: https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html
-[wcag-relations]: https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html
-[wcag-name-role]: https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html
-[wcag-label-name]: https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html
-[wcag-keyboard]: https://www.w3.org/WAI/WCAG22/Understanding/keyboard.html
-[wcag-focus-obscured]: https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html
-[wcag-target-size]: https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html
-[aria12]: https://www.w3.org/TR/wai-aria-1.2/
-[aria-host]: https://www.w3.org/TR/wai-aria-1.2/#host_general_conflict
-[aria-html]: https://www.w3.org/TR/2026/REC-html-aria-20260811/
-[accname11]: https://www.w3.org/TR/accname-1.1/
-[accname12]: https://www.w3.org/TR/accname-1.2/
-[html-aam]: https://www.w3.org/TR/html-aam-1.0/
-[act]: https://www.w3.org/TR/act-rules-format-1.1/
-[apg]: https://www.w3.org/WAI/ARIA/apg/
-[wai-structure]: https://www.w3.org/WAI/tutorials/page-structure/
-[wai-images]: https://www.w3.org/WAI/tutorials/images/
-[wai-labels]: https://www.w3.org/WAI/tutorials/forms/labels/
-[nu]: https://validator.github.io/validator/
-[nu-repo]: https://github.com/validator/validator
-[parse5]: https://parse5.js.org/
-[axe]: https://github.com/dequelabs/axe-core
-[url]: https://url.spec.whatwg.org/
-[sarif]: https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html
-[wpt]: https://web-platform-tests.org/
+## References
+
+- WHATWG HTML Living Standard: <https://html.spec.whatwg.org/multipage/> (syntax and optional tags §13.1.2.4, parsing §13.2, fragment parsing, content models, element indices)
+- WCAG 2.2: <https://www.w3.org/TR/WCAG22/>; removal of 4.1.1: <https://www.w3.org/WAI/WCAG22/Understanding/parsing.html>
+- WAI-ARIA 1.2: <https://www.w3.org/TR/wai-aria-1.2/>
+- ARIA in HTML: <https://www.w3.org/TR/html-aria/>
+- Accessible Name and Description Computation 1.2: <https://www.w3.org/TR/accname-1.2/>
+- HTML-AAM: <https://www.w3.org/TR/html-aam-1.0/>
+- ACT Rules Format 1.1: <https://www.w3.org/TR/act-rules-format-1.1/>
+- parse5: <https://parse5.js.org/>
+- Nu Html Checker: <https://validator.github.io/validator/>
+- axe-core: <https://github.com/dequelabs/axe-core>
+- WHATWG URL: <https://url.spec.whatwg.org/>
+- Model Context Protocol: <https://modelcontextprotocol.io/>
+- Claude Code hooks: <https://code.claude.com/docs/en/hooks>
