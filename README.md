@@ -1,6 +1,6 @@
 Experiments in hacking a tool together to check HTML for problems and reassemble it a proper semantic manner.  Trying to prove or disprove that we can actually predictably build something as simple as a web page with LLMs with actual quality
 
-The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), M1d (the Vanilla Breeze vocabulary and the `component` rules), M1e (`fix`, `init`, the Claude Code skill and hook, and the Nu cross-check), and M1f (the evaluation harness; see [eval/README.md](eval/README.md)).
+The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), M1d (the Vanilla Breeze vocabulary and the `component` rules), M1e (`fix`, `init`, the Claude Code skill and hook, and the Nu cross-check), M1f (the evaluation harness; see [eval/README.md](eval/README.md)), and the first part of M2, the assembler: component contracts, the template compiler, and the house-style serializer.
 
 ## Usage
 

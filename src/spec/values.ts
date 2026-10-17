@@ -123,7 +123,7 @@ interface UrlOptions {
 }
 
 /** URL syntax: what the URL parser would reject, or report as a validation error. */
-function urlProblem(raw: string, { nonEmpty = false, absolute = false }: UrlOptions): string | null {
+export function urlProblem(raw: string, { nonEmpty = false, absolute = false }: UrlOptions = {}): string | null {
   const value = trimSpaces(raw);
   if (value === '') return nonEmpty ? 'is empty: give it a URL' : null;
   if (/[\t\n\r]/.test(value)) return 'contains a tab or line break';
