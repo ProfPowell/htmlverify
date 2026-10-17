@@ -3,7 +3,7 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from '../config.ts';
 import { assemble } from '../assemble/assemble.ts';
-import { approveComponent, catalog, checkComponent, checkRegistry, LifecycleError, newComponent, openRegistry, showComponent } from '../assemble/lifecycle.ts';
+import { approveComponent, catalog, checkComponent, checkRegistry, LifecycleError, newComponent, openRegistry, showComponent, STARTER_REGISTRY } from '../assemble/lifecycle.ts';
 import { explain, formatExplain, formatRules, listRules } from '../explain.ts';
 import { isProfileName, type ProfileName } from '../profiles.ts';
 import { canonicalJson, stableJson } from '../report/canonical.ts';
@@ -230,7 +230,6 @@ async function assembleCommand(argv: string[], io: Io): Promise<number> {
   if (args.values['emit-failed'] && out === undefined) throw new UsageError('--emit-failed needs --out to name the failed file');
 
   const config = await loadConfig(args.values.config, io.cwd);
-  if (!config?.registryDir) throw new ConfigError(`assemble needs a component registry; set "registry" in ${CONFIG_FILE}`);
 
   const label = (absolute: string) => relative(io.cwd, absolute).split(sep).join('/') || absolute;
   const plan = args.positionals[0]!;
@@ -249,7 +248,7 @@ async function assembleCommand(argv: string[], io: Io): Promise<number> {
   }
   const target = out === undefined ? null : resolve(io.cwd, out);
   const result = await assemble(text.replace(/^\uFEFF/, ''), {
-    registry: config.registryDir, profile: profile as ProfileName | undefined, config, draft: args.values.draft === true, planPath, outPath: target ? label(target) : '<stdout>',
+    registry: registryFor(config, false), profile: profile as ProfileName | undefined, config, draft: args.values.draft === true, planPath, outPath: target ? label(target) : '<stdout>',
   });
 
   // Atomic, like fix --write: a temporary file beside the target, then a rename over it.
@@ -327,23 +326,23 @@ async function lifecycleCommand(command: 'component' | 'registry' | 'catalog', a
   }
 
   const config = await loadConfig(args.values.config, io.cwd);
-  if (!config?.registryDir) throw new ConfigError(`${command} needs a component registry; set "registry" in ${CONFIG_FILE}`);
+  const root = registryFor(config, mode === 'new' || mode === 'approve' || args.values.update === true);
   const json = (value: unknown) => io.stdout.write(`${canonicalJson(value)}\n`);
   if (mode === 'new') {
     if (!args.values.author) throw new UsageError('component new needs --author <name>');
-    const files = newComponent(config.registryDir, id!, args.values.author);
+    const files = newComponent(root, id!, args.values.author);
     if (format === 'json') json({ files });
     else io.stdout.write(`${files.map((f) => `wrote ${f}`).join('\n')}\nNext: fill in the contract and template, then run htmlverify component check ${id} --update.\n`);
     return 0;
   }
-  const registry = openRegistry(config.registryDir, config);
+  const registry = openRegistry(root, config);
   if (mode === 'catalog') {
     const list = catalog(registry, args.values.query);
     if (format === 'json') json(list);
     else io.stdout.write(formatCatalog(list));
     return 0;
   }
-  const nu = args.values.nu ? { jar: config.nu?.jar ?? resolve(io.cwd, 'node_modules/vnu-jar/build/dist/vnu.jar'), ...(config.nu?.java ? { java: config.nu.java } : {}) } : null;
+  const nu = args.values.nu ? { jar: config?.nu?.jar ?? resolve(io.cwd, 'node_modules/vnu-jar/build/dist/vnu.jar'), ...(config?.nu?.java ? { java: config.nu.java } : {}) } : null;
   if (mode === 'show') {
     const details = await showComponent(registry, id!, { config });
     if (format === 'json') json(details);
@@ -370,6 +369,19 @@ async function lifecycleCommand(command: 'component' | 'registry' | 'catalog', a
   if (format === 'json') json(result);
   else io.stdout.write(formatRegistryCheck(result));
   return result.status === 'pass' ? 0 : 1;
+}
+
+/**
+ * The registry the config names, or else the starter registry that ships
+ * with htmlverify. That one is read-only once installed: a project writes
+ * components into a registry of its own.
+ */
+function registryFor(config: Config | null, write: boolean): string {
+  if (config?.registryDir) return config.registryDir;
+  if (write && STARTER_REGISTRY.split(sep).includes('node_modules')) {
+    throw new ConfigError(`the starter registry ships with htmlverify and can’t be changed here; set "registry" in ${CONFIG_FILE} to work on your own components`);
+  }
+  return STARTER_REGISTRY;
 }
 
 /** `init [--claude] [--profile] [--force]`: a config, and with --claude the skill and hook (spec §10.4). */

@@ -5,6 +5,7 @@
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { resolveProfile, type Config } from '../config.ts';
 import type { NuOptions } from '../nu/nu.ts';
 import { check, type Finding } from '../report/report.ts';
@@ -17,6 +18,9 @@ import { jsonPointers } from './jsonpos.ts';
 import { DEFAULT_SCHEMES, isObject, validateRecord, type ParamSpec, type Problem } from './params.ts';
 import { KEY } from './plan.ts';
 import { componentDigest, fixtureFiles, loadRegistry, type Component, type Registry, type ReviewStatus } from './registry.ts';
+
+/** The starter registry that ships with htmlverify (spec §9.11), used when a project names none. */
+export const STARTER_REGISTRY = fileURLToPath(new URL('../../registry/', import.meta.url)).replace(/[\\/]$/, '');
 
 /** A request the registry can't serve, such as an unknown component; the CLI reports it as a usage error. */
 export class LifecycleError extends Error {}
