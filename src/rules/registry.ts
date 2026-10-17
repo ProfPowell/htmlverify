@@ -19,7 +19,7 @@ export const RULES: readonly RuleMeta[] = [
   { id: 'syntax/unclosed-element', authority: 'standard', summary: 'Element closed by the parser where its end tag isn’t optional', ref: `${SYNTAX}#optional-tags` },
   { id: 'syntax/stray-end-tag', authority: 'standard', summary: 'End tag that matches no open element', ref: `${PARSING}#parsing-main-inbody` },
   { id: 'syntax/misplaced-start-tag', authority: 'standard', summary: 'Start tag the parser dropped or wrapped in an implied element', ref: `${PARSING}#parsing-main-inbody` },
-  { id: 'syntax/misnested', authority: 'standard', summary: 'Overlapping elements split by the adoption agency', ref: `${PARSING}#adoption-agency-algorithm` },
+  { id: 'syntax/misnested', authority: 'standard', summary: 'Overlapping elements, closed early or split into clones', ref: `${PARSING}#adoption-agency-algorithm` },
   { id: 'syntax/reordered', authority: 'standard', summary: 'Content the parser moved', ref: `${PARSING}#foster-parent` },
   { id: 'syntax/doctype', authority: 'standard', summary: 'Missing or non-conforming doctype', ref: `${SYNTAX}#the-doctype` },
   { id: 'syntax/encoding', authority: 'standard', summary: 'Invalid UTF-8 or a misplaced charset declaration', ref: 'https://html.spec.whatwg.org/multipage/semantics.html#charset' },

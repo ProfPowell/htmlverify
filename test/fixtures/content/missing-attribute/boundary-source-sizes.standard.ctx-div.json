@@ -1,0 +1,23 @@
+[
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "1:10-1:82",
+    "message": "<source> needs sizes, because its srcset uses width descriptors."
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "1:138",
+    "ask": "Does alt=\"A\" convey what the image shows here?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "2:82",
+    "ask": "Does alt=\"B\" convey what the image shows here?"
+  },
+  {
+    "rule": "a11y/img-alt",
+    "review": "3:129",
+    "ask": "Does alt=\"C\" convey what the image shows here?"
+  }
+]

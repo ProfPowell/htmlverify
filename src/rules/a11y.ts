@@ -364,17 +364,23 @@ export function checkA11y(ctx: RuleContext): A11yResult {
   {
     const landmarks = elements.filter((e) => visible(e) && !inTemplate(e)).map((e) => ({ e, role: names.role(e) }));
     for (const [role, label] of [['navigation', '<nav>'], ['complementary', '<aside>'], ['region', 'named <section>']] as const) {
-      const list = landmarks.filter((l) => l.role === role);
+      const list = landmarks.filter((l) => l.role === role).map((l) => ({ ...l, name: names.name(l.e).name }));
       if (list.length < 2) continue;
+      const named = list.find((l) => l.name);
       const seen = new Map<string, Element>();
       for (const l of list) {
-        const name = names.name(l.e).name;
-        const first = seen.get(name.toLowerCase());
+        const first = seen.get(l.name.toLowerCase());
         if (first) {
-          report('a11y/landmarks', span(l.e), name
-            ? `This ${label} landmark has the same name as the one at ${pos(first)} (${quote(name)}); give each a distinct aria-label.`
+          report('a11y/landmarks', span(l.e), l.name
+            ? `This ${label} landmark has the same name as the one at ${pos(first)} (${quote(l.name)}); give each a distinct aria-label.`
             : `This ${label} landmark and the one at ${pos(first)} have no names; label each with aria-label, such as "Main" and "Footer".`);
-        } else seen.set(name.toLowerCase(), l.e);
+          continue;
+        }
+        seen.set(l.name.toLowerCase(), l.e);
+        // A repeated landmark needs a name even when the others have one (APG).
+        if (!l.name && named) {
+          report('a11y/landmarks', span(l.e), `This ${label} landmark has no name, unlike the one at ${pos(named.e)} (${quote(named.name)}); give it an aria-label too, such as "Footer".`);
+        }
       }
     }
     for (const [role, label] of [['banner', '<header>'], ['contentinfo', '<footer>']] as const) {

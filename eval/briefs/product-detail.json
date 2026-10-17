@@ -1,0 +1,71 @@
+{
+  "id": "product-detail",
+  "type": "product detail",
+  "title": "Product detail: Ridgeline 40 L pack",
+  "content": "Product page for the Ridgeline 40 L backpack. Price: $189. Rating: 4.7 out of 5 from 212 reviews.\n\nDescription: A 40-liter pack for multi-day trips. The frame transfers weight to your hips, and the side zip lets you reach the bottom without unpacking.\n\nOptions: Color (Moss, Slate, Ember) and Size (S/M, M/L). Both are required. Quantity, 1 to 5.\nButtons: Add to cart (submits the order form), Save to wishlist.\n\nSpecifications:\n- Capacity: 40 L\n- Weight: 1.4 kg\n- Fabric: 210-denier recycled nylon\n- Torso range: 41–53 cm\n- Warranty: lifetime, with free repairs at the co-op\n\nPhotos: four views (front, back panel, side zip open, on a hiker).\nReviews (two shown): \"Carried it 90 km on the Coast Trail without a sore hip.\" — Dana, 5 stars. \"Wish the hip belt pockets were larger.\" — Theo, 4 stars.\nBreadcrumbs: Home › Shop › Backpacks › Ridgeline 40 L.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "form",
+      "text": "an order form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "submit",
+      "text": "a submit button",
+      "selector": "button[type=submit]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "selects",
+      "text": "labeled color and size choices",
+      "selector": "label",
+      "count": [
+        2,
+        null
+      ]
+    },
+    {
+      "id": "specs",
+      "text": "specifications as a table with headers or a description list",
+      "selector": "table th, dl dt",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "breadcrumb",
+      "text": "breadcrumbs as navigation",
+      "selector": "nav a[href]",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "imgs",
+      "text": "product photos with alt text",
+      "selector": "img[alt]",
+      "count": [
+        4,
+        null
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/misnested",
+    "severity": "error",
+    "at": "1:5-1:9",
+    "message": "<li> overlaps </ul> at 1:12: the parser closes it there, so </li> at 1:17 matches nothing. Close </li> before </ul>."
+  }
+]

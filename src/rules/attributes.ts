@@ -196,8 +196,14 @@ function missing(element: Element): string[] {
       if (usesWidthDescriptors(attr(element, 'srcset') ?? '')) need('sizes', ', because its srcset uses width descriptors');
       break;
     case 'source':
-      if (parent === 'picture') need('srcset', ' in <picture>');
-      else if (parent === 'audio' || parent === 'video') need('src', ` in <${parent}>`);
+      if (parent === 'picture') {
+        need('srcset', ' in <picture>');
+        // Unless the <img> after it sizes itself: loading="lazy" with sizes="auto…".
+        const siblings = element.parentNode!.childNodes;
+        const img = siblings.slice(siblings.indexOf(element) + 1).find((c): c is Element => isElement(c) && c.tagName === 'img');
+        const autoSized = img && attr(img, 'loading')?.toLowerCase() === 'lazy' && /^auto(?:,|$)/i.test((attr(img, 'sizes') ?? '').trim());
+        if (usesWidthDescriptors(attr(element, 'srcset') ?? '') && !autoSized) need('sizes', ', because its srcset uses width descriptors');
+      } else if (parent === 'audio' || parent === 'video') need('src', ` in <${parent}>`);
       break;
     case 'link': {
       if (!has(element, 'href') && !has(element, 'imagesrcset')) out.push('<link> needs href (or imagesrcset).');

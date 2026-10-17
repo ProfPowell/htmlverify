@@ -1,6 +1,6 @@
 Experiments in hacking a tool together to check HTML for problems and reassemble it a proper semantic manner.  Trying to prove or disprove that we can actually predictably build something as simple as a web page with LLMs with actual quality
 
-The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), M1d (the Vanilla Breeze vocabulary and the `component` rules), and M1e (`fix`, `init`, the Claude Code skill and hook, and the Nu cross-check).
+The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), M1d (the Vanilla Breeze vocabulary and the `component` rules), M1e (`fix`, `init`, the Claude Code skill and hook, and the Nu cross-check), and M1f (the evaluation harness; see [eval/README.md](eval/README.md)).
 
 ## Usage
 
@@ -76,7 +76,10 @@ When a test names changed elements or rows, review them in `src/spec/model.ts`, 
 ## Development
 
 ```sh
-npm test                    # fixtures, unit, ARIA, docs, config, and CLI tests
+npm test                    # fixtures, mutation corpus, unit, ARIA, docs, config, and CLI tests
 npm run typecheck
 UPDATE_GOLDEN=1 npm test    # rewrite test/fixtures/**/*.json after an intended change; review the diff
+HTMLVERIFY_VNU_JAR=path/to/vnu.jar node --test test/nu.test.ts   # the Nu differential
 ```
+
+The mutation corpus (`test/corpus.ts`) injects one defect per rule into a known-good page, and each must trigger its rule. The Nu differential checks every document fixture, known-good page, and mutant with Nu: each Nu error or warning must match a local finding or be listed in `test/nu-gaps.json`, which says why htmlverify doesn't report it, and each listed message must still occur on its example. CI runs it with `vnu-jar`.

@@ -54,7 +54,7 @@ export const RULE_DOCS: Readonly<Record<string, RuleDoc>> = {
     passes: '<table><tbody><tr><td>1</td></tr></tbody></table>',
   },
   'syntax/misnested': {
-    why: 'Overlapping tags are repaired by cloning elements, which duplicates them in the tree.',
+    why: 'The parser closes an overlapping element early, then drops its end tag or reopens it as a clone, so the tree differs from the source.',
     fix: 'Close elements in the reverse order they were opened.',
     fails: '<b><i>bold italic</b> italic</i>',
     passes: '<b><i>bold italic</i></b><i> italic</i>',
@@ -315,7 +315,7 @@ export const RULE_DOCS: Readonly<Record<string, RuleDoc>> = {
   },
   'a11y/landmarks': {
     why: 'Landmarks are a page’s table of contents; two unnamed navigation landmarks can’t be told apart.',
-    fix: 'Give repeated landmarks distinct names with aria-label, and keep one top-level header and footer.',
+    fix: 'Give every instance of a repeated landmark a distinct aria-label, and keep one top-level header and footer.',
     fails: '<nav><a href="/">Home</a></nav><nav><a href="/help">Help</a></nav>',
     passes: '<nav aria-label="Main"><a href="/">Home</a></nav><nav aria-label="Support"><a href="/help">Help</a></nav>',
   },

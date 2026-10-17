@@ -136,7 +136,13 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
         lastOrderFailure = matcher.key();
         const expected = matcher.expected();
         const where = expected.length ? `expected ${describeTokens(expected)} here` : `nothing more is allowed after ${previous(child, children)}`;
-        report('content/order', child, `${what} is out of order in ${name}: ${where}.${hint}`);
+        // The expected element further on, such as a <summary> after other content.
+        const names = new Set(expected.flatMap((t) => (t.kind === 'element' ? [t.name] : [])));
+        const index = children.indexOf(child);
+        const later = index < 0 ? undefined : children.slice(index + 1).find((c): c is Element => isElement(c) && names.has(nameOf(c) ?? ''));
+        const offset = later ? spanOf(later, ctx.text).offset : null;
+        const move = offset === null ? '' : ` Move the ${describe(later!)} at ${at(ctx, offset)} before it.`;
+        findings.push({ rule: 'content/order', ...spanOf(child, ctx.text), message: `${what} is out of order in ${name}: ${where}.${move}${hint}`, ...(offset === null ? {} : { alsoAt: [offset] }) });
         return;
       }
       const allowed = nfa.tokens.length === 0 ? 'which must be empty' : `which accepts only ${describeTokens(nfa.tokens)}`;
@@ -158,13 +164,20 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
       place(child, element, ancestors, children, skip ? null : { matcher, fail, from: transparent ? inherited.from : element }, active);
     }
 
-    // A required single-choice <select> needs a placeholder first, or required can never fail.
-    if (isHtml(element) && element.tagName === 'select' && has(element, 'required') && !has(element, 'multiple') && Number(attr(element, 'size') ?? '1') <= 1) {
+    if (isHtml(element) && element.tagName === 'select') {
       const options = children.flatMap((c) => (isElement(c) && c.tagName === 'option' ? [c] : isElement(c) && c.tagName === 'optgroup' ? c.childNodes.filter((o): o is Element => isElement(o) && o.tagName === 'option') : []));
-      const first = options[0];
-      const value = first ? attr(first, 'value') ?? first.childNodes.filter(isText).map((t) => t.value).join('').replace(/[\t\n\f\r ]+/g, ' ').trim() : null;
-      if (first && (value !== '' || first.parentNode !== element)) {
-        report('content/child', first, 'A required <select> must start with a placeholder option, <option value="">Choose…</option>, directly inside it; otherwise the first option is selected from the start and required never fails.');
+      // A required single-choice <select> needs a placeholder first, or required can never fail.
+      if (has(element, 'required') && !has(element, 'multiple') && Number(attr(element, 'size') ?? '1') <= 1) {
+        const first = options[0];
+        const value = first ? attr(first, 'value') ?? first.childNodes.filter(isText).map((t) => t.value).join('').replace(/[\t\n\f\r ]+/g, ' ').trim() : null;
+        if (first && (value !== '' || first.parentNode !== element)) {
+          report('content/child', first, 'A required <select> must start with a placeholder option, <option value="">Choose…</option>, directly inside it; otherwise the first option is selected from the start and required never fails.');
+        }
+      }
+      // Without multiple, only one option can start selected.
+      const selected = has(element, 'multiple') ? [] : options.filter((o) => has(o, 'selected'));
+      for (const extra of selected.slice(1)) {
+        report('content/attribute-value', extra, `A <select> without multiple can have only one selected <option>; the first is at ${at(ctx, spanOf(selected[0]!, ctx.text).offset)}. Remove selected from the others, or add multiple.`);
       }
     }
     if (!failed && isHtml(element) && element.tagName === 'time' && !has(element, 'datetime')) {

@@ -1,0 +1,71 @@
+{
+  "id": "sign-up",
+  "type": "sign-up",
+  "title": "Sign-up form",
+  "content": "Join Larkspur Supply Co.. A one-time $30 lifetime membership.\n\nForm fields:\n- Full name (required)\n- Email (required)\n- Password (required, at least 12 characters)\n- Phone (optional)\n- Interests (choose any): Hiking, Paddling, Climbing, Winter travel\n- Newsletter: \"Send me the monthly newsletter\" (checkbox)\n- Agreement: \"I agree to the member terms\" (required checkbox; the terms link to /terms)\n\nButton: Join and pay $30.\nBelow the form: Already a member? Sign in (/sign-in).\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "form",
+      "text": "a sign-up form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "email",
+      "text": "an email input",
+      "selector": "input[type=email]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "password",
+      "text": "a password input",
+      "selector": "input[type=password]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "interests",
+      "text": "the interests grouped in a fieldset with a legend",
+      "selector": "fieldset > legend",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "checkboxes",
+      "text": "checkboxes for interests and agreements",
+      "selector": "input[type=checkbox]",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "labels",
+      "text": "labeled fields",
+      "selector": "label",
+      "count": [
+        8,
+        null
+      ]
+    }
+  ]
+}

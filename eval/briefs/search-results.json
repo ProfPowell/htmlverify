@@ -1,0 +1,53 @@
+{
+  "id": "search-results",
+  "type": "search results",
+  "title": "Search results",
+  "content": "Search results for \"rain jacket\": 5 results.\n\nThe search box shows the query, with a Search button.\nFilters: Shop (3), Workshops (1), Blog (1).\n\nResults (title, link, a short excerpt, the section):\n1. Drift rain jacket, /shop/drift-jacket — \"A packable 2.5-layer shell for spring hiking.\" — Shop\n2. Storm Line rain jacket, /shop/storm-line — \"Fully taped seams and a stiff brim for coastal storms.\" — Shop\n3. Kids' Puddle jacket, /shop/puddle-jacket — \"Reflective trim and room to grow.\" — Shop\n4. Waterproofing your shell, /workshops/waterproofing — \"Bring your jacket; we'll reproof it with you.\" — Workshops\n5. How we test rain gear, /blog/rain-testing — \"Two weeks in a coastal rainforest.\" — Blog\n\nPagination: page 1 of 1.\n",
+  "checklist": [
+    {
+      "id": "heading",
+      "text": "a heading for the results",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "search-input",
+      "text": "a search input",
+      "selector": "input[type=search]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "label",
+      "text": "a label for the search box",
+      "selector": "label",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "results",
+      "text": "the results as an ordered list",
+      "selector": "ol > li",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "result-links",
+      "text": "a link for each result",
+      "selector": "ol > li a[href]",
+      "count": [
+        5,
+        null
+      ]
+    }
+  ]
+}

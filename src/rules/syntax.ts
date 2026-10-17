@@ -89,11 +89,13 @@ export function checkSyntax(ctx: RuleContext): SyntaxResult {
     const tag = element.tagName;
     const endTag = element.sourceCodeLocation?.endTag;
     const upTo = endTag ? `</${tag}> at ${at(ctx, endTag.startOffset)}` : until(unclosedOf.get(element));
+    const closer = endTag?.startOffset ?? unclosedOf.get(element)?.closedBy?.offset;
     findings.push({
       rule: 'syntax/self-closing-non-void',
       ...startTagSpan(element),
       message: `<${tag}/> doesn’t close the element: HTML ignores "/" on non-void elements, so <${tag}> stays open and swallows everything up to ${upTo}. Write <${tag}></${tag}>.`,
       evidence: { element: tag },
+      ...(closer === undefined ? {} : { alsoAt: [closer] }),
     });
   }
 
@@ -103,12 +105,14 @@ export function checkSyntax(ctx: RuleContext): SyntaxResult {
     for (const element of group) absorbed.add(element);
     const closer = unclosedOf.get(original)?.closedBy;
     const tag = original.tagName;
-    const where = closer ? `</${closer.name}> at ${at(ctx, closer.offset)}` : 'a later end tag';
+    const closerTag = closer ? `<${closer.kind === 'end' ? '/' : ''}${closer.name}>` : 'that end tag';
+    const where = closer ? `${closerTag} at ${at(ctx, closer.offset)}` : 'a later end tag';
     findings.push({
       rule: 'syntax/misnested',
       ...startTagSpan(original),
-      message: `<${tag}> overlaps ${where}: the parser closes it there and reopens it, making ${group.length} <${tag}> elements. Close </${tag}> before ${closer ? `</${closer.name}>` : 'that end tag'}.`,
+      message: `<${tag}> overlaps ${where}: the parser closes it there and reopens it, making ${group.length} <${tag}> elements. Close </${tag}> before ${closerTag}.`,
       evidence: { element: tag, elements: group.length },
+      ...(closer ? { alsoAt: [closer.offset] } : {}),
     });
   }
 
@@ -116,11 +120,27 @@ export function checkSyntax(ctx: RuleContext): SyntaxResult {
   // parser closed implicitly usually explains them.
   for (const token of signals.strayEnd) {
     claimed.add(token.offset);
+    const earlier = closedEarlier(ctx, token);
+    const by = earlier?.closedBy;
+    // `<b><i>…</b></i>`: an ancestor's end tag closed the element, so its own end tag matches nothing.
+    if (earlier && by?.kind === 'end' && by.name !== token.name && !absorbed.has(earlier.element)) {
+      absorbed.add(earlier.element);
+      const tag = token.name;
+      const inserted = tag === 'p' ? ' The parser inserted an empty <p> there.' : '';
+      findings.push({
+        rule: 'syntax/misnested',
+        ...startTagSpan(earlier.element),
+        message: `<${tag}> overlaps </${by.name}> at ${at(ctx, by.offset)}: the parser closes it there, so </${tag}> at ${at(ctx, token.offset)} matches nothing.${inserted} Close </${tag}> before </${by.name}>.`,
+        evidence: { element: tag, elements: 1 },
+        alsoAt: [by.offset, token.offset],
+      });
+      continue;
+    }
     findings.push({
       rule: 'syntax/stray-end-tag',
       offset: token.offset,
       endOffset: token.endOffset,
-      message: strayMessage(ctx, token, absorbed),
+      message: strayMessage(ctx, token, absorbed, earlier),
       evidence: { element: token.name },
     });
   }
@@ -138,6 +158,7 @@ export function checkSyntax(ctx: RuleContext): SyntaxResult {
       ...startTagSpan(u.element),
       message: `<${tag}> is never closed: ${how}. Add </${tag}> where it should end.`,
       evidence: { element: tag },
+      ...(by ? { alsoAt: [by.offset] } : {}),
     });
   }
 
@@ -221,7 +242,16 @@ export function checkSyntax(ctx: RuleContext): SyntaxResult {
   return { findings, absorbed };
 }
 
-function strayMessage(ctx: RuleContext, token: TagToken, absorbed: Set<Element>): string {
+/** The latest element named like a stray end tag that the parser closed before it. */
+function closedEarlier(ctx: RuleContext, token: TagToken): Unclosed | null {
+  let earlier: Unclosed | null = null;
+  for (const u of ctx.signals.unclosed) {
+    if (u.element.tagName === token.name && isHtml(u.element) && u.closedAt <= token.offset && (!earlier || u.closedAt > earlier.closedAt)) earlier = u;
+  }
+  return earlier;
+}
+
+function strayMessage(ctx: RuleContext, token: TagToken, absorbed: Set<Element>, earlier: Unclosed | null): string {
   const name = token.name;
   if (name === 'br') {
     const br = ctx.options.voidElements === 'html' ? '<br>' : ctx.options.voidElements === 'tight' ? '<br/>' : '<br />';
@@ -229,10 +259,6 @@ function strayMessage(ctx: RuleContext, token: TagToken, absorbed: Set<Element>)
   }
   if (VOID_ELEMENTS.has(name)) return `<${name}> is a void element and never has an end tag; delete </${name}>.`;
   const inserted = name === 'p' ? ' The parser inserted an empty <p> here.' : '';
-  let earlier: Unclosed | null = null;
-  for (const u of ctx.signals.unclosed) {
-    if (u.element.tagName === name && isHtml(u.element) && u.closedAt <= token.offset && (!earlier || u.closedAt > earlier.closedAt)) earlier = u;
-  }
   if (!earlier) {
     let closed: Element | null = null;
     for (const element of locatedElements(ctx)) {

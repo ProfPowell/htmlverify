@@ -57,6 +57,8 @@ export interface Finding {
   origin: null;
   /** Rules of later families that reported the same defect here (spec §5.1). */
   alsoReportedBy?: string[];
+  /** Other places the defect shows, such as where the parser closed the element. */
+  alsoAt?: { line: number; column: number }[];
   /** Other checkers' messages about this spot, such as Nu's (spec §6.9). */
   related?: { source: string; message: string; line: number; column: number }[];
 }
@@ -246,15 +248,17 @@ export function crossCheck(findings: Finding[], reviews: Review[], messages: NuM
   for (const m of messages) {
     if (disagreement(m, profile)) continue;
     // A document-level message matches the local finding wherever each checker puts it; otherwise, the
-    // finding on a shared line nearest Nu's column, preferring conformance families.
+    // finding nearest Nu's column on a shared line, at its span or one of its other places, preferring
+    // conformance families.
     const documentLevel = DOCUMENT_LEVEL.find(([pattern]) => pattern.test(m.message))?.[1];
     const local = documentLevel
       ? findings.find((f) => documentLevel.includes(f.rule))
       : findings
-        .filter((f) => f.line <= m.endLine && m.line <= f.endLine)
-        .sort((a, b) => distance(a, m) - distance(b, m) || Number(!CONFORMANCE.has(a.rule.split('/')[0]!)) - Number(!CONFORMANCE.has(b.rule.split('/')[0]!)))[0];
-    // A judgment left to a person, such as an article without a heading, covers Nu's warning about it.
-    const asked = local ? null : reviews.find((r) => m.line <= r.line && r.line <= m.endLine);
+        .flatMap((f) => { const d = distance(f, m); return d === null ? [] : [{ f, d }]; })
+        .sort((a, b) => a.d - b.d || Number(!CONFORMANCE.has(a.f.rule.split('/')[0]!)) - Number(!CONFORMANCE.has(b.f.rule.split('/')[0]!)))[0]?.f;
+    // A judgment left to a person, such as an article without a heading, covers Nu's warning about it,
+    // but never an error.
+    const asked = local || m.severity === 'error' ? null : reviews.find((r) => m.line <= r.line && r.line <= m.endLine);
     const target = local ?? asked;
     if (target) {
       (target.related ??= []).push({ source, message: m.message, line: m.line, column: m.column });
@@ -282,12 +286,21 @@ export function crossCheck(findings: Finding[], reviews: Review[], messages: NuM
   return out;
 }
 
-/** Columns between a finding's span and a Nu message on one of its lines; 0 inside the span. */
-function distance(f: Finding, m: NuMessage): number {
-  if (m.line !== f.line && m.line !== f.endLine) return 0;
-  const from = f.line === m.line ? f.column : 1;
-  const to = f.endLine === m.line ? f.endColumn : Infinity;
-  return m.column < from ? from - m.column : m.column > to ? m.column - to : 0;
+/**
+ * Columns between a Nu message and the nearest of a finding's span and other
+ * places that share a line with it; 0 inside the span, null when none does.
+ */
+function distance(f: Finding, m: NuMessage): number | null {
+  const spans = [f, ...(f.alsoAt ?? []).map((p) => ({ ...p, endLine: p.line, endColumn: p.column }))];
+  let best: number | null = null;
+  for (const s of spans) {
+    if (s.line > m.endLine || m.line > s.endLine) continue;
+    const from = s.line === m.line ? s.column : 1;
+    const to = s.endLine === m.line ? s.endColumn : Infinity;
+    const d = m.line !== s.line && m.line !== s.endLine ? 0 : m.column < from ? from - m.column : m.column > to ? m.column - to : 0;
+    if (best === null || d < best) best = d;
+  }
+  return best;
 }
 
 /** Nu's messages about the whole document, and the local rules that report the same thing at the top. */
@@ -295,6 +308,7 @@ const DOCUMENT_LEVEL: readonly [RegExp, readonly string[]][] = [
   [/without seeing a doctype first|Non-space characters found without seeing a doctype/, ['syntax/doctype']],
   [/“lang” attribute to the “html” start tag/, ['a11y/lang']],
   [/required instance of child element “title”/, ['content/order', 'a11y/title']],
+  [/^End of file seen/, ['syntax/unclosed-element', 'syntax/self-closing-non-void', 'syntax/misnested']],
 ];
 
 /**
@@ -359,6 +373,7 @@ function toFinding(raw: RawFinding, path: string, lines: LineIndex, profile: Pro
     fix: raw.fix ? { edits: raw.fix } : null,
     origin: null,
     ...(also.length ? { alsoReportedBy: also } : {}),
+    ...(raw.alsoAt?.length ? { alsoAt: raw.alsoAt.map((o) => { const p = lines.position(o); return { line: p.line, column: p.column }; }) } : {}),
   };
 }
 

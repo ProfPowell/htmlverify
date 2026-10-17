@@ -1,0 +1,53 @@
+{
+  "id": "press-release",
+  "type": "press release",
+  "title": "Press release",
+  "content": "Press release, for immediate release, Port Wren, 14 October 2026.\n\nHeadline: Larkspur Supply Co. opens the region's first gear library.\nSubhead: Members can borrow tents, stoves, and snowshoes for free, starting 1 November 2026.\n\nBody:\nPort Wren — Larkspur Supply Co. will open a gear library on 1 November 2026. Members can borrow up to three items for a week at no cost. The library starts with 240 items donated by members and repaired in the co-op's workshop.\n\n\"Most gear spends its life in a closet,\" said general manager Priya Raman. \"A library puts it back on the trail.\"\n\nThe library will be open during store hours at 214 Alder Street.\n\nAbout Larkspur Supply Co.: Founded in 1987, the cooperative is owned by 9,400 members and sells, rents, and repairs outdoor equipment.\n\nMedia contact: Sam Whitlock, press@larkspur.coop, (360) 555-0177.\n",
+  "checklist": [
+    {
+      "id": "article",
+      "text": "the release as an article",
+      "selector": "article",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "date",
+      "text": "the release date as a time element",
+      "selector": "time[datetime]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "quote",
+      "text": "the manager's quote as a blockquote or q",
+      "selector": "blockquote, q",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "email-link",
+      "text": "the media email as a mailto link",
+      "selector": "a[href^=mailto]",
+      "count": [
+        1,
+        null
+      ]
+    }
+  ]
+}

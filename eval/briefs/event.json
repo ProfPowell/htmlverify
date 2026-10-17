@@ -1,0 +1,62 @@
+{
+  "id": "event",
+  "type": "event",
+  "title": "Event page: winter skills weekend",
+  "content": "Event: Winter Skills Weekend, Saturday 6 to Sunday 7 December 2026, at Hollow Pine Camp, 88 Ridge Road, Mount Alder.\n\nDescription: Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience.\n\nSchedule:\nSaturday 6 December\n- 9:00 Arrival and gear check\n- 10:00 Avalanche awareness\n- 14:00 Snowshoe technique\nSunday 7 December\n- 9:00 Snow shelters\n- 13:00 Debrief and lunch\n\nPrice: $180 for members, $220 for others. Includes meals and a bunk.\nRegistration: a form with name, email, membership number (optional), and dietary needs; a Register button.\nSpaces left: 6 of 24.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "times",
+      "text": "event times as time elements",
+      "selector": "time[datetime]",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "schedule",
+      "text": "the schedule as a list, table, or description list",
+      "selector": "ol > li, ul > li, tr, dl > dt",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "form",
+      "text": "a registration form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "email",
+      "text": "an email input",
+      "selector": "input[type=email]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "address",
+      "text": "the venue in an address element",
+      "selector": "address",
+      "count": [
+        1,
+        null
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "product-list",
+  "type": "product list",
+  "title": "Product list: packs",
+  "content": "Category page: Backpacks. 8 products, sorted by popularity.\n\nFilters: Capacity (Under 30 L, 30–50 L, Over 50 L), Price (Under $100, $100–$200, Over $200), Only show items in stock (a checkbox). An Apply filters button.\n\nProducts (name, price, rating out of 5, availability, link):\n1. Ridgeline 40 L, $189, 4.7, in stock, /shop/ridgeline-40\n2. Day Hiker 22 L, $79, 4.5, in stock, /shop/day-hiker-22\n3. Summit 55 L, $249, 4.8, 2 left, /shop/summit-55\n4. Commuter 18 L, $64, 4.2, in stock, /shop/commuter-18\n5. Trailhead 30 L, $119, 4.4, out of stock, /shop/trailhead-30\n6. Expedition 70 L, $329, 4.9, in stock, /shop/expedition-70\n7. Kids' Explorer 12 L, $45, 4.6, in stock, /shop/explorer-12\n8. Ultralight 35 L, $215, 4.3, in stock, /shop/ultralight-35\n\nEach product has a photo (a pack in its color), the name as a link, the price, the rating, and its availability.\nPagination: page 1 of 3, with links to pages 2 and 3 and a Next link.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "products",
+      "text": "the products as list items or articles",
+      "selector": "li a[href], article a[href]",
+      "count": [
+        8,
+        null
+      ]
+    },
+    {
+      "id": "filter-form",
+      "text": "a filter form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "labels",
+      "text": "labeled filter controls",
+      "selector": "label",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "pagination",
+      "text": "pagination as navigation",
+      "selector": "nav a[href]",
+      "count": [
+        2,
+        null
+      ]
+    },
+    {
+      "id": "imgs",
+      "text": "product photos with alt text",
+      "selector": "img[alt]",
+      "count": [
+        8,
+        null
+      ]
+    }
+  ]
+}

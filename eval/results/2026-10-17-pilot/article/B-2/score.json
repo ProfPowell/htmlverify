@@ -1,0 +1,102 @@
+{
+  "brief": "article",
+  "condition": "B",
+  "run": 2,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "page": true,
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 5,
+    "items": [
+      {
+        "id": "article",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "published",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "sections",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "figure",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "main",
+    "article",
+    "header",
+    "h1",
+    "p",
+    "time",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "figure",
+    "img",
+    "figcaption",
+    "section",
+    "h2",
+    "p",
+    "blockquote",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "aside",
+    "h2",
+    "ul",
+    "li",
+    "li"
+  ],
+  "tokens": {
+    "input": 20,
+    "output": 2819,
+    "cacheRead": 415863,
+    "cacheWrite": 28363
+  },
+  "costUsd": 0.18341260000000004,
+  "wallMs": 27381,
+  "turns": 14
+}

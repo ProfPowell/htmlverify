@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/attribute-value",
+    "severity": "error",
+    "at": "2:8-2:19",
+    "message": "value=\"1.5\" must be at most the default max, 1."
+  }
+]

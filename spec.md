@@ -159,6 +159,7 @@ Positions are parse5's: `line` and `column` are 1-based in UTF-16 code units; `o
 - `severity`: `error` fails the gate; `warning` and `info` don't.
 - `evidence`: rule-specific facts, such as the computed name and its source, raw attribute text, metric values.
 - `fix`: tree-preserving edits (§8), or `null`. Fixes never invent content such as alt text or labels.
+- `alsoAt`: other places the defect shows, as lines and columns, such as where the parser closed an unclosed element; omitted when there are none.
 - `origin`: where an assembled node came from (§9.8).
 
 **Deduplication.** When several rules report one defect at one location (a missing title: `content/order` and `a11y/title`), the report keeps the finding from the first family in the order syntax, content, component, a11y, semantic, policy, style, bloat, and lists the others in `alsoReportedBy`. A syntax finding absorbs the style findings it explains: there is no separate `style/explicit-end-tag` for the `<p>` behind a stray `</p>`.
@@ -229,7 +230,7 @@ All standard, error in both profiles, M0, no automatic fix.
 | `syntax/unclosed-element` | element closed by end of file, a parent's end tag, or a start tag it can't contain, where its end tag isn't optional |
 | `syntax/stray-end-tag` | end tag that matches nothing: ignored, or turned into an element |
 | `syntax/misplaced-start-tag` | start tag the parser dropped (nested `form`, `tr` outside a table, a second `body`) or wrapped in an implied element (`td` directly in `table` gets a `tr`) |
-| `syntax/misnested` | overlapping elements repaired by cloning (`<b><i></b></i>`) |
+| `syntax/misnested` | overlapping elements, closed early (`<b><i></b></i>`) or repaired by cloning (`<b><i></b>x</i>`) |
 | `syntax/reordered` | content the parser moved (foster-parented out of a table) |
 | `syntax/doctype` | missing or non-conforming doctype; quirks or limited-quirks mode |
 | `syntax/encoding` | invalid UTF-8; charset declaration missing from the first 1024 bytes or not `utf-8` |
@@ -359,9 +360,9 @@ Metrics are reported even when under threshold. Bloat never gets automatic fixes
 
 ### 6.9 Nu cross-check
 
-- `--nu` runs `vnu.jar` (the config's `nu.jar`, relative to the config file, or `node_modules/vnu-jar/build/dist/vnu.jar`) once per check, with `--format json`, over every document; fragments are `untested` for it. A Nu message on the line of a local finding is attached to the nearest one as `related` evidence, and one on the line of a review item to that item; Nu's document-level messages (no doctype, no `lang`, no `title`) match the local finding wherever each checker places it. The rest become `conformance/nu` findings, verbatim, with Nu's severity, and the report's `tool.nu` names the version.
+- `--nu` runs `vnu.jar` (the config's `nu.jar`, relative to the config file, or `node_modules/vnu-jar/build/dist/vnu.jar`) once per check, with `--format json`, over every document; fragments are `untested` for it. A Nu message on a line of a local finding, or at another place the finding names in `alsoAt` (where the parser closed an unclosed element, the misplaced child an order error points to), is attached to the nearest one as `related` evidence. A Nu warning on the line of a review item is attached to that item; an error never is, since a question to a person can't account for one. Nu's document-level messages (no doctype, no `lang`, no `title`, the end of the file with elements open) match the local finding wherever each checker places it. The rest become `conformance/nu` findings, verbatim, with Nu's severity, and the report's `tool.nu` names the version.
 - Messages htmlverify disagrees with by design are dropped: the trailing-slash info when the house void form is `xhtml` or `tight`; CSS messages, since htmlverify leaves CSS to CSS tools and Nu's CSS checker lags current CSS (`container-type`, `@property`); and the info that an attribute is "never allowed" on an autonomous custom element, which HTML allows.
-- Measured on 2026-10-17 (vnu 26.10.12, Java 21): about 1.4 s for one file, mostly JVM startup, and 14 s for the 960 Vanilla Breeze demo pages in one run. On those pages, Nu's messages became 1,161 related notes on findings, 347 on review items, and 47 `conformance/nu` findings: 22 notes recommending a single top-level `h1` (`policy/single-h1` covers it in `strict`), 18 `slot` attributes on `svg` (SVG content isn't modeled), 6 `dt`/`dd` order errors that htmlverify reports on the element before, and 1 comment that isn't XML-compatible. The first run's gaps are now local rules: `aria-label` on a `label` that labels a control and on a role-less custom element, `aria-disabled` on `a[href]`, `aria-hidden` beside `hidden`, controls inside roles with presentational children, an `itemprop` outside any item, and a required `select` without a placeholder option.
+- Measured on 2026-10-17 (vnu 26.10.12, Java 21): about 1.4 s for one file, mostly JVM startup, and 14 s for the 960 Vanilla Breeze demo pages in one run. On those pages, Nu's messages became 1,167 related notes on findings, 347 on review items, and 41 `conformance/nu` findings, all listed in `test/nu-gaps.json`: 22 notes recommending a single top-level `h1` (`policy/single-h1` covers half of them in `strict`), 18 `slot` attributes on `svg`, and 1 comment that isn't XML-compatible. The first run's gaps are now local rules: `aria-label` on a `label` that labels a control and on a role-less custom element, `aria-disabled` on `a[href]`, `aria-hidden` beside `hidden`, controls inside roles with presentational children, an `itemprop` outside any item, and a required `select` without a placeholder option. Probing Nu with common defects added `meter` and `progress` values out of order, a single-choice `select` with more than one `selected` option, and a width-described `source` without `sizes`.
 - A long-running Nu server (`nu.validator.servlet.Main`) for repeated runs, such as the hook's, is left for later.
 - Nu stops at its first fatal error ("Cannot recover after last error" after foster parenting), checks only documents, and knows nothing of house style or most accessibility rules. It complements local rules; it doesn't replace them.
 - Without Java, `conformance/nu` is `untested` and the status comes from local rules. Registry CI requires Nu.
@@ -832,8 +833,8 @@ Findings are results, not exceptions; only invalid arguments throw. Everything w
 ### 12.3 Corpora and properties
 
 - **Known-good**: hand-checked pages with zero errors under `standard`.
-- **Mutation**: single defects injected into known-good pages (drop an `alt`, unquote a value, nest a `div` in a `span`, duplicate an ID, add a positive `tabindex`, …). Each mutant must trigger the intended rule. Target recall for deterministic rules: 100%.
-- **Nu differential**: every Nu error on a corpus page matches a local finding or is listed in `test/nu-gaps.json` with a reason. That list is the content-model coverage gap.
+- **Mutation**: single defects injected into known-good pages (drop an `alt`, unquote a value, nest a `div` in a `span`, duplicate an ID, add a positive `tabindex`, …). Each mutant must trigger the intended rule. Target recall for deterministic rules: 100%. The mutations are in `test/corpus.ts`, at least one per rule except the review-only, opt-in, page-wide, and Nu rules.
+- **Nu differential**: every Nu error on a corpus page matches a local finding or is listed in `test/nu-gaps.json` with a reason. That list is the content-model coverage gap. Each entry is a gap (not checked yet: the table model, media queries, SVG and MathML content, XML-incompatible comments) or a disagreement (accepted on purpose: `slot` on `svg`, an `h1` inside a section, and a Nu false positive on `source` without `sizes`), with an example that must still produce the message unmatched. The corpus is the document fixtures, the known-good pages, and the mutants; the test runs where a `vnu.jar` is installed, and CI installs one.
 - **Assembler properties**: plans generated from the starter registry with random in-contract data always pass `strict`, round-trip, and serialize byte-identically twice.
 - **Injection corpus** for `text`, `url`, `inline`, `prose`: `</title><script>`, `" onfocus="`, `javascript:`, `jav&#x09;ascript:`, pre-escaped `&amp;`, NUL, bidi controls, NBSP, CRLF. Values never leave their sink, and invalid values fail with a located error.
 - **Determinism**: canonical JSON is identical across runs and on Linux, macOS, and Windows in CI.
@@ -864,6 +865,20 @@ Each brief runs 3 times per condition.
 - **Not supported** if C fails mostly on gaps or composition errors that a larger catalog wouldn't fix.
 
 Results, raw outputs, and the failure analysis go in `eval/results/`.
+
+**Harness (M1).** `eval/run.ts` runs conditions A and B; `eval/README.md` describes it.
+
+- **Agent driver**: headless Claude Code (`claude -p`) in a fresh directory per run, with its own session, project settings only, and no MCP servers.
+- **Human driver**: the same directories, with instructions.
+- **House skills**: `eval/skills/`, a snapshot of Vanilla Breeze's at commit `1817856`.
+- **Condition B** adds the htmlverify skill and the hook. The hook logs each round and stops blocking after 3.
+- **Measurements**:
+  - The first attempt is B's first hook check, or A's final file.
+  - Repair rounds are failing hook checks.
+  - The checklist is selectors over the parsed page.
+  - Structural variance is the mean pairwise edit distance between element skeletons, normalized by the longer one.
+- **Rubric**: scoring by human raters or a calibrated agent judge isn't in the harness yet.
+- **First results**: `eval/results/2026-10-17-pilot/`, 5 briefs × 2 runs. With the loop, `strict` passes on all of them at the end, against none without it. Both conditions conform to HTML. The loop roughly halves structural variance and costs about 1.7 times as much.
 
 ## 14. Milestones
 

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/landmarks",
+    "severity": "warning",
+    "at": "2:1-2:6",
+    "message": "This <nav> landmark has no name, unlike the one at 1:1 (\"Main\"); give it an aria-label too, such as \"Footer\"."
+  }
+]

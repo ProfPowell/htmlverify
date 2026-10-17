@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/misnested",
+    "severity": "error",
+    "at": "1:7-1:10",
+    "message": "<i> overlaps </b> at 1:21: the parser closes it there, so </i> at 1:25 matches nothing. Close </i> before </b>."
+  }
+]

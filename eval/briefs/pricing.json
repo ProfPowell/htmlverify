@@ -1,0 +1,53 @@
+{
+  "id": "pricing",
+  "type": "pricing",
+  "title": "Pricing page: rental memberships",
+  "content": "Rental plans. Compare three plans.\n\nPlans:\n- Day Pass: $0 a month; pay per rental; members get 20% off. Button: Rent now.\n- Weekender: $19 a month; 2 rentals a month included; free gear delivery. Button: Choose Weekender. (Most popular)\n- Season Pass: $49 a month; unlimited rentals; priority booking for kayaks; free delivery. Button: Choose Season Pass.\n\nComparison of features (rows) by plan (columns):\n- Included rentals: none, 2 per month, unlimited\n- Member discount: 20%, 20%, 20%\n- Free delivery: no, yes, yes\n- Priority kayak booking: no, no, yes\n\nNote: Prices include tax. Cancel any time.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "plans",
+      "text": "the three plans as sections, articles, or list items",
+      "selector": "main article, main section, main li",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "table",
+      "text": "a comparison table",
+      "selector": "table",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "headers",
+      "text": "header cells in the comparison table",
+      "selector": "th",
+      "count": [
+        4,
+        null
+      ]
+    },
+    {
+      "id": "actions",
+      "text": "an action for each plan",
+      "selector": "a[href], button",
+      "count": [
+        3,
+        null
+      ]
+    }
+  ]
+}

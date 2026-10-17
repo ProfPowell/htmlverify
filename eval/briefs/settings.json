@@ -1,0 +1,62 @@
+{
+  "id": "settings",
+  "type": "settings form",
+  "title": "Account settings",
+  "content": "Account settings for a signed-in member.\n\nSections:\n1. Profile: display name (currently \"Ines O.\"), email (ines@example.net), and a profile photo upload.\n2. Notifications: email me about rental due dates (on), workshop announcements (off), the monthly newsletter (on).\n3. Rental preferences: default pickup location (Alder Street store, Harbor kiosk); preferred units (Metric or Imperial, a choice of one).\n4. Danger zone: Cancel membership (a separate button).\n\nButtons: Save changes, Cancel.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "form",
+      "text": "a settings form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "fieldsets",
+      "text": "the sections grouped in fieldsets with legends",
+      "selector": "fieldset > legend",
+      "count": [
+        2,
+        null
+      ]
+    },
+    {
+      "id": "radios",
+      "text": "radio buttons for the units",
+      "selector": "input[type=radio]",
+      "count": [
+        2,
+        null
+      ]
+    },
+    {
+      "id": "file",
+      "text": "a file input for the photo",
+      "selector": "input[type=file]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "select",
+      "text": "a select for the pickup location",
+      "selector": "select",
+      "count": [
+        1,
+        null
+      ]
+    }
+  ]
+}

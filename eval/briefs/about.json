@@ -1,0 +1,53 @@
+{
+  "id": "about",
+  "type": "about",
+  "title": "About page",
+  "content": "About Larkspur Supply Co..\n\nOur story: Twelve paddlers and climbers founded the co-op in 1987 in a rented garage. Today 9,400 members own it, and every member gets one vote at the annual meeting.\n\nWhat we believe (three principles):\n1. Repair before replace. Our workshop fixed 3,100 items last year.\n2. Pay people fairly. Every employee earns at least the regional living wage.\n3. Leave places better. We give 2% of sales to trail and shoreline groups.\n\nMilestones:\n- 1987: Founded in a garage on Pier Road.\n- 1999: Opened the Alder Street store.\n- 2014: Started the rental program.\n- 2023: Opened the repair workshop.\n\nA quote from the board chair, Ines Okafor: \"We are not here to sell more gear. We are here to help people get outside with the gear they already have.\"\n\nLinks: Read the annual report (/reports/2025.pdf), Meet the team (/team).\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "sections",
+      "text": "at least two second-level headings",
+      "selector": "h2",
+      "count": [
+        2,
+        null
+      ]
+    },
+    {
+      "id": "principles",
+      "text": "the principles as an ordered list",
+      "selector": "ol > li",
+      "count": [
+        3,
+        null
+      ]
+    },
+    {
+      "id": "quote",
+      "text": "the chair's quote as a blockquote",
+      "selector": "blockquote",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "milestone-times",
+      "text": "milestone years marked up with time elements",
+      "selector": "time",
+      "count": [
+        4,
+        null
+      ]
+    }
+  ]
+}
