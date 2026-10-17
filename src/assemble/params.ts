@@ -169,6 +169,8 @@ export function characterProblem(s: string): string | null {
     if (c === 0x0d) return 'contains a carriage return; write line breaks as \\n';
     if ((c < 0x20 && c !== 0x09 && c !== 0x0a) || (c >= 0x7f && c <= 0x9f)) return `contains the control character U+${hex(c)}`;
     if (c >= 0xd800 && c <= 0xdfff) return 'contains a lone surrogate';
+    // Embeddings, overrides, and isolates reorder what's displayed; markup says it visibly.
+    if ((c >= 0x202a && c <= 0x202e) || (c >= 0x2066 && c <= 0x2069)) return `contains the bidirectional control U+${hex(c)}; mark direction with dir or <bdi> instead`;
     if ((c >= 0xfdd0 && c <= 0xfdef) || (c & 0xfffe) === 0xfffe) return `contains the noncharacter U+${hex(c)}`;
   }
   return null;
@@ -192,6 +194,8 @@ export function validateValue(spec: ParamSpec, value: unknown, pointer: string, 
     case 'text': {
       const s = string();
       if (s === undefined) return undefined;
+      // Space at either end collapses away or reads as a mistake, and a blank value is no text at all.
+      if (s.trim() !== s) return fail(s.trim() === '' && s !== '' ? 'is only whitespace' : 'must not start or end with whitespace');
       if (spec.minLength !== undefined && count(s) < spec.minLength) return fail(spec.minLength === 1 ? 'must not be empty' : `must be at least ${spec.minLength} characters`);
       if (spec.maxLength !== undefined && count(s) > spec.maxLength) return fail(`must be at most ${spec.maxLength} characters`);
       if (spec.pattern !== undefined && !new RegExp(spec.pattern, 'u').test(s)) return fail(`must match ${spec.pattern}`);
@@ -207,6 +211,7 @@ export function validateValue(spec: ParamSpec, value: unknown, pointer: string, 
       if (s.trim() !== s) return fail('must not start or end with spaces');
       const syntax = urlProblem(s, { nonEmpty: true });
       if (syntax) return fail(`${syntax}`);
+      if (s === '#') return fail('is "#", which links nowhere; give the destination');
       const scheme = URL.canParse(s) ? new URL(s).protocol.slice(0, -1) : null;
       if (scheme !== null && !options.schemes.includes(scheme)) {
         return fail(`uses the ${scheme}: scheme; allowed are ${words(options.schemes.map((x) => `${x}:`))}, relative, and #fragment URLs`);

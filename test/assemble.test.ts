@@ -242,6 +242,13 @@ test('assembly/ref: refs resolve to instance IDs; missing targets and references
   assert.equal(missing.report, null, 'the output isn’t checked until the plan builds cleanly');
   assert.ok(missing.html, 'the output is still there to inspect');
 
+  // On a page, a fragment link from data or prose must land on an ID the page has.
+  const fragments = await run(page([section('write', 'Write', [prose('p', '<p>See <a href="#write">above</a> or <a href="#later">later</a>.</p>')])], { header: [{ use: 'nav/primary', key: 'nav', data: { label: 'Main', items: [{ text: 'Write', href: '#write' }, { text: 'Gone', href: '#gone' }, { text: 'Top', href: '#top' }] } }] }));
+  assert.deepEqual(planFindings(fragments), [
+    'assembly/ref /page/slots/main/0/slots/body/0/data/html: href="#later" matches no id on the page; link to one it has, such as an instance’s ID.',
+    'assembly/ref /page/slots/header/0/data/items/1/href: href="#gone" matches no id on the page; link to one it has, such as an instance’s ID.',
+  ], 'in plan order: main comes first in this plan');
+
   const registry = registryWith({
     'test/check': { contract: { params: { label: { type: 'text' }, box: { type: 'boolean', default: false } } }, template: '<label for="@box">{{label}}</label>\n<template vb-if="box"><input id="@box" type="checkbox" /></template>' },
     'test/skip': { contract: { params: { show: { type: 'boolean', default: false } } }, template: '<a href="#@target">Skip</a>\n<template vb-if="show"><p id="@target">Target.</p></template>' },
@@ -341,9 +348,9 @@ test('output findings are traced to their origin and classified as plan, compone
     'test/item': { contract: { context: 'ul', params: { text: { type: 'text' } } }, template: '<li>{{text}}</li>' },
     'test/badge': { contract: { slots: { body: {} } }, template: '<p><layout-badge><template vb-slot="body"></template></layout-badge></p>' },
   });
-  const nav = { use: 'nav/primary', key: 'nav', data: { label: 'Main', items: [{ text: 'Click here', href: '/a' }, { text: 'Elsewhere', href: '#nowhere' }] } };
+  const nav = { use: 'nav/primary', key: 'nav', data: { label: 'Main', items: [{ text: 'Click here', href: '/a' }, { text: 'Docs', href: 'https://example.com/docs' }] } };
   const plan = await run(page([prose('p', '<p>A.</p>')], { header: [nav] }), { registry });
-  assert.deepEqual(outFindings(plan), ['a11y/link-text plan nav', 'semantic/fragment-link plan nav'], 'data text and bound attributes are the plan’s');
+  assert.deepEqual(outFindings(plan), ['a11y/link-text plan nav', 'semantic/placeholder-content plan nav'], 'data text and bound attributes are the plan’s');
   const finding = plan.report!.files[0]!.findings.find((f) => f.rule === 'a11y/link-text')!;
   assert.deepEqual(finding.origin, { kind: 'plan', component: 'nav/primary@1.0.0', template: 'template.html:4:11', instance: 'nav', plan: '/page/slots/header/0' });
 

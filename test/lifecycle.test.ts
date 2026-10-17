@@ -211,7 +211,7 @@ test('the catalog lists every component on one line, filtered by a query', () =>
     'form/form@1        Form. data: action(url), method?=get|post. slots: fields[1..], actions[1..](action/submit). [unreviewed]',
     'form/text-field@1  Labeled single-line input with an optional hint. data: label, name, type?=text|email|tel|url|search|password, autocomplete?=name|email|tel|organization|off, required?(boolean), hint?(inline). [unreviewed]',
     "nav/primary@1      The site's main navigation. data: label, items[1..](text, href(url), current?=page). [unreviewed]",
-    'page/basic@1       A page: head, skip link, header, main with the page heading, and footer. data: lang?(lang), title, description, heading. slots: header, main[1..], footer. [unreviewed]',
+    'page/basic@1       A page: head, skip link, header, main with the page heading, and footer. data: lang?(lang), title, description, heading. slots: header(nav/primary), main[1..], footer. [unreviewed]',
   ]);
   assert.deepEqual(catalog(registry, 'FORM').map((c) => c.id), ['action/jump', 'action/submit', 'form/form', 'form/text-field'], 'the query matches IDs, summaries, and uses');
 });

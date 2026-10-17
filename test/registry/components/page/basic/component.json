@@ -10,6 +10,6 @@
     "description": { "type": "text", "minLength": 1 },
     "heading": { "type": "text", "minLength": 1 }
   },
-  "slots": { "header": {}, "main": { "min": 1 }, "footer": {} },
+  "slots": { "header": { "accepts": ["nav/primary"], "description": "Comes before the page’s h1, so it takes navigation, not ranked content." }, "main": { "min": 1 }, "footer": {} },
   "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
 }
