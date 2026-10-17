@@ -1,0 +1,15 @@
+{
+  "id": "page/basic",
+  "version": "1.0.0",
+  "summary": "A page: head, skip link, header, main with the page heading, and footer.",
+  "use": "The root of every page plan.",
+  "context": "document",
+  "params": {
+    "lang": { "type": "lang", "default": "en" },
+    "title": { "type": "text", "minLength": 1 },
+    "description": { "type": "text", "minLength": 1 },
+    "heading": { "type": "text", "minLength": 1 }
+  },
+  "slots": { "header": {}, "main": { "min": 1 }, "footer": {} },
+  "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
+}

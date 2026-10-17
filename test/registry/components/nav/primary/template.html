@@ -1,0 +1,7 @@
+<nav aria-label="{{label}}">
+  <ul>
+    <template vb-each="items" vb-as="item">
+      <li><a href="{{item.href}}" aria-current="{{item.current}}">{{item.text}}</a></li>
+    </template>
+  </ul>
+</nav>

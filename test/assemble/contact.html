@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact us · Acme</title>
+  <meta name="description" content="How to reach Acme support." />
+</head>
+<body>
+  <header>
+    <a href="#main">Skip to content</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/contact" aria-current="page">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main">
+    <h1>Contact us</h1>
+    <layout-stack>
+      <p>We reply within <strong>one business day</strong>.</p>
+    </layout-stack>
+    <section id="write" aria-labelledby="write-title">
+      <h2 id="write-title">Write to us</h2>
+      <form action="/contact" method="post">
+        <form-field>
+          <label for="write-contact-name-input">Name</label>
+          <input id="write-contact-name-input" type="text" name="name" autocomplete="name" required="true" />
+        </form-field>
+        <form-field>
+          <label for="write-contact-email-input">Email</label>
+          <input id="write-contact-email-input" type="email" name="email" autocomplete="email" required="true" aria-describedby="write-contact-email-hint" />
+          <output id="write-contact-email-hint" for="write-contact-email-input">We <em>never</em> share it.</output>
+        </form-field>
+        <button type="submit">Send message</button>
+      </form>
+    </section>
+  </main>
+  <footer><a href="#write">Write to us</a></footer>
+</body>
+</html>

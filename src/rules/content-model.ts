@@ -221,7 +221,7 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
     const env: Env = { element: child, parent, ancestors, siblings };
     for (const p of prohibitions) {
       const hit = p.forbid.find((f) => f.test(child, ancestors));
-      if (hit) report('content/descendant', child, `${describe(child)} can’t be inside ${describe(p.ancestor)}, which must not contain ${hit.what}.`);
+      if (hit) report('content/descendant', child, `${describe(child)} can’t be inside ${describe(p.ancestor)}, which must not contain ${hit.what}.`, { ancestor: p.ancestor.tagName, ancestorOffset: spanOf(p.ancestor, ctx.text).offset });
     }
     const kind = kindOf(child);
     if (kind === 'unknown' || kind === 'obsolete') {

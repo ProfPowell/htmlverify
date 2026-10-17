@@ -1,6 +1,6 @@
 Experiments in hacking a tool together to check HTML for problems and reassemble it a proper semantic manner.  Trying to prove or disprove that we can actually predictably build something as simple as a web page with LLMs with actual quality
 
-The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), M1d (the Vanilla Breeze vocabulary and the `component` rules), M1e (`fix`, `init`, the Claude Code skill and hook, and the Nu cross-check), M1f (the evaluation harness; see [eval/README.md](eval/README.md)), and the first part of M2, the assembler: component contracts, the template compiler, and the house-style serializer.
+The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), M1d (the Vanilla Breeze vocabulary and the `component` rules), M1e (`fix`, `init`, the Claude Code skill and hook, and the Nu cross-check), M1f (the evaluation harness; see [eval/README.md](eval/README.md)), and most of M2, the assembler: component contracts, the template compiler, the house-style serializer, plans, and `assemble`.
 
 ## Usage
 
@@ -19,6 +19,8 @@ node bin/htmlverify.js init --claude                        # a config, the Clau
 node bin/htmlverify.js explain content/child               # what a rule checks, with examples
 node bin/htmlverify.js rules --profile standard            # every rule and its severity
 node bin/htmlverify.js vocab update vanilla-breeze --from ../vanilla-breeze   # rebuild the vocabulary snapshot
+node bin/htmlverify.js assemble plan.json --out page.html  # build a page from components; written only when it passes
+node bin/htmlverify.js assemble plan.json --draft          # allow unreviewed components; the page goes to stdout
 ```
 
 Exit codes: 0 pass, 1 fail, 2 usage, config, or input error, 3 incomplete.
@@ -36,7 +38,7 @@ Exit codes: 0 pass, 1 fail, 2 usage, config, or input error, 3 incomplete.
 }
 ```
 
-Unknown keys, rules, and severities are errors; keys the spec reserves for later milestones are rejected with the milestone that adds them. `registry` points at a directory, relative to the config, whose `elements.json` declares the project's own custom elements in the html-validate format:
+Unknown keys, rules, and severities are errors. `registry` points at a directory, relative to the config, whose `elements.json` declares the project's own custom elements in the html-validate format, and whose `components/` holds the components `assemble` builds pages from:
 
 ```json
 { "app-card": { "flow": true, "permittedContent": ["@flow"], "attributes": { "tone": { "enum": ["calm", "loud"] }, "open": { "boolean": true } }, "role": "region" } }
@@ -54,6 +56,20 @@ Unknown keys, rules, and severities are errors; keys the spec reserves for later
 - `bloat/*`: share of generic elements, wrapper chains, class counts, depth, and size, with thresholds set per rule. The metrics are in every JSON report, whether or not a threshold is crossed.
 
 `fix` applies the fixes that findings propose, in verified rounds: each round must leave the parsed tree unchanged and add no error, or the fixes that break it stay suggestions. Running it twice changes nothing the second time. `--nu` cross-checks documents with the Nu Html Checker: its messages attach to the local findings they confirm, and the rest become `conformance/nu` findings. `init --claude` sets up the Claude Code skill and a `PostToolUse` hook that checks each `.html` file Claude writes and hands failures back to the model.
+
+## Assembling pages
+
+A plan names components from the registry, their data, and what goes in their slots; `assemble` builds the page and checks it. The assembler owns the markup: escaping, IDs from key paths (`contact/email` + `@input` is `contact-email-input`), heading levels from nesting, pruned references, and the house style. A plan with `{ "key": "…", "html": "…" }` inserts hand-written HTML where no component fits; it must pass `strict` and is reported as a registry gap.
+
+```json
+{ "page": { "use": "page/basic", "data": { "title": "Contact us", "description": "How to reach us.", "heading": "Contact us" }, "slots": {
+  "main": [ { "use": "content/section", "key": "write", "data": { "title": "Write to us" }, "slots": { "body": [
+    { "use": "form/form", "key": "contact", "data": { "action": "/contact" }, "slots": {
+      "fields": [ { "use": "form/text-field", "key": "email", "data": { "label": "Email", "name": "email", "type": "email" } } ],
+      "actions": [ { "use": "action/submit", "key": "send", "data": { "label": "Send" } } ] } } ] } } ] } } }
+```
+
+`assembly/*` findings are located in the plan by line, column, and JSON Pointer. Each finding in the output carries its origin, classified so the fix goes to the right place: **plan** (wrong data or component choice: fix the plan), **composition** (components that don't fit together: pick others), or **component** (a defect in the component itself: it needs repair and re-review). `strict` assembles only approved components; `--draft` allows the rest with a warning. See `test/assemble/contact.plan.json` and the components in `test/registry/`.
 
 When several rules report one defect (a missing title is `content/order` and `a11y/title`), the earliest family keeps it and lists the others in `alsoReportedBy`.
 
@@ -76,9 +92,9 @@ When a test names changed elements or rows, review them in `src/spec/model.ts`, 
 ## Development
 
 ```sh
-npm test                    # fixtures, mutation corpus, unit, ARIA, docs, config, and CLI tests
+npm test                    # fixtures, mutation corpus, unit, ARIA, docs, config, assembler, and CLI tests
 npm run typecheck
-UPDATE_GOLDEN=1 npm test    # rewrite test/fixtures/**/*.json after an intended change; review the diff
+UPDATE_GOLDEN=1 npm test    # rewrite test/fixtures/**/*.json and test/assemble/*.html after an intended change; review the diff
 HTMLVERIFY_VNU_JAR=path/to/vnu.jar node --test test/nu.test.ts   # the Nu differential
 ```
 

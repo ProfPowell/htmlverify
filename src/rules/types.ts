@@ -81,4 +81,6 @@ export interface RuleMeta {
   ref: string;
   /** Options the config can set: "bloat/depth": ["warning", { "max": 16 }]. */
   options?: Readonly<Record<string, RuleOptionSpec>>;
+  /** Always an error: the config can't change it, since correct output depends on it. */
+  fixed?: true;
 }

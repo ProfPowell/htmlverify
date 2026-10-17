@@ -1,0 +1,7 @@
+<form-field>
+  <label for="@input">{{label}}</label>
+  <input id="@input" type="{{type}}" name="{{name}}" autocomplete="{{autocomplete}}" required="{{required}}" aria-describedby="@hint" />
+  <template vb-if="hint">
+    <output id="@hint" for="@input">{{hint}}</output>
+  </template>
+</form-field>

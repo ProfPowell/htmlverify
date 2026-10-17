@@ -1,11 +1,13 @@
 export { check, LIMITS } from './report/report.ts';
 export { fix, type FixResult } from './fix/fix.ts';
+export { assemble, type AssembleOptions, type AssemblyResult } from './assemble/assemble.ts';
+export type { Component, Registry, ReviewStatus } from './assemble/registry.ts';
 export { unifiedDiff } from './fix/diff.ts';
-export type { CheckInput, CheckOptions, FileReport, Finding, Report, Status } from './report/report.ts';
+export type { CheckInput, CheckOptions, FileReport, Finding, Origin, Report, Status } from './report/report.ts';
 export { canonicalJson } from './report/canonical.ts';
 export { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from './config.ts';
 export { explain, listRules, type RuleInfo, type RuleRow } from './explain.ts';
-export { formatText } from './report/text.ts';
+export { formatAssembly, formatText } from './report/text.ts';
 export { PROFILES, type Profile, type ProfileName } from './profiles.ts';
 export { RULES } from './rules/registry.ts';
 export type { Authority, Edit, RuleMeta, Severity } from './rules/types.ts';

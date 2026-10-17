@@ -559,6 +559,7 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 - `context` is the parent element for parsing the template and checking fixtures: `body` by default, `tbody` for rows, `ul` for list items.
 - Versions follow semver: removing or retyping a parameter or slot is a major change.
 - Parameter, slot, and record-field names are letters and digits starting with a lowercase letter (`label`, `linkText`); parameters and slots share one namespace. A list's `items` is a scalar type other than `enum`, or a record of fields. Unknown keys are errors, and every problem is reported at once with its JSON Pointer.
+- `budget.elements` caps the elements one instance renders from its template, repetitions included; markup from `inline` and `prose` values and the children in its slots don't count.
 - The digest is SHA-256 over the canonical contract (minus `review`), the template, and the fixtures. When the current digest differs from the reviewed one, the component is **stale**. `strict` rejects stale and unreviewed components; the `draft` option allows them with a warning.
 
 ### 9.5 Parameter types and sinks
@@ -587,7 +588,7 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 
 ### 9.6 Composition rules
 
-**Slots.** What fits a slot comes from its position in the template, via the content model: a slot inside `<ul>` takes components whose roots are `li`; a slot inside `<p>` takes phrasing roots. A contract can narrow a slot further with `accepts` (component IDs), `min`, and `max`. The assembler pre-checks each child's root categories against the slot for an early, specific error; the full check of the output (§9.8) has the final word.
+**Slots.** What fits a slot comes from its position in the template, via the content model: a slot inside `<ul>` takes components whose roots are `li`; a slot inside `<p>` takes phrasing roots. A contract can narrow a slot further with `accepts` (component IDs), `min`, and `max`. For an early, specific error, the assembler pre-checks each child's roots while it validates the plan, from the slot's ancestors in its template and its instance's own place: lists, tables, and other parents with fixed children take only those, phrasing parents (looking through transparent ones such as `a`) take phrasing roots, and `form`, `a`, and `button` never nest, at any depth. The full check of the output (§9.8) has the final word.
 
 **Keys.** Every component instance in a plan has a `key` matching `[a-z][a-z0-9-]*`, unique among all children of its parent instance, across slots.
 
@@ -632,22 +633,24 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 ```
 
 - `use` can pin a version (`@1.0.0`) or a major (`@1`); without a pin, the registry's current version is used. Reports record the exact version and digest of every component.
-- A fragment plan has `"fragment": { "context": "main", "children": [ … ] }` instead of `page`.
+- A fragment plan has `"fragment": { "context": "main", "rank": 1, "children": [ … ] }` instead of `page`. `rank` is the level of the heading the fragment sits under, 0 to 5 and 1 by default, so its first ranked heading is an `h2`.
 - Unknown properties are errors at every level, so typos fail loudly.
 
 ### 9.8 Assembly algorithm
 
 1. Validate the plan against its schema; errors carry JSON Pointers.
-2. Resolve components and check their review status against the profile.
+2. Resolve components and check their review status against the profile, once per component.
 3. Validate each instance's `data` against its parameters and its `slots` against the contract; pre-check slot fit.
-4. Instantiate top-down into an in-memory tree. Every node records its origin: instance key path, component and version, template line and column, data JSON Pointer. Compute heading ranks, allocate IDs, resolve `ref`s, prune dangling reference tokens.
+4. Instantiate top-down into an in-memory tree. Every node records its origin: instance key path, component and version, template line and column, data JSON Pointer. Compute heading ranks, allocate IDs, resolve `ref`s, prune dangling reference tokens. Errors from steps 1 to 4 end assembly before the output is checked: they leave known gaps, such as a link whose `ref` didn't resolve, that the check would only repeat.
 5. Serialize (§9.9).
-6. Reparse the output and compare it with the in-memory tree, ignoring only whitespace the serializer may add or re-indent (§9.9) and trailing whitespace at the end of `body` or of a fragment, where the final line breaks go. Boolean attributes compare by presence; everything else is exact, attribute order included. A difference is `assembly/round-trip`, which means an assembler bug.
+6. Reparse the output and compare it with the in-memory tree, ignoring only whitespace the serializer may add or re-indent (§9.9) and trailing whitespace at the end of `body` or of a fragment, where the final line breaks go. Boolean attributes compare by presence; everything else is exact, attribute order included. Where the parser restructures the output, as when a block closes the paragraph it was put in, the tree-changing syntax findings of step 7 explain the difference and are traced like any other finding. Any other difference is `assembly/round-trip`, an assembler bug.
 7. Check the output, as a document or as a fragment in the plan's context, under the configured profile.
 8. Map each finding to its origin and classify it:
    - **plan**: wrong data or component choice → fix the plan;
    - **component**: a defect inside one component → the component needs repair and re-review, and no plan change fixes it;
    - **composition**: components that don't fit together → pick different components or slots.
+
+   The element written around a finding's offset gives its origin. A finding is **plan** when that element came from data or an HTML node, when the attribute it names was bound from data, or when a text rule (link text, names, placeholders, empty elements) fires on text from data. It's **composition** when a structural rule (content model, context, landmarks, headings, sections) or a tree-changing parse error crosses from one instance into another, or when the parser moved another instance's element out of the one the finding is on; the origin is then the element that doesn't fit. Anything else is **component**.
 9. Write the HTML only when the status is `pass`. Otherwise write nothing and return the report; `--emit-failed` writes `name.failed.html` for inspection.
 
 ```json
@@ -673,7 +676,7 @@ Assembly rules:
 ### 9.9 Serializer
 
 - Output satisfies the `strict` style rules by construction: lowercase, double quotes, `name="true"` booleans, the configured void form (`<br />`), explicit tags, `<!doctype html>`, LF line endings, UTF-8 without BOM, final newline.
-- Layout: an element whose children are all block items, apart from whitespace that can't render, is laid out as a block: each child on its own line, indented 2 spaces, with `head` and `body` kept at the level of `html`. A block item is a comment or an element that isn't inline-level. Inline-level elements are HTML phrasing content (except `script`, `template`, `link`, and `meta`, which draw nothing), custom elements the vocabulary calls phrasing or doesn't know, unknown elements, and the `svg` and `math` roots; inside foreign content nothing is. Anything else is written inline exactly as built, except that whitespace-only text with a line break is re-indented to its depth. So whitespace appears only where it can't render or already was, and trees that differ only in such whitespace serialize alike.
+- Layout: an element whose children are all block items, apart from whitespace that can't render, is laid out as a block: each child on its own line, indented 2 spaces, with `head` and `body` kept at the level of `html`. A block item is a comment or an element that isn't inline-level. Inline-level elements are HTML phrasing content (except `script`, `template`, `link`, and `meta`, which draw nothing), custom elements the vocabulary calls phrasing or doesn't know, unknown elements, and the `svg` and `math` roots; inside foreign content nothing is. Mixed content is written as built, except that whitespace that can't render is dropped, a line break goes beside each block-level child and inside the edges of a block-level container that breaks anywhere, never next to text, and whitespace-only text with a line break is re-indented to its depth. So whitespace appears only where it can't render or already was, and trees that differ only in such whitespace serialize alike.
 - `pre`, `textarea`, `listing`, `title`, the raw-text elements (`script`, `style`, …), SVG text elements, and MathML token elements are written exactly; content starting with a newline in `pre`, `textarea`, or `listing` gets the extra newline the parser strips. Foreign elements without children close themselves (`<path />`). A fragment ending in text gets no final newline, which would join that text.
 - Escaping: `&`, `<`, `>` in text; `&`, `"`, `<`, `>` in attribute values. U+00A0 is written `&nbsp;` so it stays visible in source.
 - Attributes keep template order.
@@ -720,7 +723,7 @@ htmlverify catalog [--query form] [--format text|json]
 htmlverify component show|new|check|approve <id>
 htmlverify registry check
 htmlverify vocab update vanilla-breeze --from <checkout> [--out file]  # rebuild the vocabulary snapshot (§3.4)
-htmlverify assemble plan.json --out page.html [--format text|json]
+htmlverify assemble plan.json [--out page.html] [--emit-failed] [--draft] [--format text|json]   # without --out, the page goes to stdout
 htmlverify init [--claude] [--profile strict|standard] [--force]   # config; with --claude, also the skill and hook
 htmlverify hook claude                             # Claude Code hook adapter (§10.4)
 htmlverify mcp                                     # MCP server on stdio (§10.3)
@@ -751,7 +754,7 @@ form/text-field@1  Labeled single-line input. data: label, name, type=text|email
 }
 ```
 
-Unknown keys, unknown rules, and invalid severities are errors. Every report includes the resolved config's hash, and scores are comparable only between equal hashes. `registry` is relative to the config file; M1 reads its `elements.json` (§7.4), and M2 its components.
+Unknown keys, unknown rules, and invalid severities are errors. Every report includes the resolved config's hash, and scores are comparable only between equal hashes. `registry` is relative to the config file; M1 reads its `elements.json` (§7.4), and M2 its components. `"htmlNodes": false` forbids HTML nodes in plans (§9.6).
 
 **Profiles.** `standard` runs the syntax, content, a11y, and semantic rules, which are fair to any HTML. `strict` adds the style and policy rules with the house defaults. Custom profiles extend either one.
 
@@ -786,7 +789,7 @@ Each result returns the text format as content and the JSON report as `structure
 ```ts
 check(input: CheckInput, options?: CheckOptions): Promise<Report>;
 fix(input: CheckInput, options?: FixOptions): Promise<FixResult>;
-assemble(plan: unknown, options: AssembleOptions): Promise<AssemblyResult>;
+assemble(plan: unknown, options: AssembleOptions): Promise<AssemblyResult>;  // plan: parsed JSON or its text; options.registry: a Registry or its directory
 catalog(registry: string, query?: string): Promise<ComponentSummary[]>;
 explain(rule: string): RuleDoc;
 ```
@@ -921,6 +924,8 @@ Performance target for M1, without Nu: a 100 KiB page in under 300 ms warm; 100 
 | Templates are HTML with `{{…}}` and `<template vb-*>` (§9.3) | Experts write HTML, not IR JSON, and `<template>` parses correctly in every context. 1.0 specified only the IR. |
 | Template directives use the `vb-` prefix (§9.3) | It matches Vanilla Breeze's own naming (`vb-` elements, `data-vb-*` attributes, `--vb-*` properties), so templates read as the house dialect. Nothing in Vanilla Breeze uses `vb-if`, `vb-each`, `vb-as`, `vb-slot`, or `vb-rank`. |
 | Slot fit derived from the content model (§9.6) | Authors don't declare what fits, so the declaration can't be wrong. |
+| Slot fit pre-checked with the rest of the plan (§9.6) | Every plan error comes back in one pass, and the ancestors that matter, such as a `form` around a `form`, are known from the templates alone. |
+| The parser's restructuring is reported where it happens (§9.8) | A composition HTML syntax can't represent is a plan problem, not an assembler bug, and its syntax findings already say what moved. |
 | Readable deterministic IDs and reference pruning (§9.6) | `contact-email-input` works in CSS and URLs, unlike `hv-` plus 20 hex digits. Collisions are errors, and dangling `aria-describedby` tokens can't happen. |
 | Heading ranks computed from nesting (§9.6) | Removes the most common structural error class by construction. |
 | `inline` and `prose` restricted-HTML parameters (§9.5) | Content with links and emphasis, without a raw-HTML hole; validated, never sanitized. |

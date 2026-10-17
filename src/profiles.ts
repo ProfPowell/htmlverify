@@ -83,6 +83,18 @@ const A11Y = {
 const LATER_FAMILIES: Record<string, readonly [Severity | 'off', Severity | 'off']> = {
   // Runs only with --nu; each finding takes Nu's own severity.
   'conformance/nu': ['error', 'error'],
+  // Assembly (spec §9.8); review status is an error only under strict without --draft.
+  'assembly/plan': ['error', 'error'],
+  'assembly/component': ['error', 'error'],
+  'assembly/data': ['error', 'error'],
+  'assembly/slot': ['error', 'error'],
+  'assembly/key': ['error', 'error'],
+  'assembly/ref': ['error', 'error'],
+  'assembly/id-collision': ['error', 'error'],
+  'assembly/heading-depth': ['error', 'error'],
+  'assembly/restricted-html': ['error', 'error'],
+  'assembly/budget': ['error', 'error'],
+  'assembly/round-trip': ['error', 'error'],
   'component/unknown-element': ['error', 'warning'],
   'component/attribute': ['error', 'error'],
   'component/content': ['error', 'error'],

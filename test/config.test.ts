@@ -41,6 +41,7 @@ test('parseConfig rejects unknown keys, rules, severities, and options', () => {
     [{ options: { adHocPrefix: 'X_' } }, /"options.adHocPrefix" must be a prefix such as "x-", or null/],
     [{ rules: { 'style/whitespace': ['warning', { tabWidth: 0 }] } }, /"tabWidth" must be an integer of at least 1/],
     [{ rules: { 'bloat/depth': ['warning', { max: 2.5 }] } }, /"max" must be a non-negative integer/],
+    [{ rules: { 'assembly/ref': 'warning' } }, /"assembly\/ref" is always an error: the assembler can’t build correct output without it/],
   ];
   for (const [raw, error] of cases) assert.throws(() => parseConfig(raw, 'test.json'), error, JSON.stringify(raw));
 });

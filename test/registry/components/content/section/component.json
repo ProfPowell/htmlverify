@@ -1,0 +1,9 @@
+{
+  "id": "content/section",
+  "version": "1.0.0",
+  "summary": "A titled section; its heading level comes from where it sits.",
+  "use": "A titled part of a page.",
+  "params": { "title": { "type": "text", "minLength": 1 } },
+  "slots": { "body": { "min": 1 } },
+  "provenance": { "authors": ["htmlverify tests"], "aiAssisted": true }
+}

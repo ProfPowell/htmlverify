@@ -2,13 +2,14 @@ import { appendFile, glob, mkdir, readFile, rename, stat, writeFile } from 'node
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from '../config.ts';
+import { assemble } from '../assemble/assemble.ts';
 import { explain, formatExplain, formatRules, listRules } from '../explain.ts';
 import { isProfileName, type ProfileName } from '../profiles.ts';
 import { canonicalJson, stableJson } from '../report/canonical.ts';
 import { fix } from '../fix/fix.ts';
 import { unifiedDiff } from '../fix/diff.ts';
 import { check, type CheckInput, type CheckOptions, type Status } from '../report/report.ts';
-import { formatText } from '../report/text.ts';
+import { formatAssembly, formatText } from '../report/text.ts';
 import { VERSION } from '../version.ts';
 import { VocabError } from '../vocab/compile.ts';
 import { snapshotFromCheckout } from '../vocab/source.ts';
@@ -28,6 +29,7 @@ const USAGE = `Usage:
   htmlverify fix <file|glob|->... [--write] [options]
   htmlverify explain <rule> [--format text|json]
   htmlverify rules [--profile strict|standard] [--config <file>] [--format text|json]
+  htmlverify assemble <plan.json|-> [--out <file>] [--emit-failed] [--draft] [options]
   htmlverify vocab update vanilla-breeze --from <checkout> [--out <file>]
   htmlverify init [--claude] [--profile strict|standard] [--force]
   htmlverify hook claude                    (the Claude Code PostToolUse hook; reads the event on stdin)
@@ -39,6 +41,10 @@ Options:
   --context <tag>             check the input as a fragment inside <tag>
   --stdin-name <path>         path to report for input read from stdin
   --write                     fix: rewrite the files instead of printing a diff
+  --out <file>                assemble: write the page there when it passes (default: stdout,
+                              with the report on stderr)
+  --emit-failed               assemble: when it fails, write <out>.failed.html to inspect
+  --draft                     assemble: allow unreviewed and stale components, with a warning
   --nu                        check: cross-check documents with the Nu Html Checker (needs Java)
   -h, --help                  show this help
   -v, --version               print the version
@@ -78,6 +84,7 @@ async function run(argv: string[], io: Io): Promise<number> {
   if (command === 'vocab') return vocab(rest, io);
   if (command === 'init') return initCommand(rest, io);
   if (command === 'hook') return hook(rest, io);
+  if (command === 'assemble') return assembleCommand(rest, io);
   if (command !== 'check' && command !== 'fix' && command !== 'explain' && command !== 'rules') {
     throw new UsageError(command ? `unknown command "${command}"` : 'missing command');
   }
@@ -176,6 +183,91 @@ async function fixFiles(inputs: CheckInput[], options: CheckOptions, format: str
     (write ? io.stdout : io.stderr).write(summary);
   }
   return EXIT[status];
+}
+
+/**
+ * `assemble <plan> [--out file] [--emit-failed] [--draft]` (spec §9.8). The
+ * page is written only when it passes. With --out the report goes to stdout;
+ * without it the page does, and the report goes to stderr.
+ */
+async function assembleCommand(argv: string[], io: Io): Promise<number> {
+  let args;
+  try {
+    args = parseArgs({
+      args: argv,
+      allowPositionals: true,
+      strict: true,
+      options: {
+        out: { type: 'string' },
+        'emit-failed': { type: 'boolean' },
+        draft: { type: 'boolean' },
+        profile: { type: 'string' },
+        config: { type: 'string' },
+        format: { type: 'string', default: 'text' },
+        'stdin-name': { type: 'string', default: '<stdin>' },
+        help: { type: 'boolean', short: 'h' },
+      },
+    });
+  } catch (error) {
+    throw new UsageError((error as Error).message);
+  }
+  if (args.values.help) {
+    io.stdout.write(USAGE);
+    return 0;
+  }
+  const { format, profile, out } = args.values;
+  if (format !== 'text' && format !== 'json') throw new UsageError(`unknown format "${format}"`);
+  if (profile !== undefined && !isProfileName(profile)) throw new UsageError(`unknown profile "${profile}"`);
+  if (args.positionals.length !== 1) throw new UsageError('assemble takes one plan, such as plan.json');
+  if (args.values['emit-failed'] && out === undefined) throw new UsageError('--emit-failed needs --out to name the failed file');
+
+  const config = await loadConfig(args.values.config, io.cwd);
+  if (!config?.registryDir) throw new ConfigError(`assemble needs a component registry; set "registry" in ${CONFIG_FILE}`);
+
+  const label = (absolute: string) => relative(io.cwd, absolute).split(sep).join('/') || absolute;
+  const plan = args.positionals[0]!;
+  let text: string;
+  let planPath: string;
+  if (plan === '-') {
+    text = new TextDecoder().decode(await readAll(io.stdin));
+    planPath = args.values['stdin-name'];
+  } else {
+    try {
+      text = await readFile(resolve(io.cwd, plan), 'utf8');
+    } catch (error) {
+      throw new UsageError(`can’t read "${plan}": ${(error as NodeJS.ErrnoException).code ?? (error as Error).message}`);
+    }
+    planPath = label(resolve(io.cwd, plan));
+  }
+  const target = out === undefined ? null : resolve(io.cwd, out);
+  const result = await assemble(text.replace(/^\uFEFF/, ''), {
+    registry: config.registryDir, profile: profile as ProfileName | undefined, config, draft: args.values.draft === true, planPath, outPath: target ? label(target) : '<stdout>',
+  });
+
+  // Atomic, like fix --write: a temporary file beside the target, then a rename over it.
+  const write = async (path: string, html: string) => {
+    await mkdir(dirname(path), { recursive: true });
+    const temporary = `${path}.htmlverify-${process.pid}.tmp`;
+    await writeFile(temporary, html);
+    await rename(temporary, path);
+    return label(path);
+  };
+  let written: string | null = null;
+  if (result.status === 'pass' && target) written = await write(target, result.html!);
+  else if (result.status === 'fail' && target && args.values['emit-failed'] && result.html !== null) {
+    written = await write(target.replace(/(?:\.html?)?$/, '.failed.html'), result.html);
+  }
+
+  if (format === 'json') {
+    const { html, ...rest } = result;
+    io.stdout.write(`${canonicalJson({ ...rest, written, ...(target ? {} : { html: result.status === 'pass' ? html : null }) })}\n`);
+  } else if (target) {
+    io.stdout.write(formatAssembly(result, written));
+  } else {
+    if (result.status === 'pass') io.stdout.write(result.html!);
+    io.stderr.write(formatAssembly(result, result.status === 'pass' ? '<stdout>' : null));
+  }
+  return result.status === 'pass' ? 0 : 1;
 }
 
 /** `init [--claude] [--profile] [--force]`: a config, and with --claude the skill and hook (spec §10.4). */
@@ -319,7 +411,10 @@ async function loadConfig(explicit: string | undefined, cwd: string): Promise<Co
       throw new ConfigError(`${relative(cwd, path) || path}: invalid JSON: ${(error as Error).message}`);
     }
     const config = parseConfig(json, relative(cwd, path).split(sep).join('/') || CONFIG_FILE);
-    if (config.registry !== undefined) config.elements = await loadElements(resolve(dirname(path), config.registry), config, cwd);
+    if (config.registry !== undefined) {
+      config.registryDir = resolve(dirname(path), config.registry);
+      config.elements = await loadElements(config.registryDir, config, cwd);
+    }
     // Paths in the config are relative to the config file.
     if (config.nu) config.nu = { ...config.nu, jar: resolve(dirname(path), config.nu.jar) };
     return config;

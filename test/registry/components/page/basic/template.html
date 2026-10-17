@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="{{lang}}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}" />
+</head>
+<body>
+  <header>
+    <a href="#@main">Skip to content</a>
+    <template vb-slot="header"></template>
+  </header>
+  <main id="@main">
+    <h1>{{heading}}</h1>
+    <template vb-slot="main"></template>
+  </main>
+  <footer>
+    <template vb-slot="footer"></template>
+  </footer>
+</body>
+</html>

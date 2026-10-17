@@ -18,6 +18,9 @@ const PRESERVE = {
 /** Phrasing elements that draw nothing, so whitespace beside them can't show. */
 const SILENT = new Set(['script', 'template', 'link', 'meta']);
 
+/** Elements outside the phrasing category that still lay out inline: ruby annotations. */
+const INLINE_ANYWAY = new Set(['rt', 'rp']);
+
 export function preservesWhitespace(element: Element): boolean {
   return PRESERVE[element.namespaceURI as keyof typeof PRESERVE]?.has(element.tagName) ?? false;
 }
@@ -34,6 +37,7 @@ export function inlineLevel(element: Element, vocabulary: Vocabulary | null): bo
     return !(parent && isElement(parent) && !isHtml(parent));
   }
   if (SILENT.has(element.tagName)) return false;
+  if (INLINE_ANYWAY.has(element.tagName)) return true;
   const entry = vocabulary?.get(element.tagName);
   if (entry) return entry.element.phrasing;
   return HTML_ELEMENTS.has(element.tagName) ? mayBeInCategory(element, 'phrasing') : true;
@@ -42,6 +46,23 @@ export function inlineLevel(element: Element, vocabulary: Vocabulary | null): bo
 /** A child that whitespace beside it can't affect: a comment, or an element that isn't inline-level. */
 export function blockItem(node: ChildNode, vocabulary: Vocabulary | null): boolean {
   return isComment(node) || (isElement(node) && !inlineLevel(node, vocabulary));
+}
+
+/**
+ * Whether a whitespace-only child can't render: it sits beside a block-level
+ * element (looking through comments), or at an edge of a block-level
+ * container. A null parent is the document or a fragment root, which count
+ * as block-level.
+ */
+export function insignificant(children: readonly ChildNode[], index: number, parent: Element | null, vocabulary: Vocabulary | null): boolean {
+  if (!isWhitespaceText(children[index]!) || (parent && preservesWhitespace(parent))) return false;
+  const neighbor = (step: number): ChildNode | null => {
+    for (let j = index + step; j >= 0 && j < children.length; j += step) if (!isComment(children[j]!)) return children[j]!;
+    return null;
+  };
+  const blockParent = parent === null || !inlineLevel(parent, vocabulary);
+  const blockSide = (n: ChildNode | null) => (n === null ? blockParent : isElement(n) && !inlineLevel(n, vocabulary));
+  return blockSide(neighbor(-1)) || blockSide(neighbor(1));
 }
 
 /**

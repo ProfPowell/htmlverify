@@ -8,6 +8,7 @@ const HOUSE = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#67-pol
 const BLOAT = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#68-bloat-structural-economy';
 const STYLE = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#62-style-authored-form-the-tree-is-the-same-either-way';
 const COMPONENT = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#64-component-the-vanilla-breeze-contract';
+const ASSEMBLY = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#98-assembly-algorithm';
 const PARSING = `${HTML}/parsing.html`;
 const SYNTAX = `${HTML}/syntax.html`;
 
@@ -52,6 +53,17 @@ export const RULES: readonly RuleMeta[] = [
   { id: 'component/content', authority: 'vocabulary', summary: 'Children the manifest doesn’t permit, missing required structure, or flow-only elements in phrasing content', ref: COMPONENT },
   { id: 'component/output-attribute', authority: 'vocabulary', summary: 'Authored attribute the component sets itself', ref: COMPONENT },
   { id: 'conformance/nu', authority: 'standard', summary: 'Nu Html Checker message with no local finding on its line (--nu)', ref: 'https://validator.github.io/validator/' },
+  { id: 'assembly/plan', authority: 'policy', summary: 'Plan that doesn’t follow the plan schema', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/component', authority: 'policy', summary: 'Unknown component or version; unreviewed or stale under strict', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/data', authority: 'policy', summary: 'Parameter missing, unknown, of the wrong type, or out of its constraints', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/slot', authority: 'policy', summary: 'Unknown slot, the wrong number of children, or a child that doesn’t fit', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/key', authority: 'policy', summary: 'Instance key missing, malformed, or duplicated among siblings', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/ref', authority: 'policy', summary: 'Reference to a missing instance, an instance without an ID, or an element that didn’t render', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/id-collision', authority: 'standard', summary: 'Two elements end up with the same ID', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/heading-depth', authority: 'policy', summary: 'A heading would need level 7 or more', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/restricted-html', authority: 'policy', summary: 'An inline, prose, or HTML-node value outside its allowlist, or failing strict', ref: ASSEMBLY, fixed: true },
+  { id: 'assembly/budget', authority: 'policy', summary: 'An instance renders more elements than its component’s budget', ref: ASSEMBLY },
+  { id: 'assembly/round-trip', authority: 'standard', summary: 'The output doesn’t parse back to the tree that was built: an assembler bug', ref: ASSEMBLY, fixed: true },
   { id: 'a11y/lang', authority: 'standard', summary: 'Page language missing, or a lang value that isn’t well-formed', ref: `${WCAG}#language-of-page` },
   { id: 'a11y/title', authority: 'standard', summary: 'Page title missing or empty', ref: `${WCAG}#page-titled` },
   { id: 'a11y/img-alt', authority: 'standard', summary: 'Image without a text alternative', ref: `${WCAG}#non-text-content` },
