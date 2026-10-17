@@ -65,7 +65,7 @@ test('globs expand in sorted order; a glob with no match is an input error', asy
   const ok = await run(['check', 'test/fixtures/syntax/doctype/*.html', '--format', 'json']);
   const paths = JSON.parse(ok.stdout).files.map((f: { path: string }) => f.path);
   assert.deepEqual(paths, [...paths].sort());
-  assert.equal(paths.length, 3);
+  assert.equal(paths.length, 4);
   const none = await run(['check', 'test/fixtures/**/*.nothing']);
   assert.equal(none.code, 2);
   assert.match(none.stderr, /no files match/);
@@ -162,4 +162,53 @@ test('check reads the registry’s elements.json next to the config', async () =
   writeFileSync(join(project, 'htmlverify.config.json'), JSON.stringify({ registry: 'registy' }));
   const typo = await run(['check', join(project, 'page.html'), '--config', join(project, 'htmlverify.config.json')]);
   assert.match(typo.stderr, /"registry" names .*registy, which isn’t a directory/);
+});
+
+test('fix prints a diff, or with --write rewrites the file; a second run finds nothing to fix', async () => {
+  const page = join(dir, 'fixme.html');
+  writeFileSync(page, '<ul>\n<li>One\n</ul>\n');
+  const diff = await run(['fix', page, '--context', 'main']);
+  assert.match(diff.stdout, /^--- a\/.*fixme\.html\n\+\+\+ b\/.*fixme\.html\n@@ -1,3 \+1,3 @@\n <ul>\n <li>One\n-<\/ul>\n\+<\/li><\/ul>\n$/);
+  assert.match(diff.stderr, /1 fix in the diff; nothing left to fix by hand\./);
+  assert.equal(readFileSync(page, 'utf8'), '<ul>\n<li>One\n</ul>\n', 'without --write the file is untouched');
+  const written = await run(['fix', page, '--context', 'main', '--write']);
+  assert.equal(written.code, 0);
+  assert.match(written.stdout, /1 fix written/);
+  assert.equal(readFileSync(page, 'utf8'), '<ul>\n<li>One\n</li></ul>\n');
+  const again = await run(['fix', page, '--context', 'main', '--format', 'json']);
+  assert.deepEqual(JSON.parse(again.stdout).files.map((f: { changed: boolean; diff: string }) => [f.changed, f.diff]), [[false, '']]);
+  assert.equal((await run(['fix', '-', '--write'], '<p>x')).code, 2);
+  assert.equal((await run(['check', page, '--write'])).code, 2);
+});
+
+test('init writes a config, and with --claude the skill and a merged hook; a second run keeps them', async () => {
+  const project = join(dir, 'init');
+  mkdirSync(join(project, '.claude'), { recursive: true });
+  writeFileSync(join(project, '.claude/settings.json'), JSON.stringify({ hooks: { PostToolUse: [{ matcher: 'Write', hooks: [{ type: 'command', command: 'echo hi' }] }] }, model: 'x' }));
+  const io = { cwd: project };
+  const first = await main(['init', '--claude'], { stdin: (async function* () {})(), stdout: { write: () => {} }, stderr: { write: () => {} }, ...io });
+  assert.equal(first, 0);
+  const settings = JSON.parse(readFileSync(join(project, '.claude/settings.json'), 'utf8'));
+  assert.equal(settings.model, 'x');
+  assert.deepEqual(settings.hooks.PostToolUse.map((h: { matcher: string }) => h.matcher), ['Write', 'Write|Edit']);
+  assert.match(readFileSync(join(project, '.claude/skills/htmlverify/SKILL.md'), 'utf8'), /^---\nname: htmlverify\ndescription: /);
+  assert.equal(JSON.parse(readFileSync(join(project, 'htmlverify.config.json'), 'utf8')).extends, 'strict');
+  await main(['init', '--claude'], { stdin: (async function* () {})(), stdout: { write: () => {} }, stderr: { write: () => {} }, ...io });
+  assert.equal(JSON.parse(readFileSync(join(project, '.claude/settings.json'), 'utf8')).hooks.PostToolUse.length, 2, 'no second hook');
+});
+
+test('hook claude checks the .html file a tool wrote and exits 2 with the report when it fails', async () => {
+  const project = join(dir, 'hooked');
+  mkdirSync(project, { recursive: true });
+  writeFileSync(join(project, 'page.html'), '<p>Hello\n');
+  writeFileSync(join(project, 'good.html'), '<p>Hello</p>\n');
+  const event = (file: string, tool = 'Write') => JSON.stringify({ hook_event_name: 'PostToolUse', tool_name: tool, cwd: project, tool_input: { file_path: join(project, file) } });
+  const failing = await run(['hook', 'claude'], event('page.html'));
+  assert.equal(failing.code, 2);
+  assert.match(failing.stderr, /style\/explicit-end-tag/);
+  assert.match(failing.stderr, /npx htmlverify fix page\.html --context body --write/);
+  assert.equal((await run(['hook', 'claude'], event('good.html', 'Edit'))).code, 0);
+  assert.equal((await run(['hook', 'claude'], event('notes.md'))).code, 0);
+  assert.equal((await run(['hook', 'claude'], event('missing.html'))).code, 0);
+  assert.equal((await run(['hook', 'claude'], 'not json')).code, 1);
 });

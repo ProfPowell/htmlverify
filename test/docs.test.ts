@@ -8,6 +8,7 @@ for (const rule of RULES) {
   test(`explain ${rule.id}`, async () => {
     const doc = RULE_DOCS[rule.id];
     assert.ok(doc, `${rule.id} has no doc in src/rules/docs.ts`);
+    if (doc.external) return;
     const context = doc.context === undefined ? 'div' : doc.context;
     // The rule is on for its own examples; a merged finding still counts for
     // the rules it absorbed, and review-only rules count by their reviews.

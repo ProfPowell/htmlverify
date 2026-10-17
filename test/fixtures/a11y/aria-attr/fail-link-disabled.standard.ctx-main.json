@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "warning",
+    "at": "1:17-1:37",
+    "message": "Don’t mark a link aria-disabled=\"true\" while it has href, which keeps it working; to disable it, remove href (ARIA in HTML)."
+  }
+]

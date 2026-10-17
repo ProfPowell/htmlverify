@@ -22,6 +22,12 @@ export class LineIndex {
     }
   }
 
+  /** The offset of a 1-based line and column, clamped to the line's start. */
+  offset(line: number, column: number): number {
+    const start = this.#starts[Math.min(Math.max(line, 1), this.#starts.length) - 1]!;
+    return start + Math.max(column, 1) - 1;
+  }
+
   position(offset: number): Position {
     let lo = 0;
     let hi = this.#starts.length - 1;

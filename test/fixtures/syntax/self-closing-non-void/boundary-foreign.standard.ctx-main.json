@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "semantic/empty-element",
+    "severity": "info",
+    "at": "2:8-2:16",
+    "message": "Empty <span>; remove it, and use CSS for spacing."
+  },
+  {
+    "rule": "syntax/self-closing-non-void",
+    "severity": "error",
+    "at": "2:8-2:16",
+    "message": "<span/> doesn’t close the element: HTML ignores \"/\" on non-void elements, so <span> stays open and swallows everything up to 2:16. Write <span></span>."
+  }
+]

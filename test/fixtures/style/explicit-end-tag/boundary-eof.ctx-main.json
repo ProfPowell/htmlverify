@@ -1,0 +1,15 @@
+[
+  {
+    "rule": "style/explicit-end-tag",
+    "severity": "error",
+    "at": "1:1-1:4",
+    "message": "Close <p> explicitly: add </p> at the end of the file.",
+    "fix": [
+      {
+        "offset": 17,
+        "endOffset": 17,
+        "text": "</p>"
+      }
+    ]
+  }
+]

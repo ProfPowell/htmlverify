@@ -51,6 +51,7 @@ export const RULES: readonly RuleMeta[] = [
   { id: 'component/attribute', authority: 'vocabulary', summary: 'Attribute not in the element’s manifest, a bad value, or a missing required one', ref: COMPONENT },
   { id: 'component/content', authority: 'vocabulary', summary: 'Children the manifest doesn’t permit, missing required structure, or flow-only elements in phrasing content', ref: COMPONENT },
   { id: 'component/output-attribute', authority: 'vocabulary', summary: 'Authored attribute the component sets itself', ref: COMPONENT },
+  { id: 'conformance/nu', authority: 'standard', summary: 'Nu Html Checker message with no local finding on its line (--nu)', ref: 'https://validator.github.io/validator/' },
   { id: 'a11y/lang', authority: 'standard', summary: 'Page language missing, or a lang value that isn’t well-formed', ref: `${WCAG}#language-of-page` },
   { id: 'a11y/title', authority: 'standard', summary: 'Page title missing or empty', ref: `${WCAG}#page-titled` },
   { id: 'a11y/img-alt', authority: 'standard', summary: 'Image without a text alternative', ref: `${WCAG}#non-text-content` },

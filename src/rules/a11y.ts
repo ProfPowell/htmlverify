@@ -226,6 +226,13 @@ export function checkA11y(ctx: RuleContext): A11yResult {
             ? `${describeElement(e)} can’t take a role (ARIA in HTML).`
             : `role="${explicit}" isn’t allowed on ${describeElement(e)}${allowed.length && allowed.length <= 8 ? `; allowed roles: ${words(allowed)}` : ''} (ARIA in HTML).`);
         }
+        // Roles with presentational children hide what's inside them, controls included.
+        if (data?.childrenPresentational) {
+          for (const { node: inner } of walk(e)) {
+            if (inner === e || !isElement(inner) || !focusable(inner)) continue;
+            report('a11y/aria-role', span(inner), `${describeElement(inner)} is inside role="${explicit}" (at ${pos(e)}), whose children are presentational: assistive technology won’t expose it. Move it out.`, { severity: 'warning' });
+          }
+        }
         const parents = data?.requiredParents ?? [];
         if (parents.length) {
           const owner = names.ancestors(e).map((a) => names.role(a)).find((r) => r !== null && r !== 'generic' && r !== 'none' && r !== 'presentation');
@@ -255,6 +262,9 @@ export function checkA11y(ctx: RuleContext): A11yResult {
         }
         const problem = ariaValueProblem(a.name, a.value);
         if (problem) report('a11y/aria-attr', where, `${a.name}=${quote(a.value)} ${problem}.`);
+        if (a.name === 'aria-disabled' && a.value === 'true' && is(e, 'a') && has(e, 'href')) {
+          report('a11y/aria-attr', where, 'Don’t mark a link aria-disabled="true" while it has href, which keeps it working; to disable it, remove href (ARIA in HTML).', { severity: 'warning' });
+        }
         if (!sem) continue;
         if (sem.mustNot.includes(a.name)) {
           report('a11y/aria-attr', where, `Don’t use ${a.name} on ${describeElement(e)}; ${a.name === 'aria-checked' ? 'the checked attribute sets the state' : 'HTML provides it natively'} (ARIA in HTML).`);
@@ -304,6 +314,9 @@ export function checkA11y(ctx: RuleContext): A11yResult {
     }
 
     // a11y/aria-redundant
+    if (attr(e, 'aria-hidden') === 'true' && has(e, 'hidden') && e.sourceCodeLocation?.attrs?.['aria-hidden']) {
+      report('a11y/aria-redundant', attrSpan(e, 'aria-hidden'), `aria-hidden="true" is redundant with hidden, which hides ${describeElement(e)} from everyone; remove it.`);
+    }
     if (explicit && sem && (explicit === sem.implicit || (explicit === 'img' && sem.implicit === 'image') || (explicit === 'image' && sem.implicit === 'img'))) {
       const workaround = (explicit === 'list' && is(e, 'ul', 'ol', 'menu')) || (explicit === 'listitem' && is(e, 'li'));
       if (!workaround) report('a11y/aria-redundant', attrSpan(e, 'role'), `role="${explicit}" is redundant on ${describeElement(e)}, which has that role already; remove it.`);

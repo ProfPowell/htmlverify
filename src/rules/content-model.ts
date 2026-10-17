@@ -158,6 +158,15 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
       place(child, element, ancestors, children, skip ? null : { matcher, fail, from: transparent ? inherited.from : element }, active);
     }
 
+    // A required single-choice <select> needs a placeholder first, or required can never fail.
+    if (isHtml(element) && element.tagName === 'select' && has(element, 'required') && !has(element, 'multiple') && Number(attr(element, 'size') ?? '1') <= 1) {
+      const options = children.flatMap((c) => (isElement(c) && c.tagName === 'option' ? [c] : isElement(c) && c.tagName === 'optgroup' ? c.childNodes.filter((o): o is Element => isElement(o) && o.tagName === 'option') : []));
+      const first = options[0];
+      const value = first ? attr(first, 'value') ?? first.childNodes.filter(isText).map((t) => t.value).join('').replace(/[\t\n\f\r ]+/g, ' ').trim() : null;
+      if (first && (value !== '' || first.parentNode !== element)) {
+        report('content/child', first, 'A required <select> must start with a placeholder option, <option value="">Choose…</option>, directly inside it; otherwise the first option is selected from the start and required never fails.');
+      }
+    }
     if (!failed && isHtml(element) && element.tagName === 'time' && !has(element, 'datetime')) {
       const value = children.filter(isText).map((t) => t.value).join('').trim();
       if (!isTimeValue(value)) {

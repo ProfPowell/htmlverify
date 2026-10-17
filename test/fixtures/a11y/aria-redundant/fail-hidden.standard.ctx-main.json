@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/aria-redundant",
+    "severity": "warning",
+    "at": "1:11-1:29",
+    "message": "aria-hidden=\"true\" is redundant with hidden, which hides <p> from everyone; remove it."
+  }
+]

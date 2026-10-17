@@ -81,6 +81,8 @@ const A11Y = {
 
 // The component, semantic, policy, and bloat tables of spec §6.4 and §6.6–§6.8: [strict, standard]. Review-only rules are on at info.
 const LATER_FAMILIES: Record<string, readonly [Severity | 'off', Severity | 'off']> = {
+  // Runs only with --nu; each finding takes Nu's own severity.
+  'conformance/nu': ['error', 'error'],
   'component/unknown-element': ['error', 'warning'],
   'component/attribute': ['error', 'error'],
   'component/content': ['error', 'error'],

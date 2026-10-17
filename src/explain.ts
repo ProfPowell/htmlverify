@@ -17,7 +17,7 @@ export function explain(rule: string): RuleInfo {
     const near = closest(rule, RULES.map((r) => r.id));
     throw new RangeError(`unknown rule "${rule}"${near ? `; did you mean "${near}"?` : ''}`);
   }
-  const { context: _context, ...text } = doc;
+  const { context: _context, external: _external, ...text } = doc;
   return {
     ...meta,
     ...text,
