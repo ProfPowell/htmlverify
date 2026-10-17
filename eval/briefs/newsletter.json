@@ -1,0 +1,62 @@
+{
+  "id": "newsletter",
+  "type": "newsletter landing",
+  "title": "Newsletter landing page",
+  "content": "Landing page for \"The Trail Report\", the co-op's monthly newsletter.\n\nHeadline: The Trail Report, once a month, never more.\nWhat you get:\n- Trail and water conditions from members who were just there\n- Early booking for workshops\n- Repair tips from the workshop\n- The used-gear sale date, a week early\n\nSign-up form: Email (required) and a Subscribe button.\nFine print: We send one email a month. Unsubscribe from any issue.\nSocial proof: 6,200 readers. A quote from a reader, Jo: \"The only newsletter I read the day it arrives.\"\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "benefits",
+      "text": "the benefits as a list",
+      "selector": "ul > li",
+      "count": [
+        4,
+        null
+      ]
+    },
+    {
+      "id": "form",
+      "text": "a sign-up form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "email",
+      "text": "an email input",
+      "selector": "input[type=email]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "label",
+      "text": "a label for the email field",
+      "selector": "label",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "quote",
+      "text": "the reader's quote as a blockquote or q",
+      "selector": "blockquote, q",
+      "count": [
+        1,
+        null
+      ]
+    }
+  ]
+}

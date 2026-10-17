@@ -1,0 +1,44 @@
+{
+  "id": "404",
+  "type": "404",
+  "title": "Page not found",
+  "content": "Error page: 404, page not found.\n\nMessage: We couldn't find that page. It may have moved when we redesigned the shop.\nSearch: a search box with a Search button, searching /search.\nHelpful links: Shop backpacks (/shop/packs), Rental gear (/rentals), Workshops (/workshops), Contact us (/contact).\nLink back to the home page.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "search",
+      "text": "a search form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "search-input",
+      "text": "a search input",
+      "selector": "input[type=search]",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "links",
+      "text": "helpful links",
+      "selector": "main a[href]",
+      "count": [
+        5,
+        null
+      ]
+    }
+  ]
+}

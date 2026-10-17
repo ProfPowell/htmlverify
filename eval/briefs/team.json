@@ -1,0 +1,44 @@
+{
+  "id": "team",
+  "type": "team",
+  "title": "Team page",
+  "content": "Meet the Larkspur Supply Co. team.\n\nPeople (name, role, a one-line bio, photo):\n- Priya Raman, General manager — \"Twenty years of guiding sea-kayak trips before she ran the store.\"\n- Ines Okafor, Board chair — \"A member since 1994 and a former ranger.\"\n- Theo Lindqvist, Repair lead — \"Fixes zippers, stoves, and once, a canoe.\"\n- Dana Brooks, Rental manager — \"Knows where every kayak is, right now.\"\n- Sam Whitlock, Communications — \"Writes the newsletter and the trail reports.\"\n- Marta Ellison, Workshop coordinator — \"Teaches the knots class.\"\n\nJoin us: we're hiring a seasonal rental assistant (/jobs/rental-assistant).\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "people",
+      "text": "each person as an article or list item",
+      "selector": "article, li",
+      "count": [
+        6,
+        null
+      ]
+    },
+    {
+      "id": "photos",
+      "text": "photos with alt text",
+      "selector": "img[alt]",
+      "count": [
+        6,
+        null
+      ]
+    },
+    {
+      "id": "names",
+      "text": "names as headings",
+      "selector": "h2, h3",
+      "count": [
+        6,
+        null
+      ]
+    }
+  ]
+}

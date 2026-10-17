@@ -212,3 +212,23 @@ test('hook claude checks the .html file a tool wrote and exits 2 with the report
   assert.equal((await run(['hook', 'claude'], event('missing.html'))).code, 0);
   assert.equal((await run(['hook', 'claude'], 'not json')).code, 1);
 });
+
+test('hook claude logs each round and stops blocking after HTMLVERIFY_HOOK_MAX_ROUNDS failures', async () => {
+  const project = join(dir, 'capped');
+  mkdirSync(project, { recursive: true });
+  writeFileSync(join(project, 'page.html'), '<p>Hello\n');
+  const log = join(project, 'hook.jsonl');
+  const event = JSON.stringify({ cwd: project, tool_input: { file_path: join(project, 'page.html') } });
+  process.env['HTMLVERIFY_HOOK_LOG'] = log;
+  process.env['HTMLVERIFY_HOOK_MAX_ROUNDS'] = '2';
+  try {
+    const codes = [];
+    for (let i = 0; i < 3; i++) codes.push((await run(['hook', 'claude'], event)).code);
+    assert.deepEqual(codes, [2, 2, 0]);
+    const rounds = readFileSync(log, 'utf8').trim().split('\n').map((l) => JSON.parse(l) as { status: string; capped: boolean });
+    assert.deepEqual(rounds.map((r) => [r.status, r.capped]), [['fail', false], ['fail', false], ['fail', true]]);
+  } finally {
+    delete process.env['HTMLVERIFY_HOOK_LOG'];
+    delete process.env['HTMLVERIFY_HOOK_MAX_ROUNDS'];
+  }
+});

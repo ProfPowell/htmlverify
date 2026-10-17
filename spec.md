@@ -865,6 +865,19 @@ Each brief runs 3 times per condition.
 
 Results, raw outputs, and the failure analysis go in `eval/results/`.
 
+**Harness (M1).** `eval/run.ts` runs conditions A and B; `eval/README.md` describes it.
+
+- **Agent driver**: headless Claude Code (`claude -p`) in a fresh directory per run, with its own session, project settings only, and no MCP servers.
+- **Human driver**: the same directories, with instructions.
+- **House skills**: `eval/skills/`, a snapshot of Vanilla Breeze's at commit `1817856`.
+- **Condition B** adds the htmlverify skill and the hook. The hook logs each round and stops blocking after 3.
+- **Measurements**:
+  - The first attempt is B's first hook check, or A's final file.
+  - Repair rounds are failing hook checks.
+  - The checklist is selectors over the parsed page.
+  - Structural variance is the mean pairwise edit distance between element skeletons, normalized by the longer one.
+- **Rubric**: scoring by human raters or a calibrated agent judge isn't in the harness yet.
+
 ## 14. Milestones
 
 | Milestone | Deliverables | Exit criteria |

@@ -1,0 +1,53 @@
+{
+  "id": "data-report",
+  "type": "data report",
+  "title": "Annual report: membership numbers",
+  "content": "Larkspur Supply Co. 2025 membership report.\n\nSummary: Membership grew 11% in 2025, to 9,400 members. Rentals grew fastest.\n\nTable: Members and activity by quarter, 2025.\nColumns: Quarter, New members, Total members, Rentals, Repairs.\n- Q1: 210, 8,680, 1,140, 640\n- Q2: 390, 9,070, 2,310, 820\n- Q3: 260, 9,330, 2,950, 910\n- Q4: 70, 9,400, 980, 730\n- Total: 930 new members, 9,400 members, 7,380 rentals, 3,100 repairs\n\nNote under the table: Totals for members are year-end figures.\nDownload: the full report as PDF (/reports/2025.pdf, 2.4 MB).\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "table",
+      "text": "a data table",
+      "selector": "table",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "caption",
+      "text": "a table caption",
+      "selector": "table > caption",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "headers",
+      "text": "column header cells",
+      "selector": "thead th",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "rows",
+      "text": "body rows for the quarters",
+      "selector": "tbody tr",
+      "count": [
+        4,
+        null
+      ]
+    }
+  ]
+}

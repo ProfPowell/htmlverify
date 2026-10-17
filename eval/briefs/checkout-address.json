@@ -1,0 +1,71 @@
+{
+  "id": "checkout-address",
+  "type": "checkout address form",
+  "title": "Checkout: shipping address",
+  "content": "Checkout, step 2 of 3: Shipping address.\n\nProgress: 1 Cart (done), 2 Shipping (current), 3 Payment.\n\nFields:\n- Full name (required)\n- Address line 1 (required), Address line 2 (optional)\n- City (required), State or region (required), Postal code (required)\n- Country (required): United States, Canada, Mexico\n- Phone (required, for the courier)\n- A checkbox: \"Billing address is the same\"\n- Shipping speed (choose one): Standard, 5–7 days, free; Express, 2 days, $12\n\nButtons: Continue to payment; Back to cart (link to /cart).\nOrder summary beside the form: Ridgeline 40 L × 1, $189; Shipping $0; Total $189.\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "form",
+      "text": "an address form",
+      "selector": "form",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "autocomplete",
+      "text": "address autocomplete tokens",
+      "selector": "[autocomplete]",
+      "count": [
+        5,
+        null
+      ]
+    },
+    {
+      "id": "country",
+      "text": "a select for the country",
+      "selector": "select",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "speed",
+      "text": "the shipping speeds as radio buttons in a fieldset with a legend",
+      "selector": "fieldset > legend",
+      "count": [
+        1,
+        null
+      ]
+    },
+    {
+      "id": "radios",
+      "text": "radio buttons for the speed",
+      "selector": "input[type=radio]",
+      "count": [
+        2,
+        null
+      ]
+    },
+    {
+      "id": "labels",
+      "text": "labeled fields",
+      "selector": "label",
+      "count": [
+        9,
+        null
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "faq",
+  "type": "FAQ",
+  "title": "FAQ page",
+  "content": "Frequently asked questions about Larkspur Supply Co. membership and rentals.\n\n1. How much does membership cost? A lifetime membership costs $30, paid once.\n2. What is the member dividend? Each spring, members get back a share of the profit, based on what they bought the year before. Last year it was 8%.\n3. Can I rent gear without being a member? Yes. Members get 20% off rentals.\n4. How do I return a rental? Bring it to the rental desk by closing time on the return date. Late returns cost one extra day.\n5. Do you repair gear you didn't sell? Yes, we repair any brand. Estimates are free.\n6. Can I cancel my membership? Yes. We refund your $30 if you cancel within 30 days.\n\nStill have questions? Contact us (/contact).\n",
+  "checklist": [
+    {
+      "id": "one-h1",
+      "text": "exactly one h1",
+      "selector": "h1",
+      "count": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "questions",
+      "text": "the six questions as details/summary or a description list",
+      "selector": "details > summary, dl > dt, dl > div > dt",
+      "count": [
+        6,
+        null
+      ]
+    },
+    {
+      "id": "contact-link",
+      "text": "a link to the contact page",
+      "selector": "a[href]",
+      "count": [
+        1,
+        null
+      ]
+    }
+  ]
+}

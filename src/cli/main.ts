@@ -1,4 +1,4 @@
-import { glob, mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
+import { appendFile, glob, mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from '../config.ts';
@@ -239,7 +239,17 @@ async function hook(argv: string[], io: Io): Promise<number> {
   const context = /^<(?:!doctype|html[\s>])/i.test(head) ? null : 'body';
   const path = relative(cwd, absolute).split(sep).join('/') || absolute;
   const report = await check({ path, source, context }, { config });
-  if (report.status !== 'fail') return 0;
+  // The evaluation harness (eval/run.ts) logs every round and caps the repair loop.
+  const log = process.env['HTMLVERIFY_HOOK_LOG'];
+  const cap = Number(process.env['HTMLVERIFY_HOOK_MAX_ROUNDS'] ?? Infinity);
+  const file0 = report.files[0]!;
+  const earlier = log ? await readFile(log, 'utf8').then((t) => t.split('\n').filter(Boolean).map((l) => JSON.parse(l) as { file: string; status: string }), () => []) : [];
+  const failures = earlier.filter((e) => e.file === absolute && e.status === 'fail').length;
+  const capped = report.status === 'fail' && failures >= cap;
+  if (log) {
+    await appendFile(log, `${JSON.stringify({ at: new Date().toISOString(), file: absolute, status: report.status, errors: file0.summary.errors, warnings: file0.summary.warnings, capped })}\n`);
+  }
+  if (report.status !== 'fail' || capped) return 0;
   const fixCommand = `npx htmlverify fix ${path}${context ? ` --context ${context}` : ''} --write`;
   io.stderr.write(`${formatText(report)}\nhtmlverify: fix these in ${path}. \`${fixCommand}\` applies the mechanical fixes; don't disable rules or invent content to pass.\n`);
   return 2;
