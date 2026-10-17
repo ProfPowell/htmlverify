@@ -1,5 +1,6 @@
 import { isElement, isHtml, isText, isWhitespaceText, type Element, type Node } from '../parse/tree.ts';
 import { kindOf } from '../spec/model.ts';
+import type { Vocabulary } from '../vocab/vocabulary.ts';
 import type { RawFinding, RuleContext } from './types.ts';
 import { spanOf } from './util.ts';
 
@@ -24,9 +25,9 @@ export interface BloatResult {
 
 const EXCLUDED = new Set(['script', 'style', 'template']);
 
-/** Generic elements: div, span, and custom elements, which have no role until a vocabulary gives them one. */
-export function isGeneric(e: Element): boolean {
-  return (isHtml(e) && (e.tagName === 'div' || e.tagName === 'span')) || kindOf(e) === 'custom';
+/** Generic elements: div, span, and custom elements whose declaration gives no role. */
+export function isGeneric(e: Element, vocabulary: Vocabulary): boolean {
+  return (isHtml(e) && (e.tagName === 'div' || e.tagName === 'span')) || (kindOf(e) === 'custom' && !vocabulary.get(e.tagName)?.element.role);
 }
 
 export function checkBloat(ctx: RuleContext): BloatResult {
@@ -55,7 +56,7 @@ export function checkBloat(ctx: RuleContext): BloatResult {
   visit(root, 0);
 
   const n = counted.length;
-  const generic = counted.filter((c) => isGeneric(c.element)).length;
+  const generic = counted.filter((c) => isGeneric(c.element, ctx.vocabulary)).length;
   const minimum = option('bloat/generic-ratio', 'minElements');
   const ratio = n >= minimum && n > 0 ? Math.round((generic / n) * 100) / 100 : null;
   const top = root.nodeName === 'body' ? (root as Element) : counted[0]?.element ?? null;
@@ -68,12 +69,12 @@ export function checkBloat(ctx: RuleContext): BloatResult {
   const onlyGenericChild = (e: Element): Element | null => {
     const kids = e.childNodes.filter((c) => !(isText(c) && isWhitespaceText(c)) && c.nodeName !== '#comment');
     const only = kids.length === 1 && isElement(kids[0]!) ? (kids[0] as Element) : null;
-    return only && isGeneric(only) ? only : null;
+    return only && isGeneric(only, ctx.vocabulary) ? only : null;
   };
   const chainLength = new Map<Element, number>();
   for (let i = counted.length - 1; i >= 0; i--) {
     const e = counted[i]!.element;
-    if (!isGeneric(e)) continue;
+    if (!isGeneric(e, ctx.vocabulary)) continue;
     const child = onlyGenericChild(e);
     const length = 1 + (child ? chainLength.get(child) ?? 1 : 0);
     chainLength.set(e, length);

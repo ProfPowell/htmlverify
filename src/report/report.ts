@@ -14,10 +14,12 @@ import { checkStyle } from '../rules/style.ts';
 import { checkSyntax } from '../rules/syntax.ts';
 import { checkA11y } from '../rules/a11y.ts';
 import { checkBloat, type Metrics } from '../rules/bloat.ts';
+import { checkComponents } from '../rules/component.ts';
 import { checkPolicy } from '../rules/policy.ts';
 import { checkSemantic } from '../rules/semantic.ts';
 import type { Authority, Edit, RawFinding, RawReview, RuleContext, Severity } from '../rules/types.ts';
 import { VERSION } from '../version.ts';
+import { loadSnapshot, Vocabulary } from '../vocab/vocabulary.ts';
 import { canonicalJson } from './canonical.ts';
 
 export interface CheckInput {
@@ -101,18 +103,21 @@ const PENALTY: Record<Severity, number> = { error: 10, warning: 3, info: 0 };
 
 export async function check(inputs: CheckInput | CheckInput[], options: CheckOptions = {}): Promise<Report> {
   const profile = resolveProfile(options.profile, options.config ?? null);
+  const vocabulary = new Vocabulary(profile.vocabularies, profile.elements, profile.options.adHocPrefix);
   const files: FileReport[] = [];
-  for (const input of Array.isArray(inputs) ? inputs : [inputs]) files.push(await checkFile(input, profile));
+  for (const input of Array.isArray(inputs) ? inputs : [inputs]) files.push(await checkFile(input, profile, vocabulary));
   const status: Status = files.some((f) => f.status === 'incomplete') ? 'incomplete' : files.some((f) => f.status === 'fail') ? 'fail' : 'pass';
+  // A snapshot regenerated under the same version still changes the hash.
+  const snapshots = profile.vocabularies.map((id) => loadSnapshot(id).source.sha256);
   return {
     tool: { name: 'htmlverify', version: VERSION, parser: PARSER },
-    profile: { name: profile.name, hash: await sha256(new TextEncoder().encode(canonicalJson({ ...profile, version: VERSION }))) },
+    profile: { name: profile.name, hash: await sha256(new TextEncoder().encode(canonicalJson({ ...profile, snapshots, version: VERSION }))) },
     status,
     files,
   };
 }
 
-async function checkFile(input: CheckInput, profile: Profile): Promise<FileReport> {
+async function checkFile(input: CheckInput, profile: Profile, vocabulary: Vocabulary): Promise<FileReport> {
   const bytes = typeof input.source === 'string' ? new TextEncoder().encode(input.source) : input.source;
   const kind = input.context ? 'fragment' : 'document';
   const base = { path: input.path, kind, sha256: await sha256(bytes) } as const;
@@ -166,6 +171,7 @@ async function checkFile(input: CheckInput, profile: Profile): Promise<FileRepor
       r.id,
       { ...Object.fromEntries(Object.entries(r.options!).map(([k, o]) => [k, o.default])), ...profile.ruleOptions[r.id] },
     ])),
+    vocabulary,
   };
   const syntax = checkSyntax(ctx);
   const content = checkContentModel(ctx);
@@ -178,6 +184,7 @@ async function checkFile(input: CheckInput, profile: Profile): Promise<FileRepor
     ...checkBooleanValues(ctx),
     ...checkAttributes(ctx),
     ...content.findings,
+    ...checkComponents(ctx),
     ...checkIds(ctx),
     ...checkDocument(ctx),
     ...a11y.findings,
@@ -189,6 +196,7 @@ async function checkFile(input: CheckInput, profile: Profile): Promise<FileRepor
   const findings = dedupe(enabled).map(({ raw: r, also }) => toFinding(r, input.path, lines, profile, also));
   const reviews = [...a11y.reviews, ...semantic.reviews].filter((r) => (profile.severities[r.rule] ?? 'off') !== 'off').map((r) => toReview(r, lines));
   const untested = [...profile.untested, ...content.untested];
+  if (!vocabulary.configured) untested.push({ check: 'component/*', reason: 'no vocabulary is configured' });
   if (kind === 'fragment') {
     untested.push({ check: 'syntax/doctype, syntax/encoding (charset declaration), a11y/lang, a11y/title, first-heading check', reason: 'fragments have no document' });
   }

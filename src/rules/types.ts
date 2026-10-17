@@ -1,6 +1,7 @@
 import type { LineIndex } from '../parse/lines.ts';
 import type { Parsed } from '../parse/parse.ts';
 import type { Signals } from '../parse/reconcile.ts';
+import type { Vocabulary } from '../vocab/vocabulary.ts';
 
 export type Severity = 'error' | 'warning' | 'info';
 export type Authority = 'standard' | 'vocabulary' | 'policy' | 'heuristic';
@@ -43,6 +44,8 @@ export interface Options {
   booleanValue: 'true' | 'empty' | 'name' | null;
   /** Language of the generic link texts a11y/link-text looks for. */
   linkTextLanguage: 'en';
+  /** Undeclared custom elements with this prefix are ad hoc: accepted with a warning. Null turns it off. */
+  adHocPrefix: string | null;
 }
 
 export interface RuleContext {
@@ -55,6 +58,7 @@ export interface RuleContext {
   options: Options;
   /** Each rule's options: its defaults with the config's values applied. */
   ruleOptions: Readonly<Record<string, Readonly<Record<string, RuleOptionValue>>>>;
+  vocabulary: Vocabulary;
 }
 
 export type RuleOptionValue = number | readonly string[];

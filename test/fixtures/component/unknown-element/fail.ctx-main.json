@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/unknown-element",
+    "severity": "error",
+    "at": "1:1-1:14",
+    "message": "<layout-stak> isn’t declared in Vanilla Breeze 0.3.1. Did you mean <layout-stack>?"
+  }
+]

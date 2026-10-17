@@ -1,13 +1,17 @@
-import { glob, readFile } from 'node:fs/promises';
+import { glob, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from '../config.ts';
 import { explain, formatExplain, formatRules, listRules } from '../explain.ts';
 import { isProfileName, type ProfileName } from '../profiles.ts';
-import { canonicalJson } from '../report/canonical.ts';
+import { canonicalJson, stableJson } from '../report/canonical.ts';
 import { check, type CheckInput, type Status } from '../report/report.ts';
 import { formatText } from '../report/text.ts';
 import { VERSION } from '../version.ts';
+import { VocabError } from '../vocab/compile.ts';
+import { snapshotFromCheckout } from '../vocab/source.ts';
+import { parseElements } from '../vocab/project.ts';
+import { DEFAULT_VOCABULARIES, loadSnapshot, VOCAB_DIR, Vocabulary } from '../vocab/vocabulary.ts';
 
 export interface Io {
   stdin: AsyncIterable<string | Uint8Array>;
@@ -20,6 +24,7 @@ const USAGE = `Usage:
   htmlverify check <file|glob|->... [options]
   htmlverify explain <rule> [--format text|json]
   htmlverify rules [--profile strict|standard] [--config <file>] [--format text|json]
+  htmlverify vocab update vanilla-breeze --from <checkout> [--out <file>]
 
 Options:
   --profile strict|standard   rule set (default: the config's "extends", else strict)
@@ -42,7 +47,7 @@ export async function main(argv: string[], io: Io): Promise<number> {
   try {
     return await run(argv, io);
   } catch (error) {
-    if (error instanceof ConfigError) {
+    if (error instanceof ConfigError || error instanceof VocabError) {
       io.stderr.write(`htmlverify: ${error.message}\n`);
       return 2;
     }
@@ -62,6 +67,7 @@ async function run(argv: string[], io: Io): Promise<number> {
     io.stdout.write(`${VERSION}\n`);
     return 0;
   }
+  if (command === 'vocab') return vocab(rest, io);
   if (command !== 'check' && command !== 'explain' && command !== 'rules') {
     throw new UsageError(command ? `unknown command "${command}"` : 'missing command');
   }
@@ -110,6 +116,34 @@ async function run(argv: string[], io: Io): Promise<number> {
   return EXIT[report.status];
 }
 
+/** `vocab update vanilla-breeze --from <checkout>`: rebuilds a vocabulary snapshot (spec §3.4). */
+async function vocab(argv: string[], io: Io): Promise<number> {
+  let args;
+  try {
+    args = parseArgs({ args: argv, allowPositionals: true, strict: true, options: { from: { type: 'string' }, out: { type: 'string' }, help: { type: 'boolean', short: 'h' } } });
+  } catch (error) {
+    throw new UsageError((error as Error).message);
+  }
+  if (args.values.help) {
+    io.stdout.write(USAGE);
+    return 0;
+  }
+  const [sub, name, ...extra] = args.positionals;
+  if (sub !== 'update' || extra.length > 0) throw new UsageError('usage: htmlverify vocab update vanilla-breeze --from <checkout>');
+  if (name !== 'vanilla-breeze') throw new UsageError(name ? `unknown vocabulary "${name}"; htmlverify compiles vanilla-breeze` : 'name the vocabulary: vanilla-breeze');
+  if (!args.values.from) throw new UsageError('--from <checkout> is required');
+  const snapshot = snapshotFromCheckout(resolve(io.cwd, args.values.from));
+  const out = args.values.out ? resolve(io.cwd, args.values.out) : join(VOCAB_DIR, `${snapshot.name}@${snapshot.version}.json`);
+  await mkdir(dirname(out), { recursive: true });
+  await writeFile(out, stableJson(snapshot));
+  const counts = new Map<string, number>();
+  for (const e of Object.values(snapshot.elements)) counts.set(e.type, (counts.get(e.type) ?? 0) + 1);
+  const noun: Record<string, string> = { 'web-component': 'web component', 'custom-element': 'custom element', native: 'native element' };
+  const kinds = [...counts].map(([type, n]) => `${n} ${noun[type] ?? type}${n === 1 ? '' : 's'}`).join(', ');
+  io.stdout.write(`${relative(io.cwd, out) || out}: ${Object.keys(snapshot.elements).length} elements (${kinds}) from ${snapshot.source.files} manifests${snapshot.source.commit ? ` at ${snapshot.source.commit.slice(0, 7)}` : ''}\n`);
+  return 0;
+}
+
 function parseCommandArgs(args: string[]) {
   return parseArgs({
     args,
@@ -143,7 +177,9 @@ async function loadConfig(explicit: string | undefined, cwd: string): Promise<Co
     } catch (error) {
       throw new ConfigError(`${relative(cwd, path) || path}: invalid JSON: ${(error as Error).message}`);
     }
-    return parseConfig(json, relative(cwd, path).split(sep).join('/') || CONFIG_FILE);
+    const config = parseConfig(json, relative(cwd, path).split(sep).join('/') || CONFIG_FILE);
+    if (config.registry !== undefined) config.elements = await loadElements(resolve(dirname(path), config.registry), config, cwd);
+    return config;
   };
   if (explicit !== undefined) return (await read(resolve(cwd, explicit))) ?? null;
   for (let dir = resolve(cwd); ; dir = dirname(dir)) {
@@ -151,6 +187,33 @@ async function loadConfig(explicit: string | undefined, cwd: string): Promise<Co
     if (found !== undefined) return found;
     if (dirname(dir) === dir) return null;
   }
+}
+
+/** The registry's elements.json, checked against the configured vocabularies (spec §7.4). */
+async function loadElements(registry: string, config: Config, cwd: string): Promise<Config['elements']> {
+  const path = join(registry, 'elements.json');
+  const label = relative(cwd, path).split(sep).join('/') || path;
+  const isDirectory = await stat(registry).then((s) => s.isDirectory(), () => false);
+  if (!isDirectory) throw new ConfigError(`"registry" names ${relative(cwd, registry) || registry}, which isn’t a directory`);
+  let text: string;
+  try {
+    text = await readFile(path, 'utf8');
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === 'ENOENT') return undefined; // A registry may have components and no elements of its own.
+    throw new ConfigError(`can’t read ${label}: ${code ?? (error as Error).message}`);
+  }
+  let elements: NonNullable<Config['elements']>;
+  try {
+    elements = parseElements(JSON.parse(text), label);
+  } catch (error) {
+    throw new ConfigError(error instanceof SyntaxError ? `${label}: invalid JSON: ${error.message}` : (error as Error).message);
+  }
+  for (const id of config.vocabularies ?? DEFAULT_VOCABULARIES) {
+    const taken = Object.keys(elements).find((name) => loadSnapshot(id).elements[name]);
+    if (taken) throw new ConfigError(`${label}: <${taken}> is already defined by ${Vocabulary.label(id)}`);
+  }
+  return elements;
 }
 
 async function readInputs(patterns: string[], stdinName: string, context: string | null, io: Io): Promise<CheckInput[]> {

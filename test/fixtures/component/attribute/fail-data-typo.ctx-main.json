@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/attribute",
+    "severity": "error",
+    "at": "1:15-1:35",
+    "message": "data-layout-gapp isn’t an attribute of <layout-stack> in Vanilla Breeze 0.3.1. Did you mean data-layout-gap?"
+  }
+]

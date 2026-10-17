@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/content",
+    "severity": "error",
+    "at": "1:1-1:12",
+    "message": "<drop-down> needs a <menu> of actions."
+  }
+]

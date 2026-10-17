@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, test } from 'node:test';
@@ -101,8 +101,8 @@ test('the bin shim runs the CLI and sets the exit code', () => {
 
 test('canonical JSON is byte-identical across two processes', () => {
   const args = [BIN, 'check', 'test/fixtures/**/*.html', '--format', 'json'];
-  const first = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8' });
-  const second = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8' });
+  const first = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  const second = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   assert.equal(first.status, 1);
   assert.ok(first.stdout.length > 1000);
   assert.equal(first.stdout, second.stdout);
@@ -130,4 +130,36 @@ test('rules lists every rule with its severity in the profile', async () => {
   assert.equal(rules.find((x: { id: string }) => x.id === 'content/child').severity, 'error');
   const text = await run(['rules']);
   assert.match(text.stdout, /\n\d+ rules · \d+ on in strict/);
+});
+
+test('vocab update writes a snapshot from a checkout; usage errors exit 2', async () => {
+  const checkout = join(dir, 'vb');
+  mkdirSync(join(checkout, 'src/custom-elements/demo-box'), { recursive: true });
+  writeFileSync(join(checkout, 'package.json'), JSON.stringify({ name: 'vanilla-breeze', version: '9.0.0' }));
+  writeFileSync(join(checkout, 'src/custom-elements/demo-box/api.json'), JSON.stringify({ element: 'demo-box', type: 'custom-element', attributes: [] }));
+  const out = join(dir, 'snapshot.json');
+  const r = await run(['vocab', 'update', 'vanilla-breeze', '--from', checkout, '--out', out]);
+  assert.equal(r.code, 0, r.stderr);
+  assert.match(r.stdout, /: 1 elements? \(1 custom element\) from 1 manifest/);
+  assert.deepEqual(Object.keys(JSON.parse(readFileSync(out, 'utf8')).elements), ['demo-box']);
+  assert.equal((await run(['vocab', 'update', 'other', '--from', checkout])).code, 2);
+  assert.equal((await run(['vocab', 'update', 'vanilla-breeze'])).code, 2);
+});
+
+test('check reads the registry’s elements.json next to the config', async () => {
+  const project = join(dir, 'project');
+  mkdirSync(join(project, 'registry'), { recursive: true });
+  writeFileSync(join(project, 'htmlverify.config.json'), JSON.stringify({ extends: 'standard', registry: 'registry' }));
+  writeFileSync(join(project, 'registry/elements.json'), JSON.stringify({ 'app-card': { attributes: { tone: { enum: ['calm'] } } } }));
+  writeFileSync(join(project, 'page.html'), '<app-card tone="loud">Hi</app-card>\n');
+  const r = await run(['check', join(project, 'page.html'), '--context', 'main', '--config', join(project, 'htmlverify.config.json'), '--format', 'json']);
+  const findings = JSON.parse(r.stdout).files[0].findings.map((f: { rule: string }) => f.rule);
+  assert.deepEqual(findings, ['component/attribute']);
+  writeFileSync(join(project, 'registry/elements.json'), JSON.stringify({ 'layout-stack': {} }));
+  const clash = await run(['check', join(project, 'page.html'), '--config', join(project, 'htmlverify.config.json')]);
+  assert.equal(clash.code, 2);
+  assert.match(clash.stderr, /<layout-stack> is already defined by Vanilla Breeze 0\.3\.1/);
+  writeFileSync(join(project, 'htmlverify.config.json'), JSON.stringify({ registry: 'registy' }));
+  const typo = await run(['check', join(project, 'page.html'), '--config', join(project, 'htmlverify.config.json')]);
+  assert.match(typo.stderr, /"registry" names .*registy, which isn’t a directory/);
 });

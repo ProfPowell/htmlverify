@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "component/output-attribute",
+    "severity": "warning",
+    "at": "1:12-1:23",
+    "message": "<drop-down> sets open itself (it reflects the component’s state); remove it from the markup."
+  }
+]

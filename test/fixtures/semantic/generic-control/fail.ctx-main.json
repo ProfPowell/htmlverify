@@ -20,7 +20,7 @@
   {
     "rule": "semantic/generic-control",
     "severity": "error",
-    "at": "3:1-3:34",
-    "message": "<x-card> with role=\"link\" acts as a control; use <a href>, which is focusable and keyboard-operable on its own."
+    "at": "3:1-3:39",
+    "message": "<layout-card> with role=\"link\" acts as a control; use <a href>, which is focusable and keyboard-operable on its own."
   }
 ]

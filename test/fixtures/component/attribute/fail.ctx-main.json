@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "component/attribute",
+    "severity": "error",
+    "at": "1:15-1:31",
+    "message": "indicator=\"plus\" isn’t a value of indicator on <accordion-wc>: use \"plus-minus\", \"none\", or \"custom\"."
+  },
+  {
+    "rule": "component/attribute",
+    "severity": "error",
+    "at": "1:32-1:45",
+    "message": "singel isn’t an attribute of <accordion-wc> in Vanilla Breeze 0.3.1. Did you mean single?"
+  }
+]

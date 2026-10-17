@@ -4,12 +4,14 @@ import { checkEscape } from './escape.ts';
 import type { Edit, RawFinding, RuleContext } from './types.ts';
 import { at, locatedElements, nameAt, readAttribute, startTagSpan } from './util.ts';
 import { checkWhitespace } from './whitespace.ts';
+import { vocabularyBooleans } from '../vocab/booleans.ts';
 
 export function checkStyle(ctx: RuleContext, absorbed: Set<Element>): RawFinding[] {
   const findings: RawFinding[] = [];
   findings.push(...explicitStartTags(ctx), ...explicitEndTags(ctx, absorbed));
+  const vocabularyBoolean = vocabularyBooleans(ctx.vocabulary);
   for (const element of locatedElements(ctx)) {
-    findings.push(...attributes(ctx, element), ...tagCase(ctx, element));
+    findings.push(...attributes(ctx, element, vocabularyBoolean), ...tagCase(ctx, element));
     const void_ = voidForm(ctx, element);
     if (void_) findings.push(void_);
   }
@@ -79,7 +81,7 @@ function booleanForm(name: string, form: NonNullable<RuleContext['options']['boo
 }
 
 /** style/attr-quotes, style/boolean-attr, and attribute-name case. */
-function attributes(ctx: RuleContext, element: Element): RawFinding[] {
+function attributes(ctx: RuleContext, element: Element, vocabularyBoolean: (element: Element, name: string) => boolean): RawFinding[] {
   const out: RawFinding[] = [];
   const locs = element.sourceCodeLocation?.attrs ?? {};
   for (const attr of element.attrs) {
@@ -102,7 +104,7 @@ function attributes(ctx: RuleContext, element: Element): RawFinding[] {
     }
 
     const form = ctx.options.booleanValue;
-    if (isHtml(element) && isBooleanAttribute(element.tagName, attr.name)) {
+    if ((isHtml(element) && isBooleanAttribute(element.tagName, attr.name)) || (!attr.namespace && vocabularyBoolean(element, attr.name))) {
       const equivalent = attr.value === '' || attr.value === 'true' || attr.value.toLowerCase() === attr.name;
       const written = ctx.text.slice(raw.nameEndOffset, raw.endOffset);
       const wanted = booleanForm(attr.name, form ?? 'empty').slice(attr.name.length);

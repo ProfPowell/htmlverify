@@ -4,6 +4,8 @@ import { compile, Matcher, parseGrammar, tokenKey, type Nfa, type Token } from '
 import { attr, has, inCategory, kindOf, modelOf, nameOf, textInCategory, variantOf, type Env, type Forbid, type Variant } from '../spec/model.ts';
 import { isTimeValue } from '../spec/values.ts';
 import { closest, words } from '../text.ts';
+import { Vocabulary } from '../vocab/vocabulary.ts';
+import { flowOnly } from './component.ts';
 import type { RawFinding, RuleContext } from './types.ts';
 import { at, describe, spanOf } from './util.ts';
 
@@ -48,6 +50,11 @@ function nfaFor(variant: Variant, inherited: Inherited): Nfa {
 }
 
 const acceptsText = (t: Token) => t.kind === 'text' || (t.kind === 'category' && textInCategory(t.name));
+
+/** A vocabulary element that is flow content but not phrasing content. */
+function acceptsFlow(child: Element, flow: boolean) {
+  return (t: Token) => (t.kind === 'element' ? nameOf(child) === t.name : t.kind === 'category' && ((t.name === 'flow' && flow) || t.name === 'palpable'));
+}
 
 function acceptsElement(child: Element, ancestors: readonly Element[]) {
   return (t: Token) => (t.kind === 'element' ? nameOf(child) === t.name : t.kind === 'category' && inCategory(child, t.name, ancestors));
@@ -212,6 +219,11 @@ export function checkContentModel(ctx: RuleContext): ContentResult {
       return;
     }
     const accepts = acceptsElement(child, ancestors);
+    // HTML takes every custom element as phrasing content; the vocabulary may say otherwise.
+    const entry = kind === 'custom' ? ctx.vocabulary.get(child.tagName) : null;
+    if (entry && flowOnly(entry) && slot.matcher.canStep(accepts) && !slot.matcher.canStep(acceptsFlow(child, entry.element.flow))) {
+      report('component/content', child, `<${child.tagName}> isn’t phrasing content: ${Vocabulary.label(entry.source)} declares it flow content only, so it can’t be in ${describe(parent!)} here, where only phrasing content is allowed.`);
+    }
     if (slot.matcher.step(accepts)) {
       visit(child, env, { tokens: slot.matcher.expected(), from: slot.from }, prohibitions);
       return;

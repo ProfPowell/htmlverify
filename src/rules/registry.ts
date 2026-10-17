@@ -7,6 +7,7 @@ const ARIA_IN_HTML = 'https://www.w3.org/TR/html-aria/';
 const HOUSE = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#67-policy-house-rules';
 const BLOAT = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#68-bloat-structural-economy';
 const STYLE = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#62-style-authored-form-the-tree-is-the-same-either-way';
+const COMPONENT = 'https://github.com/ProfPowell/htmlverify/blob/main/spec.md#64-component-the-vanilla-breeze-contract';
 const PARSING = `${HTML}/parsing.html`;
 const SYNTAX = `${HTML}/syntax.html`;
 
@@ -46,6 +47,10 @@ export const RULES: readonly RuleMeta[] = [
   { id: 'content/invalid-id', authority: 'standard', summary: 'Empty ID, or one containing whitespace', ref: `${HTML}/dom.html#the-id-attribute` },
   { id: 'content/idref', authority: 'standard', summary: 'ID reference that doesn’t resolve, or names the wrong kind of element', ref: `${HTML}/dom.html#the-id-attribute` },
   { id: 'content/document', authority: 'standard', summary: 'More than one visible main, or more than one encoding declaration', ref: `${HTML}/grouping-content.html#the-main-element` },
+  { id: 'component/unknown-element', authority: 'vocabulary', summary: 'Custom element no vocabulary declares; ad-hoc elements are warnings', ref: COMPONENT },
+  { id: 'component/attribute', authority: 'vocabulary', summary: 'Attribute not in the element’s manifest, a bad value, or a missing required one', ref: COMPONENT },
+  { id: 'component/content', authority: 'vocabulary', summary: 'Children the manifest doesn’t permit, missing required structure, or flow-only elements in phrasing content', ref: COMPONENT },
+  { id: 'component/output-attribute', authority: 'vocabulary', summary: 'Authored attribute the component sets itself', ref: COMPONENT },
   { id: 'a11y/lang', authority: 'standard', summary: 'Page language missing, or a lang value that isn’t well-formed', ref: `${WCAG}#language-of-page` },
   { id: 'a11y/title', authority: 'standard', summary: 'Page title missing or empty', ref: `${WCAG}#page-titled` },
   { id: 'a11y/img-alt', authority: 'standard', summary: 'Image without a text alternative', ref: `${WCAG}#non-text-content` },

@@ -4,11 +4,19 @@
 import { isProfileName, PROFILES, type Profile, type ProfileName } from './profiles.ts';
 import { RULE_BY_ID } from './rules/registry.ts';
 import type { Options, RuleOptionValue, Severity } from './rules/types.ts';
+import type { VocabElement } from './vocab/types.ts';
+import { bundledVocabularies } from './vocab/vocabulary.ts';
 
 export const CONFIG_FILE = 'htmlverify.config.json';
 
 export interface Config {
   extends?: ProfileName;
+  /** Vocabulary snapshots, as name@version (spec §7.4). */
+  vocabularies?: string[];
+  /** The registry directory as written, relative to the config file; its elements.json is read in M1d, components in M2. */
+  registry?: string;
+  /** The registry's elements.json, parsed; the loader fills it in. */
+  elements?: Record<string, VocabElement>;
   options?: Partial<Options>;
   rules?: Record<string, Severity | 'off'>;
   ruleOptions?: Record<string, Record<string, RuleOptionValue>>;
@@ -18,17 +26,14 @@ export interface Config {
 export class ConfigError extends Error {}
 
 const SEVERITIES = new Set(['error', 'warning', 'info', 'off']);
-const OPTION_VALUES: Record<keyof Options, readonly (string | null)[]> = {
+const OPTION_VALUES: Record<Exclude<keyof Options, 'adHocPrefix'>, readonly (string | null)[]> = {
   voidElements: ['xhtml', 'tight', 'html'],
   booleanValue: ['true', 'empty', 'name', null],
   linkTextLanguage: ['en'],
 };
 /** Keys the spec defines that later milestones implement. */
 const LATER: Record<string, string> = {
-  vocabularies: 'M1d',
-  registry: 'M2',
   nu: 'M1e',
-  'options.adHocPrefix': 'M1d',
 };
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -53,7 +58,12 @@ export function parseConfig(raw: unknown, source: string): Config {
         const options: Partial<Options> = {};
         for (const [name, v] of Object.entries(value)) {
           if (LATER[`options.${name}`]) fail(`"options.${name}" isn’t supported yet (${LATER[`options.${name}`]})`);
-          const allowed = OPTION_VALUES[name as keyof Options];
+          if (name === 'adHocPrefix') {
+            if (v !== null && !(typeof v === 'string' && /^[a-z][a-z0-9]*-$/.test(v))) fail('"options.adHocPrefix" must be a prefix such as "x-", or null');
+            options.adHocPrefix = v as string | null;
+            continue;
+          }
+          const allowed = OPTION_VALUES[name as keyof typeof OPTION_VALUES];
           if (!allowed) fail(`unknown option "${name}"`);
           if (!allowed!.includes(v as string | null)) fail(`"options.${name}" must be ${allowed!.map((a) => JSON.stringify(a)).join(', ')}`);
           (options as Record<string, unknown>)[name] = v;
@@ -91,6 +101,22 @@ export function parseConfig(raw: unknown, source: string): Config {
         config.ruleOptions = ruleOptions;
         break;
       }
+      case 'vocabularies': {
+        if (!Array.isArray(value) || !value.every((v) => typeof v === 'string')) return fail('"vocabularies" must be an array of snapshot names such as "vanilla-breeze@0.3.1"');
+        const available = bundledVocabularies();
+        for (const id of value as string[]) {
+          if (!available.includes(id)) fail(`no vocabulary snapshot "${id}"; available: ${available.map((a) => `"${a}"`).join(', ') || 'none'}`);
+        }
+        const names = (value as string[]).map((id) => id.split('@')[0]);
+        const twice = names.find((n, i) => names.indexOf(n) !== i);
+        if (twice) fail(`"vocabularies" lists ${twice} twice; pick one version`);
+        config.vocabularies = value as string[];
+        break;
+      }
+      case 'registry':
+        if (typeof value !== 'string' || value.trim() === '') fail('"registry" must be a directory path');
+        config.registry = value as string;
+        break;
       case 'maxWarnings':
         if (value !== null && !(Number.isInteger(value) && (value as number) >= 0)) fail('"maxWarnings" must be a non-negative integer or null');
         config.maxWarnings = value as number | null;
@@ -112,5 +138,7 @@ export function resolveProfile(name: ProfileName | undefined, config: Config | n
     options: { ...base.options, ...config.options },
     maxWarnings: config.maxWarnings === undefined ? base.maxWarnings : config.maxWarnings,
     ruleOptions: { ...base.ruleOptions, ...config.ruleOptions },
+    vocabularies: config.vocabularies ?? base.vocabularies,
+    elements: config.elements ?? base.elements,
   };
 }

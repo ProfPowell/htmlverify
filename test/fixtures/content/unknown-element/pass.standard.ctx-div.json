@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "rule": "component/unknown-element",
+    "severity": "warning",
+    "at": "1:1-1:12",
+    "message": "<my-widget> isn’t declared in Vanilla Breeze 0.3.1. Declare project elements in the registry’s elements.json, or prefix a throwaway one with x-."
+  },
+  {
+    "rule": "component/unknown-element",
+    "severity": "warning",
+    "at": "2:1-2:9",
+    "message": "<x-card> is ad hoc: Vanilla Breeze 0.3.1 doesn’t declare it. Declare it in the registry’s elements.json, or use a Vanilla Breeze element."
+  }
+]

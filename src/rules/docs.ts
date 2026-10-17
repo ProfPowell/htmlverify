@@ -121,6 +121,30 @@ export const RULE_DOCS: Readonly<Record<string, RuleDoc>> = {
     passes: DOC('<p>Hello</p>'),
     context: null,
   },
+  'component/unknown-element': {
+    why: 'Every custom element should come from the vocabulary, so its attributes, children, and behavior are known. A typo such as <layout-stak> renders as an inert, unstyled element.',
+    fix: 'Use the declared name, declare project elements in the registry’s elements.json, or give a throwaway element the ad-hoc prefix (x-), which is only a warning.',
+    fails: '<layout-stak><p>Hello</p></layout-stak>',
+    passes: '<layout-stack><p>Hello</p></layout-stack>',
+  },
+  'component/attribute': {
+    why: 'A component reads only the attributes and values its manifest declares; anything else is silently ignored. A presence boolean written ="false" turns the feature on.',
+    fix: 'Use a declared attribute and value. To turn a boolean off, remove it.',
+    fails: '<accordion-wc single="false"><details><summary>One</summary><p>Text</p></details></accordion-wc>',
+    passes: '<accordion-wc single="true"><details><summary>One</summary><p>Text</p></details></accordion-wc>',
+  },
+  'component/content': {
+    why: 'A component enhances the markup it expects: <accordion-wc> works on <details> children, and a flow-only element such as <layout-stack> doesn’t belong in phrasing content like <p>.',
+    fix: 'Give the component the children its manifest permits and the structure it needs.',
+    fails: '<accordion-wc><p>Not a panel</p></accordion-wc>',
+    passes: '<accordion-wc><details><summary>One</summary><p>Text</p></details></accordion-wc>',
+  },
+  'component/output-attribute': {
+    why: 'The component sets these attributes to reflect its state; written in the markup, they claim a state it isn’t in.',
+    fix: 'Remove the attribute, and change the state through the component’s API.',
+    fails: '<drop-down open="true"><button type="button" data-trigger="true">Menu</button><menu><li><a href="/a">A</a></li></menu></drop-down>',
+    passes: '<drop-down><button type="button" data-trigger="true">Menu</button><menu><li><a href="/a">A</a></li></menu></drop-down>',
+  },
   'style/escape': {
     why: 'HTML reads a bare & as text only when the characters after it don’t spell a reference: "&copy" is ©, but "&cop" is literal. Escaped text can’t be misread, by browsers or by people.',
     fix: 'Apply the fix: & becomes &amp;, > becomes &gt;, and < in <title> or <textarea> becomes &lt;.',

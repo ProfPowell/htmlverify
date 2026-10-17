@@ -1,4 +1,6 @@
 import type { Options, RuleOptionValue, Severity } from './rules/types.ts';
+import type { VocabElement } from './vocab/types.ts';
+import { DEFAULT_VOCABULARIES } from './vocab/vocabulary.ts';
 
 export type ProfileName = 'strict' | 'standard';
 
@@ -12,6 +14,9 @@ export interface Profile {
   ruleOptions: Readonly<Record<string, Readonly<Record<string, RuleOptionValue>>>>;
   /** Checks the profile includes that this version doesn't implement yet. */
   untested: readonly { check: string; reason: string }[];
+  /** Vocabulary snapshots (name@version) and the project's elements.json. */
+  vocabularies: readonly string[];
+  elements: Readonly<Record<string, VocabElement>> | null;
 }
 
 const SYNTAX = {
@@ -74,8 +79,12 @@ const A11Y = {
   'a11y/media': 'warning',
 } as const;
 
-// The semantic, policy, and bloat tables of spec §6.6–§6.8: [strict, standard]. Review-only rules are on at info.
+// The component, semantic, policy, and bloat tables of spec §6.4 and §6.6–§6.8: [strict, standard]. Review-only rules are on at info.
 const LATER_FAMILIES: Record<string, readonly [Severity | 'off', Severity | 'off']> = {
+  'component/unknown-element': ['error', 'warning'],
+  'component/attribute': ['error', 'error'],
+  'component/content': ['error', 'error'],
+  'component/output-attribute': ['warning', 'warning'],
   'semantic/generic-control': ['error', 'warning'],
   'semantic/link-href': ['error', 'warning'],
   'semantic/native-alternative': ['warning', 'info'],
@@ -105,28 +114,26 @@ const LATER_FAMILIES: Record<string, readonly [Severity | 'off', Severity | 'off
 };
 const later = (column: 0 | 1) => Object.fromEntries(Object.entries(LATER_FAMILIES).map(([id, s]) => [id, s[column]]));
 
-const M1 = 'not implemented until M1';
-
 export const PROFILES: Readonly<Record<ProfileName, Profile>> = {
   strict: {
     name: 'strict',
     severities: { ...SYNTAX, ...STYLE, ...CONTENT, ...A11Y, 'a11y/tabindex': 'error', ...later(0) },
-    options: { voidElements: 'xhtml', booleanValue: 'true', linkTextLanguage: 'en' },
+    options: { voidElements: 'xhtml', booleanValue: 'true', linkTextLanguage: 'en', adHocPrefix: 'x-' },
     maxWarnings: null,
     ruleOptions: {},
-    untested: [
-      { check: 'component/*', reason: M1 },
-    ],
+    untested: [],
+    vocabularies: DEFAULT_VOCABULARIES,
+    elements: null,
   },
   standard: {
     name: 'standard',
     severities: { ...SYNTAX, ...Object.fromEntries(Object.keys(STYLE).map((id) => [id, 'off'])), ...CONTENT, ...A11Y, 'a11y/tabindex': 'warning', ...later(1) },
-    options: { voidElements: 'xhtml', booleanValue: null, linkTextLanguage: 'en' },
+    options: { voidElements: 'xhtml', booleanValue: null, linkTextLanguage: 'en', adHocPrefix: 'x-' },
     maxWarnings: null,
     ruleOptions: {},
-    untested: [
-      { check: 'component/*', reason: M1 },
-    ],
+    untested: [],
+    vocabularies: DEFAULT_VOCABULARIES,
+    elements: null,
   },
 };
 
