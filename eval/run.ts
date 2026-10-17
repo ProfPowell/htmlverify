@@ -12,7 +12,7 @@ import { chmod, cp, mkdir, readdir, readFile, writeFile } from 'node:fs/promises
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { check } from '../src/index.ts';
+import { check, parseConfig } from '../src/index.ts';
 import { DEFAULT_VOCABULARIES } from '../src/vocab/vocabulary.ts';
 import { median, parsePage, scoreChecklist, variance, type Brief } from './lib.ts';
 
@@ -105,6 +105,9 @@ interface Score {
   model: string | null;
   page: boolean;
   status: { first: string | null; final: string | null };
+  /** The final page under the standard profile, with the house boolean form allowed: conformance without the house style. */
+  standard: { status: string | null; errors: number };
+  /** Failing hook checks of page.html; a repair made as several small edits counts each one. */
   rounds: number;
   capped: boolean;
   errors: Record<string, number>;
@@ -127,6 +130,9 @@ async function score(dir: string, brief: Brief, condition: Condition, run: numbe
       .filter((e) => e.file.endsWith('page.html'))
     : [];
   const report = html === null ? null : (await check({ path: 'page.html', source: html }, { profile: 'strict' })).files[0]!;
+  // The house boolean form, required="true", isn't conforming HTML; with booleanValue "true" it's an info note, not an error.
+  const conformance = parseConfig({ extends: 'standard', options: { booleanValue: 'true' } }, 'eval');
+  const standard = html === null ? null : (await check({ path: 'page.html', source: html }, { config: conformance })).files[0]!;
   const errors: Record<string, number> = {};
   for (const f of report?.findings ?? []) if (f.severity === 'error') errors[f.rule.split('/')[0]!] = (errors[f.rule.split('/')[0]!] ?? 0) + 1;
   const page = html === null ? null : parsePage(html);
@@ -135,6 +141,7 @@ async function score(dir: string, brief: Brief, condition: Condition, run: numbe
   const out: Score = {
     brief: brief.id, condition, run, driver: meta.driver, model: meta.model, page: html !== null,
     status: { first: hook[0]?.status ?? report?.status ?? null, final: report?.status ?? null },
+    standard: { status: standard?.status ?? null, errors: standard?.summary.errors ?? 0 },
     rounds: hook.filter((e) => e.status === 'fail').length,
     capped: hook.some((e) => e.capped),
     errors, warnings: report?.summary.warnings ?? 0,
@@ -162,6 +169,9 @@ function summarize(scores: Score[]) {
       runs: runs.length,
       passFirst: runs.filter((r) => r.status.first === 'pass').length,
       passFinal: runs.filter((r) => r.status.final === 'pass').length,
+      passStandard: runs.filter((r) => r.standard.status === 'pass').length,
+      errorsStandard: mean(runs.map((r) => r.standard.errors)),
+      capped: runs.filter((r) => r.capped).length,
       medianRounds: median(runs.map((r) => r.rounds)),
       errorsPerPage: Object.fromEntries(families.map((f) => [f, mean(runs.map((r) => r.errors[f] ?? 0))])),
       errorsTotal: mean(runs.map((r) => Object.values(r.errors).reduce((a, b) => a + b, 0))),
@@ -189,20 +199,25 @@ function markdown(rows: ReturnType<typeof summarize>, scores: Score[], title: st
     '| Runs | ' + rows.map((r) => r.runs).join(' | ') + ' |',
     '| Pass on the first attempt | ' + rows.map((r) => pct(r.passFirst, r.runs)).join(' | ') + ' |',
     '| Pass at the end | ' + rows.map((r) => pct(r.passFinal, r.runs)).join(' | ') + ' |',
-    '| Median repair rounds | ' + rows.map((r) => f(r.medianRounds)).join(' | ') + ' |',
+    '| Pass at the end, standard profile¹ | ' + rows.map((r) => pct(r.passStandard, r.runs)).join(' | ') + ' |',
+    '| Median failing checks | ' + rows.map((r) => f(r.medianRounds)).join(' | ') + ' |',
+    '| Runs that hit the cap of 3 | ' + rows.map((r) => r.capped).join(' | ') + ' |',
     '| Errors per page | ' + rows.map((r) => f(r.errorsTotal)).join(' | ') + ' |',
     ...families.map((fam) => `| … ${fam} | ` + rows.map((r) => f(r.errorsPerPage[fam] ?? 0)).join(' | ') + ' |'),
+    '| Errors per page, standard profile¹ | ' + rows.map((r) => f(r.errorsStandard)).join(' | ') + ' |',
     '| Checklist met | ' + rows.map((r) => (r.checklist === null ? '–' : `${Math.round(r.checklist * 100)}%`)).join(' | ') + ' |',
     '| Structural variance | ' + rows.map((r) => f(r.variance, 2)).join(' | ') + ' |',
     '| Output tokens | ' + rows.map((r) => f(r.outputTokens, 0)).join(' | ') + ' |',
     '| Cost (USD) | ' + rows.map((r) => (r.costUsd === null ? '–' : `$${r.costUsd.toFixed(2)}`)).join(' | ') + ' |',
     '| Wall time (s) | ' + rows.map((r) => f(r.wallSeconds, 0)).join(' | ') + ' |',
     '',
+    '¹ Conformance without the house style: the standard profile, with the house boolean form (`required="true"`) noted rather than counted, since HTML itself allows only `""` or the attribute name.',
+    '',
     'Per run:',
     '',
-    '| Brief | Condition | Run | First | Final | Rounds | Errors | Checklist |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- |',
-    ...scores.map((s) => `| ${s.brief} | ${s.condition} | ${s.run} | ${s.status.first ?? '–'} | ${s.status.final ?? 'no page'}${s.capped ? ' (capped)' : ''} | ${s.rounds} | ${Object.entries(s.errors).map(([k, v]) => `${k} ${v}`).join(', ') || '0'} | ${s.checklist.met}/${s.checklist.of} |`),
+    '| Brief | Condition | Run | First | Final | Standard | Failing checks | Errors | Checklist |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    ...scores.map((s) => `| ${s.brief} | ${s.condition} | ${s.run} | ${s.status.first ?? '–'} | ${s.status.final ?? 'no page'}${s.capped ? ' (capped)' : ''} | ${s.standard.status ?? '–'} | ${s.rounds} | ${Object.entries(s.errors).map(([k, v]) => `${k} ${v}`).join(', ') || '0'} | ${s.checklist.met}/${s.checklist.of} |`),
     '',
   ];
   return lines.join('\n');

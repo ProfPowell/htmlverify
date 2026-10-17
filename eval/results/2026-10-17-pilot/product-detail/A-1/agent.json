@@ -1,0 +1,219 @@
+{
+  "duration_api_ms": 20210,
+  "stop_reason": "end_turn",
+  "session_id": "1443f7e0-4a37-4d4e-a4b4-aa2f4d7f11ea",
+  "total_cost_usd": 0.08633150000000002,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 8976,
+    "cache_read_input_tokens": 233597,
+    "output_tokens": 2690,
+    "output_tokens_details": {
+      "thinking_tokens": 171
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 8976,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 6,
+        "cache_read_input_tokens": 35298,
+        "cache_creation_input_tokens": 1772,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1772
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 2690,
+      "cacheReadInputTokens": 233597,
+      "cacheCreationInputTokens": 8976,
+      "webSearchRequests": 0,
+      "costUSD": 0.08619170000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 171,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01Y5dGVzNPxkUEaDNQ1tgYfH",
+      "tool_input": {
+        "skill": "xhtml-author"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_014A3JJyQbqyak9J1Q6Deyx4",
+      "tool_input": {
+        "skill": "patterns"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01S4HBX1bXse8NyHAkCnNU51",
+      "tool_input": {
+        "skill": "custom-elements"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_017be29opHK6zjb5QSL2L9Ss",
+      "tool_input": {
+        "command": "ls -a . .claude/skills ~/.claude/skills 2>&1 | head -30; ls /vb; grep -o 'form-field\\|data-layout=\"[a-z-]*\"\\|<[a-z]*-[a-z-]*' -rh /vb/vanilla-breeze.css | sort | uniq -c | sort -rn | head -40"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01SptVPVcnERRKUzAChkcvfG",
+      "tool_input": {
+        "command": "ls -a .claude/skills ~/.claude/skills"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01VZAVh4yxCKnyyjDY7PjSLs",
+      "tool_input": {
+        "command": "grep -o 'data-layout=[^]]*\\|[a-z]*-[a-z-]*\\[' /vb/vanilla-breeze.css | sort -u | head -60"
+      }
+    },
+    {
+      "tool_name": "Skill",
+      "tool_use_id": "toolu_01P2HabKSbrQENjoAFw5eJbu",
+      "tool_input": {
+        "skill": "xhtml-author"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_0169iGiGo3DDhqE1BE886HcA",
+      "tool_input": {
+        "command": "grep -o 'data-layout=\"[a-z-]*\"' /vb/vanilla-breeze.css | sort -u | head -40"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01FHxQX7iLj8JgE7bWExB9Ti",
+      "tool_input": {
+        "command": "grep -o 'form-field\\|breadcrumb-trail\\|star-rating\\|product-card\\|[a-z]*-[a-z]*\\b' /vb/vanilla-breeze.js | sort | uniq -c | sort -rn | head -50"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 13,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE.",
+  "ttft_ms": 1543,
+  "type": "result",
+  "duration_ms": 23095,
+  "uuid": "141512ca-38ad-484e-92f5-db780494f253",
+  "ttft_stream_ms": 1166,
+  "time_to_request_ms": 264,
+  "time_to_request_phases_ms": {
+    "other": 27,
+    "system_prompt": 71,
+    "resume_other": 0,
+    "process_user_input": 11,
+    "input_attachments": 25,
+    "input_hooks": 4,
+    "tool_pool_refresh": 3,
+    "init_message": 14,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 52,
+    "autocompact": 2,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 29,
+    "message_normalization": 2,
+    "client_creation": 12,
+    "request_build": 9
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 98,
+  "time_to_request_cpu_ms": 270,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 239,
+  "process_anon_mib_turn_start": 122,
+  "process_rss_mib_result": 240,
+  "process_anon_mib_result": 120,
+  "process_peak_rss_mib": 249,
+  "process_cpu_ms_turn": 1838,
+  "process_wall_ms_turn": 23094,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 20,
+    "cpu_ms": 22,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1166,
+  "time_to_request_from_spawn_ms": 11154660,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792267856600.953,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

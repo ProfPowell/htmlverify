@@ -877,6 +877,7 @@ Results, raw outputs, and the failure analysis go in `eval/results/`.
   - The checklist is selectors over the parsed page.
   - Structural variance is the mean pairwise edit distance between element skeletons, normalized by the longer one.
 - **Rubric**: scoring by human raters or a calibrated agent judge isn't in the harness yet.
+- **First results**: `eval/results/2026-10-17-pilot/`, 5 briefs × 2 runs. With the loop, `strict` passes on all of them at the end, against none without it. Both conditions conform to HTML. The loop roughly halves structural variance and costs about 1.7 times as much.
 
 ## 14. Milestones
 

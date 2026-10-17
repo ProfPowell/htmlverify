@@ -1,0 +1,131 @@
+{
+  "brief": "contact",
+  "condition": "A",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "page": true,
+  "status": {
+    "first": "fail",
+    "final": "fail"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "errors": {
+    "style": 4,
+    "policy": 7
+  },
+  "warnings": 0,
+  "checklist": {
+    "met": 7,
+    "of": 7,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "textarea",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "labels",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "required",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "address",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "main",
+    "div",
+    "h1",
+    "section",
+    "div",
+    "h2",
+    "address",
+    "p",
+    "p",
+    "a",
+    "p",
+    "a",
+    "section",
+    "div",
+    "h2",
+    "ul",
+    "li",
+    "li",
+    "section",
+    "div",
+    "h2",
+    "form",
+    "div",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "option",
+    "option",
+    "form-field",
+    "label",
+    "textarea",
+    "label",
+    "input",
+    "div",
+    "button",
+    "p",
+    "section",
+    "div",
+    "h2",
+    "p"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 1854,
+    "cacheRead": 196653,
+    "cacheWrite": 7576
+  },
+  "costUsd": 0.0686731,
+  "wallMs": 17051,
+  "turns": 10
+}
