@@ -3,7 +3,14 @@
     "rule": "style/explicit-end-tag",
     "severity": "error",
     "at": "10:1-10:4",
-    "message": "Close <p> explicitly: add </p> before <p> at 11:1."
+    "message": "Close <p> explicitly: add </p> before <p> at 11:1.",
+    "fix": [
+      {
+        "offset": 198,
+        "endOffset": 198,
+        "text": "</p>"
+      }
+    ]
   },
   {
     "rule": "a11y/lang",

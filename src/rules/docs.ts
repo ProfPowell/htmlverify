@@ -9,6 +9,8 @@ export interface RuleDoc {
   passes: string;
   /** Context element for the examples; null checks them as documents. Defaults to div. */
   context?: string | null;
+  /** The examples need an external checker, so the docs test doesn't run them. */
+  external?: true;
 }
 
 const DOC = (body: string, head = '') =>
@@ -144,6 +146,14 @@ export const RULE_DOCS: Readonly<Record<string, RuleDoc>> = {
     fix: 'Remove the attribute, and change the state through the component’s API.',
     fails: '<drop-down open="true"><button type="button" data-trigger="true">Menu</button><menu><li><a href="/a">A</a></li></menu></drop-down>',
     passes: '<drop-down><button type="button" data-trigger="true">Menu</button><menu><li><a href="/a">A</a></li></menu></drop-down>',
+  },
+  'conformance/nu': {
+    why: 'The Nu Html Checker is the reference conformance checker. Its messages that no local rule explains point at gaps in htmlverify’s rules, or in its reading of the spec.',
+    fix: 'Follow Nu’s message; if a local rule should have caught it, report the gap.',
+    fails: DOC('<p>Text</p>').replace('<html lang="en">', '<html lang="en" manifest="app.appcache">'),
+    passes: DOC('<p>Text</p>'),
+    context: null,
+    external: true,
   },
   'style/escape': {
     why: 'HTML reads a bare & as text only when the characters after it don’t spell a reference: "&copy" is ©, but "&cop" is literal. Escaped text can’t be misread, by browsers or by people.',

@@ -148,6 +148,34 @@ export function checkIds(ctx: RuleContext): RawFinding[] {
       }
     }
   }
+  out.push(...orphanProperties(ctx, index, attrSpan));
+  return out;
+}
+
+/**
+ * Microdata: itemprop names a property of an item, so the element must sit
+ * inside an itemscope, or be pulled in by an itemref. Fragments and template
+ * contents are skipped: their item may be in the page around them.
+ */
+function orphanProperties(ctx: RuleContext, index: IdIndex, attrSpan: (e: Element, name: string) => { offset: number; endOffset: number }): RawFinding[] {
+  if (ctx.parsed.kind !== 'document') return [];
+  const referenced = new Set<string>();
+  const props: Element[] = [];
+  for (const element of locatedElements(ctx)) {
+    if (index.scopeOf.get(element)?.kind !== 'document') continue;
+    if (has(element, 'itemscope')) for (const id of tokens(attr(element, 'itemref'))) referenced.add(id);
+    if (has(element, 'itemprop')) props.push(element);
+  }
+  const out: RawFinding[] = [];
+  for (const element of props) {
+    let owned = referenced.has(attr(element, 'id') ?? '');
+    for (let a = ctx.signals.parentOf.get(element); a && !owned && isElement(a); a = ctx.signals.parentOf.get(a)) {
+      owned = has(a, 'itemscope') || referenced.has(attr(a, 'id') ?? '');
+    }
+    if (!owned) {
+      out.push({ rule: 'content/unknown-attribute', ...attrSpan(element, 'itemprop'), message: 'itemprop names a property of an item, but no element with itemscope contains this one; add itemscope to the item, or reference this element from its itemref.' });
+    }
+  }
   return out;
 }
 

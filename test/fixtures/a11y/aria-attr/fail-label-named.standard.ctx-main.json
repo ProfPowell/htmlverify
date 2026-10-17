@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "a11y/aria-attr",
+    "severity": "error",
+    "at": "1:19-1:41",
+    "message": "aria-label isn’t allowed on <label>, which can’t be named; use a different element, or put the text in the content."
+  }
+]

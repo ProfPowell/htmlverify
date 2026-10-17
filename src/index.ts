@@ -1,4 +1,6 @@
 export { check, LIMITS } from './report/report.ts';
+export { fix, type FixResult } from './fix/fix.ts';
+export { unifiedDiff } from './fix/diff.ts';
 export type { CheckInput, CheckOptions, FileReport, Finding, Report, Status } from './report/report.ts';
 export { canonicalJson } from './report/canonical.ts';
 export { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from './config.ts';

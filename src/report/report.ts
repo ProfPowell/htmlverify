@@ -20,6 +20,7 @@ import { checkSemantic } from '../rules/semantic.ts';
 import type { Authority, Edit, RawFinding, RawReview, RuleContext, Severity } from '../rules/types.ts';
 import { VERSION } from '../version.ts';
 import { loadSnapshot, Vocabulary } from '../vocab/vocabulary.ts';
+import { runNu, type NuMessage, type NuOptions } from '../nu/nu.ts';
 import { canonicalJson } from './canonical.ts';
 
 export interface CheckInput {
@@ -35,6 +36,8 @@ export interface CheckOptions {
   profile?: ProfileName;
   /** A validated htmlverify.config.json (see parseConfig). */
   config?: Config | null;
+  /** Cross-check documents with the Nu Html Checker (spec §6.9). */
+  nu?: NuOptions | null;
 }
 
 export interface Finding {
@@ -54,10 +57,14 @@ export interface Finding {
   origin: null;
   /** Rules of later families that reported the same defect here (spec §5.1). */
   alsoReportedBy?: string[];
+  /** Other checkers' messages about this spot, such as Nu's (spec §6.9). */
+  related?: { source: string; message: string; line: number; column: number }[];
 }
 
 /** A judgment left to a person; never counted as a pass or a failure (spec §5.2). */
 export interface Review {
+  /** Other checkers' messages about this spot, such as Nu's (spec §6.9). */
+  related?: Finding['related'];
   rule: string;
   line: number;
   column: number;
@@ -83,7 +90,8 @@ export interface FileReport {
 }
 
 export interface Report {
-  tool: { name: 'htmlverify'; version: string; parser: string };
+  /** `nu` is the Nu Html Checker's version when the cross-check ran. */
+  tool: { name: 'htmlverify'; version: string; parser: string; nu?: string };
   profile: { name: ProfileName; hash: string };
   status: Status;
   files: FileReport[];
@@ -93,7 +101,7 @@ export const LIMITS = { bytes: 5 * 1024 * 1024, elements: 100_000, depth: 512 } 
 
 const DIMENSIONS = [
   { id: 'syntax-style', weight: 20, families: ['syntax', 'style'] },
-  { id: 'content-component', weight: 25, families: ['content', 'component'] },
+  { id: 'content-component', weight: 25, families: ['content', 'component', 'conformance'] },
   { id: 'a11y', weight: 25, families: ['a11y'] },
   { id: 'semantic-policy', weight: 20, families: ['semantic', 'policy'] },
   { id: 'bloat', weight: 10, families: ['bloat'] },
@@ -104,20 +112,37 @@ const PENALTY: Record<Severity, number> = { error: 10, warning: 3, info: 0 };
 export async function check(inputs: CheckInput | CheckInput[], options: CheckOptions = {}): Promise<Report> {
   const profile = resolveProfile(options.profile, options.config ?? null);
   const vocabulary = new Vocabulary(profile.vocabularies, profile.elements, profile.options.adHocPrefix);
+  const list = Array.isArray(inputs) ? inputs : [inputs];
+  // One Nu run covers every document; fragments aren't Nu's to check.
+  const documents = list.map((input, i) => ({ input, i })).filter(({ input }) => !input.context);
+  const nu = options.nu
+    ? await runNu(documents.map(({ input }) => (typeof input.source === 'string' ? new TextEncoder().encode(input.source) : input.source)), options.nu)
+    : null;
+  const nuFor = new Map(documents.map(({ i }, n) => [i, nu?.messages[n] ?? []]));
   const files: FileReport[] = [];
-  for (const input of Array.isArray(inputs) ? inputs : [inputs]) files.push(await checkFile(input, profile, vocabulary));
+  for (const [i, input] of list.entries()) {
+    const cross = nu ? { version: nu.version, messages: nuFor.get(i) ?? null, unavailable: nu.unavailable } : null;
+    files.push(await checkFile(input, profile, vocabulary, cross));
+  }
   const status: Status = files.some((f) => f.status === 'incomplete') ? 'incomplete' : files.some((f) => f.status === 'fail') ? 'fail' : 'pass';
   // A snapshot regenerated under the same version still changes the hash.
   const snapshots = profile.vocabularies.map((id) => loadSnapshot(id).source.sha256);
   return {
-    tool: { name: 'htmlverify', version: VERSION, parser: PARSER },
+    tool: { name: 'htmlverify', version: VERSION, parser: PARSER, ...(nu?.version ? { nu: nu.version } : {}) },
     profile: { name: profile.name, hash: await sha256(new TextEncoder().encode(canonicalJson({ ...profile, snapshots, version: VERSION }))) },
     status,
     files,
   };
 }
 
-async function checkFile(input: CheckInput, profile: Profile, vocabulary: Vocabulary): Promise<FileReport> {
+/** Nu's messages for one input: null for a fragment; `unavailable` when Nu couldn't run. */
+interface NuCross {
+  version: string | null;
+  messages: NuMessage[] | null;
+  unavailable: string | null;
+}
+
+async function checkFile(input: CheckInput, profile: Profile, vocabulary: Vocabulary, nu: NuCross | null): Promise<FileReport> {
   const bytes = typeof input.source === 'string' ? new TextEncoder().encode(input.source) : input.source;
   const kind = input.context ? 'fragment' : 'document';
   const base = { path: input.path, kind, sha256: await sha256(bytes) } as const;
@@ -195,12 +220,93 @@ async function checkFile(input: CheckInput, profile: Profile, vocabulary: Vocabu
   const enabled = raw.filter((r) => (profile.severities[r.rule] ?? 'off') !== 'off');
   const findings = dedupe(enabled).map(({ raw: r, also }) => toFinding(r, input.path, lines, profile, also));
   const reviews = [...a11y.reviews, ...semantic.reviews].filter((r) => (profile.severities[r.rule] ?? 'off') !== 'off').map((r) => toReview(r, lines));
+  if (nu?.messages) findings.push(...crossCheck(findings, reviews, nu.messages, nu.version, input.path, lines, profile));
   const untested = [...profile.untested, ...content.untested];
   if (!vocabulary.configured) untested.push({ check: 'component/*', reason: 'no vocabulary is configured' });
+  if (nu && nu.unavailable) untested.push({ check: 'conformance/nu', reason: nu.unavailable });
+  else if (nu && !nu.messages) untested.push({ check: 'conformance/nu', reason: 'Nu checks only documents' });
   if (kind === 'fragment') {
     untested.push({ check: 'syntax/doctype, syntax/encoding (charset declaration), a11y/lang, a11y/title, first-heading check', reason: 'fragments have no document' });
   }
   return finish(base, findings, reviews, profile, untested, bloat.metrics);
+}
+
+/** Families whose findings Nu's messages can corroborate. */
+const CONFORMANCE = new Set(['syntax', 'content', 'component', 'a11y']);
+
+/**
+ * Nu's messages (spec §6.9): one on the same line as a local conformance
+ * finding becomes that finding's related evidence; the rest are
+ * conformance/nu findings, verbatim, with Nu's severity.
+ */
+export function crossCheck(findings: Finding[], reviews: Review[], messages: NuMessage[], version: string | null, path: string, lines: LineIndex, profile: Profile): Finding[] {
+  const configured = profile.severities['conformance/nu'] ?? 'off';
+  const source = version ? `nu@${version.split(' ')[0]}` : 'nu';
+  const out: Finding[] = [];
+  for (const m of messages) {
+    if (disagreement(m, profile)) continue;
+    // A document-level message matches the local finding wherever each checker puts it; otherwise, the
+    // finding on a shared line nearest Nu's column, preferring conformance families.
+    const documentLevel = DOCUMENT_LEVEL.find(([pattern]) => pattern.test(m.message))?.[1];
+    const local = documentLevel
+      ? findings.find((f) => documentLevel.includes(f.rule))
+      : findings
+        .filter((f) => f.line <= m.endLine && m.line <= f.endLine)
+        .sort((a, b) => distance(a, m) - distance(b, m) || Number(!CONFORMANCE.has(a.rule.split('/')[0]!)) - Number(!CONFORMANCE.has(b.rule.split('/')[0]!)))[0];
+    // A judgment left to a person, such as an article without a heading, covers Nu's warning about it.
+    const asked = local ? null : reviews.find((r) => m.line <= r.line && r.line <= m.endLine);
+    const target = local ?? asked;
+    if (target) {
+      (target.related ??= []).push({ source, message: m.message, line: m.line, column: m.column });
+      continue;
+    }
+    if (configured === 'off') continue;
+    const offset = lines.offset(m.line, m.column);
+    out.push({
+      rule: 'conformance/nu',
+      severity: configured === 'error' ? m.severity : configured,
+      authority: 'standard',
+      message: m.message,
+      path,
+      line: m.line,
+      column: m.column,
+      endLine: m.line,
+      endColumn: m.column,
+      offset,
+      endOffset: offset,
+      evidence: { checker: source },
+      fix: null,
+      origin: null,
+    });
+  }
+  return out;
+}
+
+/** Columns between a finding's span and a Nu message on one of its lines; 0 inside the span. */
+function distance(f: Finding, m: NuMessage): number {
+  if (m.line !== f.line && m.line !== f.endLine) return 0;
+  const from = f.line === m.line ? f.column : 1;
+  const to = f.endLine === m.line ? f.endColumn : Infinity;
+  return m.column < from ? from - m.column : m.column > to ? m.column - to : 0;
+}
+
+/** Nu's messages about the whole document, and the local rules that report the same thing at the top. */
+const DOCUMENT_LEVEL: readonly [RegExp, readonly string[]][] = [
+  [/without seeing a doctype first|Non-space characters found without seeing a doctype/, ['syntax/doctype']],
+  [/“lang” attribute to the “html” start tag/, ['a11y/lang']],
+  [/required instance of child element “title”/, ['content/order', 'a11y/title']],
+];
+
+/**
+ * Nu messages htmlverify disagrees with by design: the trailing slash the
+ * house void form asks for, CSS (which htmlverify leaves to CSS tools, and
+ * where Nu's checker lags current CSS), and Nu's claim that attributes are
+ * "never allowed" on autonomous custom elements, which HTML allows.
+ */
+function disagreement(m: NuMessage, profile: Profile): boolean {
+  if (/^Trailing slash on void elements/.test(m.message)) return profile.options.voidElements !== 'html';
+  if (/^CSS: |^Style rule “.*” not allowed outside/.test(m.message)) return true;
+  return m.severity === 'info' && /^The “[^”]+” attribute is never allowed on the “[a-z][^”]*-[^”]*” element\.$/.test(m.message);
 }
 
 /** Family order for deduplication: the earliest family keeps the finding (spec §5.1). */

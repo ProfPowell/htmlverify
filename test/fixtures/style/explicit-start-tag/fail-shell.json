@@ -9,19 +9,55 @@
     "rule": "style/explicit-start-tag",
     "severity": "error",
     "at": "2:1-2:1",
-    "message": "The <head> start tag is missing; the parser implied it at 2:1. Write <head> explicitly."
+    "message": "The <head> start tag is missing; the parser implied it at 2:1. Write <head> explicitly.",
+    "fix": [
+      {
+        "offset": 16,
+        "endOffset": 16,
+        "text": "<html><head>"
+      },
+      {
+        "offset": 135,
+        "endOffset": 135,
+        "text": "</head><body>"
+      }
+    ]
   },
   {
     "rule": "style/explicit-start-tag",
     "severity": "error",
     "at": "2:1-2:1",
-    "message": "The <html> start tag is missing; the parser implied it at 2:1. Write <html> explicitly."
+    "message": "The <html> start tag is missing; the parser implied it at 2:1. Write <html> explicitly.",
+    "fix": [
+      {
+        "offset": 16,
+        "endOffset": 16,
+        "text": "<html><head>"
+      },
+      {
+        "offset": 165,
+        "endOffset": 165,
+        "text": "</body></html>"
+      }
+    ]
   },
   {
     "rule": "style/explicit-start-tag",
     "severity": "error",
     "at": "5:1-5:1",
-    "message": "The <body> start tag is missing; the parser implied it at 5:1. Write <body> explicitly."
+    "message": "The <body> start tag is missing; the parser implied it at 5:1. Write <body> explicitly.",
+    "fix": [
+      {
+        "offset": 135,
+        "endOffset": 135,
+        "text": "</head><body>"
+      },
+      {
+        "offset": 165,
+        "endOffset": 165,
+        "text": "</body></html>"
+      }
+    ]
   },
   {
     "rule": "a11y/title",

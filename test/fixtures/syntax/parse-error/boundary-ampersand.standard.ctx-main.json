@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "syntax/parse-error",
+    "severity": "error",
+    "at": "1:12-1:12",
+    "message": "Unknown character reference; write &amp; for a literal \"&\"."
+  }
+]

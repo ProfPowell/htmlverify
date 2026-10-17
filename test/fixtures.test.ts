@@ -70,14 +70,20 @@ for (const file of htmlFiles(ROOT)) {
       assert.equal(actual, readFileSync(golden, 'utf8'));
     }
 
-    // Every proposed fix keeps the tree identical and resolves its finding.
-    const edits = result.findings.flatMap((f) => f.fix?.edits ?? []);
-    if (edits.length === 0) return;
+    // Every proposed fix keeps the tree identical, and applying them reaches a
+    // state with nothing left to fix; one fix can reveal another, such as the
+    // final newline after an end tag inserted at the end of the file.
+    if (!result.findings.some((f) => f.fix)) return;
     const decoded = decodeUtf8(bytes);
     assert.ok(decoded.ok);
-    const fixed = applyEdits(decoded.text, edits);
-    assert.equal(treeSignature(fixed, context), treeSignature(decoded.text, context), 'fixes must preserve the tree');
-    const recheck = (await check({ path: rel, source: (decoded.bom ? '﻿' : '') + fixed, context }, { profile, config })).files[0]!;
-    assert.deepEqual(recheck.findings.filter((f) => f.fix).map((f) => `${f.rule} ${f.line}:${f.column}`), [], 'fixes must resolve every fixable finding');
+    const original = treeSignature(decoded.text, context);
+    let text = decoded.text;
+    let findings = result.findings;
+    for (let round = 0; findings.some((f) => f.fix); round++) {
+      assert.ok(round < 3, `fixes still pending after 3 rounds: ${findings.filter((f) => f.fix).map((f) => `${f.rule} ${f.line}:${f.column}`).join(', ')}`);
+      text = applyEdits(text, findings.flatMap((f) => f.fix?.edits ?? []));
+      assert.equal(treeSignature(text, context), original, 'fixes must preserve the tree');
+      findings = (await check({ path: rel, source: (decoded.bom ? '﻿' : '') + text, context }, { profile, config })).files[0]!.findings;
+    }
   });
 }

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "1:42-1:60",
+    "message": "A required <select> must start with a placeholder option, <option value=\"\">Choose…</option>, directly inside it; otherwise the first option is selected from the start and required never fails."
+  }
+]

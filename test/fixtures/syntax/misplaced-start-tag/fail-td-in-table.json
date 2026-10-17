@@ -3,7 +3,19 @@
     "rule": "style/explicit-start-tag",
     "severity": "error",
     "at": "10:8-10:8",
-    "message": "The <tbody> start tag is missing; the parser implied it at 10:8. Write <tbody> explicitly."
+    "message": "The <tbody> start tag is missing; the parser implied it at 10:8. Write <tbody> explicitly.",
+    "fix": [
+      {
+        "offset": 198,
+        "endOffset": 198,
+        "text": "<tbody>"
+      },
+      {
+        "offset": 208,
+        "endOffset": 208,
+        "text": "</tbody>"
+      }
+    ]
   },
   {
     "rule": "syntax/misplaced-start-tag",

@@ -17,6 +17,8 @@ export interface Config {
   registry?: string;
   /** The registry's elements.json, parsed; the loader fills it in. */
   elements?: Record<string, VocabElement>;
+  /** The Nu Html Checker for --nu: the jar, relative to the config file, and optionally java. */
+  nu?: { jar: string; java?: string };
   options?: Partial<Options>;
   rules?: Record<string, Severity | 'off'>;
   ruleOptions?: Record<string, Record<string, RuleOptionValue>>;
@@ -31,10 +33,6 @@ const OPTION_VALUES: Record<Exclude<keyof Options, 'adHocPrefix'>, readonly (str
   booleanValue: ['true', 'empty', 'name', null],
   linkTextLanguage: ['en'],
 };
-/** Keys the spec defines that later milestones implement. */
-const LATER: Record<string, string> = {
-  nu: 'M1e',
-};
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
@@ -47,7 +45,6 @@ export function parseConfig(raw: unknown, source: string): Config {
   const config: Config = {};
   for (const [key, value] of Object.entries(raw)) {
     if (key === '$schema') continue;
-    if (LATER[key]) fail(`"${key}" isn’t supported yet (${LATER[key]})`);
     switch (key) {
       case 'extends':
         if (typeof value !== 'string' || !isProfileName(value)) fail(`"extends" must be "strict" or "standard"`);
@@ -57,7 +54,6 @@ export function parseConfig(raw: unknown, source: string): Config {
         if (!isObject(value)) return fail('"options" must be an object');
         const options: Partial<Options> = {};
         for (const [name, v] of Object.entries(value)) {
-          if (LATER[`options.${name}`]) fail(`"options.${name}" isn’t supported yet (${LATER[`options.${name}`]})`);
           if (name === 'adHocPrefix') {
             if (v !== null && !(typeof v === 'string' && /^[a-z][a-z0-9]*-$/.test(v))) fail('"options.adHocPrefix" must be a prefix such as "x-", or null');
             options.adHocPrefix = v as string | null;
@@ -111,6 +107,14 @@ export function parseConfig(raw: unknown, source: string): Config {
         const twice = names.find((n, i) => names.indexOf(n) !== i);
         if (twice) fail(`"vocabularies" lists ${twice} twice; pick one version`);
         config.vocabularies = value as string[];
+        break;
+      }
+      case 'nu': {
+        if (!isObject(value) || typeof value['jar'] !== 'string' || (value['java'] !== undefined && typeof value['java'] !== 'string')) {
+          return fail('"nu" must be { "jar": "path/to/vnu.jar" }, with an optional "java" executable');
+        }
+        for (const k of Object.keys(value)) if (k !== 'jar' && k !== 'java') fail(`unknown key "nu.${k}"`);
+        config.nu = { jar: value['jar'] as string, ...(typeof value['java'] === 'string' ? { java: value['java'] } : {}) };
         break;
       }
       case 'registry':

@@ -1,6 +1,6 @@
 Experiments in hacking a tool together to check HTML for problems and reassemble it a proper semantic manner.  Trying to prove or disprove that we can actually predictably build something as simple as a web page with LLMs with actual quality
 
-The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), and M1d (the Vanilla Breeze vocabulary and the `component` rules).
+The design is in [spec.md](spec.md). Implemented so far: milestone M0 (the parser foundation, `syntax` and `style` rules), M1a (spec data, the content-model engine, and the `content` rules), M1b (ARIA data, accessible names, and the `a11y` rules), M1c (the `semantic`, `policy`, and `bloat` rules, with escaping and whitespace for `style`), M1d (the Vanilla Breeze vocabulary and the `component` rules), and M1e (`fix`, `init`, the Claude Code skill and hook, and the Nu cross-check).
 
 ## Usage
 
@@ -12,6 +12,10 @@ node bin/htmlverify.js check page.html                     # strict profile, tex
 node bin/htmlverify.js check "site/**/*.html" --format json
 node bin/htmlverify.js check row.html --context tbody      # a fragment inside <tbody>
 node bin/htmlverify.js check - --stdin-name page.html < page.html
+node bin/htmlverify.js check page.html --nu                 # also cross-check with the Nu Html Checker (needs Java)
+node bin/htmlverify.js fix page.html                        # a diff of the tree-preserving fixes
+node bin/htmlverify.js fix page.html --write                # apply them in place
+node bin/htmlverify.js init --claude                        # a config, the Claude Code skill, and the PostToolUse hook
 node bin/htmlverify.js explain content/child               # what a rule checks, with examples
 node bin/htmlverify.js rules --profile standard            # every rule and its severity
 node bin/htmlverify.js vocab update vanilla-breeze --from ../vanilla-breeze   # rebuild the vocabulary snapshot
@@ -44,11 +48,12 @@ Unknown keys, rules, and severities are errors; keys the spec reserves for later
 - `style/*` (strict profile): double-quoted attributes, `name="true"` booleans, lowercase names, `<br />`, explicit start and end tags, `<!doctype html>`, escaped `&` and `>`, space indentation, no trailing whitespace, and one newline at the end. Mechanical fixes come with each finding and are verified to leave the parsed tree unchanged; whitespace inside text, comments, and attribute values is content, so those lines are listed without a fix.
 - `content/*`: HTML conformance against a pinned WHATWG snapshot. Child grammars (with transparent content), order and counts, descendant prohibitions, contexts, unknown and obsolete elements and attributes, attribute values (keywords, numbers, URLs, dates, language tags, `srcset`, `sizes`, `autocomplete`, …), required attributes, and IDs and ID references.
 - `a11y/*`: static accessibility against WAI-ARIA and ARIA in HTML. Page language and title, image alternatives, inline `svg`, accessible names and form labels (with the source of each computed name), roles and `aria-*` attributes, focusable content under `aria-hidden`, `tabindex`, heading levels, landmarks, link text, radio and checkbox groups, data tables, and media. A failure is evidence; a pass is never a WCAG claim. What only a person can judge, such as whether an alt text is accurate, becomes a review item.
-
 - `component/*`: custom elements against the Vanilla Breeze vocabulary, a snapshot compiled from VB's `api.json` manifests (134 elements at VB 0.3.1), and the project's `elements.json`. Unknown and misspelled elements, attributes and their values (enums, numbers, presence booleans, where `="false"` turns the feature on), children the manifest doesn't permit, required structure such as `<details>` panels in `<accordion-wc>`, flow-only elements in phrasing content, and attributes the component sets itself. Ad-hoc `x-*` elements are warnings.
 - `semantic/*`: native features over rebuilt ones (`span role="button"`, `href="#"`, ARIA dialogs and disclosures, text inputs for email and phone), sections without headings, `br` used for spacing, empty spacer elements, fragment links with no target, and placeholder text such as lorem ipsum, TODO, `{{…}}`, and `example.com` links. Likely headings and lists become review items.
 - `policy/*`: the house rules: no `div`, one `h1`, typed buttons, no inline handlers, styles, or `javascript:` URLs, the icon component over inline `svg`, `strong` and `em` over `b` and `i`, `charset` first and a viewport in `head`, a configurable element denylist (off by default), and clean `class` lists.
 - `bloat/*`: share of generic elements, wrapper chains, class counts, depth, and size, with thresholds set per rule. The metrics are in every JSON report, whether or not a threshold is crossed.
+
+`fix` applies the fixes that findings propose, in verified rounds: each round must leave the parsed tree unchanged and add no error, or the fixes that break it stay suggestions. Running it twice changes nothing the second time. `--nu` cross-checks documents with the Nu Html Checker: its messages attach to the local findings they confirm, and the rest become `conformance/nu` findings. `init --claude` sets up the Claude Code skill and a `PostToolUse` hook that checks each `.html` file Claude writes and hands failures back to the model.
 
 When several rules report one defect (a missing title is `content/order` and `a11y/title`), the earliest family keeps it and lists the others in `alsoReportedBy`.
 

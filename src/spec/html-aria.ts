@@ -172,8 +172,9 @@ export function semanticsOf(element: Element, ancestors: readonly Element[]): Se
       const labels = has(element, 'for') || element.childNodes.some(function labelable(c): boolean {
         return isElement(c) && (is(c, 'button', 'meter', 'output', 'progress', 'select', 'textarea') || (is(c, 'input') && inputType(c) !== 'hidden') || c.childNodes.some(labelable));
       });
+      // An associated label has no role, so, like generic, it can't be named.
       return labels
-        ? fromRow('el-label', { allowed: set(), discouraged: set() })
+        ? fromRow('el-label', { allowed: set(), discouraged: set(), namingProhibited: true })
         : fromRow('el-label', { allowed: ANY, discouraged: set('generic'), namingProhibited: !explicitRole(element) });
     }
     case 'li': {
