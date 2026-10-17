@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/duplicate-id",
+    "severity": "error",
+    "at": "2:38-2:46",
+    "message": "id=\"row\" is already used by <p> at 2:11. IDs must be unique within a template."
+  }
+]

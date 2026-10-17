@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/document",
+    "severity": "error",
+    "at": "5:1-5:68",
+    "message": "A document can have only one character encoding declaration; the first is at 4:1. Keep one <meta charset=\"utf-8\">."
+  },
+  {
+    "rule": "content/document",
+    "severity": "error",
+    "at": "10:1-10:7",
+    "message": "A document can have only one visible <main>; the first is at 9:1. Hide the others with hidden, or use another element."
+  }
+]

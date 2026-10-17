@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/duplicate-id",
+    "severity": "error",
+    "at": "2:4-2:14",
+    "message": "id=\"intro\" is already used by <h2> at 1:1. IDs must be unique."
+  },
+  {
+    "rule": "content/duplicate-id",
+    "severity": "error",
+    "at": "3:4-3:14",
+    "message": "id=\"intro\" is already used by <h2> at 1:1. IDs must be unique."
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/invalid-id",
+    "severity": "error",
+    "at": "1:4-1:12",
+    "message": "id=\"a\tb\" contains whitespace, so nothing can reference it. Use hyphens: id=\"a-b\"."
+  }
+]

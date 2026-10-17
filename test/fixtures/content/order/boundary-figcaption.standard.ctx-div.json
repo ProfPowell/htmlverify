@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/order",
+    "severity": "error",
+    "at": "1:53-1:56",
+    "message": "<p> is out of order in <figure>: nothing more is allowed after <figcaption>. A <figcaption> can only be the first or last child of <figure>."
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "1:8-1:18",
+    "message": "border on <table> is obsolete. Use CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "1:19-1:34",
+    "message": "cellpadding on <table> is obsolete. Use CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "1:43-1:57",
+    "message": "align on <td> is obsolete. Use CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "1:58-1:72",
+    "message": "bgcolor on <td> is obsolete. Use CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "2:4-2:14",
+    "message": "name on <a> is obsolete; use id=\"top\" on the element it marks instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "error",
+    "at": "3:26-3:38",
+    "message": "align on <img> is obsolete. Use CSS instead."
+  },
+  {
+    "rule": "content/obsolete",
+    "severity": "warning",
+    "at": "3:39-3:49",
+    "message": "border=\"0\" on <img> is obsolete and does nothing; remove it."
+  }
+]

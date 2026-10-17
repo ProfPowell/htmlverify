@@ -1,0 +1,20 @@
+[
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:8-1:22",
+    "message": "htmlFor isn’t an attribute of <label>. In HTML, htmlFor is written for."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "1:23-1:40",
+    "message": "className isn’t an attribute of <label>. In HTML, className is written class."
+  },
+  {
+    "rule": "content/unknown-attribute",
+    "severity": "error",
+    "at": "2:18-2:35",
+    "message": "defaultValue isn’t an attribute of <input>. In HTML, defaultValue is written value."
+  }
+]

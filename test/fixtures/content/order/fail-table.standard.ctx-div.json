@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/order",
+    "severity": "error",
+    "at": "1:42-1:51",
+    "message": "<caption> is out of order in <table>: expected <tbody> or <tfoot> here. Table parts go in this order: <caption>, <colgroup>, <thead>, then <tbody> or <tr> elements, then <tfoot>."
+  },
+  {
+    "rule": "content/order",
+    "severity": "error",
+    "at": "2:35-2:59",
+    "message": "<source> is out of order in <picture>: nothing more is allowed after <img>. <picture> holds <source> elements followed by one <img>."
+  }
+]

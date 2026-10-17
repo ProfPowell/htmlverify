@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "1:28-1:41",
+    "message": "Text isn’t allowed in <iframe>, which must be empty."
+  },
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "2:27-2:32",
+    "message": "<col> isn’t allowed in <colgroup span>, which must be empty."
+  }
+]

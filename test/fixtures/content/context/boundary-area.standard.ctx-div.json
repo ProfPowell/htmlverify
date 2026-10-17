@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "1:1-1:42",
+    "message": "<area> must be inside <map>; here its parent is <div>."
+  }
+]

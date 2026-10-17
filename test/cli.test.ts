@@ -90,7 +90,7 @@ test('limits make the result incomplete, exit 3', async () => {
 
 test('--version and --help', async () => {
   assert.match((await run(['--version'])).stdout, /^\d+\.\d+\.\d+\n$/);
-  assert.match((await run(['check', '--help'])).stdout, /^Usage: htmlverify check/);
+  assert.match((await run(['check', '--help'])).stdout, /^Usage:\n {2}htmlverify check/);
 });
 
 test('the bin shim runs the CLI and sets the exit code', () => {
@@ -108,3 +108,26 @@ test('canonical JSON is byte-identical across two processes', () => {
   assert.equal(first.stdout, second.stdout);
 });
 
+
+test('explain prints a rule’s doc; an unknown rule exits 2', async () => {
+  const r = await run(['explain', 'content/child']);
+  assert.equal(r.code, 0);
+  assert.match(r.stdout, /^content\/child · standard · error in strict and standard\n/);
+  assert.match(r.stdout, /\nFails:\n {2}<span><div>/);
+  const json = await run(['explain', 'style/void-element', '--format', 'json']);
+  assert.deepEqual(JSON.parse(json.stdout).severities, { standard: 'off', strict: 'error' });
+  const unknown = await run(['explain', 'content/chld']);
+  assert.equal(unknown.code, 2);
+  assert.match(unknown.stderr, /did you mean "content\/child"/);
+});
+
+test('rules lists every rule with its severity in the profile', async () => {
+  const r = await run(['rules', '--profile', 'standard', '--format', 'json']);
+  assert.equal(r.code, 0);
+  const { profile, rules } = JSON.parse(r.stdout);
+  assert.equal(profile, 'standard');
+  assert.equal(rules.find((x: { id: string }) => x.id === 'style/attr-quotes').severity, 'off');
+  assert.equal(rules.find((x: { id: string }) => x.id === 'content/child').severity, 'error');
+  const text = await run(['rules']);
+  assert.match(text.stdout, /\n\d+ rules · \d+ on in strict/);
+});

@@ -6,6 +6,8 @@ export interface Profile {
   name: ProfileName;
   severities: Readonly<Record<string, Severity | 'off'>>;
   options: Options;
+  /** More warnings than this fail the file; null means warnings never fail. */
+  maxWarnings: number | null;
   /** Checks the profile includes that this version doesn't implement yet. */
   untested: readonly { check: string; reason: string }[];
 }
@@ -33,15 +35,31 @@ const STYLE = {
   'style/doctype': 'error',
 } as const;
 
+const CONTENT = {
+  'content/unknown-element': 'error',
+  'content/obsolete': 'error',
+  'content/unknown-attribute': 'error',
+  'content/attribute-value': 'error',
+  'content/missing-attribute': 'error',
+  'content/child': 'error',
+  'content/order': 'error',
+  'content/descendant': 'error',
+  'content/context': 'error',
+  'content/duplicate-id': 'error',
+  'content/invalid-id': 'error',
+  'content/idref': 'error',
+  'content/document': 'error',
+} as const;
+
 const M1 = 'not implemented until M1';
 
 export const PROFILES: Readonly<Record<ProfileName, Profile>> = {
   strict: {
     name: 'strict',
-    severities: { ...SYNTAX, ...STYLE, 'content/attribute-value': 'error' },
+    severities: { ...SYNTAX, ...STYLE, ...CONTENT },
     options: { voidElements: 'xhtml', booleanValue: 'true' },
+    maxWarnings: null,
     untested: [
-      { check: 'content/* (other than boolean values)', reason: M1 },
       { check: 'component/*', reason: M1 },
       { check: 'a11y/*', reason: M1 },
       { check: 'semantic/*', reason: M1 },
@@ -53,10 +71,10 @@ export const PROFILES: Readonly<Record<ProfileName, Profile>> = {
   },
   standard: {
     name: 'standard',
-    severities: { ...SYNTAX, ...Object.fromEntries(Object.keys(STYLE).map((id) => [id, 'off'])), 'content/attribute-value': 'error' },
+    severities: { ...SYNTAX, ...Object.fromEntries(Object.keys(STYLE).map((id) => [id, 'off'])), ...CONTENT },
     options: { voidElements: 'xhtml', booleanValue: null },
+    maxWarnings: null,
     untested: [
-      { check: 'content/* (other than boolean values)', reason: M1 },
       { check: 'component/*', reason: M1 },
       { check: 'a11y/*', reason: M1 },
       { check: 'semantic/*', reason: M1 },

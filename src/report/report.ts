@@ -3,8 +3,12 @@ import { LineIndex } from '../parse/lines.ts';
 import { PARSER, parseHtml } from '../parse/parse.ts';
 import { reconcile } from '../parse/reconcile.ts';
 import { isElement, walk } from '../parse/tree.ts';
-import { PROFILES, type Profile, type ProfileName } from '../profiles.ts';
-import { checkBooleanValues } from '../rules/content.ts';
+import { resolveProfile, type Config } from '../config.ts';
+import type { Profile, ProfileName } from '../profiles.ts';
+import { checkAttributes, checkBooleanValues } from '../rules/attributes.ts';
+import { checkContentModel } from '../rules/content-model.ts';
+import { checkDocument } from '../rules/document.ts';
+import { checkIds } from '../rules/ids.ts';
 import { RULE_BY_ID } from '../rules/registry.ts';
 import { checkStyle } from '../rules/style.ts';
 import { checkSyntax } from '../rules/syntax.ts';
@@ -21,7 +25,10 @@ export interface CheckInput {
 }
 
 export interface CheckOptions {
+  /** The built-in profile; defaults to the config's `extends`, then strict. */
   profile?: ProfileName;
+  /** A validated htmlverify.config.json (see parseConfig). */
+  config?: Config | null;
 }
 
 export interface Finding {
@@ -75,7 +82,7 @@ const DIMENSIONS = [
 const PENALTY: Record<Severity, number> = { error: 10, warning: 3, info: 0 };
 
 export async function check(inputs: CheckInput | CheckInput[], options: CheckOptions = {}): Promise<Report> {
-  const profile = PROFILES[options.profile ?? 'strict'];
+  const profile = resolveProfile(options.profile, options.config ?? null);
   const files: FileReport[] = [];
   for (const input of Array.isArray(inputs) ? inputs : [inputs]) files.push(await checkFile(input, profile));
   const status: Status = files.some((f) => f.status === 'incomplete') ? 'incomplete' : files.some((f) => f.status === 'fail') ? 'fail' : 'pass';
@@ -139,9 +146,18 @@ async function checkFile(input: CheckInput, profile: Profile): Promise<FileRepor
     options: profile.options,
   };
   const syntax = checkSyntax(ctx);
-  const raw = [...syntax.findings, ...checkStyle(ctx, syntax.absorbed), ...checkBooleanValues(ctx)];
+  const content = checkContentModel(ctx);
+  const raw = [
+    ...syntax.findings,
+    ...checkStyle(ctx, syntax.absorbed),
+    ...checkBooleanValues(ctx),
+    ...checkAttributes(ctx),
+    ...content.findings,
+    ...checkIds(ctx),
+    ...checkDocument(ctx),
+  ];
   const findings = raw.flatMap((r) => toFinding(r, input.path, lines, profile));
-  const untested = [...profile.untested];
+  const untested = [...profile.untested, ...content.untested];
   if (kind === 'fragment') untested.push({ check: 'syntax/doctype, syntax/encoding (charset declaration)', reason: 'fragments have no document' });
   return finish(base, findings, profile, untested);
 }
@@ -179,7 +195,7 @@ function finish(base: Base, findings: Finding[], profile: Profile, untested: Fil
   const summary = { errors: count('error'), warnings: count('warning'), infos: count('info'), reviews: 0 };
   return {
     ...base,
-    status: summary.errors > 0 ? 'fail' : 'pass',
+    status: summary.errors > 0 || (profile.maxWarnings !== null && summary.warnings > profile.maxWarnings) ? 'fail' : 'pass',
     summary,
     findings,
     reviews: [],

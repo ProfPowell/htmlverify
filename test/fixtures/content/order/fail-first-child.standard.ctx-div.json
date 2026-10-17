@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/order",
+    "severity": "error",
+    "at": "1:10-1:13",
+    "message": "<p> is out of order in <details>: expected <summary> here. <details> starts with a <summary>, followed by flow content."
+  },
+  {
+    "rule": "content/order",
+    "severity": "error",
+    "at": "2:24-2:32",
+    "message": "<legend> is out of order in <fieldset>: expected flow content here. A <legend> can only be the first child of <fieldset>."
+  }
+]

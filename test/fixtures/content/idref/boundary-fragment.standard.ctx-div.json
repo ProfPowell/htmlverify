@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/idref",
+    "severity": "error",
+    "at": "3:8-3:16",
+    "message": "for=\"p1\" points to <p> at 2:1, which isn’t a labelable control (<button>, <input>, <meter>, <output>, <progress>, <select>, or <textarea>)."
+  }
+]

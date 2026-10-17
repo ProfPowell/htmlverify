@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fixture</title>
+</head>
+<body>
+<form id="f"><label for="email">Email</label>
+<input id="email" list="domains" aria-describedby="hint"></form>
+<p id="hint">Hint</p>
+<datalist id="domains"><option value="example.org"></option></datalist>
+<input form="f" name="extra" aria-label="Extra">
+<div popover="" id="tip">Tip</div>
+<button type="button" popovertarget="tip">Tip</button>
+<dialog id="d"><p>Dialog</p></dialog>
+<button type="button" commandfor="d" command="show-modal">Open</button>
+<table><tr><th id="h">H</th><td headers="h">1</td></tr></table>
+<map name="m"><area shape="default" href="/" alt="Home"></map>
+<img src="m.png" usemap="#m" alt="Map">
+</body>
+</html>

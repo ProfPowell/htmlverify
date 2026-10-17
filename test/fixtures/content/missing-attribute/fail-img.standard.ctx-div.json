@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "1:1-1:17",
+    "message": "<img> needs src (or srcset)."
+  },
+  {
+    "rule": "content/missing-attribute",
+    "severity": "error",
+    "at": "2:1-2:70",
+    "message": "<img> needs sizes, because its srcset uses width descriptors."
+  }
+]

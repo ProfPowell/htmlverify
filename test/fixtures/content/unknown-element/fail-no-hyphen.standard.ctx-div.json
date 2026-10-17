@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/unknown-element",
+    "severity": "error",
+    "at": "1:1-1:9",
+    "message": "<widget> isn’t an HTML element, and without a hyphen in its name it isn’t a custom element either."
+  }
+]

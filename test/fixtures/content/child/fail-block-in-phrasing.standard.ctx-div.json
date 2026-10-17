@@ -1,0 +1,14 @@
+[
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "1:7-1:12",
+    "message": "<div> isn’t allowed in <span>, which accepts only phrasing content."
+  },
+  {
+    "rule": "content/child",
+    "severity": "error",
+    "at": "2:23-2:26",
+    "message": "<p> isn’t allowed in <button>, which accepts only phrasing content."
+  }
+]

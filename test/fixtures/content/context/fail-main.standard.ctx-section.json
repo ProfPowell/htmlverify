@@ -1,0 +1,8 @@
+[
+  {
+    "rule": "content/context",
+    "severity": "error",
+    "at": "1:1-1:7",
+    "message": "<main> can only have <html>, <body>, <div>, unnamed <form>, and custom elements as ancestors; here its parent is <section>."
+  }
+]
