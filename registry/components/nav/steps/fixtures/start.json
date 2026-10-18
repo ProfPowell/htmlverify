@@ -1,0 +1,13 @@
+{
+  "data": {
+    "steps": [
+      {
+        "text": "Account",
+        "current": "step"
+      },
+      {
+        "text": "Details"
+      }
+    ]
+  }
+}

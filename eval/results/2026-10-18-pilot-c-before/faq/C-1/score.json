@@ -1,0 +1,107 @@
+{
+  "brief": "faq",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 3,
+    "of": 3,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "questions",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "contact-link",
+        "met": true,
+        "found": 3
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "accordion-wc",
+    "details",
+    "summary",
+    "layout-stack",
+    "p",
+    "details",
+    "summary",
+    "layout-stack",
+    "p",
+    "details",
+    "summary",
+    "layout-stack",
+    "p",
+    "details",
+    "summary",
+    "layout-stack",
+    "p",
+    "details",
+    "summary",
+    "layout-stack",
+    "p",
+    "details",
+    "summary",
+    "layout-stack",
+    "p",
+    "layout-text",
+    "p",
+    "a"
+  ],
+  "tokens": {
+    "input": 14,
+    "output": 1910,
+    "cacheRead": 246524,
+    "cacheWrite": 11710
+  },
+  "costUsd": 0.09076469999999999,
+  "wallMs": 17538,
+  "turns": 11
+}

@@ -1,0 +1,7 @@
+<nav class="steps" aria-label="{{label}}">
+  <ol>
+    <template vb-each="steps" vb-as="step">
+      <li data-completed="{{step.done}}" aria-current="{{step.current}}">{{step.text}}</li>
+    </template>
+  </ol>
+</nav>

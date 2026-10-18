@@ -1,0 +1,46 @@
+{
+  "brief": "event",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": false,
+  "pageFile": null,
+  "status": {
+    "first": "fail",
+    "final": null
+  },
+  "standard": {
+    "status": null,
+    "errors": 0
+  },
+  "rounds": 3,
+  "capped": true,
+  "assembly": {
+    "calls": 3,
+    "gaps": 0,
+    "origins": {
+      "plan": 3
+    },
+    "handWritten": false
+  },
+  "denials": 2,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 0,
+    "of": 6,
+    "items": []
+  },
+  "skeleton": [],
+  "tokens": {
+    "input": 14,
+    "output": 3939,
+    "cacheRead": 252322,
+    "cacheWrite": 13205
+  },
+  "costUsd": 0.1176145,
+  "wallMs": 31245,
+  "turns": 14
+}

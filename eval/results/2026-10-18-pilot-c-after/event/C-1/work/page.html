@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Winter Skills Weekend | Winter Skills Weekend</title>
+  <meta name="description" content="Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Winter Skills Weekend</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Winter Skills Weekend</h1>
+    <dl>
+      <dt>When</dt>
+      <dd><time datetime="2026-12-06">Saturday 6</time> to <time datetime="2026-12-07">Sunday 7 December 2026</time></dd>
+      <dt>Where</dt>
+      <dd>Hollow Pine Camp, 88 Ridge Road, Mount Alder</dd>
+      <dt>Spaces left</dt>
+      <dd>6 of 24</dd>
+    </dl>
+    <layout-text>
+      <p>Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience.</p>
+    </layout-text>
+    <section id="schedule" aria-labelledby="schedule-title" data-layout="stack">
+      <h2 id="schedule-title">Schedule</h2>
+      <layout-text>
+        <h3>Saturday 6 December</h3>
+        <ul>
+          <li>9:00 Arrival and gear check</li>
+          <li>10:00 Avalanche awareness</li>
+          <li>14:00 Snowshoe technique</li>
+        </ul>
+      </layout-text>
+      <layout-text>
+        <h3>Sunday 7 December</h3>
+        <ul>
+          <li>9:00 Snow shelters</li>
+          <li>13:00 Debrief and lunch</li>
+        </ul>
+      </layout-text>
+    </section>
+    <section id="price" aria-labelledby="price-title" data-layout="stack">
+      <h2 id="price-title">Price</h2>
+      <layout-text>
+        <p>$180 for members, $220 for others. Includes meals and a bunk.</p>
+      </layout-text>
+    </section>
+    <section id="registration" aria-labelledby="registration-title" data-layout="stack">
+      <h2 id="registration-title">Registration</h2>
+      <form method="post" class="stacked" aria-label="Registration">
+        <form-field>
+          <label for="registration-register-name-input">Name</label>
+          <input id="registration-register-name-input" type="text" name="name" autocomplete="name" required="true" />
+        </form-field>
+        <form-field>
+          <label for="registration-register-email-input">Email</label>
+          <input id="registration-register-email-input" type="email" name="email" autocomplete="email" required="true" />
+        </form-field>
+        <form-field>
+          <label for="registration-register-membership-input">Membership number (optional)</label>
+          <input id="registration-register-membership-input" type="text" name="membership" />
+        </form-field>
+        <form-field>
+          <label for="registration-register-dietary-input">Dietary needs</label>
+          <textarea id="registration-register-dietary-input" name="dietary" rows="4"></textarea>
+        </form-field>
+        <footer class="actions end"><button type="submit">Register</button></footer>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

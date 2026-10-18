@@ -1,0 +1,41 @@
+{
+  "id": "nav/steps",
+  "version": "1.0.0",
+  "summary": "Progress through a sequence of steps, such as a checkout's.",
+  "use": "Where the person is in a process that spans pages. Mark the finished steps done, and the one they're on current.",
+  "params": {
+    "label": {
+      "type": "text",
+      "default": "Progress",
+      "description": "Names the steps, such as \"Checkout progress\"."
+    },
+    "steps": {
+      "type": "list",
+      "minItems": 2,
+      "items": {
+        "text": {
+          "type": "text",
+          "minLength": 1
+        },
+        "done": {
+          "type": "boolean",
+          "default": false
+        },
+        "current": {
+          "type": "enum",
+          "values": [
+            "step"
+          ],
+          "required": false,
+          "description": "On the step the person is on."
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

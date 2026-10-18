@@ -1,0 +1,155 @@
+{
+  "duration_api_ms": 17735,
+  "stop_reason": "end_turn",
+  "session_id": "d014b317-62f0-4c19-9e72-afd391d5c478",
+  "total_cost_usd": 0.10294389999999999,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 14710,
+    "cache_read_input_tokens": 213166,
+    "output_tokens": 2252,
+    "output_tokens_details": {
+      "thinking_tokens": 236
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 14710,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 267,
+        "cache_read_input_tokens": 40773,
+        "cache_creation_input_tokens": 2031,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2031
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 224,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0002433,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 206,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2252,
+      "cacheReadInputTokens": 213166,
+      "cacheCreationInputTokens": 14710,
+      "webSearchRequests": 0,
+      "costUSD": 0.10270059999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 236,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 12,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE. `page.html` is written and passes the check, but I left out the figure.\n\n- **Figure:** The brief gives no image file, alt text or dimensions for the bowline photo. The figure component requires all of them, so I didn't invent any. The caption \"A finished bowline: the tail ends inside the loop.\" isn't on the page either.\n- **Site name:** The brief doesn't name the site, and the page needs one, so I used \"Blog\".\n- **Related posts:** The two titles are plain text because the brief gives no links.\n- **Review questions for you:** Is `lang=\"en\"` right for the page? Does the title \"Five knots every paddler should know | Blog\" describe it?\n- **Warnings:** The four components used (`page/article`, `content/prose`, `content/section`, `content/quote`) haven't been approved yet.",
+  "ttft_ms": 1212,
+  "type": "result",
+  "duration_ms": 20064,
+  "uuid": "98cc8296-66b4-4f7d-94dd-2ea79f82b88a",
+  "ttft_stream_ms": 878,
+  "time_to_request_ms": 146,
+  "time_to_request_phases_ms": {
+    "other": 25,
+    "system_prompt": 13,
+    "resume_other": 0,
+    "process_user_input": 5,
+    "input_attachments": 23,
+    "input_hooks": 4,
+    "tool_pool_refresh": 6,
+    "init_message": 9,
+    "engine_pickup": 2,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 4,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 38,
+    "message_normalization": 1,
+    "client_creation": 3,
+    "request_build": 10
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 96,
+  "time_to_request_cpu_ms": 145,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 240,
+  "process_anon_mib_turn_start": 121,
+  "process_rss_mib_result": 249,
+  "process_anon_mib_result": 127,
+  "process_peak_rss_mib": 252,
+  "process_cpu_ms_turn": 1545,
+  "process_wall_ms_turn": 20063,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 17,
+    "cpu_ms": 23,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 878,
+  "time_to_request_from_spawn_ms": 3416606,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329300998.0205,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

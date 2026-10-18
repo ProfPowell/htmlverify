@@ -4,3 +4,5 @@ node_modules/
 # Evaluation runs keep their outputs, not the project scaffolding each run starts from.
 eval/results/**/work/*
 !eval/results/**/work/page.html
+!eval/results/**/work/page.failed.html
+!eval/results/**/work/plan.json

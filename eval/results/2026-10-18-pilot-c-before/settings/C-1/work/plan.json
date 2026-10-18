@@ -1,0 +1,24 @@
+{"page":{"use":"page/basic","data":{"title":"Account settings","site":"Account","description":"Account settings for a signed-in member.","heading":"Account settings"},"slots":{"main":[
+{"use":"form/form","key":"settings","data":{"action":"/settings","label":"Account settings"},"slots":{"fields":[
+{"use":"content/section","key":"profile","data":{"title":"Profile"},"slots":{"body":[
+{"use":"form/text-field","key":"display-name","data":{"label":"Display name","name":"display-name","autocomplete":"name"}},
+{"use":"form/text-field","key":"email","data":{"label":"Email","name":"email","type":"email","autocomplete":"email"}},
+{"key":"photo","html":"<form-field><label for=\"photo-input\">Profile photo</label><input id=\"photo-input\" type=\"file\" name=\"photo\" accept=\"image/*\" /></form-field>"}
+]}},
+{"use":"content/section","key":"notifications","data":{"title":"Notifications"},"slots":{"body":[
+{"use":"form/checkbox","key":"due-dates","data":{"label":"Email me about rental due dates","name":"due-dates","checked":true}},
+{"use":"form/checkbox","key":"workshops","data":{"label":"Email me about workshop announcements","name":"workshops"}},
+{"use":"form/checkbox","key":"newsletter","data":{"label":"Email me the monthly newsletter","name":"newsletter","checked":true}}
+]}},
+{"use":"content/section","key":"rental","data":{"title":"Rental preferences"},"slots":{"body":[
+{"use":"form/select-field","key":"pickup","data":{"label":"Default pickup location","name":"pickup","options":[{"value":"alder-street","label":"Alder Street store"},{"value":"harbor-kiosk","label":"Harbor kiosk"}]}},
+{"use":"form/choice-group","key":"units","data":{"legend":"Preferred units","name":"units","choices":[{"value":"metric","label":"Metric"},{"value":"imperial","label":"Imperial"}]}}
+]}}
+],"actions":[
+{"use":"action/submit","key":"save","data":{"label":"Save changes"}},
+{"key":"cancel","html":"<button type=\"reset\" class=\"secondary\">Cancel</button>"}
+]}},
+{"use":"content/section","key":"danger-zone","data":{"title":"Danger zone"},"slots":{"body":[
+{"key":"cancel-membership","html":"<button type=\"button\">Cancel membership</button>"}
+]}}
+]}}}

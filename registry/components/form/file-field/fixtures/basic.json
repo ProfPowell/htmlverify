@@ -1,0 +1,7 @@
+{
+  "data": {
+    "label": "Profile photo",
+    "name": "photo",
+    "accept": "image/*"
+  }
+}

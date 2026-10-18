@@ -2,7 +2,7 @@
   "id": "page/basic",
   "version": "1.0.0",
   "summary": "A page: head with Vanilla Breeze, skip link, site header, main with the page heading, and an optional footer.",
-  "use": "The root of every page plan. The title reads \"Title | Site\"; navigation goes in nav, the content in main, and site/footer in footer.",
+  "use": "The root of a page plan. The title reads \"Title | Site\"; navigation goes in nav, the content in main, and site/footer in footer. For a blog post, news story, or press release, use page/article.",
   "context": "document",
   "params": {
     "lang": {
@@ -11,8 +11,9 @@
     },
     "title": {
       "type": "text",
+      "required": false,
       "minLength": 1,
-      "description": "The page's own title, ahead of the site name."
+      "description": "The page's own title, ahead of the site name. Leave it out on the home page, whose title is the site name alone."
     },
     "site": {
       "type": "text",

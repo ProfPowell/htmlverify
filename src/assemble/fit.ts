@@ -58,6 +58,17 @@ export function rootElements(nodes: readonly TNode[]): string[] {
   return nodes.flatMap((n) => (n.kind === 'element' ? [n.name] : n.kind === 'if' || n.kind === 'each' ? rootElements(n.children) : []));
 }
 
+/** Every element the template itself writes, at any depth; slot children are checked where they go. */
+function elementNames(nodes: readonly TNode[], out = new Set<string>()): Set<string> {
+  for (const n of nodes) {
+    if (n.kind === 'element') {
+      out.add(n.name);
+      if (n.name !== 'template') elementNames(n.children, out);
+    } else if (n.kind === 'if' || n.kind === 'each') elementNames(n.children, out);
+  }
+  return out;
+}
+
 /** Each slot's ancestors inside the template, outermost first: where its children go. */
 export function slotAncestors(template: CompiledTemplate): Map<string, string[]> {
   const out = new Map<string, string[]>();
@@ -79,9 +90,11 @@ export function slotAncestors(template: CompiledTemplate): Map<string, string[]>
 export function misfit(template: CompiledTemplate, chain: readonly string[], vocabulary: Vocabulary): string | null {
   const roots = [...new Set(rootElements(template.nodes))];
   if (roots.length === 0 || chain.length === 0) return null;
+  // A form, link, or button anywhere in the template, not just at its root, meets the one around the slot.
+  const names = elementNames(template.nodes);
   for (let i = chain.length - 1; i >= 0 && chain[i] !== 'template'; i--) {
     const tag = chain[i]!;
-    if (NO_NESTING.has(tag) && roots.includes(tag)) {
+    if (NO_NESTING.has(tag) && names.has(tag)) {
       return `it puts <${tag}> inside <${tag}>, and the parser ${tag === 'form' ? 'drops the inner one' : 'closes the outer one first'}.`;
     }
   }

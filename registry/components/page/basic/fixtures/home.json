@@ -1,0 +1,18 @@
+{
+  "data": {
+    "site": "Acme",
+    "description": "Tools for people who build the web.",
+    "heading": "Build the web with Acme"
+  },
+  "slots": {
+    "main": [
+      {
+        "use": "content/prose",
+        "key": "intro",
+        "data": {
+          "html": "<p>Editors, linters, and hosting, in one place.</p>"
+        }
+      }
+    ]
+  }
+}

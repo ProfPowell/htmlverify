@@ -1,0 +1,156 @@
+{
+  "brief": "checkout-address",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 2,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 7,
+    "of": 7,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "autocomplete",
+        "met": true,
+        "found": 7
+      },
+      {
+        "id": "country",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "speed",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "radios",
+        "met": true,
+        "found": 2
+      },
+      {
+        "id": "labels",
+        "met": true,
+        "found": 11
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "nav",
+    "ol",
+    "li",
+    "li",
+    "li",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "option",
+    "option",
+    "form-field",
+    "label",
+    "input",
+    "output",
+    "form-field",
+    "label",
+    "input",
+    "fieldset",
+    "legend",
+    "layout-stack",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "footer",
+    "button",
+    "a",
+    "section",
+    "h2",
+    "dl",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd"
+  ],
+  "tokens": {
+    "input": 14,
+    "output": 3197,
+    "cacheRead": 254732,
+    "cacheWrite": 17489
+  },
+  "costUsd": 0.12756699999999999,
+  "wallMs": 27293,
+  "turns": 14
+}

@@ -1,17 +1,25 @@
 {
   "id": "site/footer",
   "version": "1.0.0",
-  "summary": "The site footer: copyright, legal links, and optional site links.",
-  "use": "Once per page, in page/basic's footer slot.",
+  "summary": "The site footer: copyright, and optional contact details, legal links, and site links.",
+  "use": "Once per page, in the page's footer slot.",
   "params": {
     "copyright": {
       "type": "text",
       "minLength": 1,
       "description": "Such as \"© 2026 Acme Ltd\"."
     },
+    "contact": {
+      "type": "list",
+      "minItems": 1,
+      "required": false,
+      "items": "inline",
+      "description": "The organization's contact details, a line each: its address, phone, email, or hours."
+    },
     "legal": {
       "type": "list",
       "minItems": 1,
+      "required": false,
       "items": {
         "text": {
           "type": "text",

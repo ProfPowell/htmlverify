@@ -148,3 +148,10 @@ export function median(values: readonly number[]): number | null {
   const mid = sorted.length >> 1;
   return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
 }
+
+/** A skill without the allowed-tools line of its frontmatter. */
+export function withoutAllowedTools(skill: string): string {
+  const end = skill.startsWith('---\n') ? skill.indexOf('\n---', 4) : -1;
+  if (end < 0) return skill;
+  return skill.slice(0, 4) + skill.slice(4, end).split('\n').filter((line) => !/^allowed-tools:/.test(line)).join('\n') + skill.slice(end);
+}

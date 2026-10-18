@@ -96,9 +96,11 @@ export async function parseRestricted(
   }
 
   // Parse repairs and everything else strict reports, apart from what's above.
+  // The style rules judge how the value is written, which the serializer
+  // rewrites in the house style anyway; the output check still applies them.
   const [report] = (await check({ path: 'value.html', source: value, context }, { ...options.check, profile: 'strict' })).files;
   for (const f of report!.findings) {
-    if (f.severity !== 'error' || reported.some((r) => r.start <= f.offset && f.offset < r.end)) continue;
+    if (f.severity !== 'error' || f.rule.startsWith('style/') || reported.some((r) => r.start <= f.offset && f.offset < r.end)) continue;
     problem(f.offset, `${f.message} (${f.rule})`);
   }
 

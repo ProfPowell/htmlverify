@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 22539,
+  "stop_reason": "end_turn",
+  "session_id": "b1648378-228d-4741-a560-bf52edb02bc3",
+  "total_cost_usd": 0.12756699999999999,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 17489,
+    "cache_read_input_tokens": 254732,
+    "output_tokens": 3197,
+    "output_tokens_details": {
+      "thinking_tokens": 152
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 17489,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 42521,
+        "cache_creation_input_tokens": 3062,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3062
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 3197,
+      "cacheReadInputTokens": 254732,
+      "cacheCreationInputTokens": 17489,
+      "webSearchRequests": 0,
+      "costUSD": 0.12742720000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 152,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_01GCoVWWFSyt54LfV5EpBxBq",
+      "tool_input": {
+        "file_path": "/home/user/htmlverify/eval/results/2026-10-18-pilot-c-after-checkout-address-C-1/work/brief.md"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_011yKomY5rsqvX6HamQ5XDNm",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\n  \"page\": {\n    \"use\": \"page/basic\",\n    \"data\": {\n      \"title\": \"Checkout: shipping address\",\n      \"site\": \"Checkout\",\n      \"description\": \"Checkout, step 2 of 3: Shipping address.\",\n      \"heading\": \"Checkout: shipping address\"\n    },\n    \"slots\": {\n      \"main\": [\n        { \"use\": \"nav/steps\", \"key\": \"progress\", \"data\": { \"label\": \"Checkout progress\", \"steps\": [\n          { \"text\": \"Cart\", \"done\": true },\n          { \"text\": \"Shipping\", \"current\": \"step\" },\n          { \"text\": \"Payment\" } ] } },\n        { \"use\": \"form/form\", \"key\": \"address\", \"data\": { \"label\": \"Shipping address\" },\n          \"slots\": {\n            \"fields\": [\n              { \"use\": \"form/text-field\", \"key\": \"name\", \"data\": { \"label\": \"Full name\", \"name\": \"name\", \"autocomplete\": \"name\", \"required\": true } },\n              { \"use\": \"form/text-field\", \"key\": \"line1\", \"data\": { \"label\": \"Address line 1\", \"name\": \"line1\", \"autocomplete\": \"address-line1\", \"required\": true } },\n              { \"use\": \"form/text-field\", \"key\": \"line2\", \"data\": { \"label\": \"Address line 2 (optional)\", \"name\": \"line2\", \"autocomplete\": \"address-line2\" } },\n              { \"use\": \"form/text-field\", \"key\": \"city\", \"data\": { \"label\": \"City\", \"name\": \"city\", \"autocomplete\": \"address-level2\", \"required\": true } },\n              { \"use\": \"form/text-field\", \"key\": \"region\", \"data\": { \"label\": \"State or region\", \"name\": \"region\", \"autocomplete\": \"address-level1\", \"required\": true } },\n              { \"use\": \"form/text-field\", \"key\": \"postal\", \"data\": { \"label\": \"Postal code\", \"name\": \"postal\", \"autocomplete\": \"postal-code\", \"required\": true } },\n              { \"use\": \"form/select-field\", \"key\": \"country\", \"data\": { \"label\": \"Country\", \"name\": \"country\", \"required\": true, \"options\": [\n                { \"value\": \"us\", \"label\": \"United States\" }, { \"value\": \"ca\", \"label\": \"Canada\" }, { \"value\": \"mx\", \"label\": \"Mexico\" } ] } },\n              { \"use\": \"form/text-field\", \"key\": \"phone\", \"data\": { \"label\": \"Phone\", \"name\": \"phone\", \"type\": \"tel\", \"autocomplete\": \"tel\", \"required\": true, \"hint\": \"For the courier\" } },\n              { \"use\": \"form/checkbox\", \"key\": \"billing\", \"data\": { \"label\": \"Billing address is the same\", \"name\": \"billing-same\" } },\n              { \"use\": \"form/choice-group\", \"key\": \"speed\", \"data\": { \"legend\": \"Shipping speed\", \"name\": \"speed\", \"required\": true, \"choices\": [\n                { \"value\": \"standard\", \"label\": \"Standard, 5–7 days, free\" },\n                { \"value\": \"express\", \"label\": \"Express, 2 days, $12\" } ] } }\n            ],\n            \"actions\": [\n              { \"use\": \"action/submit\", \"key\": \"continue\", \"data\": { \"label\": \"Continue to payment\" } },\n              { \"use\": \"action/link-button\", \"key\": \"back\", \"data\": { \"label\": \"Back to cart\", \"href\": \"/cart\", \"variant\": \"ghost\" } }\n            ]\n          } },\n        { \"use\": \"content/section\", \"key\": \"summary\", \"data\": { \"title\": \"Order summary\" }, \"slots\": { \"body\": [\n          { \"use\": \"data/description-list\", \"key\": \"items\", \"data\": { \"items\": [\n            { \"term\": \"Ridgeline 40 L × 1\", \"description\": \"$189\" },\n            { \"term\": \"Shipping\", \"description\": \"$0\" },\n            { \"term\": \"Total\", \"description\": \"$189\" } ] } } ] } }\n      ]\n    }\n  }\n}\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 14,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1887,
+  "type": "result",
+  "duration_ms": 25224,
+  "uuid": "ca3fcd4b-8516-4470-bc6e-6ecc2c699f16",
+  "ttft_stream_ms": 1532,
+  "time_to_request_ms": 117,
+  "time_to_request_phases_ms": {
+    "other": 26,
+    "system_prompt": 12,
+    "resume_other": 0,
+    "process_user_input": 3,
+    "input_attachments": 19,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 7,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 3,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 27,
+    "message_normalization": 2,
+    "client_creation": 2,
+    "request_build": 6
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 67,
+  "time_to_request_cpu_ms": 115,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 237,
+  "process_anon_mib_turn_start": 117,
+  "process_rss_mib_result": 250,
+  "process_anon_mib_result": 128,
+  "process_peak_rss_mib": 255,
+  "process_cpu_ms_turn": 1833,
+  "process_wall_ms_turn": 25224,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 14,
+    "cpu_ms": 21,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1533,
+  "time_to_request_from_spawn_ms": 3416653,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329300976.0564,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

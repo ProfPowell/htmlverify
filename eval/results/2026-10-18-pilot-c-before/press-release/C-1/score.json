@@ -1,0 +1,102 @@
+{
+  "brief": "press-release",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 2,
+    "of": 5,
+    "items": [
+      {
+        "id": "article",
+        "met": false,
+        "found": 0
+      },
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "date",
+        "met": false,
+        "found": 0
+      },
+      {
+        "id": "quote",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email-link",
+        "met": false,
+        "found": 0
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "p",
+    "strong",
+    "p",
+    "figure",
+    "blockquote",
+    "p",
+    "figcaption",
+    "layout-text",
+    "p",
+    "p",
+    "strong",
+    "p",
+    "strong"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 1421,
+    "cacheRead": 210129,
+    "cacheWrite": 12914
+  },
+  "costUsd": 0.0870482,
+  "wallMs": 16087,
+  "turns": 11
+}

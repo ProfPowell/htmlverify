@@ -1,0 +1,114 @@
+{
+  "brief": "team",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 3,
+    "of": 4,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "people",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "photos",
+        "met": false,
+        "found": 0
+      },
+      {
+        "id": "names",
+        "met": true,
+        "found": 7
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "ul",
+    "li",
+    "layout-card",
+    "h2",
+    "p",
+    "li",
+    "layout-card",
+    "h2",
+    "p",
+    "li",
+    "layout-card",
+    "h2",
+    "p",
+    "li",
+    "layout-card",
+    "h2",
+    "p",
+    "li",
+    "layout-card",
+    "h2",
+    "p",
+    "li",
+    "layout-card",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "a"
+  ],
+  "tokens": {
+    "input": 10,
+    "output": 1178,
+    "cacheRead": 172970,
+    "cacheWrite": 11213
+  },
+  "costUsd": 0.0740933,
+  "wallMs": 15309,
+  "turns": 8
+}

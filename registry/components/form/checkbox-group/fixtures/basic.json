@@ -1,0 +1,17 @@
+{
+  "data": {
+    "legend": "What would you like to hear about?",
+    "name": "topics",
+    "choices": [
+      {
+        "value": "offers",
+        "label": "Offers",
+        "checked": true
+      },
+      {
+        "value": "events",
+        "label": "Events"
+      }
+    ]
+  }
+}

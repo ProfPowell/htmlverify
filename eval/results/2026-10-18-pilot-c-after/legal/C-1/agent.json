@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 24194,
+  "stop_reason": "end_turn",
+  "session_id": "51da3556-1689-45bc-8388-4fefc8255843",
+  "total_cost_usd": 0.1244947,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 15929,
+    "cache_read_input_tokens": 254784,
+    "output_tokens": 3503,
+    "output_tokens_details": {
+      "thinking_tokens": 29
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 15929,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 147,
+        "cache_read_input_tokens": 41885,
+        "cache_creation_input_tokens": 2138,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2138
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 222,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00024229999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 198,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 3503,
+      "cacheReadInputTokens": 254784,
+      "cacheCreationInputTokens": 15929,
+      "webSearchRequests": 0,
+      "costUSD": 0.1242524,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 29,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_015U6NFib7mzYq9EMf2jo8uf",
+      "tool_input": {
+        "file_path": "/home/user/htmlverify/eval/results/2026-10-18-pilot-c-after-legal-C-1-work/brief.md"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01K9WxU2UpF9hmQuuFH2Df2W",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\n  \"page\": {\n    \"use\": \"page/basic\",\n    \"data\": {\n      \"title\": \"Privacy policy\",\n      \"site\": \"Larkspur Supply Co.\",\n      \"description\": \"Privacy policy for Larkspur Supply Co. Last updated 1 September 2026.\",\n      \"heading\": \"Privacy policy\"\n    },\n    \"slots\": {\n      \"main\": [\n        { \"use\": \"content/prose\", \"key\": \"intro\", \"data\": { \"html\": \"<p>Privacy policy for Larkspur Supply Co. Last updated <time datetime=\\\"2026-09-01\\\">1 September 2026</time>.</p>\" } },\n        { \"use\": \"nav/toc\", \"key\": \"toc\", \"data\": { \"items\": [\n          { \"text\": \"What we collect\", \"target\": { \"ref\": \"collect\" } },\n          { \"text\": \"How we use it\", \"target\": { \"ref\": \"use\" } },\n          { \"text\": \"Who we share it with\", \"target\": { \"ref\": \"share\" } },\n          { \"text\": \"How long we keep it\", \"target\": { \"ref\": \"keep\" } },\n          { \"text\": \"Your rights\", \"target\": { \"ref\": \"rights\" } },\n          { \"text\": \"Cookies\", \"target\": { \"ref\": \"cookies\" } }\n        ] } },\n        { \"use\": \"content/section\", \"key\": \"collect\", \"data\": { \"title\": \"What we collect\" }, \"slots\": { \"body\": [\n          { \"use\": \"content/prose\", \"key\": \"text\", \"data\": { \"html\": \"<p>Your name, email, and address when you join; what you buy, so we can calculate your dividend; and rental records.</p>\" } } ] } },\n        { \"use\": \"content/section\", \"key\": \"use\", \"data\": { \"title\": \"How we use it\" }, \"slots\": { \"body\": [\n          { \"use\": \"content/prose\", \"key\": \"text\", \"data\": { \"html\": \"<p>To run your membership, process orders and rentals, and send the newsletter if you ask for it.</p>\" } } ] } },\n        { \"use\": \"content/section\", \"key\": \"share\", \"data\": { \"title\": \"Who we share it with\" }, \"slots\": { \"body\": [\n          { \"use\": \"content/prose\", \"key\": \"text\", \"data\": { \"html\": \"<p>Our payment processor and our shipping carrier, only as needed. We never sell personal data.</p>\" } } ] } },\n        { \"use\": \"content/section\", \"key\": \"keep\", \"data\": { \"title\": \"How long we keep it\" }, \"slots\": { \"body\": [\n          { \"use\": \"content/prose\", \"key\": \"text\", \"data\": { \"html\": \"<p>Purchase records for seven years, as tax law requires; everything else until you ask us to delete it.</p>\" } } ] } },\n        { \"use\": \"content/section\", \"key\": \"rights\", \"data\": { \"title\": \"Your rights\" }, \"slots\": { \"body\": [\n          { \"use\": \"content/prose\", \"key\": \"text\", \"data\": { \"html\": \"<p>You can ask for a copy of your data, a correction, or deletion. Email <a href=\\\"mailto:privacy@larkspur.coop\\\">privacy@larkspur.coop</a>.</p>\" } } ] } },\n        { \"use\": \"content/section\", \"key\": \"cookies\", \"data\": { \"title\": \"Cookies\" }, \"slots\": { \"body\": [\n          { \"use\": \"content/prose\", \"key\": \"text\", \"data\": { \"html\": \"<p>We use one cookie to keep you signed in, and no tracking cookies.</p>\" } } ] } }\n      ]\n    }\n  }\n}\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 16,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE.\n\nThe page passed and was written to `page.html`. These notes are for you:\n- **Unapproved components:** `page/basic`, `content/prose`, `nav/toc` and `content/section` have not been approved, so nobody has vouched for their markup yet.\n- **Review questions:** Does `lang=\"en\"` match the page's language? Does the title \"Privacy policy | Larkspur Supply Co.\" describe the page? I haven't answered either.",
+  "ttft_ms": 1595,
+  "type": "result",
+  "duration_ms": 26080,
+  "uuid": "e5668781-962d-4448-bfd3-36dae124d465",
+  "ttft_stream_ms": 1233,
+  "time_to_request_ms": 103,
+  "time_to_request_phases_ms": {
+    "other": 17,
+    "system_prompt": 10,
+    "resume_other": 0,
+    "process_user_input": 3,
+    "input_attachments": 17,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 5,
+    "engine_pickup": 2,
+    "message_prep": 0,
+    "model_config_wait": 1,
+    "autocompact": 3,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 23,
+    "message_normalization": 2,
+    "client_creation": 2,
+    "request_build": 11
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 52,
+  "time_to_request_cpu_ms": 117,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 254,
+  "process_anon_mib_turn_start": 135,
+  "process_rss_mib_result": 260,
+  "process_anon_mib_result": 138,
+  "process_peak_rss_mib": 278,
+  "process_cpu_ms_turn": 2039,
+  "process_wall_ms_turn": 26079,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 12,
+    "cpu_ms": 21,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1233,
+  "time_to_request_from_spawn_ms": 3464202,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329349228.887,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

@@ -1,0 +1,177 @@
+{
+  "duration_api_ms": 30149,
+  "stop_reason": "end_turn",
+  "session_id": "65006b0d-5faf-4745-b86b-540fd8126a4a",
+  "total_cost_usd": 0.12290519999999998,
+  "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 14100,
+    "cache_read_input_tokens": 291719,
+    "output_tokens": 3706,
+    "output_tokens_details": {
+      "thinking_tokens": 62
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 14100,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 6,
+        "cache_read_input_tokens": 40397,
+        "cache_creation_input_tokens": 1797,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1797
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 220,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0002413,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 204,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 3706,
+      "cacheReadInputTokens": 291719,
+      "cacheCreationInputTokens": 14100,
+      "webSearchRequests": 0,
+      "costUSD": 0.12266389999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 62,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_01Sy2dnL3N92Me6YH3vQDVXG",
+      "tool_input": {
+        "file_path": "/home/user/htmlverify/eval/results/2026-10-18-pilot-c-before-legal-C-1-work/brief.md"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_012YBwuTt6UQNn8B4NGfi8pK",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\"page\":{\"use\":\"page/basic\",\"data\":{\"title\":\"Privacy policy\",\"site\":\"Larkspur Supply Co.\",\"description\":\"Privacy policy for Larkspur Supply Co.\",\"heading\":\"Privacy policy\"},\"slots\":{\"main\":[\n{\"use\":\"content/prose\",\"key\":\"intro\",\"data\":{\"html\":\"<p>Privacy policy for Larkspur Supply Co.. Last updated 1 September 2026.</p>\"}},\n{\"use\":\"nav/toc\",\"key\":\"toc\",\"data\":{\"items\":[\n{\"text\":\"What we collect\",\"target\":\"collect\"},\n{\"text\":\"How we use it\",\"target\":\"use\"},\n{\"text\":\"Who we share it with\",\"target\":\"share\"},\n{\"text\":\"How long we keep it\",\"target\":\"keep\"},\n{\"text\":\"Your rights\",\"target\":\"rights\"},\n{\"text\":\"Cookies\",\"target\":\"cookies\"}]}},\n{\"use\":\"content/section\",\"key\":\"collect\",\"data\":{\"title\":\"What we collect\"},\"slots\":{\"body\":[{\"use\":\"content/prose\",\"key\":\"p\",\"data\":{\"html\":\"<p>Your name, email, and address when you join; what you buy, so we can calculate your dividend; and rental records.</p>\"}}]}},\n{\"use\":\"content/section\",\"key\":\"use\",\"data\":{\"title\":\"How we use it\"},\"slots\":{\"body\":[{\"use\":\"content/prose\",\"key\":\"p\",\"data\":{\"html\":\"<p>To run your membership, process orders and rentals, and send the newsletter if you ask for it.</p>\"}}]}},\n{\"use\":\"content/section\",\"key\":\"share\",\"data\":{\"title\":\"Who we share it with\"},\"slots\":{\"body\":[{\"use\":\"content/prose\",\"key\":\"p\",\"data\":{\"html\":\"<p>Our payment processor and our shipping carrier, only as needed. We never sell personal data.</p>\"}}]}},\n{\"use\":\"content/section\",\"key\":\"keep\",\"data\":{\"title\":\"How long we keep it\"},\"slots\":{\"body\":[{\"use\":\"content/prose\",\"key\":\"p\",\"data\":{\"html\":\"<p>Purchase records for seven years, as tax law requires; everything else until you ask us to delete it.</p>\"}}]}},\n{\"use\":\"content/section\",\"key\":\"rights\",\"data\":{\"title\":\"Your rights\"},\"slots\":{\"body\":[{\"use\":\"content/prose\",\"key\":\"p\",\"data\":{\"html\":\"<p>You can ask for a copy of your data, a correction, or deletion. Email privacy@larkspur.coop.</p>\"}}]}},\n{\"use\":\"content/section\",\"key\":\"cookies\",\"data\":{\"title\":\"Cookies\"},\"slots\":{\"body\":[{\"use\":\"content/prose\",\"key\":\"p\",\"data\":{\"html\":\"<p>We use one cookie to keep you signed in, and no tracking cookies.</p>\"}}]}}\n]}}}\nE"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_017bEEjjskHaeVE2e8GbjGLv",
+      "tool_input": {
+        "command": "sed -i -E 's/\"target\":\"([a-z]+)\"/\"target\":{\"ref\":\"\\1\"}/' plan.json && grep -c ref plan.json"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 13,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE.",
+  "ttft_ms": 2667,
+  "type": "result",
+  "duration_ms": 31591,
+  "uuid": "26a9ad91-7ea8-463c-b374-5d591a5e915b",
+  "ttft_stream_ms": 2303,
+  "time_to_request_ms": 106,
+  "time_to_request_phases_ms": {
+    "other": 17,
+    "system_prompt": 11,
+    "resume_other": 0,
+    "process_user_input": 3,
+    "input_attachments": 17,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 5,
+    "engine_pickup": 2,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 2,
+    "query_setup": 0,
+    "model_gates": 0,
+    "tool_schema_build": 24,
+    "message_normalization": 2,
+    "client_creation": 3,
+    "request_build": 12
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 55,
+  "time_to_request_cpu_ms": 116,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 254,
+  "process_anon_mib_turn_start": 135,
+  "process_rss_mib_result": 262,
+  "process_anon_mib_result": 140,
+  "process_peak_rss_mib": 277,
+  "process_cpu_ms_turn": 1987,
+  "process_wall_ms_turn": 31590,
+  "input_attachments_detail": {
+    "slowest_producer": "model",
+    "slowest_producer_ms": 13,
+    "cpu_ms": 23,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 2303,
+  "time_to_request_from_spawn_ms": 1685716,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792327570726.0122,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

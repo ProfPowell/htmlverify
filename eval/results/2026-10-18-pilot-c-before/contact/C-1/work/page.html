@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Contact | Larkspur Supply Co.</title>
+  <meta name="description" content="Contact Larkspur Supply Co.: address, phone, email, hours, a contact form, and how to get here." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Larkspur Supply Co.</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Contact</h1>
+    <layout-text>
+      <p>Contact Larkspur Supply Co.</p>
+    </layout-text>
+    <section id="visit" aria-labelledby="visit-title" data-layout="stack">
+      <h2 id="visit-title">Visit</h2>
+      <layout-text>
+        <p>Visit: 214 Alder Street, Port Wren, WA 98301. Phone: (360) 555-0142. Email: hello@larkspur.coop.</p>
+        <p>Hours: Monday–Saturday 9:00–19:00, Sunday 10:00–17:00.</p>
+      </layout-text>
+    </section>
+    <section id="form" aria-labelledby="form-title" data-layout="stack">
+      <h2 id="form-title">Contact form</h2>
+      <form action="/contact" method="post" class="stacked">
+        <form-field>
+          <label for="form-contact-name-input">Your name</label>
+          <input id="form-contact-name-input" type="text" name="name" autocomplete="name" required="true" />
+        </form-field>
+        <form-field>
+          <label for="form-contact-email-input">Email</label>
+          <input id="form-contact-email-input" type="email" name="email" autocomplete="email" required="true" />
+        </form-field>
+        <form-field>
+          <label for="form-contact-topic-input">Topic</label>
+          <select id="form-contact-topic-input" name="topic">
+            <option value="">Choose…</option>
+            <option value="membership">Membership</option>
+            <option value="rentals">Rentals</option>
+            <option value="repairs">Repairs</option>
+            <option value="other">Something else</option>
+          </select>
+        </form-field>
+        <form-field>
+          <label for="form-contact-message-input">Message</label>
+          <textarea id="form-contact-message-input" name="message" rows="4" required="true"></textarea>
+        </form-field>
+        <form-field data-type="checkbox"><label><input type="checkbox" name="copy" /> Send me a copy</label></form-field>
+        <footer class="actions end"><button type="submit">Send message</button></footer>
+      </form>
+      <layout-text>
+        <p>We answer within one business day.</p>
+      </layout-text>
+    </section>
+    <section id="getting-here" aria-labelledby="getting-here-title" data-layout="stack">
+      <h2 id="getting-here-title">Getting here</h2>
+      <layout-text>
+        <p>Bus routes 4 and 11 stop at Alder and 3rd. Free bike parking out front; paid parking in the Harbor Street garage.</p>
+      </layout-text>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 21559,
+  "stop_reason": "end_turn",
+  "session_id": "2a7c0c1a-3ea9-48bb-946a-134089c84dbf",
+  "total_cost_usd": 0.10439490000000001,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 13812,
+    "cache_read_input_tokens": 174016,
+    "output_tokens": 3158,
+    "output_tokens_details": {
+      "thinking_tokens": 164
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 13812,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 6,
+        "cache_read_input_tokens": 39680,
+        "cache_creation_input_tokens": 2226,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2226
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 28,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00014529999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 3158,
+      "cacheReadInputTokens": 174016,
+      "cacheCreationInputTokens": 13812,
+      "webSearchRequests": 0,
+      "costUSD": 0.1042496,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 164,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_01DPfc1T7dqkXL43wV6NLXZh",
+      "tool_input": {
+        "file_path": "/home/user/htmlverify/eval/results/2026-10-18-pilot-c-after-product-list-C-1-work/brief.md"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_012L4E2CQhVUGggkzAkcQK9e",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\n  \"page\": {\n    \"use\": \"page/basic\",\n    \"data\": { \"title\": \"Backpacks\", \"site\": \"Packs\", \"description\": \"Backpacks category page: 8 products, sorted by popularity.\", \"heading\": \"Backpacks\" },\n    \"slots\": {\n      \"main\": [\n        { \"use\": \"content/prose\", \"key\": \"intro\", \"data\": { \"html\": \"<p>8 products, sorted by popularity.</p>\" } },\n        { \"use\": \"form/form\", \"key\": \"filters\", \"data\": { \"method\": \"get\", \"label\": \"Filters\" },\n          \"slots\": {\n            \"fields\": [\n              { \"use\": \"form/choice-group\", \"key\": \"capacity\", \"data\": { \"legend\": \"Capacity\", \"name\": \"capacity\", \"choices\": [\n                { \"value\": \"under-30\", \"label\": \"Under 30 L\" }, { \"value\": \"30-50\", \"label\": \"30–50 L\" }, { \"value\": \"over-50\", \"label\": \"Over 50 L\" } ] } },\n              { \"use\": \"form/choice-group\", \"key\": \"price\", \"data\": { \"legend\": \"Price\", \"name\": \"price\", \"choices\": [\n                { \"value\": \"under-100\", \"label\": \"Under $100\" }, { \"value\": \"100-200\", \"label\": \"$100–$200\" }, { \"value\": \"over-200\", \"label\": \"Over $200\" } ] } },\n              { \"use\": \"form/checkbox\", \"key\": \"in-stock\", \"data\": { \"label\": \"Only show items in stock\", \"name\": \"in-stock\" } }\n            ],\n            \"actions\": [ { \"use\": \"action/submit\", \"key\": \"apply\", \"data\": { \"label\": \"Apply filters\" } } ]\n          } },\n        { \"use\": \"content/result-list\", \"key\": \"products\", \"data\": { \"results\": [\n          { \"title\": \"Ridgeline 40 L\", \"href\": \"/shop/ridgeline-40\", \"summary\": \"$189 · Rated 4.7 out of 5\", \"note\": \"In stock\" },\n          { \"title\": \"Day Hiker 22 L\", \"href\": \"/shop/day-hiker-22\", \"summary\": \"$79 · Rated 4.5 out of 5\", \"note\": \"In stock\" },\n          { \"title\": \"Summit 55 L\", \"href\": \"/shop/summit-55\", \"summary\": \"$249 · Rated 4.8 out of 5\", \"note\": \"2 left\" },\n          { \"title\": \"Commuter 18 L\", \"href\": \"/shop/commuter-18\", \"summary\": \"$64 · Rated 4.2 out of 5\", \"note\": \"In stock\" },\n          { \"title\": \"Trailhead 30 L\", \"href\": \"/shop/trailhead-30\", \"summary\": \"$119 · Rated 4.4 out of 5\", \"note\": \"Out of stock\" },\n          { \"title\": \"Expedition 70 L\", \"href\": \"/shop/expedition-70\", \"summary\": \"$329 · Rated 4.9 out of 5\", \"note\": \"In stock\" },\n          { \"title\": \"Kids' Explorer 12 L\", \"href\": \"/shop/explorer-12\", \"summary\": \"$45 · Rated 4.6 out of 5\", \"note\": \"In stock\" },\n          { \"title\": \"Ultralight 35 L\", \"href\": \"/shop/ultralight-35\", \"summary\": \"$215 · Rated 4.3 out of 5\", \"note\": \"In stock\" } ] } },\n        { \"use\": \"nav/pagination\", \"key\": \"pages\", \"data\": { \"next\": \"/shop/backpacks?page=2\", \"pages\": [\n          { \"label\": \"1\", \"href\": \"/shop/backpacks?page=1\", \"current\": \"page\" },\n          { \"label\": \"2\", \"href\": \"/shop/backpacks?page=2\" },\n          { \"label\": \"3\", \"href\": \"/shop/backpacks?page=3\" } ] } }\n      ]\n    }\n  }\n}\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 10,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE.",
+  "ttft_ms": 1914,
+  "type": "result",
+  "duration_ms": 23713,
+  "uuid": "4c9deadd-8db3-4673-b962-1c5d0f422cdc",
+  "ttft_stream_ms": 1597,
+  "time_to_request_ms": 152,
+  "time_to_request_phases_ms": {
+    "other": 29,
+    "system_prompt": 15,
+    "resume_other": 0,
+    "process_user_input": 4,
+    "input_attachments": 23,
+    "input_hooks": 3,
+    "tool_pool_refresh": 5,
+    "init_message": 7,
+    "engine_pickup": 2,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 4,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 41,
+    "message_normalization": 3,
+    "client_creation": 3,
+    "request_build": 10
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 102,
+  "time_to_request_cpu_ms": 159,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 243,
+  "process_anon_mib_turn_start": 123,
+  "process_rss_mib_result": 246,
+  "process_anon_mib_result": 124,
+  "process_peak_rss_mib": 253,
+  "process_cpu_ms_turn": 1625,
+  "process_wall_ms_turn": 23713,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 16,
+    "cpu_ms": 29,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1598,
+  "time_to_request_from_spawn_ms": 3490684,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329375082.2112,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

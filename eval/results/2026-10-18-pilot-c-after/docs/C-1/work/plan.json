@@ -1,0 +1,118 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Checking rental availability",
+      "site": "Rental API guide",
+      "description": "How to check whether a rental item is free, using the Rental API.",
+      "heading": "Checking rental availability"
+    },
+    "slots": {
+      "nav": [
+        {
+          "use": "nav/primary",
+          "key": "guide",
+          "data": {
+            "label": "Rental API guide",
+            "items": [
+              { "text": "Getting started", "href": "getting-started" },
+              { "text": "Authentication", "href": "authentication" },
+              { "text": "Checking availability", "href": "checking-availability", "current": "page" },
+              { "text": "Creating a booking", "href": "creating-a-booking" },
+              { "text": "Errors", "href": "errors" }
+            ]
+          }
+        }
+      ],
+      "main": [
+        {
+          "use": "content/prose",
+          "key": "intro",
+          "data": {
+            "html": "<p>To check whether an item is free, send a GET request to <code>/v1/items/{id}/availability</code> with start and end dates.</p>"
+          }
+        },
+        {
+          "use": "nav/toc",
+          "key": "toc",
+          "data": {
+            "items": [
+              { "text": "Request", "target": { "ref": "request" } },
+              { "text": "Response", "target": { "ref": "response" } },
+              { "text": "Errors", "target": { "ref": "errors" } }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "request",
+          "data": { "title": "Request" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/prose",
+                "key": "example",
+                "data": {
+                  "html": "<p>Request example:</p><pre><code>GET /v1/items/kayak-tidewater/availability?start=2026-11-08&amp;end=2026-11-09\nAuthorization: Bearer &lt;token&gt;</code></pre>"
+                }
+              },
+              {
+                "use": "data/description-list",
+                "key": "parameters",
+                "data": {
+                  "items": [
+                    { "term": "start", "description": "date, required" },
+                    { "term": "end", "description": "date, required" },
+                    { "term": "units", "description": "integer, optional, default 1" }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "response",
+          "data": { "title": "Response" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/prose",
+                "key": "example",
+                "data": {
+                  "html": "<p>Response example:</p><pre><code>{ \"available\": true, \"units\": 3 }</code></pre>"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "errors",
+          "data": { "title": "Errors" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/prose",
+                "key": "list",
+                "data": {
+                  "html": "<ul><li>404 if the item doesn't exist.</li><li>422 if end is before start.</li></ul>"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "nav/pagination",
+          "key": "next",
+          "data": {
+            "label": "Next page",
+            "next": "creating-a-booking",
+            "nextText": "Creating a booking",
+            "pages": []
+          }
+        }
+      ]
+    }
+  }
+}

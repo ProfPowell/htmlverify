@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 18044,
+  "stop_reason": "end_turn",
+  "session_id": "847c23c3-530f-41dd-8907-0077a978688c",
+  "total_cost_usd": 0.10781160000000001,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 15111,
+    "cache_read_input_tokens": 254198,
+    "output_tokens": 2178,
+    "output_tokens_details": {
+      "thinking_tokens": 205
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 15111,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 41983,
+        "cache_creation_input_tokens": 1222,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1222
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 2178,
+      "cacheReadInputTokens": 254198,
+      "cacheCreationInputTokens": 15111,
+      "webSearchRequests": 0,
+      "costUSD": 0.1076718,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 205,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_01M92u72V5H9zC8XE1xPi5Vg",
+      "tool_input": {
+        "file_path": "/home/user/htmlverify/eval/results/2026-10-18-pilot-c-after-press-release-C-1-work/brief.md"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01KNfzuqBNtTwyNM5D6i9MCo",
+      "tool_input": {
+        "command": "cat > plan.json <<'EOF'\n{\n  \"page\": {\n    \"use\": \"page/article\",\n    \"data\": {\n      \"title\": \"Larkspur Supply Co. opens the region's first gear library\",\n      \"site\": \"Larkspur Supply Co.\",\n      \"description\": \"Members can borrow tents, stoves, and snowshoes for free, starting 1 November 2026.\",\n      \"heading\": \"Larkspur Supply Co. opens the region's first gear library\",\n      \"subtitle\": \"Members can borrow tents, stoves, and snowshoes for free, starting 1 November 2026.\",\n      \"byline\": \"For immediate release · Port Wren, <time datetime=\\\"2026-10-14\\\">14 October 2026</time>\"\n    },\n    \"slots\": {\n      \"body\": [\n        {\n          \"use\": \"content/prose\",\n          \"key\": \"body\",\n          \"data\": {\n            \"html\": \"<p>Port Wren — Larkspur Supply Co. will open a gear library on 1 November 2026. Members can borrow up to three items for a week at no cost. The library starts with 240 items donated by members and repaired in the co-op's workshop.</p><p>\\\"Most gear spends its life in a closet,\\\" said general manager Priya Raman. \\\"A library puts it back on the trail.\\\"</p><p>The library will be open during store hours at 214 Alder Street.</p><p>About Larkspur Supply Co.: Founded in 1987, the cooperative is owned by 9,400 members and sells, rents, and repairs outdoor equipment.</p><p>Media contact: Sam Whitlock, <a href=\\\"mailto:press@larkspur.coop\\\">press@larkspur.coop</a>, (360) 555-0177.</p>\"\n          }\n        }\n      ]\n    }\n  }\n}\nEOF"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 13,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1546,
+  "type": "result",
+  "duration_ms": 20271,
+  "uuid": "b4f51539-3ca4-4dfd-88eb-b630310bba75",
+  "ttft_stream_ms": 1182,
+  "time_to_request_ms": 127,
+  "time_to_request_phases_ms": {
+    "other": 22,
+    "system_prompt": 23,
+    "resume_other": 0,
+    "process_user_input": 4,
+    "input_attachments": 19,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 6,
+    "engine_pickup": 1,
+    "message_prep": 2,
+    "model_config_wait": 1,
+    "autocompact": 2,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 24,
+    "message_normalization": 2,
+    "client_creation": 7,
+    "request_build": 7
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 77,
+  "time_to_request_cpu_ms": 139,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 254,
+  "process_anon_mib_turn_start": 135,
+  "process_rss_mib_result": 253,
+  "process_anon_mib_result": 131,
+  "process_peak_rss_mib": 262,
+  "process_cpu_ms_turn": 1628,
+  "process_wall_ms_turn": 20270,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 14,
+    "cpu_ms": 25,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1182,
+  "time_to_request_from_spawn_ms": 3468336,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329353219.4119,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

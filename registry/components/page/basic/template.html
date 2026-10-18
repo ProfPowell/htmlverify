@@ -4,7 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
-  <title>{{title}} | {{site}}</title>
+  <template vb-if="title">
+    <title>{{title}} | {{site}}</title>
+  </template>
+  <template vb-if="!title">
+    <title>{{site}}</title>
+  </template>
   <meta name="description" content="{{description}}" />
   <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
   <style>

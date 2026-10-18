@@ -1,0 +1,137 @@
+{
+  "brief": "event",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 4,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "times",
+        "met": false,
+        "found": 2
+      },
+      {
+        "id": "schedule",
+        "met": true,
+        "found": 8
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "address",
+        "met": false,
+        "found": 0
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "dl",
+    "dt",
+    "dd",
+    "time",
+    "time",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "h3",
+    "ul",
+    "li",
+    "li",
+    "li",
+    "layout-text",
+    "h3",
+    "ul",
+    "li",
+    "li",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "textarea",
+    "footer",
+    "button"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 2117,
+    "cacheRead": 212015,
+    "cacheWrite": 13572
+  },
+  "costUsd": 0.0968238,
+  "wallMs": 20924,
+  "turns": 9
+}

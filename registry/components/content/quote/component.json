@@ -1,15 +1,17 @@
 {
   "id": "content/quote",
   "version": "1.0.0",
-  "summary": "A quotation with its author and, optionally, its source.",
-  "use": "A testimonial or a cited passage, set apart from the text. For a short quote in a sentence, use <q> in prose.",
+  "summary": "A quotation set apart from the text, with its author and source when it has them.",
+  "use": "A testimonial, a cited passage, or a pull quote from the page itself. For a short quote in a sentence, use <q> in prose.",
   "params": {
     "quote": {
       "type": "inline"
     },
     "author": {
       "type": "text",
-      "minLength": 1
+      "required": false,
+      "minLength": 1,
+      "description": "Who said it. Leave it out for a pull quote from the page's own text."
     },
     "source": {
       "type": "text",

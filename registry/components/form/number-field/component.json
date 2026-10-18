@@ -1,0 +1,63 @@
+{
+  "id": "form/number-field",
+  "version": "1.0.0",
+  "summary": "Labeled whole-number input, with optional limits, a hint, and an error message.",
+  "use": "A whole number, such as a quantity. For other single-line input, use form/text-field.",
+  "context": "form",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data."
+    },
+    "min": {
+      "type": "integer",
+      "required": false
+    },
+    "max": {
+      "type": "integer",
+      "required": false
+    },
+    "step": {
+      "type": "integer",
+      "min": 1,
+      "required": false,
+      "description": "1 when left out."
+    },
+    "value": {
+      "type": "integer",
+      "required": false,
+      "description": "The number it starts with."
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "hint": {
+      "type": "inline",
+      "required": false,
+      "description": "Help shown with the field until it's valid."
+    },
+    "error": {
+      "type": "text",
+      "required": false,
+      "description": "Shown when the browser finds the value invalid."
+    }
+  },
+  "budget": {
+    "elements": 5
+  },
+  "obligations": [
+    "The label names the number, with its unit if it has one."
+  ],
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

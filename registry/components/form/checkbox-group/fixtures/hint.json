@@ -1,0 +1,21 @@
+{
+  "data": {
+    "legend": "Sizes",
+    "name": "sizes",
+    "hint": "Choose all that fit.",
+    "choices": [
+      {
+        "value": "s",
+        "label": "Small"
+      },
+      {
+        "value": "m",
+        "label": "Medium"
+      },
+      {
+        "value": "l",
+        "label": "Large"
+      }
+    ]
+  }
+}

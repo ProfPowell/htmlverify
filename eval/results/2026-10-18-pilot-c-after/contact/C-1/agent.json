@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 21079,
+  "stop_reason": "end_turn",
+  "session_id": "e6176349-204c-4d61-9737-ba0dbab0084c",
+  "total_cost_usd": 0.1138676,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 15321,
+    "cache_read_input_tokens": 214198,
+    "output_tokens": 3100,
+    "output_tokens_details": {
+      "thinking_tokens": 107
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 15321,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 85,
+        "cache_read_input_tokens": 40771,
+        "cache_creation_input_tokens": 2644,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2644
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 3100,
+      "cacheReadInputTokens": 214198,
+      "cacheCreationInputTokens": 15321,
+      "webSearchRequests": 0,
+      "costUSD": 0.1137278,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 107,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_019fhgj1zbUaaX8Bpj6Ge93X",
+      "tool_input": {
+        "file_path": "/home/user/htmlverify/eval/results/2026-10-18-pilot-c-after-contact-C-1-work/brief.md"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01HfVuXNQbXgDQR1iLNcT2N1",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\n  \"page\": {\n    \"use\": \"page/basic\",\n    \"data\": {\n      \"title\": \"Contact Larkspur Supply Co.\",\n      \"site\": \"Larkspur Supply Co.\",\n      \"description\": \"Contact Larkspur Supply Co.: address, phone, email, hours, a contact form, and how to get here.\",\n      \"heading\": \"Contact Larkspur Supply Co.\"\n    },\n    \"slots\": {\n      \"main\": [\n        {\n          \"use\": \"content/section\", \"key\": \"visit\", \"data\": { \"title\": \"Visit\" },\n          \"slots\": { \"body\": [\n            { \"use\": \"content/address\", \"key\": \"address\", \"data\": { \"lines\": [\n              \"214 Alder Street, Port Wren, WA 98301\",\n              \"Phone: <a href=\\\"tel:+13605550142\\\">(360) 555-0142</a>\",\n              \"Email: <a href=\\\"mailto:hello@larkspur.coop\\\">hello@larkspur.coop</a>\"\n            ] } },\n            { \"use\": \"content/prose\", \"key\": \"hours\", \"data\": { \"html\": \"<p>Hours: Monday–Saturday 9:00–19:00, Sunday 10:00–17:00.</p>\" } }\n          ] }\n        },\n        {\n          \"use\": \"content/section\", \"key\": \"form\", \"data\": { \"title\": \"Contact form\" },\n          \"slots\": { \"body\": [\n            { \"use\": \"form/form\", \"key\": \"contact\", \"data\": { \"label\": \"Contact form\" },\n              \"slots\": {\n                \"fields\": [\n                  { \"use\": \"form/text-field\", \"key\": \"name\", \"data\": { \"label\": \"Your name\", \"name\": \"name\", \"autocomplete\": \"name\", \"required\": true } },\n                  { \"use\": \"form/text-field\", \"key\": \"email\", \"data\": { \"label\": \"Email\", \"name\": \"email\", \"type\": \"email\", \"autocomplete\": \"email\", \"required\": true } },\n                  { \"use\": \"form/select-field\", \"key\": \"topic\", \"data\": { \"label\": \"Topic\", \"name\": \"topic\", \"options\": [\n                    { \"value\": \"membership\", \"label\": \"Membership\" },\n                    { \"value\": \"rentals\", \"label\": \"Rentals\" },\n                    { \"value\": \"repairs\", \"label\": \"Repairs\" },\n                    { \"value\": \"other\", \"label\": \"Something else\" }\n                  ] } },\n                  { \"use\": \"form/textarea-field\", \"key\": \"message\", \"data\": { \"label\": \"Message\", \"name\": \"message\", \"required\": true } },\n                  { \"use\": \"form/checkbox\", \"key\": \"copy\", \"data\": { \"label\": \"Send me a copy\", \"name\": \"copy\" } }\n                ],\n                \"actions\": [\n                  { \"use\": \"action/submit\", \"key\": \"send\", \"data\": { \"label\": \"Send message\" } }\n                ]\n              } },\n            { \"use\": \"content/prose\", \"key\": \"response\", \"data\": { \"html\": \"<p>We answer within one business day.</p>\" } }\n          ] }\n        },\n        {\n          \"use\": \"content/section\", \"key\": \"getting-here\", \"data\": { \"title\": \"Getting here\" },\n          \"slots\": { \"body\": [\n            { \"use\": \"content/prose\", \"key\": \"directions\", \"data\": { \"html\": \"<p>Bus routes 4 and 11 stop at Alder and 3rd. Free bike parking out front; paid parking in the Harbor Street garage.</p>\" } }\n          ] }\n        }\n      ]\n    }\n  }\n}\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 13,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE.\n\nOpen review questions for you:\n- Does `lang=\"en\"` match the page's language?\n- Does the title \"Contact Larkspur Supply Co. | Larkspur Supply Co.\" describe the page?\n\nNone of the 10 components used are approved yet.",
+  "ttft_ms": 1522,
+  "type": "result",
+  "duration_ms": 23537,
+  "uuid": "aad9624f-c603-46b1-9c5a-0b87240fc5e5",
+  "ttft_stream_ms": 1116,
+  "time_to_request_ms": 139,
+  "time_to_request_phases_ms": {
+    "other": 24,
+    "system_prompt": 19,
+    "resume_other": 0,
+    "process_user_input": 4,
+    "input_attachments": 21,
+    "input_hooks": 4,
+    "tool_pool_refresh": 3,
+    "init_message": 6,
+    "engine_pickup": 1,
+    "message_prep": 2,
+    "model_config_wait": 1,
+    "autocompact": 4,
+    "query_setup": 3,
+    "model_gates": 1,
+    "tool_schema_build": 33,
+    "message_normalization": 2,
+    "client_creation": 4,
+    "request_build": 7
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 89,
+  "time_to_request_cpu_ms": 145,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 244,
+  "process_anon_mib_turn_start": 124,
+  "process_rss_mib_result": 252,
+  "process_anon_mib_result": 130,
+  "process_peak_rss_mib": 255,
+  "process_cpu_ms_turn": 1791,
+  "process_wall_ms_turn": 23537,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 15,
+    "cpu_ms": 28,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1116,
+  "time_to_request_from_spawn_ms": 3433501,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329318074.035,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

@@ -1,0 +1,155 @@
+{
+  "duration_api_ms": 15488,
+  "stop_reason": "end_turn",
+  "session_id": "df09a04e-0c9d-4d23-aa62-8d25323faae5",
+  "total_cost_usd": 0.0843613,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 12304,
+    "cache_read_input_tokens": 133695,
+    "output_tokens": 2162,
+    "output_tokens_details": {
+      "thinking_tokens": 297
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 12304,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 229,
+        "cache_read_input_tokens": 37091,
+        "cache_creation_input_tokens": 3307,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3307
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2162,
+      "cacheReadInputTokens": 133695,
+      "cacheCreationInputTokens": 12304,
+      "webSearchRequests": 0,
+      "costUSD": 0.0842215,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 297,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 7,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE. `page.html` is written. Gaps and open questions:\n- **Photos:** I left out the four photos because the brief gives no image files or alt text.\n- **Wishlist button:** no component fits, so it's an HTML node.\n- **Placeholder URLs:** the breadcrumb links (`/`, `/shop`, `/shop/backpacks`) and the form action (`/cart`) are placeholders, since the brief gives none.\n- **Reviews for you:**\n  - Is `lang=\"en\"` right for the page?\n  - Does the title \"Ridgeline 40 L pack | Ridgeline\" describe the page?\n- **Unapproved components:** none of the components used have been approved yet.",
+  "ttft_ms": 1711,
+  "type": "result",
+  "duration_ms": 18131,
+  "uuid": "d82136fb-b4e0-4193-bce2-64e05e5483ad",
+  "ttft_stream_ms": 1343,
+  "time_to_request_ms": 113,
+  "time_to_request_phases_ms": {
+    "other": 19,
+    "system_prompt": 10,
+    "resume_other": 0,
+    "process_user_input": 3,
+    "input_attachments": 21,
+    "input_hooks": 3,
+    "tool_pool_refresh": 4,
+    "init_message": 5,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 2,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 26,
+    "message_normalization": 1,
+    "client_creation": 4,
+    "request_build": 11
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 63,
+  "time_to_request_cpu_ms": 123,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 254,
+  "process_anon_mib_turn_start": 135,
+  "process_rss_mib_result": 249,
+  "process_anon_mib_result": 128,
+  "process_peak_rss_mib": 262,
+  "process_cpu_ms_turn": 1208,
+  "process_wall_ms_turn": 18131,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 15,
+    "cpu_ms": 26,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1343,
+  "time_to_request_from_spawn_ms": 1708155,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792327593079.7185,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

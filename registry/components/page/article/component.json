@@ -1,0 +1,75 @@
+{
+  "id": "page/article",
+  "version": "1.0.0",
+  "summary": "An article page: the page shell, with the heading, subtitle, and byline in the article's header.",
+  "use": "A blog post, news story, or press release: one article that is the page's content. Sections go in body; related links and the like go in after, below the article.",
+  "context": "document",
+  "params": {
+    "lang": {
+      "type": "lang",
+      "default": "en"
+    },
+    "title": {
+      "type": "text",
+      "required": false,
+      "minLength": 1,
+      "description": "The page's own title, ahead of the site name. Leave it out on the home page, whose title is the site name alone."
+    },
+    "site": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The site name: the home link in the header and the end of the title."
+    },
+    "description": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The search-result summary."
+    },
+    "heading": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The article's title, the page's one h1."
+    },
+    "subtitle": {
+      "type": "inline",
+      "required": false,
+      "description": "A subheading or standfirst under the title."
+    },
+    "byline": {
+      "type": "inline",
+      "required": false,
+      "description": "Who and when, such as By Ana Ruiz · <time datetime=\"2026-05-04\">4 May 2026</time>."
+    }
+  },
+  "slots": {
+    "nav": {
+      "accepts": [
+        "nav/primary"
+      ],
+      "max": 1,
+      "description": "The site navigation, in the header ahead of the h1."
+    },
+    "body": {
+      "min": 1,
+      "description": "The article itself, below its header."
+    },
+    "after": {
+      "description": "Below the article, in main: related links, comments, and the like."
+    },
+    "footer": {
+      "accepts": [
+        "site/footer"
+      ],
+      "max": 1
+    }
+  },
+  "obligations": [
+    "The heading names the article, and the byline says who wrote it and when, if the content says."
+  ],
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

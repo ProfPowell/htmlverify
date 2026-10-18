@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{lang}}" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <template vb-if="title">
+    <title>{{title}} | {{site}}</title>
+  </template>
+  <template vb-if="!title">
+    <title>{{site}}</title>
+  </template>
+  <meta name="description" content="{{description}}" />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#@main" class="skip-link">Skip to main content</a>
+  <header class="site">
+    <a href="/" class="logo">{{site}}</a>
+    <template vb-slot="nav"></template>
+  </header>
+  <main id="@main" tabindex="-1">
+    <article class="blog">
+      <header>
+        <hgroup class="byline">
+          <h1>{{heading}}</h1>
+          <template vb-if="subtitle">
+            <p>{{subtitle}}</p>
+          </template>
+          <template vb-if="byline">
+            <p>{{byline}}</p>
+          </template>
+        </hgroup>
+      </header>
+      <template vb-slot="body"></template>
+    </article>
+    <template vb-slot="after"></template>
+  </main>
+  <template vb-slot="footer"></template>
+</body>
+</html>

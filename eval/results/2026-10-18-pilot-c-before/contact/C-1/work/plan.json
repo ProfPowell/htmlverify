@@ -1,0 +1,16 @@
+{"page":{"use":"page/basic","data":{"title":"Contact","site":"Larkspur Supply Co.","description":"Contact Larkspur Supply Co.: address, phone, email, hours, a contact form, and how to get here.","heading":"Contact"},"slots":{"main":[
+{"use":"content/prose","key":"intro","data":{"html":"<p>Contact Larkspur Supply Co.</p>"}},
+{"use":"content/section","key":"visit","data":{"title":"Visit"},"slots":{"body":[
+{"use":"content/prose","key":"details","data":{"html":"<p>Visit: 214 Alder Street, Port Wren, WA 98301. Phone: (360) 555-0142. Email: hello@larkspur.coop.</p><p>Hours: Monday–Saturday 9:00–19:00, Sunday 10:00–17:00.</p>"}}]}},
+{"use":"content/section","key":"form","data":{"title":"Contact form"},"slots":{"body":[
+{"use":"form/form","key":"contact","data":{"action":"/contact"},"slots":{"fields":[
+{"use":"form/text-field","key":"name","data":{"label":"Your name","name":"name","autocomplete":"name","required":true}},
+{"use":"form/text-field","key":"email","data":{"label":"Email","name":"email","type":"email","autocomplete":"email","required":true}},
+{"use":"form/select-field","key":"topic","data":{"label":"Topic","name":"topic","options":[{"value":"membership","label":"Membership"},{"value":"rentals","label":"Rentals"},{"value":"repairs","label":"Repairs"},{"value":"other","label":"Something else"}]}},
+{"use":"form/textarea-field","key":"message","data":{"label":"Message","name":"message","required":true}},
+{"use":"form/checkbox","key":"copy","data":{"label":"Send me a copy","name":"copy"}}],
+"actions":[{"use":"action/submit","key":"send","data":{"label":"Send message"}}]}},
+{"use":"content/prose","key":"response","data":{"html":"<p>We answer within one business day.</p>"}}]}},
+{"use":"content/section","key":"getting-here","data":{"title":"Getting here"},"slots":{"body":[
+{"use":"content/prose","key":"directions","data":{"html":"<p>Bus routes 4 and 11 stop at Alder and 3rd. Free bike parking out front; paid parking in the Harbor Street garage.</p>"}}]}}
+]}}}

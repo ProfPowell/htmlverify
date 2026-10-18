@@ -1,0 +1,155 @@
+{
+  "duration_api_ms": 16950,
+  "stop_reason": "end_turn",
+  "session_id": "d422cb32-9e85-4aab-b318-93ea1c573fe5",
+  "total_cost_usd": 0.09734550000000002,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 13416,
+    "cache_read_input_tokens": 210822,
+    "output_tokens": 2243,
+    "output_tokens_details": {
+      "thinking_tokens": 327
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 13416,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 260,
+        "cache_read_input_tokens": 39468,
+        "cache_creation_input_tokens": 2042,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2042
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 28,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00014529999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2243,
+      "cacheReadInputTokens": 210822,
+      "cacheCreationInputTokens": 13416,
+      "webSearchRequests": 0,
+      "costUSD": 0.09720020000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 327,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 14,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE. `page.html` is written and passes the checks, but with these gaps:\n\n- **Photos:** I left them out. The brief describes three photos but gives no image files, so the featured items are plain cards with name, price and link.\n- **Footer:** I used a hand-written HTML node. The footer component requires legal links, and the brief has none.\n- **Nav links:** The brief gives no URLs, so I guessed `/shop`, `/rentals`, `/workshops`, `/about` and `/contact`. Please confirm them.\n- **Components:** None are approved yet, so the check printed warnings for each one.\n- **Review questions:** Does `lang=\"en\"` match the content? Does the title \"Larkspur Supply Co. | Larkspur Supply Co.\" describe the page? It repeats the site name.",
+  "ttft_ms": 1242,
+  "type": "result",
+  "duration_ms": 19468,
+  "uuid": "ee35b179-6805-4fec-b0cb-f96672485a0e",
+  "ttft_stream_ms": 911,
+  "time_to_request_ms": 102,
+  "time_to_request_phases_ms": {
+    "other": 16,
+    "system_prompt": 11,
+    "resume_other": 0,
+    "process_user_input": 3,
+    "input_attachments": 18,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 5,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 1,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 21,
+    "message_normalization": 3,
+    "client_creation": 3,
+    "request_build": 11
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 51,
+  "time_to_request_cpu_ms": 113,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 253,
+  "process_anon_mib_turn_start": 134,
+  "process_rss_mib_result": 257,
+  "process_anon_mib_result": 135,
+  "process_peak_rss_mib": 277,
+  "process_cpu_ms_turn": 1467,
+  "process_wall_ms_turn": 19467,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 14,
+    "cpu_ms": 24,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 911,
+  "time_to_request_from_spawn_ms": 1680133,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792327565187.3403,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

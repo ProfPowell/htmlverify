@@ -1,0 +1,42 @@
+{
+  "id": "form/search",
+  "version": "1.0.0",
+  "summary": "A search box and its button, in a search landmark.",
+  "use": "Site search, or the search box on a results page, which shows the query as its value.",
+  "params": {
+    "action": {
+      "type": "url",
+      "required": false,
+      "description": "The results page; without it, the search submits to the page it's on."
+    },
+    "label": {
+      "type": "text",
+      "minLength": 1,
+      "default": "Search",
+      "description": "Names the box, such as \"Search the shop\"."
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data.",
+      "default": "q"
+    },
+    "value": {
+      "type": "text",
+      "required": false,
+      "pattern": "^[^\\r\\n]+$",
+      "description": "The query, on a results page. One line."
+    },
+    "button": {
+      "type": "text",
+      "minLength": 1,
+      "default": "Search"
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

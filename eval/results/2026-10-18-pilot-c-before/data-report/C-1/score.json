@@ -1,0 +1,134 @@
+{
+  "brief": "data-report",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 2,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 5,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "table",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "caption",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "headers",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "rows",
+        "met": true,
+        "found": 5
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "p",
+    "data-table",
+    "table",
+    "caption",
+    "thead",
+    "tr",
+    "th",
+    "th",
+    "th",
+    "th",
+    "th",
+    "tbody",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "td",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "td",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "td",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "td",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "td",
+    "layout-text",
+    "p",
+    "a"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 1799,
+    "cacheRead": 209242,
+    "cacheWrite": 12060
+  },
+  "costUsd": 0.08732300000000001,
+  "wallMs": 17096,
+  "turns": 11
+}
