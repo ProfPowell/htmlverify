@@ -3,13 +3,14 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import { CONFIG_FILE, ConfigError, parseConfig, resolveProfile, type Config } from '../config.ts';
 import { assemble } from '../assemble/assemble.ts';
+import { approveComponent, catalog, checkComponent, checkRegistry, LifecycleError, newComponent, openRegistry, showComponent } from '../assemble/lifecycle.ts';
 import { explain, formatExplain, formatRules, listRules } from '../explain.ts';
 import { isProfileName, type ProfileName } from '../profiles.ts';
 import { canonicalJson, stableJson } from '../report/canonical.ts';
 import { fix } from '../fix/fix.ts';
 import { unifiedDiff } from '../fix/diff.ts';
 import { check, type CheckInput, type CheckOptions, type Status } from '../report/report.ts';
-import { formatAssembly, formatText } from '../report/text.ts';
+import { formatAssembly, formatCatalog, formatComponent, formatComponentCheck, formatRegistryCheck, formatText } from '../report/text.ts';
 import { VERSION } from '../version.ts';
 import { VocabError } from '../vocab/compile.ts';
 import { snapshotFromCheckout } from '../vocab/source.ts';
@@ -30,6 +31,11 @@ const USAGE = `Usage:
   htmlverify explain <rule> [--format text|json]
   htmlverify rules [--profile strict|standard] [--config <file>] [--format text|json]
   htmlverify assemble <plan.json|-> [--out <file>] [--emit-failed] [--draft] [options]
+  htmlverify catalog [--query <text>] [--format text|json]
+  htmlverify component new <id> --author <name>
+  htmlverify component show|check <id> [--update] [--nu] [--format text|json]
+  htmlverify component approve <id> --by <name> [--nu]
+  htmlverify registry check [--nu] [--format text|json]
   htmlverify vocab update vanilla-breeze --from <checkout> [--out <file>]
   htmlverify init [--claude] [--profile strict|standard] [--force]
   htmlverify hook claude                    (the Claude Code PostToolUse hook; reads the event on stdin)
@@ -45,6 +51,7 @@ Options:
                               with the report on stderr)
   --emit-failed               assemble: when it fails, write <out>.failed.html to inspect
   --draft                     assemble: allow unreviewed and stale components, with a warning
+  --update                    component check: write each fixture's expected output, to review
   --nu                        check: cross-check documents with the Nu Html Checker (needs Java)
   -h, --help                  show this help
   -v, --version               print the version
@@ -61,7 +68,7 @@ export async function main(argv: string[], io: Io): Promise<number> {
   try {
     return await run(argv, io);
   } catch (error) {
-    if (error instanceof ConfigError || error instanceof VocabError) {
+    if (error instanceof ConfigError || error instanceof VocabError || error instanceof LifecycleError) {
       io.stderr.write(`htmlverify: ${error.message}\n`);
       return 2;
     }
@@ -85,6 +92,7 @@ async function run(argv: string[], io: Io): Promise<number> {
   if (command === 'init') return initCommand(rest, io);
   if (command === 'hook') return hook(rest, io);
   if (command === 'assemble') return assembleCommand(rest, io);
+  if (command === 'component' || command === 'registry' || command === 'catalog') return lifecycleCommand(command, rest, io);
   if (command !== 'check' && command !== 'fix' && command !== 'explain' && command !== 'rules') {
     throw new UsageError(command ? `unknown command "${command}"` : 'missing command');
   }
@@ -267,6 +275,100 @@ async function assembleCommand(argv: string[], io: Io): Promise<number> {
     if (result.status === 'pass') io.stdout.write(result.html!);
     io.stderr.write(formatAssembly(result, result.status === 'pass' ? '<stdout>' : null));
   }
+  return result.status === 'pass' ? 0 : 1;
+}
+
+/**
+ * The component lifecycle (spec §9.10) and the catalog (spec §10.1):
+ * `component new|show|check|approve <id>`, `registry check`, and `catalog`,
+ * all on the registry the config names.
+ */
+async function lifecycleCommand(command: 'component' | 'registry' | 'catalog', argv: string[], io: Io): Promise<number> {
+  let args;
+  try {
+    args = parseArgs({
+      args: argv,
+      allowPositionals: true,
+      strict: true,
+      options: {
+        author: { type: 'string' },
+        by: { type: 'string' },
+        query: { type: 'string' },
+        update: { type: 'boolean' },
+        nu: { type: 'boolean' },
+        config: { type: 'string' },
+        format: { type: 'string', default: 'text' },
+        help: { type: 'boolean', short: 'h' },
+      },
+    });
+  } catch (error) {
+    throw new UsageError((error as Error).message);
+  }
+  if (args.values.help) {
+    io.stdout.write(USAGE);
+    return 0;
+  }
+  const { format } = args.values;
+  if (format !== 'text' && format !== 'json') throw new UsageError(`unknown format "${format}"`);
+  const [sub, id, ...extra] = command === 'catalog' ? [undefined, undefined, ...args.positionals] : args.positionals;
+  if (extra.length) throw new UsageError(`unexpected argument "${extra[0]}"`);
+  const usage: Record<string, string> = {
+    component: 'usage: htmlverify component new|show|check|approve <id>',
+    registry: 'usage: htmlverify registry check',
+  };
+  if (command === 'component' && !(['new', 'show', 'check', 'approve'].includes(sub ?? '') && id)) throw new UsageError(usage['component']!);
+  if (command === 'registry' && (sub !== 'check' || id)) throw new UsageError(usage['registry']!);
+  const allowed: Record<string, readonly string[]> = {
+    catalog: ['query'], new: ['author'], show: [], check: ['update', 'nu'], approve: ['by', 'nu'], registry: ['nu'],
+  };
+  const mode = command === 'component' ? sub! : command;
+  for (const option of ['author', 'by', 'query', 'update', 'nu'] as const) {
+    if (args.values[option] !== undefined && !allowed[mode]!.includes(option)) throw new UsageError(`--${option} doesn’t apply to ${command === 'component' ? `component ${sub}` : command}`);
+  }
+
+  const config = await loadConfig(args.values.config, io.cwd);
+  if (!config?.registryDir) throw new ConfigError(`${command} needs a component registry; set "registry" in ${CONFIG_FILE}`);
+  const json = (value: unknown) => io.stdout.write(`${canonicalJson(value)}\n`);
+  if (mode === 'new') {
+    if (!args.values.author) throw new UsageError('component new needs --author <name>');
+    const files = newComponent(config.registryDir, id!, args.values.author);
+    if (format === 'json') json({ files });
+    else io.stdout.write(`${files.map((f) => `wrote ${f}`).join('\n')}\nNext: fill in the contract and template, then run htmlverify component check ${id} --update.\n`);
+    return 0;
+  }
+  const registry = openRegistry(config.registryDir, config);
+  if (mode === 'catalog') {
+    const list = catalog(registry, args.values.query);
+    if (format === 'json') json(list);
+    else io.stdout.write(formatCatalog(list));
+    return 0;
+  }
+  const nu = args.values.nu ? { jar: config.nu?.jar ?? resolve(io.cwd, 'node_modules/vnu-jar/build/dist/vnu.jar'), ...(config.nu?.java ? { java: config.nu.java } : {}) } : null;
+  if (mode === 'show') {
+    const details = await showComponent(registry, id!, { config });
+    if (format === 'json') json(details);
+    else io.stdout.write(formatComponent(details));
+    return 0;
+  }
+  if (mode === 'check') {
+    const result = await checkComponent(registry, id!, { config, nu, update: args.values.update === true });
+    if (format === 'json') json(result);
+    else io.stdout.write(formatComponentCheck(result));
+    return result.status === 'pass' ? 0 : 1;
+  }
+  if (mode === 'approve') {
+    if (!args.values.by) throw new UsageError('component approve needs --by <name>, the reviewer');
+    const approval = await approveComponent(registry, id!, args.values.by, { config, nu });
+    if (format === 'json') json(approval);
+    else {
+      io.stdout.write(formatComponentCheck(approval.check));
+      io.stdout.write(approval.approved ? `Approved ${id}@${approval.check.version}: the review is recorded in components/${id}/component.json.\n` : `Not approved: ${id} needs a clean check with full coverage first.\n`);
+    }
+    return approval.approved ? 0 : 1;
+  }
+  const result = await checkRegistry(registry, { config, nu });
+  if (format === 'json') json(result);
+  else io.stdout.write(formatRegistryCheck(result));
   return result.status === 'pass' ? 0 : 1;
 }
 
