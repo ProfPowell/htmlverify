@@ -710,6 +710,8 @@ Enough to build the page set in §13, on Vanilla Breeze 0.3.1. It ships in `regi
 | overlays | `disclosure/details`, `disclosure/tabs` (`tab-set` over `details`), `dialog/modal` (`dialog` named by its heading, closed by invoker buttons; runtime checks in M4) |
 | site | `site/footer` (`footer.minimal` with `site-legal`, and a `nav` for other links) |
 
+Every component's fixtures also pass Nu. Its one warning, "Section lacks heading", is on the body `section` of `dialog/modal`, which VB pads and which `aria-labelledby` names after the dialog's title. Nu doesn't count `aria-labelledby`; `semantic/section-heading` does, and Nu's alternative, a `div`, is what `policy/no-div` forbids.
+
 ## 10. Interfaces
 
 ### 10.1 CLI
