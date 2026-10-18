@@ -1,0 +1,16 @@
+{
+  "data": {
+    "label": "Country",
+    "name": "country",
+    "options": [
+      {
+        "value": "gb",
+        "label": "United Kingdom"
+      },
+      {
+        "value": "ie",
+        "label": "Ireland"
+      }
+    ]
+  }
+}

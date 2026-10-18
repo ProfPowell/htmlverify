@@ -1,0 +1,15 @@
+{
+  "data": {
+    "cards": [
+      {
+        "title": "Fast by default",
+        "text": "Pages load in under a second.",
+        "href": "/features/speed"
+      },
+      {
+        "title": "Accessible",
+        "text": "Every component meets <abbr title=\"Web Content Accessibility Guidelines\">WCAG</abbr> 2.2 AA."
+      }
+    ]
+  }
+}

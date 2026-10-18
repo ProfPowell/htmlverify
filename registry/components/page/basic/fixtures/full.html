@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-GB" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>About | Acme</title>
+  <meta name="description" content="Who we are and what we make." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site">
+    <a href="/" class="logo">Acme</a>
+    <nav class="horizontal" aria-label="Main navigation">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about" aria-current="page">About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+    <h1>About Acme</h1>
+    <section id="story" aria-labelledby="story-title" data-layout="stack">
+      <h2 id="story-title">Our story</h2>
+      <layout-text>
+        <p>Founded in 2020, we make tools for people who build the web.</p>
+      </layout-text>
+    </section>
+  </main>
+  <footer class="minimal">
+    <site-legal>
+      <span>© 2026 Acme</span>
+      <a href="/privacy">Privacy</a>
+    </site-legal>
+  </footer>
+</body>
+</html>

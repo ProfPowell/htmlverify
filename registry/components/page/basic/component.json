@@ -1,0 +1,61 @@
+{
+  "id": "page/basic",
+  "version": "1.0.0",
+  "summary": "A page: head with Vanilla Breeze, skip link, site header, main with the page heading, and an optional footer.",
+  "use": "The root of every page plan. The title reads \"Title | Site\"; navigation goes in nav, the content in main, and site/footer in footer.",
+  "context": "document",
+  "params": {
+    "lang": {
+      "type": "lang",
+      "default": "en"
+    },
+    "title": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The page's own title, ahead of the site name."
+    },
+    "site": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The site name: the home link in the header and the end of the title."
+    },
+    "description": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The search-result summary."
+    },
+    "heading": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The page's one h1."
+    }
+  },
+  "slots": {
+    "nav": {
+      "accepts": [
+        "nav/primary"
+      ],
+      "max": 1,
+      "description": "The site navigation, in the header ahead of the h1."
+    },
+    "main": {
+      "min": 1,
+      "description": "The page's content, below its h1."
+    },
+    "footer": {
+      "accepts": [
+        "site/footer"
+      ],
+      "max": 1
+    }
+  },
+  "obligations": [
+    "The heading says what the page is about, and the description summarizes it."
+  ],
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

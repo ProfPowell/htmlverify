@@ -1,0 +1,55 @@
+{
+  "id": "form/textarea-field",
+  "version": "1.0.0",
+  "summary": "Labeled multi-line text input, with an optional hint and error message.",
+  "use": "Messages, comments, and descriptions. For a single line use form/text-field.",
+  "context": "form",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data."
+    },
+    "rows": {
+      "type": "integer",
+      "min": 2,
+      "max": 20,
+      "default": 4
+    },
+    "maxLength": {
+      "type": "integer",
+      "min": 1,
+      "required": false
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "hint": {
+      "type": "inline",
+      "required": false,
+      "description": "Help shown with the field until it's valid."
+    },
+    "error": {
+      "type": "text",
+      "required": false,
+      "description": "Shown when the browser finds the value invalid."
+    }
+  },
+  "budget": {
+    "elements": 5
+  },
+  "obligations": [
+    "The label names the expected input."
+  ],
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

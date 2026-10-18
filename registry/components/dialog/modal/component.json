@@ -1,0 +1,41 @@
+{
+  "id": "dialog/modal",
+  "version": "1.0.0",
+  "summary": "A modal dialog with a title, content, and a close button.",
+  "use": "Content that needs the person's attention before they go on, opened by action/button. Its ID comes from its key, which the button's target names.",
+  "context": "main",
+  "params": {
+    "title": {
+      "type": "text",
+      "minLength": 1
+    },
+    "body": {
+      "type": "prose"
+    },
+    "dismiss": {
+      "type": "text",
+      "default": "Close",
+      "description": "The text of the button that closes it."
+    },
+    "closeLabel": {
+      "type": "text",
+      "default": "Close dialog",
+      "description": "The name of the icon-only close button in the header."
+    }
+  },
+  "slots": {
+    "actions": {
+      "accepts": [
+        "action/button",
+        "action/link-button"
+      ],
+      "description": "More actions beside the close button."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

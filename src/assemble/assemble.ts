@@ -43,8 +43,12 @@ export interface AssembleOptions {
   planPath?: string;
   /** The path the output is reported under. */
   outPath?: string;
-  /** Where the plan in planSource sits in the plan assembled, such as a fixture that is one instance; its pointers are relative to it. */
-  sourcePointer?: string;
+  /**
+   * Where parts of the plan assembled sit in planSource, as [plan pointer,
+   * source pointer] pairs: a fixture's instance is /fragment/children/0 in
+   * the plan and the root of its file.
+   */
+  sourcePointers?: readonly (readonly [string, string])[];
   /** Records the branches and loops rendered, for a component check (spec §9.10). */
   coverage?: Coverage;
 }
@@ -73,7 +77,7 @@ export async function assemble(input: unknown, options: AssembleOptions): Promis
   const registry = typeof options.registry === 'string' ? loadRegistry(options.registry, vocabulary) : options.registry;
   const planPath = options.planPath ?? 'plan.json';
   const text = typeof input === 'string' ? input : null;
-  const located = new PlanLocator(planPath, options.planSource ?? text, options.sourcePointer ?? '');
+  const located = new PlanLocator(planPath, options.planSource ?? text, options.sourcePointers ?? []);
   const fail = (findings: Finding[], extra: Partial<AssemblyResult> = {}): AssemblyResult =>
     ({ status: 'fail', html: null, plan: { path: planPath, findings: inPlanOrder(findings) }, report: null, components: [], gaps: [], ...extra });
 
@@ -234,18 +238,21 @@ class PlanLocator {
   readonly #path: string;
   readonly #pointers: Map<string, number> | null;
   readonly #lines: LineIndex | null;
-  readonly #base: string;
+  readonly #map: readonly (readonly [string, string])[];
 
-  constructor(path: string, source: string | null, base: string) {
+  constructor(path: string, source: string | null, map: readonly (readonly [string, string])[]) {
     this.#path = path;
     this.#pointers = source === null ? null : jsonPointers(source);
     this.#lines = source === null ? null : new LineIndex(source);
-    this.#base = base;
+    this.#map = map;
   }
 
-  /** A pointer into the plan assembled, relative to the plan in the source. */
+  /** A pointer into the plan assembled, as a pointer into the source. */
   local(absolute: string): string {
-    return this.#base && (absolute === this.#base || absolute.startsWith(`${this.#base}/`)) ? absolute.slice(this.#base.length) : absolute;
+    for (const [plan, source] of this.#map) {
+      if (absolute === plan || absolute.startsWith(`${plan}/`)) return source + absolute.slice(plan.length);
+    }
+    return absolute;
   }
 
   finding(rule: string, absolute: string, message: string, severity: Severity = 'error', at?: number): Finding {

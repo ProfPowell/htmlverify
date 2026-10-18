@@ -4,10 +4,11 @@
 // node records its origin.
 
 import { defaultTreeAdapter as tree } from 'parse5';
-import { isElement, isHtml, walk, type ChildNode, type Document, type DocumentFragment, type Element, type Node, type ParentNode, type Template } from '../parse/tree.ts';
+import { isElement, isHtml, isText, walk, type ChildNode, type Document, type DocumentFragment, type Element, type Node, type ParentNode, type Template } from '../parse/tree.ts';
 import type { CheckOptions } from '../report/report.ts';
 import type { Coverage } from './coverage.ts';
 import { NS } from '../spec/html.ts';
+import { words } from '../text.ts';
 import { isObject, type Value, type ValueOptions } from './params.ts';
 import type { PlanHtml, PlanInstance, PlanNode } from './plan.ts';
 import type { Component } from './registry.ts';
@@ -62,7 +63,8 @@ interface Frame {
   elements: number;
 }
 
-type Scope = ReadonlyMap<string, Value>;
+/** vb-each items in scope by their vb-as name, with where each is in the plan. */
+type Scope = ReadonlyMap<string, { value: Value; pointer: string }>;
 type Attr = Element['attrs'][number];
 
 /** Fills in a placeholder attribute, or removes it, keeping template order. */
@@ -80,8 +82,10 @@ export class Builder {
   readonly #options: InstantiateOptions;
   readonly #built: Built;
   /** Each instance's own ID (its @ symbol), by key path, for ref parameters. */
-  readonly #instances = new Map<string, { id: string | null; pointer: string }>();
-  readonly #refs: { element: Element; attr: Attr; ref: string; href: boolean; pointer: string }[] = [];
+  readonly #instances = new Map<string, { id: string | null; pointer: string; component: string }>();
+  readonly #refs: { element: Element; attr: Attr; ref: string; href: boolean; pointer: string; accepts: readonly string[] | null }[] = [];
+  /** Fragment links from data and markup values, which must land on an ID in a page (spec §9.5). */
+  readonly #fragmentLinks: { href: string; pointer: string }[] = [];
 
   constructor(components: ReadonlyMap<PlanInstance, Component>, data: ReadonlyMap<PlanInstance, Record<string, Value>>, options: InstantiateOptions) {
     this.#components = components;
@@ -148,7 +152,7 @@ export class Builder {
     if (budget && frame.elements > budget.elements) {
       this.#problem('assembly/budget', node.pointer, `${component.id} rendered ${frame.elements} elements, more than its budget of ${budget.elements}; that usually means too much data, or a component that should be split.`);
     }
-    this.#instances.set(path.join('/'), { id: frame.rendered.has('') && path.length ? this.#symbolId(frame, '') : null, pointer: node.pointer });
+    this.#instances.set(path.join('/'), { id: frame.rendered.has('') && path.length ? this.#symbolId(frame, '') : null, pointer: node.pointer, component: component.id });
   }
 
   /** An instance's ID for a symbol: contact/email's @input is contact-email-input, its @ is contact-email. */
@@ -167,8 +171,14 @@ export class Builder {
     };
   }
 
+  /** Where a path's value is in the plan: /…/data/items/1/href for item.href in a vb-each over items. */
+  #pointer(path: Path, frame: Frame, scope: Scope): string {
+    const base = scope.get(path.root)?.pointer ?? `${frame.node.pointer}/data/${path.root}`;
+    return path.field === null ? base : `${base}/${path.field}`;
+  }
+
   #lookup(path: Path, frame: Frame, scope: Scope): Value | undefined {
-    const base = scope.has(path.root) ? scope.get(path.root) : frame.data[path.root];
+    const base = scope.has(path.root) ? scope.get(path.root)!.value : frame.data[path.root];
     if (path.field === null) return base;
     return isObject(base) ? (base as Record<string, Value>)[path.field] : undefined;
   }
@@ -185,7 +195,7 @@ export class Builder {
         case 'value': {
           const v = this.#lookup(n.path, frame, scope);
           if (v === undefined) break;
-          if (n.type === 'inline' || n.type === 'prose') await this.#markup(String(v), n.type, parent, context, frame, `${frame.node.pointer}/data/${n.path.root}`);
+          if (n.type === 'inline' || n.type === 'prose') await this.#markup(String(v), n.type, parent, context, frame, this.#pointer(n.path, frame, scope));
           else {
             tree.insertText(parent, String(v));
             if (isElement(parent as Node)) this.#built.dataText.add(parent as Element);
@@ -203,7 +213,8 @@ export class Builder {
           const v = this.#lookup(n.path, frame, scope);
           const items = Array.isArray(v) ? v : [];
           this.#options.coverage?.loop(frame.component.id, n.loc, items.length);
-          for (const item of items) await this.#nodes(n.children, parent, context, frame, new Map(scope).set(n.as, item));
+          const list = this.#pointer(n.path, frame, scope);
+          for (const [i, item] of items.entries()) await this.#nodes(n.children, parent, context, frame, new Map(scope).set(n.as, { value: item, pointer: `${list}/${i}` }));
           break;
         }
         case 'slot':
@@ -258,8 +269,11 @@ export class Builder {
         else if (a.type === 'ref') {
           const attr: Attr = { name: a.name, value: '' };
           element.attrs.push(attr);
-          this.#refs.push({ element, attr, ref: (v as { ref: string }).ref, href: a.name === 'href', pointer: `${frame.node.pointer}/data/${a.path.root}` });
-        } else element.attrs.push({ name: a.name, value: String(v) });
+          this.#refs.push({ element, attr, ref: (v as { ref: string }).ref, href: a.name === 'href', pointer: this.#pointer(a.path, frame, scope), accepts: a.accepts ?? null });
+        } else {
+          element.attrs.push({ name: a.name, value: String(v) });
+          if (a.type === 'url' && a.name === 'href') this.#fragmentLink(String(v), this.#pointer(a.path, frame, scope));
+        }
         return;
       }
       case 'mixed': {
@@ -326,14 +340,26 @@ export class Builder {
       element.tagName = element.nodeName = `h${Math.min(level, 6)}`;
     }
     const origin = this.#origin(frame, null, 'data', pointer);
-    for (const n of parsed.nodes) this.#adopt(n, parent, origin);
+    for (const n of parsed.nodes) {
+      for (const { node: e } of walk(n)) if (isElement(e) && e.tagName === 'a') this.#fragmentLink(e.attrs.find((x) => x.name === 'href')?.value ?? '', pointer);
+      this.#adopt(n, parent, origin);
+    }
   }
 
-  /** Moves parsed nodes into the tree, recording where they came from. */
+  #fragmentLink(href: string, pointer: string): void {
+    if (href.startsWith('#') && href.length > 1 && href.toLowerCase() !== '#top') this.#fragmentLinks.push({ href, pointer });
+  }
+
+  /**
+   * Moves parsed nodes into the tree, recording where they came from. Text
+   * joins the text before it, as the parser will join it when the output is
+   * read back.
+   */
   #adopt(node: ChildNode, parent: ParentNode, origin: NodeOrigin): void {
     for (const { node: n } of walk(node)) if (isElement(n)) this.#built.origins.set(n, origin);
     tree.detachNode(node);
-    tree.appendChild(parent, node);
+    if (isText(node)) tree.insertText(parent, node.value);
+    else tree.appendChild(parent, node);
   }
 
   /** Cross-instance refs, then ID collisions over the whole tree. */
@@ -343,7 +369,9 @@ export class Builder {
       if (!target && this.#built.gaps.some((g) => g.instance === r.ref)) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names an HTML node; a ref names a component instance whose component has id="@".`);
       else if (!target) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names no instance in the plan; a key path lists keys from the top of the plan down, such as "contact/email".`);
       else if (!target.id) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names an instance whose component has no id="@"; refer to one that does.`);
-      settle(r.element, r.attr, target?.id ? (r.href ? `#${target.id}` : target.id) : null);
+      const fits = !target || !r.accepts || r.accepts.includes(target.component);
+      if (!fits) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names a ${target!.component}; it takes ${words([...r.accepts!])}.`);
+      settle(r.element, r.attr, target?.id && fits ? (r.href ? `#${target.id}` : target.id) : null);
     }
     const seen = new Map<string, Element>();
     for (const { node } of walk(this.#built.root)) {
@@ -358,6 +386,11 @@ export class Builder {
       const a = this.#built.origins.get(first);
       const b = this.#built.origins.get(node);
       this.#problem('assembly/id-collision', b?.plan ?? '', `id="${id}" appears twice, in ${a?.instance || 'the page'} and ${b?.instance || 'the page'}; change a key.`);
+    }
+    // Only a page has all its IDs; a fragment's links may land elsewhere on its page.
+    if (this.#built.root.nodeName !== '#document') return;
+    for (const link of this.#fragmentLinks) {
+      if (!seen.has(link.href.slice(1))) this.#problem('assembly/ref', link.pointer, `href="${link.href}" matches no id on the page; link to one it has, such as an instance’s ID.`);
     }
   }
 }

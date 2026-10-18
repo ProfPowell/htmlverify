@@ -1,0 +1,52 @@
+{
+  "id": "site/footer",
+  "version": "1.0.0",
+  "summary": "The site footer: copyright, legal links, and optional site links.",
+  "use": "Once per page, in page/basic's footer slot.",
+  "params": {
+    "copyright": {
+      "type": "text",
+      "minLength": 1,
+      "description": "Such as \"© 2026 Acme Ltd\"."
+    },
+    "legal": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "text": {
+          "type": "text",
+          "minLength": 1
+        },
+        "href": {
+          "type": "url"
+        }
+      },
+      "description": "Privacy, terms, and the like."
+    },
+    "label": {
+      "type": "text",
+      "default": "Footer links"
+    },
+    "links": {
+      "type": "list",
+      "minItems": 1,
+      "required": false,
+      "items": {
+        "text": {
+          "type": "text",
+          "minLength": 1
+        },
+        "href": {
+          "type": "url"
+        }
+      },
+      "description": "Other site links, in a labeled navigation."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

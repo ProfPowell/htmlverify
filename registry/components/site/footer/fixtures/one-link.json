@@ -1,0 +1,17 @@
+{
+  "data": {
+    "copyright": "© 2026 Acme Ltd",
+    "legal": [
+      {
+        "text": "Accessibility",
+        "href": "/accessibility"
+      }
+    ],
+    "links": [
+      {
+        "text": "Contact",
+        "href": "/contact"
+      }
+    ]
+  }
+}

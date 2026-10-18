@@ -1,0 +1,16 @@
+{
+  "data": {
+    "title": "Contact",
+    "site": "Acme",
+    "description": "How to reach Acme support.",
+    "heading": "Contact us"
+  },
+  "slots": {
+    "main": [
+      {
+        "key": "intro",
+        "html": "<p>We reply within one business day.</p>"
+      }
+    ]
+  }
+}

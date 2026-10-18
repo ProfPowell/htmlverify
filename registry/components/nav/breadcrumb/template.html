@@ -1,0 +1,8 @@
+<nav class="breadcrumb" aria-label="{{label}}" data-separator="{{separator}}">
+  <ol>
+    <template vb-each="trail" vb-as="crumb">
+      <li><a href="{{crumb.href}}">{{crumb.text}}</a></li>
+    </template>
+    <li><span aria-current="page">{{current}}</span></li>
+  </ol>
+</nav>

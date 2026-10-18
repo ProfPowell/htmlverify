@@ -1,0 +1,15 @@
+<ul class="unstyled" data-layout="grid" data-layout-min="{{min}}" data-layout-gap="l">
+  <template vb-each="cards" vb-as="card">
+    <li>
+      <layout-card data-variant="outlined">
+        <template vb-if="card.href">
+          <h3 vb-rank><a href="{{card.href}}">{{card.title}}</a></h3>
+        </template>
+        <template vb-if="!card.href">
+          <h3 vb-rank>{{card.title}}</h3>
+        </template>
+        <p>{{card.text}}</p>
+      </layout-card>
+    </li>
+  </template>
+</ul>

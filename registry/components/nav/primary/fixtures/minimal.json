@@ -1,0 +1,15 @@
+{
+  "data": {
+    "variant": "minimal",
+    "items": [
+      {
+        "text": "Blog",
+        "href": "/blog/"
+      },
+      {
+        "text": "About",
+        "href": "/about"
+      }
+    ]
+  }
+}

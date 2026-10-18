@@ -1,0 +1,28 @@
+action/button@1          A button that opens or closes a dialog. data: label, target(ref dialog/modal), command?=show-modal|close|request-close, variant?=secondary|ghost.
+action/link-button@1     A link styled as a button. data: label, href(url), variant?=secondary|ghost.
+action/submit@1          The button that submits its form. data: label, variant?=secondary|ghost.
+content/callout@1        A highlighted message: information, success, a warning, or an error. data: tone?=info|success|warning|error|neutral, title?, text(inline), icon?.
+content/card-list@1      A grid of cards, each with a title and a line of text, optionally linked. data: min?=s|m|l, cards[1..](title, text(inline), href?(url)).
+content/faq@1            Questions and answers that open one at a time or together. data: single?(boolean), items[1..](question, answer(prose)).
+content/figure@1         An image with a caption. data: src(url), alt, width(integer), height(integer), caption(inline), loading?=lazy|eager.
+content/image@1          An image on its own, informative or decorative. data: src(url), alt, width(integer), height(integer), loading?=lazy|eager.
+content/prose@1          Paragraphs, lists, quotes, and subheadings from restricted HTML. data: html(prose).
+content/quote@1          A quotation with its author and, optionally, its source. data: quote(inline), author, source?, cite?(url).
+content/section@1        A titled section; its heading level comes from where it sits. data: title, gap?=s|m|l|xl. slots: body[1..].
+data/description-list@1  Terms and their descriptions: specifications, metadata, a glossary. data: items[1..](term, description(inline)).
+data/table@1             A data table with a caption, column headers, and a header cell per row. data: caption, columns[1..](text), rows[1..](header, cells[](text)).
+dialog/modal@1           A modal dialog with a title, content, and a close button. data: title, body(prose), dismiss?, closeLabel?. slots: actions(action/button|action/link-button).
+disclosure/details@1     A summary that shows more when opened. data: summary, body(prose), open?(boolean).
+disclosure/tabs@1        Tabs: one panel at a time, chosen by its label. data: tabs[2..](label, content(prose)).
+form/checkbox@1          A single labeled checkbox: agree to terms, subscribe, remember me. data: label(inline), name, value?, required?(boolean), checked?(boolean).
+form/choice-group@1      A labeled group of radio buttons: one choice from a few. data: legend, name, required?(boolean), choices[2..](value, label), hint?(inline).
+form/form@1              Form: fields stacked, with its actions at the end. data: action(url), method?=get|post, label?. slots: fields[1..], actions[1..](action/submit|action/button|action/link-button).
+form/select-field@1      Labeled drop-down list of options, starting with a placeholder. data: label, name, placeholder?, options[1..](value, label), required?(boolean), hint?(inline), error?.
+form/text-field@1        Labeled single-line input, with an optional hint and error message. data: label, name, type?=text|email|tel|url|search|password, autocomplete?=name|given-name|family-name|email|tel|organization|street-address|address-line1|address-line2|address-level2|address-level1|postal-code|country-name|username|current-password|new-password|one-time-code|off, required?(boolean), hint?(inline), error?.
+form/textarea-field@1    Labeled multi-line text input, with an optional hint and error message. data: label, name, rows?(integer), maxLength?(integer), required?(boolean), hint?(inline), error?.
+nav/breadcrumb@1         Breadcrumb trail from the home page to the current one. data: label?, separator?=chevron|arrow|dot|pipe, trail[1..](text, href(url)), current.
+nav/pagination@1         Links to the previous and next page and to numbered pages. data: label?, previous?(url), next?(url), previousText?, nextText?, pages[](label, href(url), current?=page).
+nav/primary@1            The site's main navigation: a horizontal list of links. data: label?, variant?=pills|tabs|minimal, items[1..](text, href(url), current?=page).
+nav/toc@1                Table of contents: links to the page's sections. data: title?, items[1..](text, target(ref content/section)).
+page/basic@1             A page: head with Vanilla Breeze, skip link, site header, main with the page heading, and an optional footer. data: lang?(lang), title, site, description, heading. slots: nav[0..1](nav/primary), main[1..], footer[0..1](site/footer).
+site/footer@1            The site footer: copyright, legal links, and optional site links. data: copyright, legal[1..](text, href(url)), label?, links?[1..](text, href(url)).

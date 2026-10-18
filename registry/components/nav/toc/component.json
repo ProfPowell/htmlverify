@@ -1,0 +1,36 @@
+{
+  "id": "nav/toc",
+  "version": "1.0.0",
+  "summary": "Table of contents: links to the page's sections.",
+  "use": "On long pages such as docs and articles, ahead of or beside the content. Each item's target is a section's key path.",
+  "params": {
+    "title": {
+      "type": "text",
+      "default": "On this page",
+      "description": "The summary of the disclosure and the navigation's name."
+    },
+    "items": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "text": {
+          "type": "text",
+          "minLength": 1
+        },
+        "target": {
+          "type": "ref",
+          "accepts": [
+            "content/section"
+          ],
+          "description": "The section it links to, such as { \"ref\": \"install\" }."
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

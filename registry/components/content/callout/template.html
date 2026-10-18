@@ -1,0 +1,11 @@
+<status-message data-variant="{{tone}}">
+  <template vb-if="icon">
+    <icon-wc name="{{icon}}" data-icon=""></icon-wc>
+  </template>
+  <layout-stack data-content="" data-layout-gap="2xs">
+    <template vb-if="title">
+      <p data-title="">{{title}}</p>
+    </template>
+    <p data-description="">{{text}}</p>
+  </layout-stack>
+</status-message>

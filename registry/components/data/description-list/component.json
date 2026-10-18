@@ -1,0 +1,27 @@
+{
+  "id": "data/description-list",
+  "version": "1.0.0",
+  "summary": "Terms and their descriptions: specifications, metadata, a glossary.",
+  "use": "Name–value pairs, such as product specifications or event details.",
+  "params": {
+    "items": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "term": {
+          "type": "text",
+          "minLength": 1
+        },
+        "description": {
+          "type": "inline"
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

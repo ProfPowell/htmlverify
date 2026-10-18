@@ -571,11 +571,11 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 | `prose` | restricted flow HTML | the sole content of a flow container |
 | `url` | string, parsed by WHATWG `URL` against the configured base | `href`, `src`, `action`, `formaction`, `cite`, `poster`, `data` |
 | `boolean` | `true` or `false` | boolean attributes (rendered `name="true"` or omitted), `vb-if` |
-| `enum` | one of `values` | enumerated attributes (values checked against the spec data), `class` |
+| `enum` | one of `values` | enumerated attributes (values checked against the spec data or the vocabulary), `class`, and `data-*` attributes nothing types, whose values are the author's |
 | `integer` | number; `min`, `max` | numeric attributes (`width`, `height`, `colspan`, `rows`, …) |
 | `datetime` | HTML date/time microsyntax | `time[datetime]`, `ins[datetime]`, `del[datetime]` |
 | `lang` | well-formed BCP 47 tag | `lang`, `hreflang` |
-| `ref` | `{ "ref": "key/path" }`, another instance's ID | ID-reference attributes (`commandfor`, `popovertarget`, `aria-controls`, …); in `href` it becomes `#id` |
+| `ref` | `{ "ref": "key/path" }`, another instance's ID; `accepts` lists the components it may name | ID-reference attributes (`commandfor`, `popovertarget`, `aria-controls`, …); in `href` it becomes `#id` |
 | `list` | array; `items` is a type or a record of fields; `minItems`, `maxItems` | `vb-each` |
 
 - **URL policy** (configurable): `https`, `http`, `mailto`, `tel`, relative, and fragment URLs. `javascript:` is rejected; `data:` is opt-in for images. Fragment URLs must resolve to an ID in the assembled page. Parsing proves syntax, not trust.
@@ -687,28 +687,30 @@ Assembly rules:
 | --- | --- |
 | `component new <id> --author <name>` | scaffolds a contract, a template, a fixture, and a README |
 | `component show <id>` | prints the contract and an example: the basic fixture as a plan instance, and what it renders |
-| `component check <id> [--update] [--nu]` | compiles the template; renders each fixture and checks it in context (`strict` with no errors, plus Nu inside a page shell with `--nu`); compares it with the expected output, which `--update` writes for review; checks the budget; reports **branch coverage**: each `vb-if` both ways, each `vb-each` with 0 (if allowed), 1, and 2+ items, each optional parameter given and left out, each enum value and both booleans used, with list items' fields counted across all items. It passes only when approval would. |
+| `component check <id> [--update] [--nu]` | compiles the template; renders each fixture and checks it in context (`strict` with no errors, plus Nu inside a page shell with `--nu`); compares it with the expected output, which `--update` writes for review; checks the budget; reports **branch coverage**: each `vb-if` both ways, each `vb-each` with 0 (if allowed), 1, and 2+ items, each optional parameter given and left out, both booleans, and each value of an enum that reaches text or a `class` token, with list items' fields counted across all items. An enum that only fills attribute values needs no fixture per value: the compiler already checked each value against its attribute, and nothing else changes. It passes only when approval would. |
 | `component approve <id> --by <name>` | requires a clean check and full coverage; records reviewer, date, and digest in `provenance.review`, leaving the rest of `component.json` as written |
 | `registry check` | checks every component and requires each to be approved at its current digest; this is the CI gate |
 
-A fixture, `fixtures/<name>.json`, is `{ "data": { … }, "slots": { … } }`, either one optional. It renders as a one-instance plan: the component alone in its `context`, keyed by the fixture's name, so `@input` becomes `basic-input`, and its slots take plan children. A page component's fixture is a page plan. Plan findings point into the fixture file, and `fixtures/` holds nothing else, since all of it is in the digest.
+A fixture, `fixtures/<name>.json`, is `{ "data": { … }, "slots": { … }, "with": [ … ] }`, each one optional. It renders as a fragment plan: the component in its `context`, keyed by the fixture's name, so `@input` becomes `basic-input`, with plan children in its slots, then the siblings in `with`, such as the targets of its refs. A page component's fixture is a page plan. Plan findings point into the fixture file, and `fixtures/` holds nothing else, since all of it is in the digest.
 
 **AI-assisted authoring**: the LLM drafts a component and its fixtures and iterates with `component check` until it's clean; a human reviews and approves it. `aiAssisted` records the assistance, and the approval is the trust boundary.
 
 ### 9.11 Starter registry (M2)
 
-Enough to build the page set in §13, on Vanilla Breeze. Native elements with `data-layout` come first, then VB custom elements and web components where they fit. The page shell links VB's stylesheet and script.
+Enough to build the page set in §13, on Vanilla Breeze 0.3.1. It ships in `registry/`, and the CLI uses it when the config names no registry; once installed it's read-only, so a project's own components go in a registry of its own. Native elements come first wherever a VB element needs its script for its semantics: `nav-bar` and `bread-crumb` become landmarks only when their scripts run, so navigation is a native `nav`. VB has no callout element; `status-message` has the tones. The page shell links VB's stylesheet, script, and icons.
 
-| Group | Components (VB element) |
+| Group | Components (markup) |
 | --- | --- |
-| page | `page/basic`: charset first, viewport, title, description, `lang`, VB stylesheet and script, skip link, header/main/footer slots, `h1` |
-| navigation | `nav/primary` (`nav-bar`), `nav/breadcrumb` (`bread-crumb` around an `ol`), `nav/pagination` (`pager-wc`), `nav/toc` (`page-toc`) |
-| content | `content/section` (ranked heading, anchor, `data-layout`), `content/prose`, `content/figure`, `content/image`, `content/callout`, `content/card-list`, `content/faq` (`accordion-wc` with `details`/`summary`), `content/quote` |
-| data | `data/table` (`data-table` around a `table` with caption and column headers), `data/description-list` |
-| forms | `form/form`, `form/text-field`, `form/textarea-field`, `form/select-field` (each in `form-field`), `form/choice-group` (`fieldset` and `legend`), `form/checkbox` |
-| actions | `action/button` (`command`/`commandfor`), `action/submit`, `action/link-button` |
-| overlays | `disclosure/details`, `disclosure/tabs` (`tab-set`), `dialog/modal` (`dialog`, heading, close command; runtime checks in M4) |
-| site | `site/footer` |
+| page | `page/basic`: charset first, viewport, color scheme, title "Title \| Site", description, `lang`, VB stylesheet, module script, and icon path, a skip link with the CSS VB doesn't ship, a site header with the home link and a `nav` slot, `main` with the `h1`, and a footer slot |
+| navigation | `nav/primary` (`nav.horizontal` around a list), `nav/breadcrumb` (`nav.breadcrumb` around an `ol`), `nav/pagination` (`nav.pagination` links), `nav/toc` (`page-toc` in its manual form, linking sections by ref) |
+| content | `content/section` (ranked heading, ID, `data-layout="stack"`), `content/prose` (`layout-text`), `content/figure`, `content/image`, `content/callout` (`status-message`), `content/card-list` (`layout-card` in a grid list), `content/faq` (`accordion-wc` with `details` and `summary`), `content/quote` (`figure.quote`) |
+| data | `data/table` (`data-table` around a `table` with a caption and scoped headers), `data/description-list` (`dl`) |
+| forms | `form/form` (`form.stacked`, actions in `footer.actions`), `form/text-field`, `form/textarea-field`, `form/select-field` (each in `form-field`, with hint and error `output`s), `form/choice-group` (radios in a `fieldset` with a `legend`), `form/checkbox` |
+| actions | `action/button` (`command` and `commandfor`, to a dialog), `action/submit`, `action/link-button` (`a.button`) |
+| overlays | `disclosure/details`, `disclosure/tabs` (`tab-set` over `details`), `dialog/modal` (`dialog` named by its heading, closed by invoker buttons; runtime checks in M4) |
+| site | `site/footer` (`footer.minimal` with `site-legal`, and a `nav` for other links) |
+
+Every component's fixtures also pass Nu. Its one warning, "Section lacks heading", is on the body `section` of `dialog/modal`, which VB pads and which `aria-labelledby` names after the dialog's title. Nu doesn't count `aria-labelledby`; `semantic/section-heading` does, and Nu's alternative, a `div`, is what `policy/no-div` forbids.
 
 ## 10. Interfaces
 

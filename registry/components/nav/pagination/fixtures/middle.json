@@ -1,0 +1,21 @@
+{
+  "data": {
+    "previous": "?page=1",
+    "next": "?page=3",
+    "pages": [
+      {
+        "label": "1",
+        "href": "?page=1"
+      },
+      {
+        "label": "2",
+        "href": "?page=2",
+        "current": "page"
+      },
+      {
+        "label": "3",
+        "href": "?page=3"
+      }
+    ]
+  }
+}

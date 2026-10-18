@@ -159,6 +159,7 @@ export function formatComponent(d: ComponentDetails): string {
 function paramLine(spec: ParamSpec): string {
   const parts: string[] = [spec.type === 'enum' ? `enum ${spec.values!.join('|')}` : spec.type];
   if (spec.type === 'list') parts[0] = `list of ${typeof spec.items === 'object' ? `{ ${Object.entries(spec.items).map(([n, s]) => `${n}${s.required ? '' : '?'}: ${s.type === 'enum' ? s.values!.join('|') : s.type}`).join(', ')} }` : spec.items}`;
+  if (spec.type === 'ref' && spec.accepts) parts[0] = `ref to ${spec.accepts.join(' or ')}`;
   parts.push(spec.default !== undefined ? `default ${JSON.stringify(spec.default)}` : spec.required ? 'required' : 'optional');
   if (spec.minLength !== undefined) parts.push(`minLength ${spec.minLength}`);
   if (spec.maxLength !== undefined) parts.push(`maxLength ${spec.maxLength}`);

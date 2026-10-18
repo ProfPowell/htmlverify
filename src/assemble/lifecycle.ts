@@ -5,6 +5,7 @@
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { resolveProfile, type Config } from '../config.ts';
 import type { NuOptions } from '../nu/nu.ts';
 import { check, type Finding } from '../report/report.ts';
@@ -17,6 +18,9 @@ import { jsonPointers } from './jsonpos.ts';
 import { DEFAULT_SCHEMES, isObject, validateRecord, type ParamSpec, type Problem } from './params.ts';
 import { KEY } from './plan.ts';
 import { componentDigest, fixtureFiles, loadRegistry, type Component, type Registry, type ReviewStatus } from './registry.ts';
+
+/** The starter registry that ships with htmlverify (spec §9.11), used when a project names none. */
+export const STARTER_REGISTRY = fileURLToPath(new URL('../../registry/', import.meta.url)).replace(/[\\/]$/, '');
 
 /** A request the registry can't serve, such as an unknown component; the CLI reports it as a usage error. */
 export class LifecycleError extends Error {}
@@ -87,6 +91,10 @@ export async function checkComponent(registry: Registry, id: string, options: Li
   for (const name of fixtureNames(dir, out.problems)) {
     const fixture = readFixture(dir, name, out.problems);
     if (!fixture) continue;
+    if (isPage(component.contract) && fixture.with.length) {
+      out.problems.push({ file: `fixtures/${name}.json`, message: '"with" is for fragment fixtures; a page’s fixture puts everything in its slots' });
+      continue;
+    }
     const values = validateRecord(component.contract.params, fixture.data, '', [] as Problem[], { schemes: DEFAULT_SCHEMES });
     if (values) coverage.data(component.contract.params, fixture.data, values);
     const result = await render(registry, component, name, fixture, options.config ?? null, coverage);
@@ -142,6 +150,8 @@ interface Fixture {
   text: string;
   data: unknown;
   slots: unknown;
+  /** Siblings rendered after the component, such as the targets of its refs. */
+  with: unknown[];
 }
 
 /** A fixture as a plan instance: the component, keyed by the fixture's name unless it's a page. */
@@ -149,13 +159,19 @@ function instanceOf(component: Component, name: string, fixture: Fixture): Recor
   return { use: component.id, ...(isPage(component.contract) ? {} : { key: name }), ...(fixture.data !== undefined ? { data: fixture.data } : {}), ...(fixture.slots !== undefined ? { slots: fixture.slots } : {}) };
 }
 
-/** Renders a fixture: the component alone in its context, under strict, with findings located in the fixture file. */
+/**
+ * Renders a fixture: the component in its context, followed by any siblings
+ * the fixture names, under strict, with findings located in the fixture file.
+ */
 async function render(registry: Registry, component: Component, name: string, fixture: Fixture, config: Config | null, coverage?: Coverage): Promise<AssemblyResult> {
   const instance = instanceOf(component, name, fixture);
   const page = isPage(component.contract);
-  const result = await assemble(page ? { page: instance } : { fragment: { context: component.contract.context, children: [instance] } }, {
+  const sources: [string, string][] = page
+    ? [['/page', '']]
+    : [['/fragment/children/0', ''], ...fixture.with.map((_, i): [string, string] => [`/fragment/children/${i + 1}`, `/with/${i}`])];
+  const result = await assemble(page ? { page: instance } : { fragment: { context: component.contract.context, children: [instance, ...fixture.with] } }, {
     registry, profile: 'strict', config, draft: true, ...(coverage ? { coverage } : {}),
-    planSource: fixture.text, planPath: `fixtures/${name}.json`, sourcePointer: page ? '/page' : '/fragment/children/0', outPath: `fixtures/${name}.html`,
+    planSource: fixture.text, planPath: `fixtures/${name}.json`, sourcePointers: sources, outPath: `fixtures/${name}.html`,
   });
   // Review status is what checking leads to, not a finding about the fixture.
   result.plan.findings = result.plan.findings.filter((f) => !(f.rule === 'assembly/component' && f.severity === 'warning'));
@@ -173,15 +189,19 @@ function readFixture(dir: string, name: string, problems: ComponentCheck['proble
     return null;
   }
   if (!isObject(raw)) {
-    problems.push({ file, message: 'must be { "data": { … }, "slots": { … } }, with either one optional' });
+    problems.push({ file, message: 'must be { "data": { … }, "slots": { … }, "with": [ … ] }, each one optional' });
     return null;
   }
-  const unknown = Object.keys(raw).filter((k) => k !== 'data' && k !== 'slots');
+  const unknown = Object.keys(raw).filter((k) => k !== 'data' && k !== 'slots' && k !== 'with');
   if (unknown.length) {
-    problems.push({ file, message: `has ${unknown.map((k) => `"${k}"`).join(', ')}; a fixture holds only "data" and "slots"` });
+    problems.push({ file, message: `has ${unknown.map((k) => `"${k}"`).join(', ')}; a fixture holds only "data", "slots", and "with"` });
     return null;
   }
-  return { text, data: raw['data'], slots: raw['slots'] };
+  if (raw['with'] !== undefined && !Array.isArray(raw['with'])) {
+    problems.push({ file, message: '"with" must be an array of plan children to render after the component, such as the targets of its refs' });
+    return null;
+  }
+  return { text, data: raw['data'], slots: raw['slots'], with: (raw['with'] as unknown[] | undefined) ?? [] };
 }
 
 /** Where a fragment sits in a page, so Nu can check it in context: rows in a table, items in a list. */
@@ -368,6 +388,7 @@ function param(name: string, spec: ParamSpec): string {
     const items = typeof spec.items === 'object' ? Object.entries(spec.items).map(([n, s]) => param(n, s)).join(', ') : spec.items!;
     return `${name}${optional}${range(spec.minItems ?? 0, spec.maxItems ?? null) || '[]'}(${items})`;
   }
+  if (spec.type === 'ref' && spec.accepts) return `${name}${optional}(ref ${spec.accepts.join('|')})`;
   return `${name}${optional}${spec.type === 'text' ? '' : `(${spec.type})`}`;
 }
 

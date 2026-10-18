@@ -1,0 +1,8 @@
+{
+  "data": {
+    "label": "I agree to the <a href=\"/terms\">terms of service</a>",
+    "name": "terms",
+    "value": "agreed",
+    "required": true
+  }
+}

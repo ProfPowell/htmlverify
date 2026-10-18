@@ -26,6 +26,8 @@ export interface ParamSpec {
   items?: ParamType | Record<string, ParamSpec>;
   minItems?: number;
   maxItems?: number;
+  /** The components a ref may name; any instance with an ID when left out. */
+  accepts?: string[];
 }
 
 export interface Problem {
@@ -39,6 +41,9 @@ export interface ValueOptions {
 }
 
 export const DEFAULT_SCHEMES: readonly string[] = ['https', 'http', 'mailto', 'tel'];
+
+/** A component's ID: its path under components/, a group and a name. */
+export const COMPONENT_ID = /^[a-z][a-z0-9-]*(?:\/[a-z][a-z0-9-]*)+$/;
 
 /** Parameter, slot, and record field names. */
 export const NAME = /^[a-z][a-zA-Z0-9]*$/;
@@ -54,7 +59,7 @@ const KEYS: Record<ParamType, readonly string[]> = {
   integer: ['min', 'max'],
   datetime: [],
   lang: [],
-  ref: [],
+  ref: ['accepts'],
   list: ['items', 'minItems', 'maxItems'],
 };
 
@@ -138,6 +143,11 @@ function parseSpec(raw: unknown, pointer: string, problems: Problem[]): ParamSpe
     else if (new Set(values).size !== values.length) problem(at(pointer, 'values'), 'lists a value twice');
     else spec.values = values as string[];
   }
+  if (t === 'ref' && raw['accepts'] !== undefined) {
+    const accepts = raw['accepts'];
+    if (!(Array.isArray(accepts) && accepts.length > 0 && accepts.every((a) => typeof a === 'string' && COMPONENT_ID.test(a)))) problem(at(pointer, 'accepts'), 'must be a non-empty array of component IDs');
+    else spec.accepts = accepts as string[];
+  }
   if (t === 'list') {
     const items = raw['items'];
     if (typeof items === 'string') {
@@ -169,6 +179,8 @@ export function characterProblem(s: string): string | null {
     if (c === 0x0d) return 'contains a carriage return; write line breaks as \\n';
     if ((c < 0x20 && c !== 0x09 && c !== 0x0a) || (c >= 0x7f && c <= 0x9f)) return `contains the control character U+${hex(c)}`;
     if (c >= 0xd800 && c <= 0xdfff) return 'contains a lone surrogate';
+    // Embeddings, overrides, and isolates reorder what's displayed; markup says it visibly.
+    if ((c >= 0x202a && c <= 0x202e) || (c >= 0x2066 && c <= 0x2069)) return `contains the bidirectional control U+${hex(c)}; mark direction with dir or <bdi> instead`;
     if ((c >= 0xfdd0 && c <= 0xfdef) || (c & 0xfffe) === 0xfffe) return `contains the noncharacter U+${hex(c)}`;
   }
   return null;
@@ -192,6 +204,8 @@ export function validateValue(spec: ParamSpec, value: unknown, pointer: string, 
     case 'text': {
       const s = string();
       if (s === undefined) return undefined;
+      // Space at either end collapses away or reads as a mistake, and a blank value is no text at all.
+      if (s.trim() !== s) return fail(s.trim() === '' && s !== '' ? 'is only whitespace' : 'must not start or end with whitespace');
       if (spec.minLength !== undefined && count(s) < spec.minLength) return fail(spec.minLength === 1 ? 'must not be empty' : `must be at least ${spec.minLength} characters`);
       if (spec.maxLength !== undefined && count(s) > spec.maxLength) return fail(`must be at most ${spec.maxLength} characters`);
       if (spec.pattern !== undefined && !new RegExp(spec.pattern, 'u').test(s)) return fail(`must match ${spec.pattern}`);
@@ -207,6 +221,7 @@ export function validateValue(spec: ParamSpec, value: unknown, pointer: string, 
       if (s.trim() !== s) return fail('must not start or end with spaces');
       const syntax = urlProblem(s, { nonEmpty: true });
       if (syntax) return fail(`${syntax}`);
+      if (s === '#') return fail('is "#", which links nowhere; give the destination');
       const scheme = URL.canParse(s) ? new URL(s).protocol.slice(0, -1) : null;
       if (scheme !== null && !options.schemes.includes(scheme)) {
         return fail(`uses the ${scheme}: scheme; allowed are ${words(options.schemes.map((x) => `${x}:`))}, relative, and #fragment URLs`);

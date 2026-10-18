@@ -1,0 +1,8 @@
+<accordion-wc single="{{single}}">
+  <template vb-each="items" vb-as="item">
+    <details>
+      <summary>{{item.question}}</summary>
+      <layout-stack>{{item.answer}}</layout-stack>
+    </details>
+  </template>
+</accordion-wc>

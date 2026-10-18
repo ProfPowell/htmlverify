@@ -1,0 +1,19 @@
+{
+  "data": {
+    "items": [
+      {
+        "text": "Home",
+        "href": "/",
+        "current": "page"
+      },
+      {
+        "text": "Pricing",
+        "href": "/pricing"
+      },
+      {
+        "text": "Contact",
+        "href": "/contact"
+      }
+    ]
+  }
+}

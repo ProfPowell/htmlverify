@@ -1,0 +1,12 @@
+<page-toc>
+  <details class="details" open>
+    <summary class="summary">{{title}}</summary>
+    <nav class="nav" aria-label="{{title}}">
+      <ul class="list">
+        <template vb-each="items" vb-as="item">
+          <li class="item"><a href="{{item.target}}" class="link">{{item.text}}</a></li>
+        </template>
+      </ul>
+    </nav>
+  </details>
+</page-toc>

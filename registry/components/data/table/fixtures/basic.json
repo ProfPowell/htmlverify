@@ -1,0 +1,26 @@
+{
+  "data": {
+    "caption": "Plans and prices",
+    "columns": [
+      "Plan",
+      "Price",
+      "Sites"
+    ],
+    "rows": [
+      {
+        "header": "Starter",
+        "cells": [
+          "£5",
+          "1"
+        ]
+      },
+      {
+        "header": "Team",
+        "cells": [
+          "£20",
+          "10"
+        ]
+      }
+    ]
+  }
+}

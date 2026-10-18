@@ -1,0 +1,65 @@
+{
+  "data": {
+    "lang": "en-GB",
+    "title": "About",
+    "site": "Acme",
+    "description": "Who we are and what we make.",
+    "heading": "About Acme"
+  },
+  "slots": {
+    "nav": [
+      {
+        "use": "nav/primary",
+        "key": "nav",
+        "data": {
+          "items": [
+            {
+              "text": "Home",
+              "href": "/"
+            },
+            {
+              "text": "About",
+              "href": "/about",
+              "current": "page"
+            }
+          ]
+        }
+      }
+    ],
+    "main": [
+      {
+        "use": "content/section",
+        "key": "story",
+        "data": {
+          "title": "Our story"
+        },
+        "slots": {
+          "body": [
+            {
+              "use": "content/prose",
+              "key": "text",
+              "data": {
+                "html": "<p>Founded in 2020, we make tools for people who build the web.</p>"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "footer": [
+      {
+        "use": "site/footer",
+        "key": "footer",
+        "data": {
+          "copyright": "© 2026 Acme",
+          "legal": [
+            {
+              "text": "Privacy",
+              "href": "/privacy"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

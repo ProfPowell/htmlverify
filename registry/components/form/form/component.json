@@ -1,0 +1,43 @@
+{
+  "id": "form/form",
+  "version": "1.0.0",
+  "summary": "Form: fields stacked, with its actions at the end.",
+  "use": "Any form. Fields go in fields, buttons in actions. Give a label when the page has more than one form.",
+  "params": {
+    "action": {
+      "type": "url"
+    },
+    "method": {
+      "type": "enum",
+      "values": [
+        "get",
+        "post"
+      ],
+      "default": "post"
+    },
+    "label": {
+      "type": "text",
+      "required": false,
+      "description": "Names the form, which also makes it a landmark."
+    }
+  },
+  "slots": {
+    "fields": {
+      "min": 1
+    },
+    "actions": {
+      "min": 1,
+      "accepts": [
+        "action/submit",
+        "action/button",
+        "action/link-button"
+      ]
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

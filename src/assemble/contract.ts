@@ -4,7 +4,9 @@
 
 import { HTML_ELEMENTS } from '../spec/data.ts';
 import { isCustomElementName } from '../spec/model.ts';
-import { at, isObject, NAME, parseParams, type ParamSpec, type Problem } from './params.ts';
+import { at, COMPONENT_ID, isObject, NAME, parseParams, type ParamSpec, type Problem } from './params.ts';
+
+export { COMPONENT_ID };
 
 export interface SlotSpec {
   /** Component IDs the slot is narrowed to, or null for anything that fits where it sits. */
@@ -42,7 +44,6 @@ export class ContractError extends Error {
   }
 }
 
-export const COMPONENT_ID = /^[a-z][a-z0-9-]*(?:\/[a-z][a-z0-9-]*)+$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/;
 const KEYS = new Set(['$schema', 'id', 'version', 'summary', 'use', 'context', 'params', 'slots', 'budget', 'obligations', 'provenance']);
 

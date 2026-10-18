@@ -1,0 +1,8 @@
+<tab-set>
+  <template vb-each="tabs" vb-as="tab">
+    <details>
+      <summary>{{tab.label}}</summary>
+      <layout-stack>{{tab.content}}</layout-stack>
+    </details>
+  </template>
+</tab-set>

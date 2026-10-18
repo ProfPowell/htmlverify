@@ -276,12 +276,14 @@ test('assemble writes the page only when it passes, and reports each output find
   assert.equal(existsSync(out), false);
   assert.match(readFileSync(join(project, 'site/contact.failed.html'), 'utf8'), /<footer><a>Write to us<\/a><\/footer>/);
 
-  // Invalid JSON is a plan finding, located; a missing registry and --emit-failed without --out are usage errors.
+  // Invalid JSON is a plan finding, located; --emit-failed without --out is a usage error.
   writeFileSync(broken, '{ "page": { "use": "page/basic", } }');
   assert.match((await run(['assemble', broken, '--config', config])).stderr, /broken\.json\n {2}1:34 +error +assembly\/plan +\/: isn’t valid JSON: Expected double-quoted property name\./);
-  writeFileSync(join(project, 'empty.json'), '{}');
-  const none = await run(['assemble', plan, '--config', join(project, 'empty.json')]);
-  assert.equal(none.code, 2);
-  assert.match(none.stderr, /assemble needs a component registry; set "registry" in htmlverify\.config\.json/);
   assert.equal((await run(['assemble', plan, '--emit-failed', '--config', config])).code, 2);
+
+  // Without a registry in the config, the starter registry that ships with htmlverify is used.
+  writeFileSync(join(project, 'empty.json'), '{}');
+  const starter = await run(['catalog', '--query', 'page', '--config', join(project, 'empty.json')]);
+  assert.equal(starter.code, 0);
+  assert.match(starter.stdout, /^page\/basic@1 +A page: head with Vanilla Breeze/m);
 });

@@ -1,0 +1,47 @@
+{
+  "id": "nav/breadcrumb",
+  "version": "1.0.0",
+  "summary": "Breadcrumb trail from the home page to the current one.",
+  "use": "At the top of main on pages below the top level. The trail lists the ancestors; current names the page itself.",
+  "params": {
+    "label": {
+      "type": "text",
+      "default": "Breadcrumb"
+    },
+    "separator": {
+      "type": "enum",
+      "values": [
+        "chevron",
+        "arrow",
+        "dot",
+        "pipe"
+      ],
+      "required": false,
+      "description": "A slash when left out."
+    },
+    "trail": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "text": {
+          "type": "text",
+          "minLength": 1
+        },
+        "href": {
+          "type": "url"
+        }
+      }
+    },
+    "current": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The current page, last in the trail."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

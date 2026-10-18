@@ -1,0 +1,25 @@
+{
+  "id": "disclosure/details",
+  "version": "1.0.0",
+  "summary": "A summary that shows more when opened.",
+  "use": "Detail most readers can skip. For several questions, use content/faq.",
+  "params": {
+    "summary": {
+      "type": "text",
+      "minLength": 1
+    },
+    "body": {
+      "type": "prose"
+    },
+    "open": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

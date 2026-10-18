@@ -1,0 +1,18 @@
+{
+  "data": {
+    "label": "Read the terms",
+    "target": {
+      "ref": "terms"
+    }
+  },
+  "with": [
+    {
+      "use": "dialog/modal",
+      "key": "terms",
+      "data": {
+        "title": "Terms of service",
+        "body": "<p>Be kind.</p>"
+      }
+    }
+  ]
+}

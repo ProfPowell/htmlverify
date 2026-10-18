@@ -1,0 +1,10 @@
+{
+  "data": {
+    "src": "/images/product.webp",
+    "alt": "The Acme kettle in matte black",
+    "width": 1600,
+    "height": 900,
+    "caption": "The new kettle.",
+    "loading": "eager"
+  }
+}

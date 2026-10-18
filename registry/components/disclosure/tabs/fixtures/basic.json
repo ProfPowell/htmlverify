@@ -1,0 +1,14 @@
+{
+  "data": {
+    "tabs": [
+      {
+        "label": "macOS",
+        "content": "<p>Run <code>brew install acme</code>.</p>"
+      },
+      {
+        "label": "Windows",
+        "content": "<p>Run <code>winget install acme</code>.</p>"
+      }
+    ]
+  }
+}

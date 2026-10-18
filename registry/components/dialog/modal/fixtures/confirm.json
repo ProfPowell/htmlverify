@@ -1,0 +1,20 @@
+{
+  "data": {
+    "title": "Delete this draft?",
+    "body": "<p>You can't undo this.</p>",
+    "dismiss": "Keep it",
+    "closeLabel": "Cancel"
+  },
+  "slots": {
+    "actions": [
+      {
+        "use": "action/link-button",
+        "key": "delete",
+        "data": {
+          "label": "Delete",
+          "href": "/drafts/12/delete"
+        }
+      }
+    ]
+  }
+}

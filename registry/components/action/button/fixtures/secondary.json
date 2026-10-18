@@ -1,0 +1,20 @@
+{
+  "data": {
+    "label": "Close",
+    "target": {
+      "ref": "help"
+    },
+    "command": "close",
+    "variant": "secondary"
+  },
+  "with": [
+    {
+      "use": "dialog/modal",
+      "key": "help",
+      "data": {
+        "title": "Help",
+        "body": "<p>Ask us anything.</p>"
+      }
+    }
+  ]
+}
