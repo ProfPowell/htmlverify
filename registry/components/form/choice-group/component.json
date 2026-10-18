@@ -1,0 +1,48 @@
+{
+  "id": "form/choice-group",
+  "version": "1.0.0",
+  "summary": "A labeled group of radio buttons: one choice from a few.",
+  "use": "Two to about six mutually exclusive options, all visible. For many options use form/select-field; for a yes or no, form/checkbox.",
+  "context": "form",
+  "params": {
+    "legend": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The question the choices answer."
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data."
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "choices": {
+      "type": "list",
+      "minItems": 2,
+      "items": {
+        "value": {
+          "type": "text",
+          "minLength": 1
+        },
+        "label": {
+          "type": "text",
+          "minLength": 1
+        }
+      }
+    },
+    "hint": {
+      "type": "inline",
+      "required": false,
+      "description": "Help shown with the field until it's valid."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

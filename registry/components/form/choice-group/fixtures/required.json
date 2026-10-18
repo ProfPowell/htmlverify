@@ -1,0 +1,22 @@
+{
+  "data": {
+    "legend": "Delivery",
+    "name": "delivery",
+    "required": true,
+    "hint": "Next-day delivery costs £5.",
+    "choices": [
+      {
+        "value": "standard",
+        "label": "Standard, 3 to 5 days"
+      },
+      {
+        "value": "next-day",
+        "label": "Next day"
+      },
+      {
+        "value": "collect",
+        "label": "Collect from the shop"
+      }
+    ]
+  }
+}

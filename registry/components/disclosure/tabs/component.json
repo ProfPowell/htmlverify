@@ -1,0 +1,27 @@
+{
+  "id": "disclosure/tabs",
+  "version": "1.0.0",
+  "summary": "Tabs: one panel at a time, chosen by its label.",
+  "use": "Two to about five alternative views of the same thing, such as install steps per platform. Content anyone needs should not hide behind tabs.",
+  "params": {
+    "tabs": {
+      "type": "list",
+      "minItems": 2,
+      "items": {
+        "label": {
+          "type": "text",
+          "minLength": 1
+        },
+        "content": {
+          "type": "prose"
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

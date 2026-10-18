@@ -26,6 +26,8 @@ export interface ParamSpec {
   items?: ParamType | Record<string, ParamSpec>;
   minItems?: number;
   maxItems?: number;
+  /** The components a ref may name; any instance with an ID when left out. */
+  accepts?: string[];
 }
 
 export interface Problem {
@@ -39,6 +41,9 @@ export interface ValueOptions {
 }
 
 export const DEFAULT_SCHEMES: readonly string[] = ['https', 'http', 'mailto', 'tel'];
+
+/** A component's ID: its path under components/, a group and a name. */
+export const COMPONENT_ID = /^[a-z][a-z0-9-]*(?:\/[a-z][a-z0-9-]*)+$/;
 
 /** Parameter, slot, and record field names. */
 export const NAME = /^[a-z][a-zA-Z0-9]*$/;
@@ -54,7 +59,7 @@ const KEYS: Record<ParamType, readonly string[]> = {
   integer: ['min', 'max'],
   datetime: [],
   lang: [],
-  ref: [],
+  ref: ['accepts'],
   list: ['items', 'minItems', 'maxItems'],
 };
 
@@ -137,6 +142,11 @@ function parseSpec(raw: unknown, pointer: string, problems: Problem[]): ParamSpe
     if (!(Array.isArray(values) && values.length > 0 && values.every((v) => typeof v === 'string'))) problem(at(pointer, 'values'), 'must be a non-empty array of strings');
     else if (new Set(values).size !== values.length) problem(at(pointer, 'values'), 'lists a value twice');
     else spec.values = values as string[];
+  }
+  if (t === 'ref' && raw['accepts'] !== undefined) {
+    const accepts = raw['accepts'];
+    if (!(Array.isArray(accepts) && accepts.length > 0 && accepts.every((a) => typeof a === 'string' && COMPONENT_ID.test(a)))) problem(at(pointer, 'accepts'), 'must be a non-empty array of component IDs');
+    else spec.accepts = accepts as string[];
   }
   if (t === 'list') {
     const items = raw['items'];

@@ -1,0 +1,16 @@
+{
+  "data": {
+    "legend": "How should we contact you?",
+    "name": "contact",
+    "choices": [
+      {
+        "value": "email",
+        "label": "Email"
+      },
+      {
+        "value": "phone",
+        "label": "Phone"
+      }
+    ]
+  }
+}

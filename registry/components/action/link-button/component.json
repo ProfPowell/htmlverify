@@ -1,0 +1,31 @@
+{
+  "id": "action/link-button",
+  "version": "1.0.0",
+  "summary": "A link styled as a button.",
+  "use": "A call to action that goes somewhere: sign up, read more, download. Use a link for navigation and a button for actions.",
+  "context": "main",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "href": {
+      "type": "url"
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "secondary",
+        "ghost"
+      ],
+      "required": false,
+      "description": "Primary when left out."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

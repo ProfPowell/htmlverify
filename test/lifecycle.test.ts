@@ -69,8 +69,7 @@ test('coverage goals: each vb-if both ways, each vb-each by count, optional para
     '✓ title is left out',
     '✗ links[].current is given',
     '✗ links[].current is left out',
-    '✗ links[].current is page',
-  ]);
+  ], 'links[].current only fills aria-current, so its values need no fixture each; tone reaches a class token');
 });
 
 test('a component with full coverage passes once its expected outputs are written, and approval records the digest', async () => {
@@ -165,9 +164,27 @@ test('fixture files are checked: valid JSON, only data and slots, key-shaped nam
     'fixtures/Bad Name.json: needs a name of lowercase letters, digits, and hyphens, starting with a letter: the name is the instance key the fixture renders under',
     'fixtures/notes.txt: isn’t a fixture; fixtures/ holds <name>.json, the data for one rendering, and <name>.html, its expected output',
     'fixtures/orphan.html: is an expected output with no fixtures/orphan.json to render it',
-    'fixtures/basic.json: has "key"; a fixture holds only "data" and "slots"',
+    'fixtures/basic.json: has "key"; a fixture holds only "data", "slots", and "with"',
     'fixtures/broken.json: isn’t valid JSON: …',
   ]);
+});
+
+test('a fixture can render siblings after the component, such as the targets of its refs', async () => {
+  const root = registryDir({
+    'action/jump': { contract: { context: 'main', params: { label: { type: 'text' }, target: { type: 'ref' } } }, template: '<p><a href="{{target}}">{{label}}</a></p>' },
+    'content/section': { contract: { context: 'main', params: { title: { type: 'text' } } }, template: '<section id="@" aria-labelledby="@title">\n  <h2 id="@title" vb-rank>{{title}}</h2>\n</section>' },
+  });
+  const fixtures = join(root, 'components/action/jump/fixtures');
+  writeFileSync(join(fixtures, 'basic.json'), JSON.stringify({ data: { label: 'To the end', target: { ref: 'end' } }, with: [{ use: 'content/section', key: 'end', data: { title: 'The end' } }] }));
+  const c = await checkComponent(openRegistry(root), 'action/jump', { update: true });
+  assert.equal(c.status, 'pass');
+  assert.equal(c.fixtures[0]!.result.html, '<p><a href="#end">To the end</a></p>\n<section id="end" aria-labelledby="end-title">\n  <h2 id="end-title">The end</h2>\n</section>\n');
+  writeFileSync(join(fixtures, 'basic.json'), JSON.stringify({ data: { label: 'To the end', target: { ref: 'end' } }, with: [{ use: 'content/section', key: 'end', data: { titel: 'The end' } }] }));
+  const typo = await checkComponent(openRegistry(root), 'action/jump');
+  assert.deepEqual(typo.fixtures[0]!.result.plan.findings.map((f) => f.message), [
+    '/with/0/data/title: "title" is required (text).',
+    '/with/0/data/titel: "titel" isn’t a parameter here; did you mean "title"?',
+  ], 'findings in a sibling point into the fixture’s "with", in file order');
 });
 
 test('fixtures can fill slots, and a page component renders as a page', async () => {

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "items": [
+      {
+        "question": "Do you ship abroad?",
+        "answer": "<p>Yes, to the EU and the UK.</p>"
+      },
+      {
+        "question": "Can I return an item?",
+        "answer": "<p>Within 30 days, unused.</p><p>We pay the postage.</p>"
+      }
+    ]
+  }
+}

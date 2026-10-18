@@ -1,0 +1,38 @@
+{
+  "data": {
+    "action": "/search",
+    "method": "get",
+    "label": "Search"
+  },
+  "slots": {
+    "fields": [
+      {
+        "use": "form/text-field",
+        "key": "q",
+        "data": {
+          "label": "Search for",
+          "name": "q",
+          "type": "search"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "use": "action/submit",
+        "key": "go",
+        "data": {
+          "label": "Search"
+        }
+      },
+      {
+        "use": "action/link-button",
+        "key": "advanced",
+        "data": {
+          "label": "Advanced search",
+          "href": "/search/advanced",
+          "variant": "ghost"
+        }
+      }
+    ]
+  }
+}

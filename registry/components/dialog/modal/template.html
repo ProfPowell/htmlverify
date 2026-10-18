@@ -1,0 +1,11 @@
+<dialog id="@" aria-labelledby="@title">
+  <header>
+    <h2 id="@title" vb-rank>{{title}}</h2>
+    <button type="button" class="ghost" commandfor="@" command="close" aria-label="{{closeLabel}}"><icon-wc name="x"></icon-wc></button>
+  </header>
+  <section aria-labelledby="@title">{{body}}</section>
+  <footer class="actions end">
+    <button type="button" class="secondary" commandfor="@" command="close">{{dismiss}}</button>
+    <template vb-slot="actions"></template>
+  </footer>
+</dialog>

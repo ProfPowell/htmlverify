@@ -69,3 +69,4 @@ function properties(name: string, root: string) {
 }
 
 properties('test registry', join(ROOT, 'test/registry'));
+properties('starter registry', join(ROOT, 'registry'));

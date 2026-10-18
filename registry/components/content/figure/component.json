@@ -1,0 +1,42 @@
+{
+  "id": "content/figure",
+  "version": "1.0.0",
+  "summary": "An image with a caption.",
+  "use": "A photo, diagram, or chart that the text refers to. For an image without a caption, use content/image.",
+  "params": {
+    "src": {
+      "type": "url"
+    },
+    "alt": {
+      "type": "text",
+      "minLength": 1,
+      "description": "What the image shows, for people who can't see it."
+    },
+    "width": {
+      "type": "integer",
+      "min": 1
+    },
+    "height": {
+      "type": "integer",
+      "min": 1
+    },
+    "caption": {
+      "type": "inline"
+    },
+    "loading": {
+      "type": "enum",
+      "values": [
+        "lazy",
+        "eager"
+      ],
+      "default": "lazy",
+      "description": "eager for an image in the first screenful."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

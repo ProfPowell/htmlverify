@@ -57,8 +57,8 @@ export class PlanGenerator {
   readonly #vocabulary: Vocabulary;
   readonly #next: () => number;
   readonly #maxDepth: number;
-  #refs: { ref: string }[] = [];
-  #targets: string[] = [];
+  #refs: { value: { ref: string }; accepts: readonly string[] | null }[] = [];
+  #targets: { path: string; component: string }[] = [];
 
   constructor(registry: Registry, vocabulary: Vocabulary, next: () => number, maxDepth = 3) {
     this.#registry = registry;
@@ -114,7 +114,7 @@ export class PlanGenerator {
     const data = this.#record(component.contract.params);
     if (!data) return null;
     if (Object.keys(data).length) node.data = data;
-    if (key !== null && component.template.symbols.has('')) this.#targets.push(here.join('/'));
+    if (key !== null && component.template.symbols.has('')) this.#targets.push({ path: here.join('/'), component: component.id });
     const ancestors = slotAncestors(component.template);
     const slots: Record<string, Node[]> = {};
     let n = 0;
@@ -175,9 +175,9 @@ export class PlanGenerator {
         return this.#int(min, spec.max ?? min + 99);
       }
       case 'ref': {
-        const ref = { ref: '' };
-        this.#refs.push(ref);
-        return ref;
+        const value = { ref: '' };
+        this.#refs.push({ value, accepts: spec.accepts ?? null });
+        return value;
       }
       case 'list': {
         const min = spec.minItems ?? 0;
@@ -192,10 +192,13 @@ export class PlanGenerator {
     }
   }
 
-  /** Points every ref at an instance with an ID, now that all of them are known. */
+  /** Points every ref at an instance with an ID that it accepts, now that all of them are known. */
   #resolveRefs(): boolean {
-    if (this.#refs.length && !this.#targets.length) return false;
-    for (const r of this.#refs) r.ref = this.#pick(this.#targets);
+    for (const r of this.#refs) {
+      const targets = this.#targets.filter((t) => !r.accepts || r.accepts.includes(t.component));
+      if (!targets.length) return false;
+      r.value.ref = this.#pick(targets).path;
+    }
     return true;
   }
 }

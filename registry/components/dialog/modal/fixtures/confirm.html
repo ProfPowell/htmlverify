@@ -1,0 +1,13 @@
+<dialog id="confirm" aria-labelledby="confirm-title">
+  <header>
+    <h2 id="confirm-title">Delete this draft?</h2>
+    <button type="button" class="ghost" commandfor="confirm" command="close" aria-label="Cancel"><icon-wc name="x"></icon-wc></button>
+  </header>
+  <section aria-labelledby="confirm-title">
+    <p>You can't undo this.</p>
+  </section>
+  <footer class="actions end">
+    <button type="button" class="secondary" commandfor="confirm" command="close">Keep it</button>
+    <a href="/drafts/12/delete" class="button">Delete</a>
+  </footer>
+</dialog>

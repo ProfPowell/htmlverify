@@ -1,0 +1,16 @@
+{
+  "data": {
+    "title": "Opening hours"
+  },
+  "slots": {
+    "body": [
+      {
+        "use": "content/prose",
+        "key": "text",
+        "data": {
+          "html": "<p>Monday to Friday, 9 to 5.</p>"
+        }
+      }
+    ]
+  }
+}

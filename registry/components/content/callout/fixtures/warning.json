@@ -1,0 +1,8 @@
+{
+  "data": {
+    "tone": "warning",
+    "title": "Planned maintenance",
+    "text": "The site is read-only on <time datetime=\"2026-11-02\">2 November</time> from 6 to 7 am.",
+    "icon": "triangle-alert"
+  }
+}

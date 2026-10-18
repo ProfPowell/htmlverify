@@ -1,0 +1,12 @@
+{
+  "data": {
+    "label": "Site",
+    "variant": "pills",
+    "items": [
+      {
+        "text": "Docs",
+        "href": "/docs/"
+      }
+    ]
+  }
+}

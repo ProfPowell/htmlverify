@@ -1,0 +1,37 @@
+{
+  "id": "data/table",
+  "version": "1.0.0",
+  "summary": "A data table with a caption, column headers, and a header cell per row.",
+  "use": "Tabular data: prices, specifications, schedules. The first column names each row; columns lists every column's header, that one included.",
+  "params": {
+    "caption": {
+      "type": "text",
+      "minLength": 1
+    },
+    "columns": {
+      "type": "list",
+      "minItems": 1,
+      "items": "text"
+    },
+    "rows": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "header": {
+          "type": "text",
+          "minLength": 1
+        },
+        "cells": {
+          "type": "list",
+          "items": "text"
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

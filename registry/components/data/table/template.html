@@ -1,0 +1,22 @@
+<data-table>
+  <table>
+    <caption>{{caption}}</caption>
+    <thead>
+      <tr>
+        <template vb-each="columns" vb-as="column">
+          <th scope="col">{{column}}</th>
+        </template>
+      </tr>
+    </thead>
+    <tbody>
+      <template vb-each="rows" vb-as="row">
+        <tr>
+          <th scope="row">{{row.header}}</th>
+          <template vb-each="row.cells" vb-as="cell">
+            <td>{{cell}}</td>
+          </template>
+        </tr>
+      </template>
+    </tbody>
+  </table>
+</data-table>

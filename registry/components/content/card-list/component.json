@@ -1,0 +1,41 @@
+{
+  "id": "content/card-list",
+  "version": "1.0.0",
+  "summary": "A grid of cards, each with a title and a line of text, optionally linked.",
+  "use": "Features, products, team members, or articles side by side. Each card's title links to href when it has one.",
+  "params": {
+    "min": {
+      "type": "enum",
+      "values": [
+        "s",
+        "m",
+        "l"
+      ],
+      "default": "m",
+      "description": "The narrowest a card gets before the grid wraps."
+    },
+    "cards": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "title": {
+          "type": "text",
+          "minLength": 1
+        },
+        "text": {
+          "type": "inline"
+        },
+        "href": {
+          "type": "url",
+          "required": false
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

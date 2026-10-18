@@ -1,0 +1,17 @@
+{
+  "data": {
+    "label": "You are here",
+    "separator": "chevron",
+    "trail": [
+      {
+        "text": "Home",
+        "href": "/"
+      },
+      {
+        "text": "Docs",
+        "href": "/docs/"
+      }
+    ],
+    "current": "Installation"
+  }
+}

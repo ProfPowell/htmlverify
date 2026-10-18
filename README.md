@@ -76,6 +76,8 @@ A plan names components from the registry, their data, and what goes in their sl
 
 `assembly/*` findings are located in the plan by line, column, and JSON Pointer. Each finding in the output carries its origin, classified so the fix goes to the right place: **plan** (wrong data or component choice: fix the plan), **composition** (components that don't fit together: pick others), or **component** (a defect in the component itself: it needs repair and re-review). `strict` assembles only approved components; `--draft` allows the rest with a warning. See `test/assemble/contact.plan.json` and the components in `test/registry/`.
 
+The starter registry in `registry/` holds 28 Vanilla Breeze components, from `page/basic` to forms, dialogs, and tabs; `catalog` lists them, and the CLI uses them when the config names no registry of its own.
+
 A component is `components/<group>/<name>/` in the registry: `component.json` (the contract), `template.html`, and `fixtures/<name>.json` with the `.html` each renders. `component check` renders every fixture in the component's context under `strict`, compares it with the expected output, and reports branch coverage: each `vb-if` both ways, each `vb-each` with no, one, and several items, each optional parameter given and left out, and each enum value used. `component approve` records the reviewer and the digest of the exact files reviewed; any later change makes the approval stale, which `registry check` fails.
 
 When several rules report one defect (a missing title is `content/order` and `a11y/title`), the earliest family keeps it and lists the others in `alsoReportedBy`.

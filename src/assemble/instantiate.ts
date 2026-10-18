@@ -4,10 +4,11 @@
 // node records its origin.
 
 import { defaultTreeAdapter as tree } from 'parse5';
-import { isElement, isHtml, walk, type ChildNode, type Document, type DocumentFragment, type Element, type Node, type ParentNode, type Template } from '../parse/tree.ts';
+import { isElement, isHtml, isText, walk, type ChildNode, type Document, type DocumentFragment, type Element, type Node, type ParentNode, type Template } from '../parse/tree.ts';
 import type { CheckOptions } from '../report/report.ts';
 import type { Coverage } from './coverage.ts';
 import { NS } from '../spec/html.ts';
+import { words } from '../text.ts';
 import { isObject, type Value, type ValueOptions } from './params.ts';
 import type { PlanHtml, PlanInstance, PlanNode } from './plan.ts';
 import type { Component } from './registry.ts';
@@ -81,8 +82,8 @@ export class Builder {
   readonly #options: InstantiateOptions;
   readonly #built: Built;
   /** Each instance's own ID (its @ symbol), by key path, for ref parameters. */
-  readonly #instances = new Map<string, { id: string | null; pointer: string }>();
-  readonly #refs: { element: Element; attr: Attr; ref: string; href: boolean; pointer: string }[] = [];
+  readonly #instances = new Map<string, { id: string | null; pointer: string; component: string }>();
+  readonly #refs: { element: Element; attr: Attr; ref: string; href: boolean; pointer: string; accepts: readonly string[] | null }[] = [];
   /** Fragment links from data and markup values, which must land on an ID in a page (spec §9.5). */
   readonly #fragmentLinks: { href: string; pointer: string }[] = [];
 
@@ -151,7 +152,7 @@ export class Builder {
     if (budget && frame.elements > budget.elements) {
       this.#problem('assembly/budget', node.pointer, `${component.id} rendered ${frame.elements} elements, more than its budget of ${budget.elements}; that usually means too much data, or a component that should be split.`);
     }
-    this.#instances.set(path.join('/'), { id: frame.rendered.has('') && path.length ? this.#symbolId(frame, '') : null, pointer: node.pointer });
+    this.#instances.set(path.join('/'), { id: frame.rendered.has('') && path.length ? this.#symbolId(frame, '') : null, pointer: node.pointer, component: component.id });
   }
 
   /** An instance's ID for a symbol: contact/email's @input is contact-email-input, its @ is contact-email. */
@@ -268,7 +269,7 @@ export class Builder {
         else if (a.type === 'ref') {
           const attr: Attr = { name: a.name, value: '' };
           element.attrs.push(attr);
-          this.#refs.push({ element, attr, ref: (v as { ref: string }).ref, href: a.name === 'href', pointer: this.#pointer(a.path, frame, scope) });
+          this.#refs.push({ element, attr, ref: (v as { ref: string }).ref, href: a.name === 'href', pointer: this.#pointer(a.path, frame, scope), accepts: a.accepts ?? null });
         } else {
           element.attrs.push({ name: a.name, value: String(v) });
           if (a.type === 'url' && a.name === 'href') this.#fragmentLink(String(v), this.#pointer(a.path, frame, scope));
@@ -349,11 +350,16 @@ export class Builder {
     if (href.startsWith('#') && href.length > 1 && href.toLowerCase() !== '#top') this.#fragmentLinks.push({ href, pointer });
   }
 
-  /** Moves parsed nodes into the tree, recording where they came from. */
+  /**
+   * Moves parsed nodes into the tree, recording where they came from. Text
+   * joins the text before it, as the parser will join it when the output is
+   * read back.
+   */
   #adopt(node: ChildNode, parent: ParentNode, origin: NodeOrigin): void {
     for (const { node: n } of walk(node)) if (isElement(n)) this.#built.origins.set(n, origin);
     tree.detachNode(node);
-    tree.appendChild(parent, node);
+    if (isText(node)) tree.insertText(parent, node.value);
+    else tree.appendChild(parent, node);
   }
 
   /** Cross-instance refs, then ID collisions over the whole tree. */
@@ -363,7 +369,9 @@ export class Builder {
       if (!target && this.#built.gaps.some((g) => g.instance === r.ref)) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names an HTML node; a ref names a component instance whose component has id="@".`);
       else if (!target) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names no instance in the plan; a key path lists keys from the top of the plan down, such as "contact/email".`);
       else if (!target.id) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names an instance whose component has no id="@"; refer to one that does.`);
-      settle(r.element, r.attr, target?.id ? (r.href ? `#${target.id}` : target.id) : null);
+      const fits = !target || !r.accepts || r.accepts.includes(target.component);
+      if (!fits) this.#problem('assembly/ref', r.pointer, `{ "ref": "${r.ref}" } names a ${target!.component}; it takes ${words([...r.accepts!])}.`);
+      settle(r.element, r.attr, target?.id && fits ? (r.href ? `#${target.id}` : target.id) : null);
     }
     const seen = new Map<string, Element>();
     for (const { node } of walk(this.#built.root)) {

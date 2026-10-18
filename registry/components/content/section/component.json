@@ -1,0 +1,34 @@
+{
+  "id": "content/section",
+  "version": "1.0.0",
+  "summary": "A titled section; its heading level comes from where it sits.",
+  "use": "Any titled part of a page. Nest sections for sub-parts; the headings rank themselves.",
+  "params": {
+    "title": {
+      "type": "text",
+      "minLength": 1
+    },
+    "gap": {
+      "type": "enum",
+      "values": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "required": false,
+      "description": "Space between the children; medium when left out."
+    }
+  },
+  "slots": {
+    "body": {
+      "min": 1
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

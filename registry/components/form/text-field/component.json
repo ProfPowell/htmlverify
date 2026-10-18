@@ -1,0 +1,80 @@
+{
+  "id": "form/text-field",
+  "version": "1.0.0",
+  "summary": "Labeled single-line input, with an optional hint and error message.",
+  "use": "Single-line text, email, phone, URL, search, or password input. For longer text use form/textarea-field; for choices, form/select-field or form/choice-group.",
+  "context": "form",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data."
+    },
+    "type": {
+      "type": "enum",
+      "values": [
+        "text",
+        "email",
+        "tel",
+        "url",
+        "search",
+        "password"
+      ],
+      "default": "text"
+    },
+    "autocomplete": {
+      "type": "enum",
+      "values": [
+        "name",
+        "given-name",
+        "family-name",
+        "email",
+        "tel",
+        "organization",
+        "street-address",
+        "address-line1",
+        "address-line2",
+        "address-level2",
+        "address-level1",
+        "postal-code",
+        "country-name",
+        "username",
+        "current-password",
+        "new-password",
+        "one-time-code",
+        "off"
+      ],
+      "required": false
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "hint": {
+      "type": "inline",
+      "required": false,
+      "description": "Help shown with the field until it's valid."
+    },
+    "error": {
+      "type": "text",
+      "required": false,
+      "description": "Shown when the browser finds the value invalid."
+    }
+  },
+  "budget": {
+    "elements": 5
+  },
+  "obligations": [
+    "The label names the expected input."
+  ],
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

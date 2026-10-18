@@ -1,0 +1,23 @@
+{
+  "data": {
+    "caption": "Opening hours",
+    "columns": [
+      "Day",
+      "Hours"
+    ],
+    "rows": [
+      {
+        "header": "Monday",
+        "cells": [
+          "9–5"
+        ]
+      },
+      {
+        "header": "Sunday",
+        "cells": [
+          "Closed"
+        ]
+      }
+    ]
+  }
+}

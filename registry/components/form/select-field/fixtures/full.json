@@ -1,0 +1,16 @@
+{
+  "data": {
+    "label": "Plan",
+    "name": "plan",
+    "placeholder": "Pick a plan",
+    "required": true,
+    "options": [
+      {
+        "value": "starter",
+        "label": "Starter"
+      }
+    ],
+    "hint": "You can change it later.",
+    "error": "Choose a plan."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "data": {
+    "copyright": "© 2026 Acme Ltd",
+    "legal": [
+      {
+        "text": "Privacy",
+        "href": "/privacy"
+      },
+      {
+        "text": "Terms",
+        "href": "/terms"
+      }
+    ],
+    "label": "Company",
+    "links": [
+      {
+        "text": "About",
+        "href": "/about"
+      },
+      {
+        "text": "Careers",
+        "href": "/careers"
+      }
+    ]
+  }
+}

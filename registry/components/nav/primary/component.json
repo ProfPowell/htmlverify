@@ -1,0 +1,49 @@
+{
+  "id": "nav/primary",
+  "version": "1.0.0",
+  "summary": "The site's main navigation: a horizontal list of links.",
+  "use": "Top-level links, once per page, in page/basic's nav slot. Mark the current page with current: page.",
+  "params": {
+    "label": {
+      "type": "text",
+      "default": "Main navigation",
+      "description": "Names the navigation landmark."
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "pills",
+        "tabs",
+        "minimal"
+      ],
+      "required": false,
+      "description": "Plain links when left out."
+    },
+    "items": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "text": {
+          "type": "text",
+          "minLength": 1
+        },
+        "href": {
+          "type": "url"
+        },
+        "current": {
+          "type": "enum",
+          "values": [
+            "page"
+          ],
+          "required": false
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

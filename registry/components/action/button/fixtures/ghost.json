@@ -1,0 +1,20 @@
+{
+  "data": {
+    "label": "Not now",
+    "target": {
+      "ref": "offer"
+    },
+    "command": "request-close",
+    "variant": "ghost"
+  },
+  "with": [
+    {
+      "use": "dialog/modal",
+      "key": "offer",
+      "data": {
+        "title": "Ten percent off",
+        "body": "<p>For your first order.</p>"
+      }
+    }
+  ]
+}

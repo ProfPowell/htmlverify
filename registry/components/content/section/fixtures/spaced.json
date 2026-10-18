@@ -1,0 +1,35 @@
+{
+  "data": {
+    "title": "Features",
+    "gap": "l"
+  },
+  "slots": {
+    "body": [
+      {
+        "use": "content/prose",
+        "key": "intro",
+        "data": {
+          "html": "<p>What you get.</p>"
+        }
+      },
+      {
+        "use": "content/section",
+        "key": "speed",
+        "data": {
+          "title": "Speed"
+        },
+        "slots": {
+          "body": [
+            {
+              "use": "content/prose",
+              "key": "text",
+              "data": {
+                "html": "<p>Pages load in under a second.</p>"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

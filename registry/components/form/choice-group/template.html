@@ -1,0 +1,13 @@
+<fieldset aria-describedby="@hint">
+  <legend>{{legend}}</legend>
+  <template vb-if="hint">
+    <output id="@hint" class="hint">{{hint}}</output>
+  </template>
+  <layout-stack data-layout-gap="xs">
+    <template vb-each="choices" vb-as="choice">
+      <form-field data-type="radio">
+        <label><input type="radio" name="{{name}}" value="{{choice.value}}" required="{{required}}" /> {{choice.label}}</label>
+      </form-field>
+    </template>
+  </layout-stack>
+</fieldset>

@@ -242,6 +242,12 @@ test('assembly/ref: refs resolve to instance IDs; missing targets and references
   assert.equal(missing.report, null, 'the output isn’t checked until the plan builds cleanly');
   assert.ok(missing.html, 'the output is still there to inspect');
 
+  // A ref can be narrowed to the components it may name.
+  const narrowed = registryWith({ 'test/opener': { contract: { context: 'main', params: { target: { type: 'ref', accepts: ['test/box'] } } }, template: '<button type="button" commandfor="{{target}}" command="show-modal">Open</button>' }, 'test/box': { contract: { context: 'main' }, template: '<dialog id="@" aria-label="Box"><p>Inside.</p></dialog>' } });
+  const wrong = await run(page([section('write', 'Write', [prose('p', '<p>A.</p>')]), { use: 'test/box', key: 'box' }, { use: 'test/opener', key: 'a', data: { target: { ref: 'write' } } }, { use: 'test/opener', key: 'b', data: { target: { ref: 'box' } } }]), { registry: narrowed });
+  assert.deepEqual(planFindings(wrong), ['assembly/ref /page/slots/main/2/data/target: { "ref": "write" } names a content/section; it takes test/box.']);
+  assert.match(wrong.html!, /<button type="button" commandfor="box" command="show-modal">Open<\/button>/, 'the ref to an accepted component resolves');
+
   // On a page, a fragment link from data or prose must land on an ID the page has.
   const fragments = await run(page([section('write', 'Write', [prose('p', '<p>See <a href="#write">above</a> or <a href="#later">later</a>.</p>')])], { header: [{ use: 'nav/primary', key: 'nav', data: { label: 'Main', items: [{ text: 'Write', href: '#write' }, { text: 'Gone', href: '#gone' }, { text: 'Top', href: '#top' }] } }] }));
   assert.deepEqual(planFindings(fragments), [

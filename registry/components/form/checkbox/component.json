@@ -1,0 +1,38 @@
+{
+  "id": "form/checkbox",
+  "version": "1.0.0",
+  "summary": "A single labeled checkbox: agree to terms, subscribe, remember me.",
+  "use": "One yes-or-no choice. For one of several options use form/choice-group.",
+  "context": "form",
+  "params": {
+    "label": {
+      "type": "inline",
+      "description": "May link to the terms it refers to."
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data."
+    },
+    "value": {
+      "type": "text",
+      "required": false,
+      "minLength": 1,
+      "description": "Sent when checked; \"on\" when left out."
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "checked": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

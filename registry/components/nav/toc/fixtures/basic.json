@@ -1,0 +1,56 @@
+{
+  "data": {
+    "items": [
+      {
+        "text": "Install",
+        "target": {
+          "ref": "install"
+        }
+      },
+      {
+        "text": "Configure",
+        "target": {
+          "ref": "configure"
+        }
+      }
+    ]
+  },
+  "with": [
+    {
+      "use": "content/section",
+      "key": "install",
+      "data": {
+        "title": "Install"
+      },
+      "slots": {
+        "body": [
+          {
+            "use": "content/prose",
+            "key": "text",
+            "data": {
+              "html": "<p>Run npm install.</p>"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "use": "content/section",
+      "key": "configure",
+      "data": {
+        "title": "Configure"
+      },
+      "slots": {
+        "body": [
+          {
+            "use": "content/prose",
+            "key": "text",
+            "data": {
+              "html": "<p>Add a config file.</p>"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

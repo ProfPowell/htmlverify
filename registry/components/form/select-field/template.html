@@ -1,0 +1,15 @@
+<form-field>
+  <label for="@input">{{label}}</label>
+  <select id="@input" name="{{name}}" required="{{required}}" aria-describedby="@hint @error">
+    <option value="">{{placeholder}}</option>
+    <template vb-each="options" vb-as="option">
+      <option value="{{option.value}}">{{option.label}}</option>
+    </template>
+  </select>
+  <template vb-if="hint">
+    <output id="@hint" class="hint" for="@input">{{hint}}</output>
+  </template>
+  <template vb-if="error">
+    <output id="@error" class="error" for="@input">{{error}}</output>
+  </template>
+</form-field>

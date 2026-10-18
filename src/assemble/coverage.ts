@@ -1,8 +1,10 @@
 // Branch coverage (spec §9.10): what a component's fixtures must exercise
 // before it can be approved. Each vb-if both ways; each vb-each with 0 items
 // (where allowed), 1, and 2 or more; each optional parameter present and
-// absent; each enum value and both booleans used. Record fields of list items
-// count the same way, across all the items.
+// absent; both booleans; and each value of an enum that reaches text or a
+// class token. An enum that only fills attribute values changes nothing but
+// the value, which the compiler already checked against the attribute.
+// Record fields of list items count the same way, across all the items.
 
 import type { Contract } from './contract.ts';
 import { isObject, type ParamSpec, type Value } from './params.ts';
@@ -75,7 +77,8 @@ export class Coverage {
           const seen = this.#loops.get(key(n.loc));
           const min = list?.minItems ?? 0;
           const max = list?.maxItems ?? Infinity;
-          const counts: [Count, boolean][] = [['0', min === 0 || list?.required === false], ['1', min <= 1 && max >= 1], ['2+', max >= 2]];
+          // An optional list that's left out is the parameter's own goal, and often a vb-if keeps the loop from running at all.
+          const counts: [Count, boolean][] = [['0', min === 0], ['1', min <= 1 && max >= 1], ['2+', max >= 2]];
           for (const [count, allowed] of counts) {
             if (allowed) out.push({ goal: `vb-each="${name(n.path)}" with ${count === '2+' ? '2 or more items' : count === '1' ? '1 item' : 'no items'} (${where(n.loc)})`, met: seen?.has(count) ?? false });
           }
@@ -85,6 +88,7 @@ export class Coverage {
       }
     };
     walk(template.nodes, new Map());
+    const shown = renderedEnums(template);
     const params = (specs: Record<string, ParamSpec>, prefix: string) => {
       for (const [param, spec] of Object.entries(specs)) {
         const path = prefix + param;
@@ -93,7 +97,7 @@ export class Coverage {
           out.push({ goal: `${path} is given`, met: present?.has(true) ?? false });
           out.push({ goal: `${path} is left out`, met: present?.has(false) ?? false });
         }
-        const values = spec.type === 'boolean' ? ['true', 'false'] : spec.type === 'enum' ? spec.values ?? [] : [];
+        const values = spec.type === 'boolean' ? ['true', 'false'] : spec.type === 'enum' && shown.has(path) ? spec.values ?? [] : [];
         for (const v of values) out.push({ goal: `${path} is ${v}`, met: this.#values.get(path)?.has(v) ?? false });
         if (spec.type === 'list' && typeof spec.items === 'object') params(spec.items, `${path}[].`);
       }
@@ -101,6 +105,28 @@ export class Coverage {
     params(contract.params, '');
     return out;
   }
+}
+
+/** Parameters, as "links[].current", whose value reaches text or a class token, where each value renders differently. */
+function renderedEnums(template: CompiledTemplate): Set<string> {
+  const out = new Set<string>();
+  const name = (path: Path, scope: ReadonlyMap<string, string>) => `${scope.get(path.root) ?? path.root}${path.field === null ? '' : `.${path.field}`}`;
+  const walk = (nodes: readonly TNode[], scope: ReadonlyMap<string, string>) => {
+    for (const n of nodes) {
+      if (n.kind === 'value') out.add(name(n.path, scope));
+      else if (n.kind === 'each') walk(n.children, new Map(scope).set(n.as, `${name(n.path, scope)}[]`));
+      else if (n.kind === 'if') walk(n.children, scope);
+      else if (n.kind === 'element') {
+        for (const a of n.attrs) {
+          if (a.kind === 'value' && a.name === 'class') out.add(name(a.path, scope));
+          else if (a.kind === 'mixed') for (const part of a.parts) if (typeof part !== 'string') out.add(name(part, scope));
+        }
+        walk(n.children, scope);
+      }
+    }
+  };
+  walk(template.nodes, new Map());
+  return out;
 }
 
 function key(loc: Loc): string {

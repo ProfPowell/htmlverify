@@ -1,0 +1,11 @@
+{
+  "data": {
+    "single": true,
+    "items": [
+      {
+        "question": "How do I reset my password?",
+        "answer": "<p>Use <a href=\"/account/reset\">the reset page</a>.</p>"
+      }
+    ]
+  }
+}

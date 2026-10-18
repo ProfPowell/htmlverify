@@ -1,0 +1,17 @@
+{
+  "id": "content/prose",
+  "version": "1.0.0",
+  "summary": "Paragraphs, lists, quotes, and subheadings from restricted HTML.",
+  "use": "Running text with links and emphasis. Its headings are relative: the highest becomes one below where it sits.",
+  "params": {
+    "html": {
+      "type": "prose"
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

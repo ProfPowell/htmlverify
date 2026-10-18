@@ -1,0 +1,38 @@
+{
+  "id": "content/callout",
+  "version": "1.0.0",
+  "summary": "A highlighted message: information, success, a warning, or an error.",
+  "use": "Something the reader must not miss, set apart from the text. Not for announcements that should interrupt; those need a live region.",
+  "params": {
+    "tone": {
+      "type": "enum",
+      "values": [
+        "info",
+        "success",
+        "warning",
+        "error",
+        "neutral"
+      ],
+      "default": "info"
+    },
+    "title": {
+      "type": "text",
+      "required": false
+    },
+    "text": {
+      "type": "inline"
+    },
+    "icon": {
+      "type": "text",
+      "required": false,
+      "pattern": "^[a-z0-9-]+$",
+      "description": "A Lucide icon name, such as info or triangle-alert."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

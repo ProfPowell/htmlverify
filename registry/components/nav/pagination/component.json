@@ -1,0 +1,53 @@
+{
+  "id": "nav/pagination",
+  "version": "1.0.0",
+  "summary": "Links to the previous and next page and to numbered pages.",
+  "use": "Below a list split across pages: search results, an article index. Leave out previous on the first page and next on the last.",
+  "params": {
+    "label": {
+      "type": "text",
+      "default": "Pagination"
+    },
+    "previous": {
+      "type": "url",
+      "required": false
+    },
+    "next": {
+      "type": "url",
+      "required": false
+    },
+    "previousText": {
+      "type": "text",
+      "default": "Previous"
+    },
+    "nextText": {
+      "type": "text",
+      "default": "Next"
+    },
+    "pages": {
+      "type": "list",
+      "items": {
+        "label": {
+          "type": "text",
+          "minLength": 1
+        },
+        "href": {
+          "type": "url"
+        },
+        "current": {
+          "type": "enum",
+          "values": [
+            "page"
+          ],
+          "required": false
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

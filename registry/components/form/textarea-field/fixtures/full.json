@@ -1,0 +1,11 @@
+{
+  "data": {
+    "label": "Describe the problem",
+    "name": "details",
+    "rows": 8,
+    "maxLength": 2000,
+    "required": true,
+    "hint": "Include what you expected and what happened.",
+    "error": "Tell us what went wrong."
+  }
+}

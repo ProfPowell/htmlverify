@@ -1,0 +1,17 @@
+<footer class="minimal">
+  <site-legal>
+    <span>{{copyright}}</span>
+    <template vb-each="legal" vb-as="link">
+      <a href="{{link.href}}">{{link.text}}</a>
+    </template>
+  </site-legal>
+  <template vb-if="links">
+    <nav aria-label="{{label}}">
+      <ul>
+        <template vb-each="links" vb-as="link">
+          <li><a href="{{link.href}}">{{link.text}}</a></li>
+        </template>
+      </ul>
+    </nav>
+  </template>
+</footer>

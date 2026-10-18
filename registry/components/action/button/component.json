@@ -1,0 +1,44 @@
+{
+  "id": "action/button",
+  "version": "1.0.0",
+  "summary": "A button that opens or closes a dialog.",
+  "use": "Opening a dialog/modal, or closing it, with no script. target is the dialog's key path. Not for submitting a form; that's action/submit.",
+  "context": "main",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "target": {
+      "type": "ref",
+      "accepts": [
+        "dialog/modal"
+      ],
+      "description": "The dialog it controls, such as { \"ref\": \"terms\" }."
+    },
+    "command": {
+      "type": "enum",
+      "values": [
+        "show-modal",
+        "close",
+        "request-close"
+      ],
+      "default": "show-modal"
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "secondary",
+        "ghost"
+      ],
+      "required": false,
+      "description": "Primary when left out."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

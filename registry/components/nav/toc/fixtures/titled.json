@@ -1,0 +1,33 @@
+{
+  "data": {
+    "title": "Contents",
+    "items": [
+      {
+        "text": "Overview",
+        "target": {
+          "ref": "overview"
+        }
+      }
+    ]
+  },
+  "with": [
+    {
+      "use": "content/section",
+      "key": "overview",
+      "data": {
+        "title": "Overview"
+      },
+      "slots": {
+        "body": [
+          {
+            "use": "content/prose",
+            "key": "text",
+            "data": {
+              "html": "<p>What it does.</p>"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

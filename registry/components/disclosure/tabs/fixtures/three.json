@@ -1,0 +1,18 @@
+{
+  "data": {
+    "tabs": [
+      {
+        "label": "Overview",
+        "content": "<p>What it is.</p>"
+      },
+      {
+        "label": "Specifications",
+        "content": "<p>What it's made of.</p>"
+      },
+      {
+        "label": "Reviews",
+        "content": "<p>What people say.</p>"
+      }
+    ]
+  }
+}

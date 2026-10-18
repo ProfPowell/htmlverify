@@ -34,7 +34,7 @@ export type IdToken = { symbol: string } | { literal: string };
 export type TAttr =
   | { kind: 'static'; name: string; value: string; namespace: string | null; prefix: string | null }
   /** The whole value is one parameter; a boolean attribute is present or omitted. */
-  | { kind: 'value'; name: string; path: Path; type: ParamType; boolean: boolean; loc: Loc }
+  | { kind: 'value'; name: string; path: Path; type: ParamType; boolean: boolean; loc: Loc; accepts?: readonly string[] }
   /** Text and parameters, in a text attribute or class. */
   | { kind: 'mixed'; name: string; parts: (string | Path)[]; loc: Loc }
   /** An ID or ID references with @ symbols, and literal IDs in page components. */
@@ -419,7 +419,7 @@ class Compiler {
         if (!resolved) continue;
         const why = this.#sink(e, name, resolved.spec);
         if (why) this.#report(loc, `${name}="${rawValue}": ${why}`);
-        else out.push({ kind: 'value', name, path: resolved.path, type: resolved.spec.type, boolean: this.#isBoolean(e, name), loc });
+        else out.push({ kind: 'value', name, path: resolved.path, type: resolved.spec.type, boolean: this.#isBoolean(e, name), loc, ...(resolved.spec.accepts ? { accepts: resolved.spec.accepts } : {}) });
         continue;
       }
       if (!(TEXT_ATTRIBUTES.has(name) || name.startsWith('data-') || name === 'class')) {
@@ -526,7 +526,8 @@ class Compiler {
           const bad = spec.values!.filter((v) => valueProblem(e, name, v, row) !== null);
           return bad.length ? `${words(bad.map((v) => `"${v}"`))} ${bad.length === 1 ? 'isn’t a valid value' : 'aren’t valid values'} for ${name} on <${tag}>.` : null;
         }
-        return loose ? null : `${name} doesn’t take keywords.`;
+        // A data-* attribute nothing types takes whatever values its author defines.
+        return loose || (custom === null && name.startsWith('data-')) ? null : `${name} doesn’t take keywords.`;
       }
       case 'integer':
         return (row && /integer|floating-point number/i.test(row.value)) || custom?.type === 'number' ? null : `${name} isn’t a numeric attribute.`;

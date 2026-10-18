@@ -1,0 +1,32 @@
+{
+  "id": "content/faq",
+  "version": "1.0.0",
+  "summary": "Questions and answers that open one at a time or together.",
+  "use": "A FAQ, or any list of questions with longer answers. Answers are prose.",
+  "params": {
+    "single": {
+      "type": "boolean",
+      "default": false,
+      "description": "Only one answer open at a time."
+    },
+    "items": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "question": {
+          "type": "text",
+          "minLength": 1
+        },
+        "answer": {
+          "type": "prose"
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

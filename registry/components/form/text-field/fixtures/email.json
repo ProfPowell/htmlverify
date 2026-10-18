@@ -1,0 +1,11 @@
+{
+  "data": {
+    "label": "Email",
+    "name": "email",
+    "type": "email",
+    "autocomplete": "email",
+    "required": true,
+    "hint": "We <em>never</em> share it.",
+    "error": "Enter an email address, such as name@example.org."
+  }
+}

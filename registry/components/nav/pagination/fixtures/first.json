@@ -1,0 +1,14 @@
+{
+  "data": {
+    "label": "Results pages",
+    "next": "?page=2",
+    "nextText": "More results",
+    "pages": [
+      {
+        "label": "1",
+        "href": "?page=1",
+        "current": "page"
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "action/submit",
+  "version": "1.0.0",
+  "summary": "The button that submits its form.",
+  "use": "A form's main action, in form/form's actions slot.",
+  "context": "form",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "secondary",
+        "ghost"
+      ],
+      "required": false,
+      "description": "Primary when left out."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

@@ -1,0 +1,13 @@
+<nav class="pagination" aria-label="{{label}}">
+  <ul>
+    <template vb-if="previous">
+      <li><a href="{{previous}}" rel="prev" data-prev="">{{previousText}}</a></li>
+    </template>
+    <template vb-each="pages" vb-as="page">
+      <li><a href="{{page.href}}" aria-current="{{page.current}}">{{page.label}}</a></li>
+    </template>
+    <template vb-if="next">
+      <li><a href="{{next}}" rel="next" data-next="">{{nextText}}</a></li>
+    </template>
+  </ul>
+</nav>

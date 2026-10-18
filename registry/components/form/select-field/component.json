@@ -1,0 +1,61 @@
+{
+  "id": "form/select-field",
+  "version": "1.0.0",
+  "summary": "Labeled drop-down list of options, starting with a placeholder.",
+  "use": "One choice from a long list, such as a country. For a few choices, form/choice-group shows them all.",
+  "context": "form",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data."
+    },
+    "placeholder": {
+      "type": "text",
+      "minLength": 1,
+      "default": "Choose…",
+      "description": "The empty first option, so no choice is made for the person."
+    },
+    "options": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "value": {
+          "type": "text",
+          "minLength": 1
+        },
+        "label": {
+          "type": "text",
+          "minLength": 1
+        }
+      }
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "hint": {
+      "type": "inline",
+      "required": false,
+      "description": "Help shown with the field until it's valid."
+    },
+    "error": {
+      "type": "text",
+      "required": false,
+      "description": "Shown when the browser finds the value invalid."
+    }
+  },
+  "obligations": [
+    "The label names the choice being made."
+  ],
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}
