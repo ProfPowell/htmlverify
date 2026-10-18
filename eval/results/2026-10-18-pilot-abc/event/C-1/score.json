@@ -1,0 +1,144 @@
+{
+  "brief": "event",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "times",
+        "met": true,
+        "found": 7
+      },
+      {
+        "id": "schedule",
+        "met": true,
+        "found": 8
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "address",
+        "met": false,
+        "found": 0
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "dl",
+    "dt",
+    "dd",
+    "time",
+    "time",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "section",
+    "h3",
+    "layout-text",
+    "ul",
+    "li",
+    "time",
+    "li",
+    "time",
+    "li",
+    "time",
+    "section",
+    "h3",
+    "layout-text",
+    "ul",
+    "li",
+    "time",
+    "li",
+    "time",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "textarea",
+    "footer",
+    "button"
+  ],
+  "tokens": {
+    "input": 14,
+    "output": 2260,
+    "cacheRead": 254200,
+    "cacheWrite": 14814
+  },
+  "costUsd": 0.10744429999999999,
+  "wallMs": 25941,
+  "turns": 12
+}

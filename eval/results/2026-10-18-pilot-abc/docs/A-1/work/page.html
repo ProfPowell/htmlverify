@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Checking rental availability</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Skip links">
+      <ul>
+        <li><a href="#main">Skip to content</a></li>
+      </ul>
+    </nav>
+    <p>Rental API guide</p>
+  </header>
+
+  <section data-layout="sidebar">
+    <aside>
+      <nav aria-label="Rental API guide">
+        <ul>
+          <li><a href="#getting-started">Getting started</a></li>
+          <li><a href="#authentication">Authentication</a></li>
+          <li><a href="#checking-availability" aria-current="page">Checking availability</a></li>
+          <li><a href="#creating-a-booking">Creating a booking</a></li>
+          <li><a href="#errors-guide">Errors</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main id="main">
+      <article>
+        <h1>Checking rental availability</h1>
+        <p>To check whether an item is free, send a GET request to <code>/v1/items/{id}/availability</code> with start and end dates.</p>
+
+        <nav aria-label="On this page">
+          <h2>On this page</h2>
+          <ul>
+            <li><a href="#request">Request</a></li>
+            <li><a href="#response">Response</a></li>
+            <li><a href="#errors">Errors</a></li>
+          </ul>
+        </nav>
+
+        <section id="request" aria-labelledby="request-heading">
+          <h2 id="request-heading">Request</h2>
+          <pre><code>GET /v1/items/kayak-tidewater/availability?start=2026-11-08&amp;end=2026-11-09
+Authorization: Bearer &lt;token&gt;</code></pre>
+          <table>
+            <caption>Parameters</caption>
+            <thead>
+              <tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Required</th><th scope="col">Default</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>start</code></td><td>date</td><td>required</td><td></td></tr>
+              <tr><td><code>end</code></td><td>date</td><td>required</td><td></td></tr>
+              <tr><td><code>units</code></td><td>integer</td><td>optional</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="response" aria-labelledby="response-heading">
+          <h2 id="response-heading">Response</h2>
+          <pre><code>{ "available": true, "units": 3 }</code></pre>
+        </section>
+
+        <section id="errors" aria-labelledby="errors-heading">
+          <h2 id="errors-heading">Errors</h2>
+          <ul>
+            <li><code>404</code> if the item doesn't exist.</li>
+            <li><code>422</code> if end is before start.</li>
+          </ul>
+        </section>
+
+        <footer>
+          <nav aria-label="Next page">
+            <p>Next: <a href="#creating-a-booking" rel="next">Creating a booking</a></p>
+          </nav>
+        </footer>
+      </article>
+    </main>
+  </section>
+</body>
+</html>

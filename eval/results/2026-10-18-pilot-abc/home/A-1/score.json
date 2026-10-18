@@ -1,0 +1,139 @@
+{
+  "brief": "home",
+  "condition": "A",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "fail"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": null,
+  "denials": 1,
+  "errors": {
+    "style": 10
+  },
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "nav",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "main",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "featured-imgs",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "footer",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "time",
+        "met": true,
+        "found": 2
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "script",
+    "body",
+    "header",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "main",
+    "section",
+    "h1",
+    "p",
+    "p",
+    "a",
+    "section",
+    "h2",
+    "ul",
+    "li",
+    "article",
+    "img",
+    "h3",
+    "p",
+    "a",
+    "li",
+    "article",
+    "img",
+    "h3",
+    "p",
+    "a",
+    "li",
+    "article",
+    "img",
+    "h3",
+    "p",
+    "a",
+    "section",
+    "h2",
+    "ul",
+    "li",
+    "time",
+    "li",
+    "time",
+    "footer",
+    "address",
+    "br",
+    "br",
+    "a",
+    "p",
+    "p",
+    "small"
+  ],
+  "tokens": {
+    "input": 8,
+    "output": 1704,
+    "cacheRead": 137845,
+    "cacheWrite": 12185
+  },
+  "costUsd": 0.0798968,
+  "wallMs": 16231,
+  "turns": 8
+}

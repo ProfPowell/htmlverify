@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 12154,
+  "stop_reason": "end_turn",
+  "session_id": "410bd42a-3acc-42eb-9b13-abf5437ebc2a",
+  "total_cost_usd": 0.09389290000000002,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 15259,
+    "cache_read_input_tokens": 187471,
+    "output_tokens": 1395,
+    "output_tokens_details": {
+      "thinking_tokens": 76
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 15259,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 42363,
+        "cache_creation_input_tokens": 990,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 990
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1395,
+      "cacheReadInputTokens": 187471,
+      "cacheCreationInputTokens": 15259,
+      "webSearchRequests": 0,
+      "costUSD": 0.09375310000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 76,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_015kv1GNdJzG8qURvzDnX4bL",
+      "tool_input": {
+        "command": "grep -o 'data-layout=\"[^\"]*\"' /vb/vanilla-breeze.css | sort -u | head -20; ls /vb; ls"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01DQsDtYxa3oTZ17aJzgHM1B",
+      "tool_input": {
+        "command": "grep -o 'data-layout=[^]]*' /vb/vanilla-breeze.css | sort -u | head -20"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 11,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1568,
+  "type": "result",
+  "duration_ms": 13970,
+  "uuid": "0a5b275d-0571-4d8f-9bbc-b3b5839c08f4",
+  "ttft_stream_ms": 1212,
+  "time_to_request_ms": 155,
+  "time_to_request_phases_ms": {
+    "other": 19,
+    "system_prompt": 14,
+    "resume_other": 0,
+    "process_user_input": 4,
+    "input_attachments": 20,
+    "input_hooks": 4,
+    "tool_pool_refresh": 3,
+    "init_message": 6,
+    "engine_pickup": 2,
+    "message_prep": 1,
+    "model_config_wait": 34,
+    "autocompact": 3,
+    "query_setup": 0,
+    "model_gates": 0,
+    "tool_schema_build": 28,
+    "message_normalization": 2,
+    "client_creation": 2,
+    "request_build": 13
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 105,
+  "time_to_request_cpu_ms": 179,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 239,
+  "process_anon_mib_turn_start": 122,
+  "process_rss_mib_result": 244,
+  "process_anon_mib_result": 125,
+  "process_peak_rss_mib": 262,
+  "process_cpu_ms_turn": 1457,
+  "process_wall_ms_turn": 13969,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 15,
+    "cpu_ms": 22,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1213,
+  "time_to_request_from_spawn_ms": 3722640,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329607806.203,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

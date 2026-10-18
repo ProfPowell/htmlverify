@@ -1,0 +1,163 @@
+{
+  "duration_api_ms": 15534,
+  "stop_reason": "end_turn",
+  "session_id": "8a9ae191-0615-4e32-8a91-fa184df75d9b",
+  "total_cost_usd": 0.09641179999999999,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 12612,
+    "cache_read_input_tokens": 249660,
+    "output_tokens": 2066,
+    "output_tokens_details": {
+      "thinking_tokens": 123
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 12612,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 39363,
+        "cache_creation_input_tokens": 1343,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1343
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 357,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0003098,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 332,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 2066,
+      "cacheReadInputTokens": 249660,
+      "cacheCreationInputTokens": 12612,
+      "webSearchRequests": 0,
+      "costUSD": 0.09610199999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 123,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_018UpCTn8si6XyFX9B8UbxTW",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\n  \"page\": {\n    \"use\": \"page/basic\",\n    \"data\": {\n      \"title\": \"FAQ\",\n      \"site\": \"Larkspur Supply Co.\",\n      \"description\": \"Frequently asked questions about Larkspur Supply Co. membership and rentals.\",\n      \"heading\": \"Frequently asked questions\"\n    },\n    \"slots\": {\n      \"main\": [\n        {\n          \"use\": \"content/prose\",\n          \"key\": \"intro\",\n          \"data\": { \"html\": \"<p>Frequently asked questions about Larkspur Supply Co. membership and rentals.</p>\" }\n        },\n        {\n          \"use\": \"content/faq\",\n          \"key\": \"faq\",\n          \"data\": {\n            \"items\": [\n              { \"question\": \"How much does membership cost?\", \"answer\": \"<p>A lifetime membership costs $30, paid once.</p>\" },\n              { \"question\": \"What is the member dividend?\", \"answer\": \"<p>Each spring, members get back a share of the profit, based on what they bought the year before. Last year it was 8%.</p>\" },\n              { \"question\": \"Can I rent gear without being a member?\", \"answer\": \"<p>Yes. Members get 20% off rentals.</p>\" },\n              { \"question\": \"How do I return a rental?\", \"answer\": \"<p>Bring it to the rental desk by closing time on the return date. Late returns cost one extra day.</p>\" },\n              { \"question\": \"Do you repair gear you didn't sell?\", \"answer\": \"<p>Yes, we repair any brand. Estimates are free.</p>\" },\n              { \"question\": \"Can I cancel my membership?\", \"answer\": \"<p>Yes. We refund your $30 if you cancel within 30 days.</p>\" }\n            ]\n          }\n        },\n        {\n          \"use\": \"content/prose\",\n          \"key\": \"contact\",\n          \"data\": { \"html\": \"<p>Still have questions? <a href=\\\"/contact\\\">Contact us</a></p>\" }\n        }\n      ]\n    }\n  }\n}\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 11,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1197,
+  "type": "result",
+  "duration_ms": 16444,
+  "uuid": "7da830bf-528d-4d27-ab60-5aea214d48bb",
+  "ttft_stream_ms": 883,
+  "time_to_request_ms": 135,
+  "time_to_request_phases_ms": {
+    "other": 22,
+    "system_prompt": 14,
+    "resume_other": 0,
+    "process_user_input": 4,
+    "input_attachments": 25,
+    "input_hooks": 5,
+    "tool_pool_refresh": 3,
+    "init_message": 8,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 2,
+    "autocompact": 2,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 28,
+    "message_normalization": 2,
+    "client_creation": 3,
+    "request_build": 14
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 85,
+  "time_to_request_cpu_ms": 147,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 249,
+  "process_anon_mib_turn_start": 130,
+  "process_rss_mib_result": 251,
+  "process_anon_mib_result": 129,
+  "process_peak_rss_mib": 258,
+  "process_cpu_ms_turn": 1630,
+  "process_wall_ms_turn": 16443,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 18,
+    "cpu_ms": 31,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 883,
+  "time_to_request_from_spawn_ms": 3816021,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329700728.722,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

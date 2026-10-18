@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Account settings</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+</head>
+<body>
+  <header>
+    <h1>Account settings</h1>
+  </header>
+
+  <main id="main" data-layout="stack">
+    <form action="#" method="post" enctype="multipart/form-data" data-layout="stack">
+      <section aria-labelledby="profile-heading" data-layout="stack">
+        <h2 id="profile-heading">Profile</h2>
+        <form-field>
+          <label for="display-name">Display name</label>
+          <input type="text" id="display-name" name="display_name" value="Ines O." autocomplete="nickname"/>
+        </form-field>
+        <form-field>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="ines@example.net" autocomplete="email"/>
+        </form-field>
+        <form-field>
+          <label for="photo">Profile photo</label>
+          <input type="file" id="photo" name="photo" accept="image/*"/>
+        </form-field>
+      </section>
+
+      <section aria-labelledby="notifications-heading" data-layout="stack">
+        <h2 id="notifications-heading">Notifications</h2>
+        <fieldset>
+          <legend>Email me about</legend>
+          <form-field>
+            <label for="n-rentals"><input type="checkbox" id="n-rentals" name="notify_rental_due" checked="checked"/> Rental due dates</label>
+          </form-field>
+          <form-field>
+            <label for="n-workshops"><input type="checkbox" id="n-workshops" name="notify_workshops"/> Workshop announcements</label>
+          </form-field>
+          <form-field>
+            <label for="n-newsletter"><input type="checkbox" id="n-newsletter" name="notify_newsletter" checked="checked"/> The monthly newsletter</label>
+          </form-field>
+        </fieldset>
+      </section>
+
+      <section aria-labelledby="rentals-heading" data-layout="stack">
+        <h2 id="rentals-heading">Rental preferences</h2>
+        <form-field>
+          <label for="pickup">Default pickup location</label>
+          <select id="pickup" name="pickup_location">
+            <option value="alder-street" selected="selected">Alder Street store</option>
+            <option value="harbor-kiosk">Harbor kiosk</option>
+          </select>
+        </form-field>
+        <fieldset>
+          <legend>Preferred units</legend>
+          <form-field>
+            <label for="units-metric"><input type="radio" id="units-metric" name="units" value="metric"/> Metric</label>
+          </form-field>
+          <form-field>
+            <label for="units-imperial"><input type="radio" id="units-imperial" name="units" value="imperial"/> Imperial</label>
+          </form-field>
+        </fieldset>
+      </section>
+
+      <footer>
+        <button type="submit">Save changes</button>
+        <button type="reset">Cancel</button>
+      </footer>
+    </form>
+
+    <section aria-labelledby="danger-heading" data-layout="stack">
+      <h2 id="danger-heading">Danger zone</h2>
+      <button type="button">Cancel membership</button>
+    </section>
+  </main>
+</body>
+</html>

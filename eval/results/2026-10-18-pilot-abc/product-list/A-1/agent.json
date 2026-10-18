@@ -1,0 +1,184 @@
+{
+  "duration_api_ms": 28613,
+  "stop_reason": "end_turn",
+  "session_id": "8a623d8c-feb4-4372-8db4-90b3237fb901",
+  "total_cost_usd": 0.1654766,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 22985,
+    "cache_read_input_tokens": 292443,
+    "output_tokens": 4412,
+    "output_tokens_details": {
+      "thinking_tokens": 257
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22985,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 48700,
+        "cache_creation_input_tokens": 2379,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2379
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 26,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00014429999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 4412,
+      "cacheReadInputTokens": 292443,
+      "cacheCreationInputTokens": 22985,
+      "webSearchRequests": 0,
+      "costUSD": 0.16533230000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 257,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01KrERYq5jbde2q3XTkLmDJo",
+      "tool_input": {
+        "command": "grep -o 'data-layout[^{,]*' /vb/vanilla-breeze.css | sort -u | head -30; grep -o 'form-field[^{]*' /vb/vanilla-breeze.css | sort -u | head"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_017fGuj3zYqHQyBEJUPoDYtD",
+      "tool_input": {
+        "command": "grep -o 'data-layout=[^]]*' /vb/vanilla-breeze.css | sort -u | head -30"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01VNKMNjSQpLNPntkKHvP9au",
+      "tool_input": {
+        "command": "grep -o 'data-layout=.[a-z-]*' /vb/vanilla-breeze.css"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_0111qRMtfDd1fSqHJFiQyL7K",
+      "tool_input": {
+        "command": "python3 - <<'E'\nP=[(\"Ridgeline 40 L\",189,\"4.7\",\"In stock\",\"ridgeline-40\",\"forest green\"),\n(\"Day Hiker 22 L\",79,\"4.5\",\"In stock\",\"day-hiker-22\",\"orange\"),\n(\"Summit 55 L\",249,\"4.8\",\"2 left\",\"summit-55\",\"red\"),\n(\"Commuter 18 L\",64,\"4.2\",\"In stock\",\"commuter-18\",\"charcoal\"),\n(\"Trailhead 30 L\",119,\"4.4\",\"Out of stock\",\"trailhead-30\",\"blue\"),\n(\"Expedition 70 L\",329,\"4.9\",\"In stock\",\"expedition-70\",\"yellow\"),\n(\"Kids' Explorer 12 L\",45,\"4.6\",\"In stock\",\"explorer-12\",\"teal\"),\n(\"Ultralight 35 L\",215,\"4.3\",\"In stock\",\"ultralight-35\",\"grey\")]\nitems=\"\".join(f'''\n      <li>\n        <product-card>\n          <img src=\"/img/{s}.jpg\" alt=\"{n}, a {c} backpack\" width=\"320\" height=\"240\" loading=\"lazy\"/>\n          <h3><a href=\"/shop/{s}\">{n}</a></h3>\n          <p>${p}</p>\n          <p>Rating: {r} out of 5</p>\n          <p>{a}</p>\n        </product-card>\n      </li>''' for n,p,r,a,s,c in P)\ndef opt(i,name,vals):\n    return \"\".join(f'''\n          <label><input type=\"radio\" name=\"{name}\" value=\"{v}\"/> {v}</label>''' for v in vals)\nhtml=f'''<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>\n  <title>Backpacks</title>\n  <link rel=\"stylesheet\" href=\"/vb/vanilla-breeze.css\"/>\n  <script src=\"/vb/vanilla-breeze.js\" defer=\"defer\"></script>\n</head>\n<body>\n  <header>\n    <nav aria-label=\"Main navigation\">\n      <ul>\n        <li><a href=\"#main\">Skip to content</a></li>\n      </ul>\n    </nav>\n    <h1>Backpacks</h1>\n    <p>8 products, sorted by popularity</p>\n  </header>\n\n  <main id=\"main\">\n    <section data-layout=\"sidebar\" aria-label=\"Backpack listing\">\n      <aside aria-labelledby=\"filters-heading\">\n        <h2 id=\"filters-heading\">Filters</h2>\n        <form action=\"/shop/backpacks\" method=\"get\">\n          <fieldset>\n            <legend>Capacity</legend>{opt(0,\"capacity\",[\"Under 30 L\",\"30–50 L\",\"Over 50 L\"])}\n          </fieldset>\n          <fieldset>\n            <legend>Price</legend>{opt(0,\"price\",[\"Under $100\",\"$100–$200\",\"Over $200\"])}\n          </fieldset>\n          <form-field>\n            <label><input type=\"checkbox\" name=\"in-stock\" value=\"1\"/> Only show items in stock</label>\n          </form-field>\n          <button type=\"submit\">Apply filters</button>\n        </form>\n      </aside>\n\n      <section aria-labelledby=\"products-heading\">\n        <h2 id=\"products-heading\">Products</h2>\n        <ul data-layout=\"grid\">{items}\n        </ul>\n      </section>\n    </section>\n\n    <nav aria-label=\"Pagination\">\n      <ul data-layout=\"cluster\">\n        <li aria-current=\"page\">Page 1 of 3</li>\n        <li><a href=\"?page=2\">2</a></li>\n        <li><a href=\"?page=3\">3</a></li>\n        <li><a href=\"?page=2\" rel=\"next\">Next</a></li>\n      </ul>\n    </nav>\n  </main>\n</body>\n</html>\n'''\nopen(\"page.html\",\"w\").write(html)\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 15,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1575,
+  "type": "result",
+  "duration_ms": 29834,
+  "uuid": "7ba800ed-49eb-4615-b31a-5ff62f5911e2",
+  "ttft_stream_ms": 1174,
+  "time_to_request_ms": 243,
+  "time_to_request_phases_ms": {
+    "other": 25,
+    "system_prompt": 35,
+    "resume_other": 0,
+    "process_user_input": 5,
+    "input_attachments": 48,
+    "input_hooks": 3,
+    "tool_pool_refresh": 4,
+    "init_message": 7,
+    "engine_pickup": 1,
+    "message_prep": 2,
+    "model_config_wait": 38,
+    "autocompact": 3,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 34,
+    "message_normalization": 2,
+    "client_creation": 25,
+    "request_build": 10
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 134,
+  "time_to_request_cpu_ms": 343,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 238,
+  "process_anon_mib_turn_start": 121,
+  "process_rss_mib_result": 241,
+  "process_anon_mib_result": 121,
+  "process_peak_rss_mib": 248,
+  "process_cpu_ms_turn": 2569,
+  "process_wall_ms_turn": 29833,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 42,
+    "cpu_ms": 71,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1175,
+  "time_to_request_from_spawn_ms": 3900829,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329785723.568,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

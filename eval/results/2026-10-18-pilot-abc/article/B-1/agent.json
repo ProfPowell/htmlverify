@@ -1,0 +1,163 @@
+{
+  "duration_api_ms": 12659,
+  "stop_reason": "end_turn",
+  "session_id": "1f745aa7-5b8b-461c-aeed-cbec24a6ce41",
+  "total_cost_usd": 0.0801461,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 12195,
+    "cache_read_input_tokens": 174828,
+    "output_tokens": 1360,
+    "output_tokens_details": {
+      "thinking_tokens": 98
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 12195,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5,
+        "cache_read_input_tokens": 39254,
+        "cache_creation_input_tokens": 1035,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1035
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 264,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0002633,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 240,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 1360,
+      "cacheReadInputTokens": 174828,
+      "cacheCreationInputTokens": 12195,
+      "webSearchRequests": 0,
+      "costUSD": 0.0798828,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 98,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01PQfF2HdyNmwjaZEnTLo6Eu",
+      "tool_input": {
+        "command": "cat htmlverify.config.json; ls /vb; grep -o 'data-layout=\"[a-z-]*\"' -r /vb/vanilla-breeze.css | sort -u | head -20"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 10,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 2693,
+  "type": "result",
+  "duration_ms": 15952,
+  "uuid": "08eae463-8091-47ac-9e72-c599db106b84",
+  "ttft_stream_ms": 2234,
+  "time_to_request_ms": 168,
+  "time_to_request_phases_ms": {
+    "other": 21,
+    "system_prompt": 26,
+    "resume_other": 0,
+    "process_user_input": 4,
+    "input_attachments": 20,
+    "input_hooks": 4,
+    "tool_pool_refresh": 3,
+    "init_message": 6,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 38,
+    "autocompact": 2,
+    "query_setup": 2,
+    "model_gates": 0,
+    "tool_schema_build": 27,
+    "message_normalization": 2,
+    "client_creation": 3,
+    "request_build": 8
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 62,
+  "time_to_request_cpu_ms": 195,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 239,
+  "process_anon_mib_turn_start": 123,
+  "process_rss_mib_result": 249,
+  "process_anon_mib_result": 129,
+  "process_peak_rss_mib": 263,
+  "process_cpu_ms_turn": 1672,
+  "process_wall_ms_turn": 15952,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 15,
+    "cpu_ms": 21,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 2234,
+  "time_to_request_from_spawn_ms": 3724173,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329609328.2559,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

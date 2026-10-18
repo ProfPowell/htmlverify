@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ridgeline 40 L pack</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Breadcrumb">
+      <ol data-layout="cluster">
+        <li><a href="/">Home</a> ›</li>
+        <li><a href="/shop">Shop</a> ›</li>
+        <li><a href="/shop/backpacks">Backpacks</a> ›</li>
+        <li><a href="#main" aria-current="page">Ridgeline 40 L</a></li>
+      </ol>
+    </nav>
+  </header>
+
+  <main id="main" data-layout="stack">
+    <article data-layout="stack">
+      <section aria-labelledby="product-heading" data-layout="grid">
+        <section aria-label="Photos" data-layout="stack">
+          <figure>
+            <img src="photos/front.jpg" alt="Ridgeline 40 L pack, front view" width="600" height="600"/>
+            <figcaption>Front</figcaption>
+          </figure>
+          <ul data-layout="grid" aria-label="More photos">
+            <li>
+              <figure>
+                <img src="photos/back-panel.jpg" alt="Ridgeline 40 L pack, back panel" width="300" height="300"/>
+                <figcaption>Back panel</figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure>
+                <img src="photos/side-zip.jpg" alt="Ridgeline 40 L pack with the side zip open" width="300" height="300"/>
+                <figcaption>Side zip open</figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure>
+                <img src="photos/on-hiker.jpg" alt="Ridgeline 40 L pack worn by a hiker" width="300" height="300"/>
+                <figcaption>On a hiker</figcaption>
+              </figure>
+            </li>
+          </ul>
+        </section>
+
+        <section data-layout="stack">
+          <hgroup>
+            <h1 id="product-heading">Ridgeline 40 L pack</h1>
+            <p>Rating: 4.7 out of 5 from 212 reviews</p>
+          </hgroup>
+          <p><strong>$189</strong></p>
+          <p>A 40-liter pack for multi-day trips. The frame transfers weight to your hips, and the side zip lets you reach the bottom without unpacking.</p>
+
+          <form id="order-form" action="/cart" method="post" data-layout="stack">
+            <form-field>
+              <label for="color">Color</label>
+              <select id="color" name="color" required="required">
+                <option value="" disabled="disabled" selected="selected">Select a color</option>
+                <option value="moss">Moss</option>
+                <option value="slate">Slate</option>
+                <option value="ember">Ember</option>
+              </select>
+            </form-field>
+
+            <form-field>
+              <label for="size">Size</label>
+              <select id="size" name="size" required="required">
+                <option value="" disabled="disabled" selected="selected">Select a size</option>
+                <option value="s-m">S/M</option>
+                <option value="m-l">M/L</option>
+              </select>
+            </form-field>
+
+            <form-field>
+              <label for="quantity">Quantity</label>
+              <input type="number" id="quantity" name="quantity" min="1" max="5" value="1" required="required"/>
+            </form-field>
+
+            <p data-layout="cluster">
+              <button type="submit">Add to cart</button>
+              <button type="button">Save to wishlist</button>
+            </p>
+          </form>
+        </section>
+      </section>
+
+      <section aria-labelledby="specs-heading">
+        <h2 id="specs-heading">Specifications</h2>
+        <dl>
+          <dt>Capacity</dt>
+          <dd>40 L</dd>
+          <dt>Weight</dt>
+          <dd>1.4 kg</dd>
+          <dt>Fabric</dt>
+          <dd>210-denier recycled nylon</dd>
+          <dt>Torso range</dt>
+          <dd>41–53 cm</dd>
+          <dt>Warranty</dt>
+          <dd>Lifetime, with free repairs at the co-op</dd>
+        </dl>
+      </section>
+
+      <section aria-labelledby="reviews-heading">
+        <h2 id="reviews-heading">Reviews</h2>
+        <article>
+          <blockquote><p>Carried it 90 km on the Coast Trail without a sore hip.</p></blockquote>
+          <p>Dana, 5 stars</p>
+        </article>
+        <article>
+          <blockquote><p>Wish the hip belt pockets were larger.</p></blockquote>
+          <p>Theo, 4 stars</p>
+        </article>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

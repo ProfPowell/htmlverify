@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Backpacks</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="#main">Skip to content</a></li>
+      </ul>
+    </nav>
+    <h1>Backpacks</h1>
+    <p>8 products, sorted by popularity</p>
+  </header>
+
+  <main id="main">
+    <section data-layout="sidebar" aria-label="Backpack listing">
+      <aside aria-labelledby="filters-heading">
+        <h2 id="filters-heading">Filters</h2>
+        <form action="/shop/backpacks" method="get">
+          <fieldset>
+            <legend>Capacity</legend>
+            <label><input type="radio" name="capacity" value="under-30"/> Under 30 L</label>
+            <label><input type="radio" name="capacity" value="30-50"/> 30–50 L</label>
+            <label><input type="radio" name="capacity" value="over-50"/> Over 50 L</label>
+          </fieldset>
+          <fieldset>
+            <legend>Price</legend>
+            <label><input type="radio" name="price" value="under-100"/> Under $100</label>
+            <label><input type="radio" name="price" value="100-200"/> $100–$200</label>
+            <label><input type="radio" name="price" value="over-200"/> Over $200</label>
+          </fieldset>
+          <form-field>
+            <label><input type="checkbox" name="in-stock" value="1"/> Only show items in stock</label>
+          </form-field>
+          <button type="submit">Apply filters</button>
+        </form>
+      </aside>
+
+      <section aria-labelledby="products-heading">
+        <h2 id="products-heading">Products</h2>
+        <ul data-layout="grid">
+          <li>
+            <product-card>
+              <img src="/img/ridgeline-40.jpg" alt="Ridgeline 40 L, a forest green backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/ridgeline-40">Ridgeline 40 L</a></h3>
+              <p>$189</p>
+              <p>Rating: 4.7 out of 5</p>
+              <p>In stock</p>
+            </product-card>
+          </li>
+          <li>
+            <product-card>
+              <img src="/img/day-hiker-22.jpg" alt="Day Hiker 22 L, an orange backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/day-hiker-22">Day Hiker 22 L</a></h3>
+              <p>$79</p>
+              <p>Rating: 4.5 out of 5</p>
+              <p>In stock</p>
+            </product-card>
+          </li>
+          <li>
+            <product-card>
+              <img src="/img/summit-55.jpg" alt="Summit 55 L, a red backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/summit-55">Summit 55 L</a></h3>
+              <p>$249</p>
+              <p>Rating: 4.8 out of 5</p>
+              <p>2 left</p>
+            </product-card>
+          </li>
+          <li>
+            <product-card>
+              <img src="/img/commuter-18.jpg" alt="Commuter 18 L, a charcoal backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/commuter-18">Commuter 18 L</a></h3>
+              <p>$64</p>
+              <p>Rating: 4.2 out of 5</p>
+              <p>In stock</p>
+            </product-card>
+          </li>
+          <li>
+            <product-card>
+              <img src="/img/trailhead-30.jpg" alt="Trailhead 30 L, a blue backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/trailhead-30">Trailhead 30 L</a></h3>
+              <p>$119</p>
+              <p>Rating: 4.4 out of 5</p>
+              <p>Out of stock</p>
+            </product-card>
+          </li>
+          <li>
+            <product-card>
+              <img src="/img/expedition-70.jpg" alt="Expedition 70 L, a yellow backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/expedition-70">Expedition 70 L</a></h3>
+              <p>$329</p>
+              <p>Rating: 4.9 out of 5</p>
+              <p>In stock</p>
+            </product-card>
+          </li>
+          <li>
+            <product-card>
+              <img src="/img/explorer-12.jpg" alt="Kids' Explorer 12 L, a teal backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/explorer-12">Kids' Explorer 12 L</a></h3>
+              <p>$45</p>
+              <p>Rating: 4.6 out of 5</p>
+              <p>In stock</p>
+            </product-card>
+          </li>
+          <li>
+            <product-card>
+              <img src="/img/ultralight-35.jpg" alt="Ultralight 35 L, a grey backpack" width="320" height="240" loading="lazy"/>
+              <h3><a href="/shop/ultralight-35">Ultralight 35 L</a></h3>
+              <p>$215</p>
+              <p>Rating: 4.3 out of 5</p>
+              <p>In stock</p>
+            </product-card>
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    <nav aria-label="Pagination">
+      <ul data-layout="cluster">
+        <li aria-current="page">Page 1 of 3</li>
+        <li><a href="?page=2">2</a></li>
+        <li><a href="?page=3">3</a></li>
+        <li><a href="?page=2" rel="next">Next</a></li>
+      </ul>
+    </nav>
+  </main>
+</body>
+</html>

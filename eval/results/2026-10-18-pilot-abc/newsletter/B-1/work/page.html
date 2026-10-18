@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Trail Report</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css" />
+  <script src="/vb/vanilla-breeze.js" defer="true"></script>
+</head>
+<body>
+  <main id="main" data-layout="stack">
+    <header data-layout="stack">
+      <h1>The Trail Report, once a month, never more.</h1>
+    </header>
+
+    <section data-layout="stack" aria-labelledby="what-heading">
+      <h2 id="what-heading">What you get</h2>
+      <ul>
+        <li>Trail and water conditions from members who were just there</li>
+        <li>Early booking for workshops</li>
+        <li>Repair tips from the workshop</li>
+        <li>The used-gear sale date, a week early</li>
+      </ul>
+    </section>
+
+    <section data-layout="stack" aria-label="Sign up">
+      <form method="post" data-layout="stack">
+        <form-field>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required="true" autocomplete="email" />
+        </form-field>
+        <button type="submit">Subscribe</button>
+      </form>
+      <p><small>We send one email a month. Unsubscribe from any issue.</small></p>
+    </section>
+
+    <aside data-layout="stack" aria-label="Readers">
+      <p>6,200 readers</p>
+      <figure>
+        <blockquote>
+          <p>“The only newsletter I read the day it arrives.”</p>
+        </blockquote>
+        <figcaption>Jo</figcaption>
+      </figure>
+    </aside>
+  </main>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "wallMs": 15814,
+  "ok": true,
+  "error": null
+}

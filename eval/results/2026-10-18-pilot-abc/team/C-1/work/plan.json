@@ -1,0 +1,48 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Team",
+      "site": "Larkspur Supply Co.",
+      "description": "Meet the Larkspur Supply Co. team.",
+      "heading": "Team"
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "content/prose",
+          "key": "intro",
+          "data": { "html": "<p>Meet the Larkspur Supply Co. team.</p>" }
+        },
+        {
+          "use": "content/card-list",
+          "key": "people",
+          "data": {
+            "cards": [
+              { "title": "Priya Raman", "text": "General manager. Twenty years of guiding sea-kayak trips before she ran the store." },
+              { "title": "Ines Okafor", "text": "Board chair. A member since 1994 and a former ranger." },
+              { "title": "Theo Lindqvist", "text": "Repair lead. Fixes zippers, stoves, and once, a canoe." },
+              { "title": "Dana Brooks", "text": "Rental manager. Knows where every kayak is, right now." },
+              { "title": "Sam Whitlock", "text": "Communications. Writes the newsletter and the trail reports." },
+              { "title": "Marta Ellison", "text": "Workshop coordinator. Teaches the knots class." }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "join",
+          "data": { "title": "Join us" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/prose",
+                "key": "hiring",
+                "data": { "html": "<p>We're hiring a <a href=\"/jobs/rental-assistant\">seasonal rental assistant</a>.</p>" }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

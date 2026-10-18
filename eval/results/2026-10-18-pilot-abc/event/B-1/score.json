@@ -1,0 +1,125 @@
+{
+  "brief": "event",
+  "condition": "B",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "assembly": null,
+  "denials": 2,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "times",
+        "met": true,
+        "found": 7
+      },
+      {
+        "id": "schedule",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "address",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "header",
+    "h1",
+    "p",
+    "time",
+    "time",
+    "address",
+    "main",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "h3",
+    "ul",
+    "li",
+    "time",
+    "li",
+    "time",
+    "li",
+    "time",
+    "h3",
+    "ul",
+    "li",
+    "time",
+    "li",
+    "time",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "textarea",
+    "button"
+  ],
+  "tokens": {
+    "input": 16,
+    "output": 1985,
+    "cacheRead": 317265,
+    "cacheWrite": 19826
+  },
+  "costUsd": 0.1311788,
+  "wallMs": 23643,
+  "turns": 15
+}

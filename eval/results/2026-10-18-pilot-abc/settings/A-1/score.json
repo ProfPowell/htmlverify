@@ -1,0 +1,130 @@
+{
+  "brief": "settings",
+  "condition": "A",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "fail"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": null,
+  "denials": 1,
+  "errors": {
+    "style": 15
+  },
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "fieldsets",
+        "met": true,
+        "found": 2
+      },
+      {
+        "id": "radios",
+        "met": true,
+        "found": 2
+      },
+      {
+        "id": "file",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "select",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "header",
+    "h1",
+    "main",
+    "form",
+    "section",
+    "h2",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "section",
+    "h2",
+    "fieldset",
+    "legend",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "section",
+    "h2",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "fieldset",
+    "legend",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "footer",
+    "button",
+    "button",
+    "section",
+    "h2",
+    "button"
+  ],
+  "tokens": {
+    "input": 8,
+    "output": 1890,
+    "cacheRead": 149305,
+    "cacheWrite": 19935
+  },
+  "costUsd": 0.1137308,
+  "wallMs": 16403,
+  "turns": 12
+}

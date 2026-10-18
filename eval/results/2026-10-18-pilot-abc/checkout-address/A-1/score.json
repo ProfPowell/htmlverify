@@ -1,0 +1,149 @@
+{
+  "brief": "checkout-address",
+  "condition": "A",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "fail"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": null,
+  "denials": 3,
+  "errors": {
+    "style": 25
+  },
+  "warnings": 1,
+  "checklist": {
+    "met": 7,
+    "of": 7,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "autocomplete",
+        "met": true,
+        "found": 8
+      },
+      {
+        "id": "country",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "speed",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "radios",
+        "met": true,
+        "found": 2
+      },
+      {
+        "id": "labels",
+        "met": true,
+        "found": 11
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "style",
+    "body",
+    "header",
+    "h1",
+    "nav",
+    "p",
+    "ol",
+    "li",
+    "li",
+    "li",
+    "main",
+    "section",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "option",
+    "option",
+    "form-field",
+    "label",
+    "input",
+    "output",
+    "form-field",
+    "label",
+    "input",
+    "fieldset",
+    "legend",
+    "label",
+    "input",
+    "label",
+    "input",
+    "footer",
+    "button",
+    "a",
+    "aside",
+    "h2",
+    "dl",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "strong"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 2563,
+    "cacheRead": 224137,
+    "cacheWrite": 15255
+  },
+  "costUsd": 0.1092275,
+  "wallMs": 20018,
+  "turns": 10
+}

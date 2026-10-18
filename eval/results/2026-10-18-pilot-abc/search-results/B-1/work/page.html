@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Search results for "rain jacket"</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css" />
+  <script src="/vb/vanilla-breeze.js" defer="true"></script>
+</head>
+<body>
+  <main id="main" data-layout="stack">
+    <header>
+      <h1>Search results</h1>
+      <p>Search results for "rain jacket": 5 results.</p>
+    </header>
+
+    <search>
+      <form action="/search" method="get">
+        <label for="q">Search</label>
+        <input type="search" id="q" name="q" value="rain jacket" />
+        <button type="submit">Search</button>
+      </form>
+    </search>
+
+    <nav aria-label="Filters">
+      <ul data-layout="cluster">
+        <li><a href="?q=rain+jacket&amp;section=shop">Shop (3)</a></li>
+        <li><a href="?q=rain+jacket&amp;section=workshops">Workshops (1)</a></li>
+        <li><a href="?q=rain+jacket&amp;section=blog">Blog (1)</a></li>
+      </ul>
+    </nav>
+
+    <section aria-labelledby="results-heading">
+      <h2 id="results-heading">Results</h2>
+      <ol data-layout="stack">
+        <li>
+          <article>
+            <h3><a href="/shop/drift-jacket">Drift rain jacket</a></h3>
+            <p>A packable 2.5-layer shell for spring hiking.</p>
+            <p>Shop</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h3><a href="/shop/storm-line">Storm Line rain jacket</a></h3>
+            <p>Fully taped seams and a stiff brim for coastal storms.</p>
+            <p>Shop</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h3><a href="/shop/puddle-jacket">Kids' Puddle jacket</a></h3>
+            <p>Reflective trim and room to grow.</p>
+            <p>Shop</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h3><a href="/workshops/waterproofing">Waterproofing your shell</a></h3>
+            <p>Bring your jacket; we'll reproof it with you.</p>
+            <p>Workshops</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h3><a href="/blog/rain-testing">How we test rain gear</a></h3>
+            <p>Two weeks in a coastal rainforest.</p>
+            <p>Blog</p>
+          </article>
+        </li>
+      </ol>
+    </section>
+
+    <nav aria-label="Pagination">
+      <p>Page 1 of 1</p>
+    </nav>
+  </main>
+</body>
+</html>

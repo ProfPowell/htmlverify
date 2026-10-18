@@ -1,0 +1,46 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": { "title": "Account settings", "site": "Account", "description": "Account settings for a signed-in member.", "heading": "Account settings" },
+    "slots": {
+      "main": [
+        {
+          "use": "form/form", "key": "settings", "data": { "label": "Account settings", "enctype": "multipart/form-data" },
+          "slots": {
+            "fields": [
+              { "use": "content/section", "key": "profile", "data": { "title": "Profile" }, "slots": { "body": [
+                { "use": "form/text-field", "key": "name", "data": { "label": "Display name", "name": "display-name" } },
+                { "use": "form/text-field", "key": "email", "data": { "label": "Email", "name": "email", "type": "email", "autocomplete": "email" } },
+                { "use": "form/file-field", "key": "photo", "data": { "label": "Profile photo", "name": "photo", "accept": "image/*" } }
+              ] } },
+              { "use": "content/section", "key": "notifications", "data": { "title": "Notifications" }, "slots": { "body": [
+                { "use": "form/checkbox-group", "key": "email-me", "data": { "legend": "Email me about", "name": "notify", "choices": [
+                  { "value": "rental-due", "label": "Rental due dates", "checked": true },
+                  { "value": "workshops", "label": "Workshop announcements" },
+                  { "value": "newsletter", "label": "The monthly newsletter", "checked": true }
+                ] } }
+              ] } },
+              { "use": "content/section", "key": "rental", "data": { "title": "Rental preferences" }, "slots": { "body": [
+                { "use": "form/select-field", "key": "pickup", "data": { "label": "Default pickup location", "name": "pickup", "options": [
+                  { "value": "alder-street", "label": "Alder Street store" },
+                  { "value": "harbor", "label": "Harbor kiosk" }
+                ] } },
+                { "use": "form/choice-group", "key": "units", "data": { "legend": "Preferred units", "name": "units", "choices": [
+                  { "value": "metric", "label": "Metric" },
+                  { "value": "imperial", "label": "Imperial" }
+                ] } }
+              ] } }
+            ],
+            "actions": [
+              { "use": "action/submit", "key": "save", "data": { "label": "Save changes" } },
+              { "key": "cancel", "html": "<button type=\"reset\" class=\"secondary\">Cancel</button>" }
+            ]
+          }
+        },
+        { "use": "content/section", "key": "danger", "data": { "title": "Danger zone" }, "slots": { "body": [
+          { "key": "cancel-membership", "html": "<button type=\"button\">Cancel membership</button>" }
+        ] } }
+      ]
+    }
+  }
+}

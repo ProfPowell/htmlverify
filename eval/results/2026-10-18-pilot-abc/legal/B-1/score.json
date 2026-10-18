@@ -1,0 +1,107 @@
+{
+  "brief": "legal",
+  "condition": "B",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "assembly": null,
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 4,
+    "of": 4,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "sections",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "toc",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "updated",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "header",
+    "h1",
+    "p",
+    "time",
+    "main",
+    "nav",
+    "ol",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "a",
+    "section",
+    "h2",
+    "p"
+  ],
+  "tokens": {
+    "input": 8,
+    "output": 1260,
+    "cacheRead": 137049,
+    "cacheWrite": 11509
+  },
+  "costUsd": 0.0724967,
+  "wallMs": 15818,
+  "turns": 9
+}

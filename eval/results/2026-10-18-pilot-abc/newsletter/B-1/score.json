@@ -1,0 +1,103 @@
+{
+  "brief": "newsletter",
+  "condition": "B",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "assembly": null,
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "benefits",
+        "met": true,
+        "found": 4
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "label",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "quote",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "main",
+    "header",
+    "h1",
+    "section",
+    "h2",
+    "ul",
+    "li",
+    "li",
+    "li",
+    "li",
+    "section",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "button",
+    "p",
+    "small",
+    "aside",
+    "p",
+    "figure",
+    "blockquote",
+    "p",
+    "figcaption"
+  ],
+  "tokens": {
+    "input": 10,
+    "output": 1316,
+    "cacheRead": 183233,
+    "cacheWrite": 16438
+  },
+  "costUsd": 0.0975791,
+  "wallMs": 19402,
+  "turns": 12
+}

@@ -1,0 +1,76 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Rental memberships",
+      "site": "Rental memberships",
+      "description": "Compare the Day Pass, Weekender and Season Pass rental plans.",
+      "heading": "Pricing page: rental memberships"
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "content/section",
+          "key": "plans",
+          "data": { "title": "Rental plans" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/section",
+                "key": "day-pass",
+                "data": { "title": "Day Pass" },
+                "slots": {
+                  "body": [
+                    { "use": "content/prose", "key": "details", "data": { "html": "<p>$0 a month</p><ul><li>Pay per rental</li><li>Members get 20% off</li></ul>" } },
+                    { "key": "cta", "html": "<button type=\"button\">Rent now</button>" }
+                  ]
+                }
+              },
+              {
+                "use": "content/section",
+                "key": "weekender",
+                "data": { "title": "Weekender" },
+                "slots": {
+                  "body": [
+                    { "use": "content/prose", "key": "details", "data": { "html": "<p><strong>Most popular</strong></p><p>$19 a month</p><ul><li>2 rentals a month included</li><li>Free gear delivery</li></ul>" } },
+                    { "key": "cta", "html": "<button type=\"button\">Choose Weekender</button>" }
+                  ]
+                }
+              },
+              {
+                "use": "content/section",
+                "key": "season-pass",
+                "data": { "title": "Season Pass" },
+                "slots": {
+                  "body": [
+                    { "use": "content/prose", "key": "details", "data": { "html": "<p>$49 a month</p><ul><li>Unlimited rentals</li><li>Priority booking for kayaks</li><li>Free delivery</li></ul>" } },
+                    { "key": "cta", "html": "<button type=\"button\">Choose Season Pass</button>" }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "data/table",
+          "key": "comparison",
+          "data": {
+            "caption": "Comparison of features by plan",
+            "columns": ["Day Pass", "Weekender", "Season Pass"],
+            "rows": [
+              { "header": "Included rentals", "cells": ["none", "2 per month", "unlimited"] },
+              { "header": "Member discount", "cells": ["20%", "20%", "20%"] },
+              { "header": "Free delivery", "cells": ["no", "yes", "yes"] },
+              { "header": "Priority kayak booking", "cells": ["no", "no", "yes"] }
+            ]
+          }
+        },
+        {
+          "use": "content/prose",
+          "key": "note",
+          "data": { "html": "<p>Prices include tax. Cancel any time.</p>" }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Checkout: Shipping Address</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+  <style>
+    main { max-width: 64rem; margin-inline: auto; padding-inline: 1rem; }
+    .checkout { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); align-items: start; }
+    .checkout > form { display: grid; gap: 1.25rem; }
+    form-field { display: grid; gap: 0.35rem; }
+    form-field input, form-field select { padding: 0.65rem; }
+    form-field:has(input:required, select:required) label::after { content: " *"; }
+    form-field:has(input:user-invalid, select:user-invalid) input,
+    form-field:has(input:user-invalid, select:user-invalid) select { border-color: #dc2626; }
+    form-field output { font-size: 0.875rem; }
+    fieldset { display: grid; gap: 0.75rem; }
+    ol.progress { display: flex; flex-wrap: wrap; gap: 1.5rem; padding: 0; list-style: none; }
+    ol.progress [aria-current="step"] { font-weight: 700; }
+    dl.summary { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; }
+    dl.summary dd { margin: 0; text-align: end; }
+    footer.actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Checkout: shipping address</h1>
+    <nav aria-label="Checkout progress">
+      <p>Checkout, step 2 of 3: Shipping address.</p>
+      <ol class="progress">
+        <li>1 Cart (done)</li>
+        <li aria-current="step">2 Shipping (current)</li>
+        <li>3 Payment</li>
+      </ol>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="checkout" data-layout="sidebar">
+      <form action="/checkout/payment" method="post">
+        <form-field>
+          <label for="full-name">Full name</label>
+          <input type="text" id="full-name" name="full_name" required="required" autocomplete="name" autofocus="autofocus"/>
+        </form-field>
+
+        <form-field>
+          <label for="address1">Address line 1</label>
+          <input type="text" id="address1" name="address1" required="required" autocomplete="address-line1"/>
+        </form-field>
+
+        <form-field>
+          <label for="address2">Address line 2 (optional)</label>
+          <input type="text" id="address2" name="address2" autocomplete="address-line2"/>
+        </form-field>
+
+        <form-field>
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" required="required" autocomplete="address-level2"/>
+        </form-field>
+
+        <form-field>
+          <label for="region">State or region</label>
+          <input type="text" id="region" name="region" required="required" autocomplete="address-level1"/>
+        </form-field>
+
+        <form-field>
+          <label for="postal">Postal code</label>
+          <input type="text" id="postal" name="postal_code" required="required" autocomplete="postal-code"/>
+        </form-field>
+
+        <form-field>
+          <label for="country">Country</label>
+          <select id="country" name="country" required="required" autocomplete="country-name">
+            <option value="" disabled="disabled" selected="selected">Select a country...</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="MX">Mexico</option>
+          </select>
+        </form-field>
+
+        <form-field>
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" required="required" autocomplete="tel" aria-describedby="phone-msg"/>
+          <output id="phone-msg" for="phone">For the courier</output>
+        </form-field>
+
+        <form-field>
+          <label for="billing-same"><input type="checkbox" id="billing-same" name="billing_same"/> Billing address is the same</label>
+        </form-field>
+
+        <fieldset>
+          <legend>Shipping speed</legend>
+          <label><input type="radio" name="shipping_speed" value="standard" required="required"/> Standard, 5–7 days, free</label>
+          <label><input type="radio" name="shipping_speed" value="express"/> Express, 2 days, $12</label>
+        </fieldset>
+
+        <footer class="actions">
+          <button type="submit">Continue to payment</button>
+          <a href="/cart">Back to cart</a>
+        </footer>
+      </form>
+
+      <aside aria-labelledby="summary-title">
+        <h2 id="summary-title">Order summary</h2>
+        <dl class="summary">
+          <dt>Ridgeline 40 L × 1</dt>
+          <dd>$189</dd>
+          <dt>Shipping</dt>
+          <dd>$0</dd>
+          <dt>Total</dt>
+          <dd><strong>$189</strong></dd>
+        </dl>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
