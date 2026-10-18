@@ -1,0 +1,95 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Shipping address",
+      "site": "Checkout",
+      "description": "Checkout, step 2 of 3: enter your shipping address and choose a shipping speed.",
+      "heading": "Checkout: shipping address"
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "nav/steps",
+          "key": "progress",
+          "data": {
+            "label": "Checkout progress",
+            "steps": [
+              { "text": "Cart", "done": true },
+              { "text": "Shipping", "current": "step" },
+              { "text": "Payment" }
+            ]
+          }
+        },
+        {
+          "use": "form/form",
+          "key": "address",
+          "data": { "label": "Shipping address" },
+          "slots": {
+            "fields": [
+              { "use": "form/text-field", "key": "full-name", "data": { "label": "Full name", "name": "full-name", "autocomplete": "name", "required": true } },
+              { "use": "form/text-field", "key": "address1", "data": { "label": "Address line 1", "name": "address1", "autocomplete": "address-line1", "required": true } },
+              { "use": "form/text-field", "key": "address2", "data": { "label": "Address line 2 (optional)", "name": "address2", "autocomplete": "address-line2" } },
+              { "use": "form/text-field", "key": "city", "data": { "label": "City", "name": "city", "autocomplete": "address-level2", "required": true } },
+              { "use": "form/text-field", "key": "region", "data": { "label": "State or region", "name": "region", "autocomplete": "address-level1", "required": true } },
+              { "use": "form/text-field", "key": "postal-code", "data": { "label": "Postal code", "name": "postal-code", "autocomplete": "postal-code", "required": true } },
+              {
+                "use": "form/select-field",
+                "key": "country",
+                "data": {
+                  "label": "Country",
+                  "name": "country",
+                  "required": true,
+                  "options": [
+                    { "value": "us", "label": "United States" },
+                    { "value": "ca", "label": "Canada" },
+                    { "value": "mx", "label": "Mexico" }
+                  ]
+                }
+              },
+              { "use": "form/text-field", "key": "phone", "data": { "label": "Phone", "name": "phone", "type": "tel", "autocomplete": "tel", "required": true, "hint": "For the courier" } },
+              { "use": "form/checkbox", "key": "billing-same", "data": { "label": "Billing address is the same", "name": "billing-same" } },
+              {
+                "use": "form/choice-group",
+                "key": "speed",
+                "data": {
+                  "legend": "Shipping speed",
+                  "name": "shipping-speed",
+                  "required": true,
+                  "choices": [
+                    { "value": "standard", "label": "Standard, 5–7 days, free" },
+                    { "value": "express", "label": "Express, 2 days, $12" }
+                  ]
+                }
+              }
+            ],
+            "actions": [
+              { "use": "action/submit", "key": "continue", "data": { "label": "Continue to payment" } },
+              { "use": "action/link-button", "key": "back", "data": { "label": "Back to cart", "href": "/cart", "variant": "secondary" } }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "summary",
+          "data": { "title": "Order summary" },
+          "slots": {
+            "body": [
+              {
+                "use": "data/description-list",
+                "key": "summary-items",
+                "data": {
+                  "items": [
+                    { "term": "Ridgeline 40 L × 1", "description": "$189" },
+                    { "term": "Shipping", "description": "$0" },
+                    { "term": "Total", "description": "$189" }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Winter Skills Weekend",
+      "site": "Hollow Pine Camp",
+      "description": "Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience.",
+      "heading": "Winter Skills Weekend"
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "data/description-list",
+          "key": "details",
+          "data": {
+            "items": [
+              {
+                "term": "When",
+                "description": "<time datetime=\"2026-12-06\">Saturday 6</time> to <time datetime=\"2026-12-07\">Sunday 7 December 2026</time>"
+              },
+              {
+                "term": "Where",
+                "description": "Hollow Pine Camp, 88 Ridge Road, Mount Alder"
+              },
+              {
+                "term": "Spaces left",
+                "description": "6 of 24"
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/prose",
+          "key": "description",
+          "data": {
+            "html": "<p>Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience.</p>"
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "schedule",
+          "data": { "title": "Schedule" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/section",
+                "key": "saturday",
+                "data": { "title": "Saturday 6 December" },
+                "slots": {
+                  "body": [
+                    {
+                      "use": "content/prose",
+                      "key": "items",
+                      "data": {
+                        "html": "<ul><li><time datetime=\"09:00\">9:00</time> Arrival and gear check</li><li><time datetime=\"10:00\">10:00</time> Avalanche awareness</li><li><time datetime=\"14:00\">14:00</time> Snowshoe technique</li></ul>"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "use": "content/section",
+                "key": "sunday",
+                "data": { "title": "Sunday 7 December" },
+                "slots": {
+                  "body": [
+                    {
+                      "use": "content/prose",
+                      "key": "items",
+                      "data": {
+                        "html": "<ul><li><time datetime=\"09:00\">9:00</time> Snow shelters</li><li><time datetime=\"13:00\">13:00</time> Debrief and lunch</li></ul>"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "price",
+          "data": { "title": "Price" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/prose",
+                "key": "text",
+                "data": {
+                  "html": "<p>$180 for members, $220 for others. Includes meals and a bunk.</p>"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "registration",
+          "data": { "title": "Registration" },
+          "slots": {
+            "body": [
+              {
+                "use": "form/form",
+                "key": "register",
+                "data": { "label": "Registration" },
+                "slots": {
+                  "fields": [
+                    {
+                      "use": "form/text-field",
+                      "key": "name",
+                      "data": { "label": "Name", "name": "name", "autocomplete": "name", "required": true }
+                    },
+                    {
+                      "use": "form/text-field",
+                      "key": "email",
+                      "data": { "label": "Email", "name": "email", "type": "email", "autocomplete": "email", "required": true }
+                    },
+                    {
+                      "use": "form/text-field",
+                      "key": "membership",
+                      "data": { "label": "Membership number (optional)", "name": "membership" }
+                    },
+                    {
+                      "use": "form/textarea-field",
+                      "key": "dietary",
+                      "data": { "label": "Dietary needs", "name": "dietary" }
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "use": "action/submit",
+                      "key": "register",
+                      "data": { "label": "Register" }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

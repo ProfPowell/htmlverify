@@ -1,0 +1,174 @@
+{
+  "registry": "registry",
+  "draft": true,
+  "components": [
+    {
+      "id": "action/button",
+      "version": "1.0.0",
+      "digest": "sha256-079c977b55b8e8cc2b1ff7f4d55c74ef67c9699f9878acc982f2e3ff34613a66",
+      "status": "unreviewed"
+    },
+    {
+      "id": "action/link-button",
+      "version": "1.0.0",
+      "digest": "sha256-5dcc96d6d15affd9b009c2e4d50d50e905363d9ed4f916087ad7c879c173e874",
+      "status": "unreviewed"
+    },
+    {
+      "id": "action/submit",
+      "version": "1.0.0",
+      "digest": "sha256-7efc69c685fe88f1cf5df8d250fa565f516a038ea36d6bcebc39d18e88fe5d4c",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/callout",
+      "version": "1.0.0",
+      "digest": "sha256-e5667df036d6f548ca4d4dea48d282d857e9a5080e0080b58797b841c2bce566",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/card-list",
+      "version": "1.0.0",
+      "digest": "sha256-3dbb966fa138bc5f9a12ecbefbe0d14792ea89c6b97c0d79b1fd1debc245c706",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/faq",
+      "version": "1.0.0",
+      "digest": "sha256-f5fe114e2e8f9008fbdbec32de1c63f239ccd2521ef338d87c3cb6d5a294d806",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/figure",
+      "version": "1.0.0",
+      "digest": "sha256-20ab5279aad22e527c5425e527ab978ff64cf62c0eba9419b91e891bfc5a6a72",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/image",
+      "version": "1.0.0",
+      "digest": "sha256-642d7277aafdc05cd2b39096ba8383ca7ce225761c822e07b22be5b7ccc56611",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/prose",
+      "version": "1.0.0",
+      "digest": "sha256-6c8d8f43a937c896ace89ce580569a1d7b07faf837d63836278bf13078716859",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/quote",
+      "version": "1.0.0",
+      "digest": "sha256-101bb3ecb7c02c10c8eaed8c023a076390e1a182739156f0a0f64193c6709513",
+      "status": "unreviewed"
+    },
+    {
+      "id": "content/section",
+      "version": "1.0.0",
+      "digest": "sha256-29b174d2279f742a9d5c64824084ff2c9948d5148ea85157c917a418fbec25b6",
+      "status": "unreviewed"
+    },
+    {
+      "id": "data/description-list",
+      "version": "1.0.0",
+      "digest": "sha256-bda0cd1fe59be9f39496733e63181b6f5a328d27376ffc1f5f12f9e1c04eb83a",
+      "status": "unreviewed"
+    },
+    {
+      "id": "data/table",
+      "version": "1.0.0",
+      "digest": "sha256-37be351f1e3eb5771d265d2ffd140f143e9cb66ce1ad2e2bcd7a9f62dc69edc3",
+      "status": "unreviewed"
+    },
+    {
+      "id": "dialog/modal",
+      "version": "1.0.0",
+      "digest": "sha256-44b508ccc21224513d9e169d44e56e21879ddc097522a315c34cadfc86e4111c",
+      "status": "unreviewed"
+    },
+    {
+      "id": "disclosure/details",
+      "version": "1.0.0",
+      "digest": "sha256-a2f95c354928a528fbba649f2599ce577aab4994b6c0d4946127109c07ffbba5",
+      "status": "unreviewed"
+    },
+    {
+      "id": "disclosure/tabs",
+      "version": "1.0.0",
+      "digest": "sha256-d5c77237ba7b692c6fd376c76c3dde009a040277d772befc5a6cc68ea039985d",
+      "status": "unreviewed"
+    },
+    {
+      "id": "form/checkbox",
+      "version": "1.0.0",
+      "digest": "sha256-0ce6956798f49052c890fc6209c532fd86adf25229d849063a7cb0343a922533",
+      "status": "unreviewed"
+    },
+    {
+      "id": "form/choice-group",
+      "version": "1.0.0",
+      "digest": "sha256-4ed5664981e436502b025ec4ed86b06ef279d2fbef49f46bdc6c25c5ff58b566",
+      "status": "unreviewed"
+    },
+    {
+      "id": "form/form",
+      "version": "1.0.0",
+      "digest": "sha256-e8efe4835d7e3b492a33a57472449ebac6da60b7bedb38e746b9b43c7dcd9d0c",
+      "status": "unreviewed"
+    },
+    {
+      "id": "form/select-field",
+      "version": "1.0.0",
+      "digest": "sha256-97e59e85b5abca1fe03ebb5c73e2605d50f54c2f6f6c468305283b29b780f135",
+      "status": "unreviewed"
+    },
+    {
+      "id": "form/text-field",
+      "version": "1.0.0",
+      "digest": "sha256-8909aec1a1f391eee5ec3cd7cc4d7f5e53906306cf1db375f0f1b78c5eed6096",
+      "status": "unreviewed"
+    },
+    {
+      "id": "form/textarea-field",
+      "version": "1.0.0",
+      "digest": "sha256-c428a0206d4904f5d00a67cbac0fddcd9b9c1a74a049132391da9bf9552acad1",
+      "status": "unreviewed"
+    },
+    {
+      "id": "nav/breadcrumb",
+      "version": "1.0.0",
+      "digest": "sha256-fe904bf783bf735447274b35f2c0cfc3e9430f015adb0f4af9e3effb5b634ea1",
+      "status": "unreviewed"
+    },
+    {
+      "id": "nav/pagination",
+      "version": "1.0.0",
+      "digest": "sha256-042a8e0771a6b813644d20f0ac308765c46c50fe9fc19e90b636f80134696008",
+      "status": "unreviewed"
+    },
+    {
+      "id": "nav/primary",
+      "version": "1.0.0",
+      "digest": "sha256-77af9c48070b9924b589350f2312b36ebaf824f412b0c7c39432f13e3e963f55",
+      "status": "unreviewed"
+    },
+    {
+      "id": "nav/toc",
+      "version": "1.0.0",
+      "digest": "sha256-0c999ef12927eadce2eea9937457f681a995e617e52b163409bf2d1442412438",
+      "status": "unreviewed"
+    },
+    {
+      "id": "page/basic",
+      "version": "1.0.0",
+      "digest": "sha256-a58177661cd4ba680c94ed8efd1c3835abdb9f6bb31fee5ff45e1e4c675ec887",
+      "status": "unreviewed"
+    },
+    {
+      "id": "site/footer",
+      "version": "1.0.0",
+      "digest": "sha256-e13a01210c7e9d38cb2256401a4306b6e45cef65e6d8df622af56a40a2c4eae4",
+      "status": "unreviewed"
+    }
+  ]
+}

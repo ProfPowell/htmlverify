@@ -1,0 +1,126 @@
+{
+  "brief": "search-results",
+  "condition": "B",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "assembly": null,
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 5,
+    "items": [
+      {
+        "id": "heading",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "search-input",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "label",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "results",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "result-links",
+        "met": true,
+        "found": 5
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "main",
+    "header",
+    "h1",
+    "p",
+    "search",
+    "form",
+    "label",
+    "input",
+    "button",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "section",
+    "h2",
+    "ol",
+    "li",
+    "article",
+    "h3",
+    "a",
+    "p",
+    "p",
+    "li",
+    "article",
+    "h3",
+    "a",
+    "p",
+    "p",
+    "li",
+    "article",
+    "h3",
+    "a",
+    "p",
+    "p",
+    "li",
+    "article",
+    "h3",
+    "a",
+    "p",
+    "p",
+    "li",
+    "article",
+    "h3",
+    "a",
+    "p",
+    "p",
+    "nav",
+    "p"
+  ],
+  "tokens": {
+    "input": 8,
+    "output": 1711,
+    "cacheRead": 137538,
+    "cacheWrite": 12195
+  },
+  "costUsd": 0.07980409999999999,
+  "wallMs": 18095,
+  "turns": 9
+}

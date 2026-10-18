@@ -1,0 +1,141 @@
+{
+  "brief": "home",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "nav",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "main",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "featured-imgs",
+        "met": false,
+        "found": 0
+      },
+      {
+        "id": "footer",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "time",
+        "met": true,
+        "found": 2
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "a",
+    "section",
+    "h2",
+    "ul",
+    "li",
+    "layout-card",
+    "h3",
+    "a",
+    "p",
+    "li",
+    "layout-card",
+    "h3",
+    "a",
+    "p",
+    "li",
+    "layout-card",
+    "h3",
+    "a",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "ul",
+    "li",
+    "time",
+    "li",
+    "time",
+    "footer",
+    "address",
+    "p",
+    "p",
+    "a",
+    "p",
+    "site-legal",
+    "span"
+  ],
+  "tokens": {
+    "input": 14,
+    "output": 2226,
+    "cacheRead": 257728,
+    "cacheWrite": 15700
+  },
+  "costUsd": 0.11100360000000001,
+  "wallMs": 21634,
+  "turns": 16
+}

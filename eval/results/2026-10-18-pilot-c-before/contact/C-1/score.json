@@ -1,0 +1,135 @@
+{
+  "brief": "contact",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 7,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "textarea",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "labels",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "required",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "address",
+        "met": false,
+        "found": 0
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "p",
+    "section",
+    "h2",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "option",
+    "option",
+    "option",
+    "form-field",
+    "label",
+    "textarea",
+    "form-field",
+    "label",
+    "input",
+    "footer",
+    "button",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "p"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 1664,
+    "cacheRead": 209671,
+    "cacheWrite": 13330
+  },
+  "costUsd": 0.0910909,
+  "wallMs": 15907,
+  "turns": 12
+}

@@ -1,0 +1,163 @@
+{
+  "duration_api_ms": 28296,
+  "stop_reason": "end_turn",
+  "session_id": "9b9ea3b9-4023-4cdf-8c84-83f045e2c0ec",
+  "total_cost_usd": 0.11712289999999999,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 14966,
+    "cache_read_input_tokens": 251961,
+    "output_tokens": 3189,
+    "output_tokens_details": {
+      "thinking_tokens": 440
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 14966,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 84,
+        "cache_read_input_tokens": 40682,
+        "cache_creation_input_tokens": 2378,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2378
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 27,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.0001448,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 3189,
+      "cacheReadInputTokens": 251961,
+      "cacheCreationInputTokens": 14966,
+      "webSearchRequests": 0,
+      "costUSD": 0.11697809999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 440,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_014P1Br756cvhy5v7xp3xawx",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\n  \"page\": {\n    \"use\": \"page/basic\",\n    \"data\": { \"title\": \"Account settings\", \"site\": \"Account\", \"description\": \"Account settings for a signed-in member.\", \"heading\": \"Account settings\" },\n    \"slots\": {\n      \"main\": [\n        {\n          \"use\": \"form/form\", \"key\": \"settings\", \"data\": { \"label\": \"Account settings\" },\n          \"slots\": {\n            \"fields\": [\n              { \"use\": \"content/section\", \"key\": \"profile\", \"data\": { \"title\": \"Profile\" }, \"slots\": { \"body\": [\n                { \"use\": \"form/text-field\", \"key\": \"name\", \"data\": { \"label\": \"Display name\", \"name\": \"display-name\", \"autocomplete\": \"name\" } },\n                { \"use\": \"form/text-field\", \"key\": \"email\", \"data\": { \"label\": \"Email\", \"name\": \"email\", \"type\": \"email\", \"autocomplete\": \"email\" } },\n                { \"use\": \"form/file-field\", \"key\": \"photo\", \"data\": { \"label\": \"Profile photo\", \"name\": \"photo\", \"accept\": \"image/*\" } }\n              ] } },\n              { \"use\": \"content/section\", \"key\": \"notifications\", \"data\": { \"title\": \"Notifications\" }, \"slots\": { \"body\": [\n                { \"use\": \"form/checkbox\", \"key\": \"due\", \"data\": { \"label\": \"Email me about rental due dates\", \"name\": \"notify-due\", \"checked\": true } },\n                { \"use\": \"form/checkbox\", \"key\": \"workshops\", \"data\": { \"label\": \"Email me about workshop announcements\", \"name\": \"notify-workshops\" } },\n                { \"use\": \"form/checkbox\", \"key\": \"newsletter\", \"data\": { \"label\": \"Email me the monthly newsletter\", \"name\": \"notify-newsletter\", \"checked\": true } }\n              ] } },\n              { \"use\": \"content/section\", \"key\": \"rental\", \"data\": { \"title\": \"Rental preferences\" }, \"slots\": { \"body\": [\n                { \"use\": \"form/select-field\", \"key\": \"pickup\", \"data\": { \"label\": \"Default pickup location\", \"name\": \"pickup\", \"options\": [ { \"value\": \"alder-street\", \"label\": \"Alder Street store\" }, { \"value\": \"harbor\", \"label\": \"Harbor kiosk\" } ] } },\n                { \"use\": \"form/choice-group\", \"key\": \"units\", \"data\": { \"legend\": \"Preferred units\", \"name\": \"units\", \"choices\": [ { \"value\": \"metric\", \"label\": \"Metric\" }, { \"value\": \"imperial\", \"label\": \"Imperial\" } ] } }\n              ] } }\n            ],\n            \"actions\": [\n              { \"use\": \"action/submit\", \"key\": \"save\", \"data\": { \"label\": \"Save changes\" } },\n              { \"key\": \"cancel\", \"html\": \"<button type=\\\"reset\\\" class=\\\"secondary\\\">Cancel</button>\" }\n            ]\n          }\n        },\n        { \"use\": \"content/section\", \"key\": \"danger\", \"data\": { \"title\": \"Danger zone\" }, \"slots\": { \"body\": [\n          { \"key\": \"cancel-membership\", \"html\": \"<button type=\\\"button\\\">Cancel membership</button>\" }\n        ] } }\n      ]\n    }\n  }\n}\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 13,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE",
+  "ttft_ms": 1353,
+  "type": "result",
+  "duration_ms": 29045,
+  "uuid": "1a2cc33f-1c3f-4aaf-9abe-60655883c0af",
+  "ttft_stream_ms": 1036,
+  "time_to_request_ms": 128,
+  "time_to_request_phases_ms": {
+    "other": 18,
+    "system_prompt": 12,
+    "resume_other": 0,
+    "process_user_input": 3,
+    "input_attachments": 20,
+    "input_hooks": 3,
+    "tool_pool_refresh": 4,
+    "init_message": 6,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 2,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 27,
+    "message_normalization": 2,
+    "client_creation": 14,
+    "request_build": 13
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 78,
+  "time_to_request_cpu_ms": 142,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 250,
+  "process_anon_mib_turn_start": 131,
+  "process_rss_mib_result": 252,
+  "process_anon_mib_result": 130,
+  "process_peak_rss_mib": 258,
+  "process_cpu_ms_turn": 1795,
+  "process_wall_ms_turn": 29044,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 14,
+    "cpu_ms": 26,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1037,
+  "time_to_request_from_spawn_ms": 3499870,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329384610.6172,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

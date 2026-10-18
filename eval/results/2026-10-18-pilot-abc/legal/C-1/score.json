@@ -1,0 +1,127 @@
+{
+  "brief": "legal",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 2,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 4,
+    "of": 4,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "sections",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "toc",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "updated",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "time",
+    "page-toc",
+    "details",
+    "summary",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "a",
+    "section",
+    "h2",
+    "layout-text",
+    "p"
+  ],
+  "tokens": {
+    "input": 14,
+    "output": 2665,
+    "cacheRead": 251814,
+    "cacheWrite": 14735
+  },
+  "costUsd": 0.11094369999999999,
+  "wallMs": 22149,
+  "turns": 13
+}

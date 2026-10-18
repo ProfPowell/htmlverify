@@ -1,0 +1,13 @@
+<ol class="unstyled" data-layout="stack" data-layout-gap="l">
+  <template vb-each="results" vb-as="result">
+    <li>
+      <h3 vb-rank><a href="{{result.href}}">{{result.title}}</a></h3>
+      <template vb-if="result.summary">
+        <p>{{result.summary}}</p>
+      </template>
+      <template vb-if="result.note">
+        <p><small>{{result.note}}</small></p>
+      </template>
+    </li>
+  </template>
+</ol>

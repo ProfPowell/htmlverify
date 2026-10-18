@@ -22,7 +22,7 @@ import { misfit, slotAncestors } from './fit.ts';
 import { Builder, type AssemblyProblem, type Built } from './instantiate.ts';
 import { jsonPointers, offsetOf } from './jsonpos.ts';
 import { DEFAULT_SCHEMES, validateRecord, type Problem, type Value } from './params.ts';
-import { parsePlan, type PlanInstance, type PlanNode } from './plan.ts';
+import { parsePlan, unmatchedBracket, type PlanInstance, type PlanNode } from './plan.ts';
 import { loadRegistry, type Component, type Registry } from './registry.ts';
 import { compareTrees } from './roundtrip.ts';
 import { serialize, type OutputRange } from './serialize.ts';
@@ -88,7 +88,12 @@ export async function assemble(input: unknown, options: AssembleOptions): Promis
     } catch (error) {
       const message = (error as Error).message;
       const position = /at position (\d+)/.exec(message);
-      return fail([located.finding('assembly/plan', '', `isn’t valid JSON: ${message.replace(/ in JSON at position.*$/, '')}`, 'error', position ? Number(position[1]) : 0)]);
+      const offset = position ? Number(position[1]) : text.length;
+      // A bracket that doesn't pair up, at or before where the parser gave up, is the likely cause; name it.
+      const bracket = unmatchedBracket(text);
+      const cause = bracket && bracket.offset <= offset ? bracket : null;
+      const what = message.replace(/ in JSON(?= at position)/, '').replace(/ at position \d+.*$/, '');
+      return fail([located.finding('assembly/plan', '', `isn’t valid JSON: ${what}${cause ? `; ${cause.message}` : ''}`, 'error', cause?.offset ?? offset)]);
     }
   }
 

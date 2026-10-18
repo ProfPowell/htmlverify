@@ -1,0 +1,135 @@
+{
+  "brief": "search-results",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 5,
+    "items": [
+      {
+        "id": "heading",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "search-input",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "label",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "results",
+        "met": true,
+        "found": 5
+      },
+      {
+        "id": "result-links",
+        "met": true,
+        "found": 5
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "search",
+    "form",
+    "label",
+    "input",
+    "button",
+    "layout-text",
+    "p",
+    "layout-text",
+    "p",
+    "ul",
+    "li",
+    "li",
+    "li",
+    "ol",
+    "li",
+    "h2",
+    "a",
+    "p",
+    "p",
+    "small",
+    "li",
+    "h2",
+    "a",
+    "p",
+    "p",
+    "small",
+    "li",
+    "h2",
+    "a",
+    "p",
+    "p",
+    "small",
+    "li",
+    "h2",
+    "a",
+    "p",
+    "p",
+    "small",
+    "li",
+    "h2",
+    "a",
+    "p",
+    "p",
+    "small",
+    "nav",
+    "ul",
+    "li",
+    "a"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 1701,
+    "cacheRead": 212178,
+    "cacheWrite": 13145
+  },
+  "costUsd": 0.09115110000000001,
+  "wallMs": 17381,
+  "turns": 13
+}

@@ -511,7 +511,8 @@ class Compiler {
       case 'url':
         return URL_ATTRIBUTES.has(name) || loose ? null : `${name} doesn’t take a URL.`;
       case 'boolean':
-        return this.#isBoolean(e, name) ? null : `${name} isn’t a boolean attribute; for ARIA states, use an enum of "true" and "false".`;
+        // An untyped data-* attribute is present or absent, as Vanilla Breeze's [data-completed] is.
+        return this.#isBoolean(e, name) || (custom === null && name.startsWith('data-')) ? null : `${name} isn’t a boolean attribute; for ARIA states, use an enum of "true" and "false".`;
       case 'enum': {
         if (name === 'class') return spec.values!.every((v) => /^[^\t\n\f\r ]+$/.test(v)) ? null : 'class values must be single tokens.';
         if (custom?.type === 'enum' && custom.values) {
@@ -529,8 +530,12 @@ class Compiler {
         // A data-* attribute nothing types takes whatever values its author defines.
         return loose || (custom === null && name.startsWith('data-')) ? null : `${name} doesn’t take keywords.`;
       }
-      case 'integer':
-        return (row && /integer|floating-point number/i.test(row.value)) || custom?.type === 'number' ? null : `${name} isn’t a numeric attribute.`;
+      case 'integer': {
+        if ((row && /integer|floating-point number/i.test(row.value)) || custom?.type === 'number') return null;
+        // The index says min, max, and value vary with an input's type; a number or range input's are numbers.
+        const type = tag === 'input' ? e.attrs.find((a) => a.name === 'type')?.value.toLowerCase() : undefined;
+        return (type === 'number' || type === 'range') && ['min', 'max', 'value'].includes(name) ? null : `${name} isn’t a numeric attribute.`;
+      }
       case 'datetime':
         return name === 'datetime' && ['time', 'ins', 'del'].includes(tag) ? null : 'a datetime binds <time datetime>, <ins datetime>, or <del datetime>.';
       case 'lang':

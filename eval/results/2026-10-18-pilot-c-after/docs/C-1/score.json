@@ -1,0 +1,144 @@
+{
+  "brief": "docs",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 2,
+  "capped": false,
+  "assembly": {
+    "calls": 3,
+    "gaps": 0,
+    "origins": {
+      "plan": 12
+    },
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 5,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "nav",
+        "met": true,
+        "found": 9
+      },
+      {
+        "id": "code",
+        "met": true,
+        "found": 4
+      },
+      {
+        "id": "params",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "sections",
+        "met": true,
+        "found": 3
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "code",
+    "page-toc",
+    "details",
+    "summary",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a",
+    "li",
+    "a",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "pre",
+    "code",
+    "dl",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "pre",
+    "code",
+    "section",
+    "h2",
+    "layout-text",
+    "ul",
+    "li",
+    "li",
+    "nav",
+    "ul",
+    "li",
+    "a"
+  ],
+  "tokens": {
+    "input": 16,
+    "output": 3569,
+    "cacheRead": 300744,
+    "cacheWrite": 18054
+  },
+  "costUsd": 0.1381522,
+  "wallMs": 29679,
+  "turns": 20
+}

@@ -1,0 +1,110 @@
+{
+  "brief": "about",
+  "condition": "A",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "fail"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": null,
+  "denials": 2,
+  "errors": {
+    "style": 4
+  },
+  "warnings": 0,
+  "checklist": {
+    "met": 4,
+    "of": 5,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "sections",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "principles",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "quote",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "milestone-times",
+        "met": false,
+        "found": 0
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "header",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "main",
+    "article",
+    "h1",
+    "section",
+    "h2",
+    "p",
+    "section",
+    "h2",
+    "ol",
+    "li",
+    "li",
+    "li",
+    "section",
+    "h2",
+    "ul",
+    "li",
+    "li",
+    "li",
+    "li",
+    "figure",
+    "blockquote",
+    "p",
+    "figcaption",
+    "nav",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a"
+  ],
+  "tokens": {
+    "input": 10,
+    "output": 1502,
+    "cacheRead": 187438,
+    "cacheWrite": 15363
+  },
+  "costUsd": 0.0953801,
+  "wallMs": 16190,
+  "turns": 11
+}

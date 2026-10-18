@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Shipping in winter | Acme</title>
+  <meta name="description" content="How we pack orders when it's freezing." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Acme</a></header>
+  <main id="main" tabindex="-1">
+    <article class="blog">
+      <header>
+        <hgroup class="byline">
+          <h1>Shipping in winter</h1>
+          <p>By Ana Ruiz · <time datetime="2026-01-12">12 January 2026</time></p>
+        </hgroup>
+      </header>
+      <layout-text>
+        <p>Cold doesn't stop the vans, but it changes how we pack.</p>
+      </layout-text>
+      <section id="padding" aria-labelledby="padding-title" data-layout="stack">
+        <h2 id="padding-title">More padding</h2>
+        <layout-text>
+          <p>Liquids get a second box.</p>
+        </layout-text>
+      </section>
+    </article>
+    <section id="related" aria-labelledby="related-title" data-layout="stack">
+      <h2 id="related-title">Related posts</h2>
+      <layout-text>
+        <ul>
+          <li><a href="/blog/returns">Returns made simple</a></li>
+        </ul>
+      </layout-text>
+    </section>
+  </main>
+</body>
+</html>

@@ -9,13 +9,14 @@ import { isProfileName, type ProfileName } from '../profiles.ts';
 import { canonicalJson, stableJson } from '../report/canonical.ts';
 import { fix } from '../fix/fix.ts';
 import { unifiedDiff } from '../fix/diff.ts';
-import { check, type CheckInput, type CheckOptions, type Status } from '../report/report.ts';
+import { check, inferContext, type CheckInput, type CheckOptions, type Status } from '../report/report.ts';
 import { formatAssembly, formatCatalog, formatComponent, formatComponentCheck, formatRegistryCheck, formatText } from '../report/text.ts';
 import { VERSION } from '../version.ts';
 import { VocabError } from '../vocab/compile.ts';
 import { snapshotFromCheckout } from '../vocab/source.ts';
 import { parseElements } from '../vocab/project.ts';
 import { init, InitError } from './init.ts';
+import { serve } from '../mcp/server.ts';
 import { DEFAULT_VOCABULARIES, loadSnapshot, VOCAB_DIR, Vocabulary } from '../vocab/vocabulary.ts';
 
 export interface Io {
@@ -39,6 +40,7 @@ const USAGE = `Usage:
   htmlverify vocab update vanilla-breeze --from <checkout> [--out <file>]
   htmlverify init [--claude] [--profile strict|standard] [--force]
   htmlverify hook claude                    (the Claude Code PostToolUse hook; reads the event on stdin)
+  htmlverify mcp [--draft] [--emit-failed] [--structured]   (the MCP server, on stdin and stdout)
 
 Options:
   --profile strict|standard   rule set (default: the config's "extends", else strict)
@@ -49,8 +51,9 @@ Options:
   --write                     fix: rewrite the files instead of printing a diff
   --out <file>                assemble: write the page there when it passes (default: stdout,
                               with the report on stderr)
-  --emit-failed               assemble: when it fails, write <out>.failed.html to inspect
-  --draft                     assemble: allow unreviewed and stale components, with a warning
+  --emit-failed               assemble, mcp: when it fails, write <out>.failed.html to inspect
+  --draft                     assemble, mcp: allow unreviewed and stale components, with a warning
+  --structured                mcp: also return each result's JSON as structuredContent
   --update                    component check: write each fixture's expected output, to review
   --nu                        check: cross-check documents with the Nu Html Checker (needs Java)
   -h, --help                  show this help
@@ -91,6 +94,7 @@ async function run(argv: string[], io: Io): Promise<number> {
   if (command === 'vocab') return vocab(rest, io);
   if (command === 'init') return initCommand(rest, io);
   if (command === 'hook') return hook(rest, io);
+  if (command === 'mcp') return mcpCommand(rest, io);
   if (command === 'assemble') return assembleCommand(rest, io);
   if (command === 'component' || command === 'registry' || command === 'catalog') return lifecycleCommand(command, rest, io);
   if (command !== 'check' && command !== 'fix' && command !== 'explain' && command !== 'rules') {
@@ -441,8 +445,7 @@ async function hook(argv: string[], io: Io): Promise<number> {
     return 1;
   }
   // A file that doesn't start as a document is a fragment, checked as body content.
-  const head = new TextDecoder().decode(source.slice(0, 4096)).replace(/^\uFEFF/, '').replace(/^(?:\s|<!--[\s\S]*?-->)*/, '');
-  const context = /^<(?:!doctype|html[\s>])/i.test(head) ? null : 'body';
+  const context = inferContext(source);
   const path = relative(cwd, absolute).split(sep).join('/') || absolute;
   const report = await check({ path, source, context }, { config });
   // The evaluation harness (eval/run.ts) logs every round and caps the repair loop.
@@ -459,6 +462,32 @@ async function hook(argv: string[], io: Io): Promise<number> {
   const fixCommand = `npx htmlverify fix ${path}${context ? ` --context ${context}` : ''} --write`;
   io.stderr.write(`${formatText(report)}\nhtmlverify: fix these in ${path}. \`${fixCommand}\` applies the mechanical fixes; don't disable rules or invent content to pass.\n`);
   return 2;
+}
+
+/**
+ * `mcp [--draft] [--emit-failed] [--structured]`: the MCP server (spec §10.3), until stdin
+ * closes. The config and registry are read once, at startup. The evaluation
+ * harness logs each assembly to HTMLVERIFY_MCP_LOG and caps the repair loop
+ * with HTMLVERIFY_MCP_MAX_ROUNDS.
+ */
+async function mcpCommand(argv: string[], io: Io): Promise<number> {
+  let args;
+  try {
+    args = parseArgs({ args: argv, allowPositionals: false, strict: true, options: { draft: { type: 'boolean' }, 'emit-failed': { type: 'boolean' }, structured: { type: 'boolean' }, config: { type: 'string' }, help: { type: 'boolean', short: 'h' } } });
+  } catch (error) {
+    throw new UsageError((error as Error).message);
+  }
+  if (args.values.help) {
+    io.stdout.write(USAGE);
+    return 0;
+  }
+  const config = await loadConfig(args.values.config, io.cwd);
+  const rounds = process.env['HTMLVERIFY_MCP_MAX_ROUNDS'];
+  await serve(io.stdin, io.stdout, {
+    cwd: io.cwd, config, registry: registryFor(config, false), draft: args.values.draft === true, emitFailed: args.values['emit-failed'] === true, structured: args.values.structured === true,
+    log: process.env['HTMLVERIFY_MCP_LOG'] ?? null, ...(rounds ? { maxRounds: Number(rounds) } : {}),
+  });
+  return 0;
 }
 
 /** `vocab update vanilla-breeze --from <checkout>`: rebuilds a vocabulary snapshot (spec §3.4). */

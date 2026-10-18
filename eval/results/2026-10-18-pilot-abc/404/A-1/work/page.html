@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Page not found</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+</head>
+<body>
+  <main id="main" data-layout="stack">
+    <article data-layout="stack">
+      <header>
+        <p>Error page: 404, page not found.</p>
+        <h1>Page not found</h1>
+      </header>
+      <p>We couldn't find that page. It may have moved when we redesigned the shop.</p>
+
+      <form action="/search" method="get" role="search">
+        <form-field>
+          <label for="q">Search</label>
+          <input type="search" id="q" name="q" autocomplete="off"/>
+        </form-field>
+        <button type="submit">Search</button>
+      </form>
+
+      <nav aria-label="Helpful links">
+        <ul>
+          <li><a href="/shop/packs">Shop backpacks</a></li>
+          <li><a href="/rentals">Rental gear</a></li>
+          <li><a href="/workshops">Workshops</a></li>
+          <li><a href="/contact">Contact us</a></li>
+        </ul>
+      </nav>
+
+      <p><a href="/">Back to the home page</a></p>
+    </article>
+  </main>
+</body>
+</html>

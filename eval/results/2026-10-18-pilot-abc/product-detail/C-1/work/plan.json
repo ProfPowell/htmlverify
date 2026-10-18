@@ -1,0 +1,120 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Ridgeline 40 L pack",
+      "site": "Ridgeline",
+      "description": "The Ridgeline 40 L backpack for multi-day trips: $189, rated 4.7 out of 5 from 212 reviews.",
+      "heading": "Ridgeline 40 L pack"
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "nav/breadcrumb",
+          "key": "crumbs",
+          "data": {
+            "trail": [
+              { "text": "Home", "href": "/" },
+              { "text": "Shop", "href": "/shop" },
+              { "text": "Backpacks", "href": "/shop/backpacks" }
+            ],
+            "current": "Ridgeline 40 L"
+          }
+        },
+        {
+          "use": "content/prose",
+          "key": "summary",
+          "data": {
+            "html": "<p><strong>$189</strong></p><p>Rating: 4.7 out of 5 from 212 reviews.</p><p>A 40-liter pack for multi-day trips. The frame transfers weight to your hips, and the side zip lets you reach the bottom without unpacking.</p>"
+          }
+        },
+        {
+          "use": "form/form",
+          "key": "order",
+          "data": { "label": "Order" },
+          "slots": {
+            "fields": [
+              {
+                "use": "form/choice-group",
+                "key": "color",
+                "data": {
+                  "legend": "Color",
+                  "name": "color",
+                  "required": true,
+                  "choices": [
+                    { "value": "moss", "label": "Moss" },
+                    { "value": "slate", "label": "Slate" },
+                    { "value": "ember", "label": "Ember" }
+                  ]
+                }
+              },
+              {
+                "use": "form/choice-group",
+                "key": "size",
+                "data": {
+                  "legend": "Size",
+                  "name": "size",
+                  "required": true,
+                  "choices": [
+                    { "value": "s-m", "label": "S/M" },
+                    { "value": "m-l", "label": "M/L" }
+                  ]
+                }
+              },
+              {
+                "use": "form/number-field",
+                "key": "quantity",
+                "data": { "label": "Quantity", "name": "quantity", "min": 1, "max": 5, "value": 1 }
+              }
+            ],
+            "actions": [
+              { "use": "action/submit", "key": "add", "data": { "label": "Add to cart" } }
+            ]
+          }
+        },
+        { "key": "wishlist", "html": "<button type=\"button\">Save to wishlist</button>" },
+        {
+          "use": "content/section",
+          "key": "specs",
+          "data": { "title": "Specifications" },
+          "slots": {
+            "body": [
+              {
+                "use": "data/description-list",
+                "key": "specs-list",
+                "data": {
+                  "items": [
+                    { "term": "Capacity", "description": "40 L" },
+                    { "term": "Weight", "description": "1.4 kg" },
+                    { "term": "Fabric", "description": "210-denier recycled nylon" },
+                    { "term": "Torso range", "description": "41–53 cm" },
+                    { "term": "Warranty", "description": "lifetime, with free repairs at the co-op" }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "reviews",
+          "data": { "title": "Reviews" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/quote",
+                "key": "dana",
+                "data": { "quote": "Carried it 90 km on the Coast Trail without a sore hip.", "author": "Dana, 5 stars" }
+              },
+              {
+                "use": "content/quote",
+                "key": "theo",
+                "data": { "quote": "Wish the hip belt pockets were larger.", "author": "Theo, 4 stars" }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

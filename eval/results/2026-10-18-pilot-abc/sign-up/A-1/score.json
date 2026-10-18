@@ -1,0 +1,123 @@
+{
+  "brief": "sign-up",
+  "condition": "A",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "fail"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": null,
+  "denials": 0,
+  "errors": {
+    "style": 18
+  },
+  "warnings": 0,
+  "checklist": {
+    "met": 7,
+    "of": 7,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "password",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "interests",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "checkboxes",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "labels",
+        "met": true,
+        "found": 10
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "main",
+    "header",
+    "h1",
+    "p",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "output",
+    "form-field",
+    "label",
+    "input",
+    "fieldset",
+    "legend",
+    "label",
+    "input",
+    "label",
+    "input",
+    "label",
+    "input",
+    "label",
+    "input",
+    "label",
+    "input",
+    "label",
+    "input",
+    "a",
+    "button",
+    "footer",
+    "p",
+    "a"
+  ],
+  "tokens": {
+    "input": 6,
+    "output": 1491,
+    "cacheRead": 105010,
+    "cacheWrite": 17255
+  },
+  "costUsd": 0.09458330000000001,
+  "wallMs": 13500,
+  "turns": 9
+}

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Account settings | Account</title>
+  <meta name="description" content="Account settings for a signed-in member." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Account</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Account settings</h1>
+    <form method="post" enctype="multipart/form-data" class="stacked" aria-label="Account settings">
+      <section id="settings-profile" aria-labelledby="settings-profile-title" data-layout="stack">
+        <h2 id="settings-profile-title">Profile</h2>
+        <form-field>
+          <label for="settings-profile-name-input">Display name</label>
+          <input id="settings-profile-name-input" type="text" name="display-name" />
+        </form-field>
+        <form-field>
+          <label for="settings-profile-email-input">Email</label>
+          <input id="settings-profile-email-input" type="email" name="email" autocomplete="email" />
+        </form-field>
+        <form-field>
+          <label for="settings-profile-photo-input">Profile photo</label>
+          <input id="settings-profile-photo-input" type="file" name="photo" accept="image/*" />
+        </form-field>
+      </section>
+      <section id="settings-notifications" aria-labelledby="settings-notifications-title" data-layout="stack">
+        <h2 id="settings-notifications-title">Notifications</h2>
+        <fieldset>
+          <legend>Email me about</legend>
+          <layout-stack data-layout-gap="xs">
+            <form-field data-type="checkbox"><label><input type="checkbox" name="notify" value="rental-due" checked="true" /> Rental due dates</label></form-field>
+            <form-field data-type="checkbox"><label><input type="checkbox" name="notify" value="workshops" /> Workshop announcements</label></form-field>
+            <form-field data-type="checkbox"><label><input type="checkbox" name="notify" value="newsletter" checked="true" /> The monthly newsletter</label></form-field>
+          </layout-stack>
+        </fieldset>
+      </section>
+      <section id="settings-rental" aria-labelledby="settings-rental-title" data-layout="stack">
+        <h2 id="settings-rental-title">Rental preferences</h2>
+        <form-field>
+          <label for="settings-rental-pickup-input">Default pickup location</label>
+          <select id="settings-rental-pickup-input" name="pickup">
+            <option value="">Choose…</option>
+            <option value="alder-street">Alder Street store</option>
+            <option value="harbor">Harbor kiosk</option>
+          </select>
+        </form-field>
+        <fieldset>
+          <legend>Preferred units</legend>
+          <layout-stack data-layout-gap="xs">
+            <form-field data-type="radio"><label><input type="radio" name="units" value="metric" /> Metric</label></form-field>
+            <form-field data-type="radio"><label><input type="radio" name="units" value="imperial" /> Imperial</label></form-field>
+          </layout-stack>
+        </fieldset>
+      </section>
+      <footer class="actions end"><button type="submit">Save changes</button><button type="reset" class="secondary">Cancel</button></footer>
+    </form>
+    <section id="danger" aria-labelledby="danger-title" data-layout="stack">
+      <h2 id="danger-title">Danger zone</h2>
+      <button type="button">Cancel membership</button>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{
+  "brief": "press-release",
+  "condition": "B",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "assembly": null,
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 5,
+    "items": [
+      {
+        "id": "article",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "date",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "quote",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email-link",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "main",
+    "article",
+    "header",
+    "p",
+    "hgroup",
+    "h1",
+    "p",
+    "p",
+    "time",
+    "section",
+    "p",
+    "blockquote",
+    "p",
+    "p",
+    "aside",
+    "h2",
+    "p",
+    "footer",
+    "h2",
+    "p",
+    "a",
+    "a"
+  ],
+  "tokens": {
+    "input": 8,
+    "output": 1167,
+    "cacheRead": 141285,
+    "cacheWrite": 13448
+  },
+  "costUsd": 0.07975080000000001,
+  "wallMs": 15814,
+  "turns": 11
+}

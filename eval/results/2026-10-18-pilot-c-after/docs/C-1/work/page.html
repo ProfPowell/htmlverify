@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Checking rental availability | Rental API guide</title>
+  <meta name="description" content="How to check whether a rental item is free, using the Rental API." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site">
+    <a href="/" class="logo">Rental API guide</a>
+    <nav class="horizontal" aria-label="Rental API guide">
+      <ul>
+        <li><a href="getting-started">Getting started</a></li>
+        <li><a href="authentication">Authentication</a></li>
+        <li><a href="checking-availability" aria-current="page">Checking availability</a></li>
+        <li><a href="creating-a-booking">Creating a booking</a></li>
+        <li><a href="errors">Errors</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+    <h1>Checking rental availability</h1>
+    <layout-text>
+      <p>To check whether an item is free, send a GET request to <code>/v1/items/{id}/availability</code> with start and end dates.</p>
+    </layout-text>
+    <page-toc>
+      <details class="details" open="true">
+        <summary class="summary">On this page</summary>
+        <nav class="nav" aria-label="On this page">
+          <ul class="list">
+            <li class="item"><a href="#request" class="link">Request</a></li>
+            <li class="item"><a href="#response" class="link">Response</a></li>
+            <li class="item"><a href="#errors" class="link">Errors</a></li>
+          </ul>
+        </nav>
+      </details>
+    </page-toc>
+    <section id="request" aria-labelledby="request-title" data-layout="stack">
+      <h2 id="request-title">Request</h2>
+      <layout-text>
+        <p>Request example:</p>
+        <pre><code>GET /v1/items/kayak-tidewater/availability?start=2026-11-08&amp;end=2026-11-09
+Authorization: Bearer &lt;token&gt;</code></pre>
+      </layout-text>
+      <dl>
+        <dt>start</dt>
+        <dd>date, required</dd>
+        <dt>end</dt>
+        <dd>date, required</dd>
+        <dt>units</dt>
+        <dd>integer, optional, default 1</dd>
+      </dl>
+    </section>
+    <section id="response" aria-labelledby="response-title" data-layout="stack">
+      <h2 id="response-title">Response</h2>
+      <layout-text>
+        <p>Response example:</p>
+        <pre><code>{ "available": true, "units": 3 }</code></pre>
+      </layout-text>
+    </section>
+    <section id="errors" aria-labelledby="errors-title" data-layout="stack">
+      <h2 id="errors-title">Errors</h2>
+      <layout-text>
+        <ul>
+          <li>404 if the item doesn't exist.</li>
+          <li>422 if end is before start.</li>
+        </ul>
+      </layout-text>
+    </section>
+    <nav class="pagination" aria-label="Next page">
+      <ul>
+        <li><a href="creating-a-booking" rel="next" data-next="">Creating a booking</a></li>
+      </ul>
+    </nav>
+  </main>
+</body>
+</html>

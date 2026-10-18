@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Join Larkspur Supply Co.</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+</head>
+<body>
+  <main id="main" data-layout="stack">
+    <header>
+      <h1>Join Larkspur Supply Co.</h1>
+      <p>A one-time $30 lifetime membership.</p>
+    </header>
+
+    <form action="/sign-up" method="post" data-layout="stack">
+      <form-field>
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" required="required" autocomplete="name"/>
+      </form-field>
+
+      <form-field>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required="required" autocomplete="email"/>
+      </form-field>
+
+      <form-field>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required="required" minlength="12" autocomplete="new-password" aria-describedby="password-msg"/>
+        <output id="password-msg" for="password" aria-live="polite">At least 12 characters</output>
+      </form-field>
+
+      <form-field>
+        <label for="phone">Phone (optional)</label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel"/>
+      </form-field>
+
+      <fieldset>
+        <legend>Interests (choose any)</legend>
+        <label><input type="checkbox" name="interests" value="hiking"/> Hiking</label>
+        <label><input type="checkbox" name="interests" value="paddling"/> Paddling</label>
+        <label><input type="checkbox" name="interests" value="climbing"/> Climbing</label>
+        <label><input type="checkbox" name="interests" value="winter-travel"/> Winter travel</label>
+      </fieldset>
+
+      <label><input type="checkbox" name="newsletter" value="yes"/> Send me the monthly newsletter</label>
+
+      <label><input type="checkbox" name="terms" value="agreed" required="required"/> I agree to the <a href="/terms">member terms</a></label>
+
+      <button type="submit">Join and pay $30</button>
+    </form>
+
+    <footer>
+      <p>Already a member? <a href="/sign-in">Sign in</a></p>
+    </footer>
+  </main>
+</body>
+</html>

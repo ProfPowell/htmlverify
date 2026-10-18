@@ -1,0 +1,141 @@
+{
+  "brief": "settings",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 2,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "fieldsets",
+        "met": true,
+        "found": 2
+      },
+      {
+        "id": "radios",
+        "met": true,
+        "found": 2
+      },
+      {
+        "id": "file",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "select",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "form",
+    "section",
+    "h2",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "section",
+    "h2",
+    "fieldset",
+    "legend",
+    "layout-stack",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "section",
+    "h2",
+    "form-field",
+    "label",
+    "select",
+    "option",
+    "option",
+    "option",
+    "fieldset",
+    "legend",
+    "layout-stack",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "footer",
+    "button",
+    "button",
+    "section",
+    "h2",
+    "button"
+  ],
+  "tokens": {
+    "input": 14,
+    "output": 3078,
+    "cacheRead": 251943,
+    "cacheWrite": 14934
+  },
+  "costUsd": 0.1159801,
+  "wallMs": 23934,
+  "turns": 13
+}

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Search results | Search</title>
+  <meta name="description" content="Search results for &quot;rain jacket&quot;: 5 results." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Search</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Search results</h1>
+    <search>
+      <form method="get" class="inline">
+        <label for="search-input">Search</label>
+        <input id="search-input" type="search" name="q" value="rain jacket" />
+        <button type="submit">Search</button>
+      </form>
+    </search>
+    <layout-text>
+      <p>Search results for “rain jacket”: 5 results.</p>
+    </layout-text>
+    <layout-text>
+      <p>Filters:</p>
+      <ul>
+        <li>Shop (3)</li>
+        <li>Workshops (1)</li>
+        <li>Blog (1)</li>
+      </ul>
+    </layout-text>
+    <ol class="unstyled" data-layout="stack" data-layout-gap="l">
+      <li>
+        <h2><a href="/shop/drift-jacket">Drift rain jacket</a></h2>
+        <p>A packable 2.5-layer shell for spring hiking.</p>
+        <p><small>Shop</small></p>
+      </li>
+      <li>
+        <h2><a href="/shop/storm-line">Storm Line rain jacket</a></h2>
+        <p>Fully taped seams and a stiff brim for coastal storms.</p>
+        <p><small>Shop</small></p>
+      </li>
+      <li>
+        <h2><a href="/shop/puddle-jacket">Kids' Puddle jacket</a></h2>
+        <p>Reflective trim and room to grow.</p>
+        <p><small>Shop</small></p>
+      </li>
+      <li>
+        <h2><a href="/workshops/waterproofing">Waterproofing your shell</a></h2>
+        <p>Bring your jacket; we'll reproof it with you.</p>
+        <p><small>Workshops</small></p>
+      </li>
+      <li>
+        <h2><a href="/blog/rain-testing">How we test rain gear</a></h2>
+        <p>Two weeks in a coastal rainforest.</p>
+        <p><small>Blog</small></p>
+      </li>
+    </ol>
+    <nav class="pagination" aria-label="Pagination">
+      <ul>
+        <li><a href="?page=1" aria-current="page">1</a></li>
+      </ul>
+    </nav>
+  </main>
+</body>
+</html>

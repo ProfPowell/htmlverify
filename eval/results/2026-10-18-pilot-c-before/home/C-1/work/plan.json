@@ -1,0 +1,16 @@
+{"page":{"use":"page/basic","data":{"title":"Larkspur Supply Co.","site":"Larkspur Supply Co.","description":"Larkspur Supply Co. is a member-owned outdoor gear cooperative at 214 Alder Street, Port Wren.","heading":"Gear for every season, owned by the people who use it."},
+"slots":{
+"nav":[{"use":"nav/primary","key":"nav","data":{"items":[{"text":"Shop","href":"/shop"},{"text":"Rentals","href":"/rentals"},{"text":"Workshops","href":"/workshops"},{"text":"About","href":"/about"},{"text":"Contact","href":"/contact"}]}}],
+"main":[
+{"use":"content/prose","key":"lead","data":{"html":"<p>We sell, rent, and repair equipment for hiking, paddling, and winter travel. Members get a dividend every spring.</p>"}},
+{"use":"action/link-button","key":"join","data":{"label":"Become a member","href":"/join"}},
+{"use":"content/section","key":"featured","data":{"title":"Featured this week"},"slots":{"body":[
+{"use":"content/card-list","key":"items","data":{"cards":[
+{"title":"Ridgeline 40 L pack","text":"$189","href":"/shop/ridgeline-40"},
+{"title":"Tidewater touring kayak rental","text":"$55 per day","href":"/rentals/tidewater"},
+{"title":"Hearth canister stove","text":"$74","href":"/shop/hearth-stove"}]}}]}},
+{"use":"content/section","key":"workshops","data":{"title":"Upcoming workshops"},"slots":{"body":[
+{"use":"content/prose","key":"list","data":{"html":"<ul><li>Map and compass basics: <time datetime=\"2026-11-08T10:00\">Saturday 8 November 2026, 10:00</time></li><li>Winter layering: <time datetime=\"2026-11-13T18:30\">Thursday 13 November 2026, 18:30</time></li></ul>"}}]}}
+],
+"footer":[{"key":"footer","html":"<footer><address>214 Alder Street, Port Wren</address><p>Phone: <a href=\"tel:+13605550142\">(360) 555-0142</a></p><p>Opening hours: Monday–Saturday 9:00–19:00, Sunday 10:00–17:00</p><p>© 2026 Larkspur Supply Co..</p></footer>"}]
+}}}

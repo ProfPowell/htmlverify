@@ -1,0 +1,28 @@
+{
+  "data": {
+    "action": "/profile",
+    "enctype": "multipart/form-data"
+  },
+  "slots": {
+    "fields": [
+      {
+        "use": "form/file-field",
+        "key": "photo",
+        "data": {
+          "label": "Profile photo",
+          "name": "photo",
+          "accept": "image/*"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "use": "action/submit",
+        "key": "save",
+        "data": {
+          "label": "Save"
+        }
+      }
+    ]
+  }
+}

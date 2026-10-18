@@ -1,0 +1,14 @@
+{
+  "data": {
+    "copyright": "© 2026 Acme Ltd",
+    "contact": [
+      "12 Mill Lane, Leeds"
+    ],
+    "legal": [
+      {
+        "text": "Privacy",
+        "href": "/privacy"
+      }
+    ]
+  }
+}

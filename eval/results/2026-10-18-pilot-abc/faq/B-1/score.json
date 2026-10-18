@@ -1,0 +1,92 @@
+{
+  "brief": "faq",
+  "condition": "B",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "assembly": null,
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 3,
+    "of": 3,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "questions",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "contact-link",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "main",
+    "article",
+    "header",
+    "h1",
+    "p",
+    "section",
+    "details",
+    "summary",
+    "p",
+    "details",
+    "summary",
+    "p",
+    "details",
+    "summary",
+    "p",
+    "details",
+    "summary",
+    "p",
+    "details",
+    "summary",
+    "p",
+    "details",
+    "summary",
+    "p",
+    "aside",
+    "h2",
+    "p",
+    "a"
+  ],
+  "tokens": {
+    "input": 10,
+    "output": 2464,
+    "cacheRead": 187223,
+    "cacheWrite": 16786
+  },
+  "costUsd": 0.11078959999999999,
+  "wallMs": 19454,
+  "turns": 13
+}

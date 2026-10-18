@@ -142,6 +142,15 @@ test('assembly/plan: schema errors are located in plan.json, and nothing is asse
   assert.deepEqual(planFindings(await run({ page: { use: 'page/basic' }, fragment: { context: 'main', children: [] } })), [
     'assembly/plan /: a plan has exactly one of "page" and "fragment".',
   ]);
+
+  // Invalid JSON names the bracket that doesn't pair up, when one is the cause.
+  const json = async (text: string) => (await assemble(text, { registry: base, draft: true })).plan.findings.map((f) => `${f.line}:${f.column} ${f.message}`);
+  assert.deepEqual(await json('{\n  "page": {\n    "use": "page/basic",\n    "slots": { "main": [ { "key": "a", "html": "<p>[a]</p>" } }\n  }\n}\n'), [
+    '4:63 /: isn’t valid JSON: Expected \',\' or \']\' after array element; the "}" at 4:63 can’t close the "[" of "main" at 4:24, which needs "]".',
+  ]);
+  assert.deepEqual(await json('{ "page": { "use": "page/basic", "data": { "title": "\\"}" } }'), ['1:1 /: isn’t valid JSON: Expected \',\' or \'}\' after property value; the "{" at 1:1 is never closed; add its "}".']);
+  assert.deepEqual(await json('{ "page": { "use": "page/basic" } } }'), ['1:37 /: isn’t valid JSON: Unexpected non-whitespace character after JSON; the "}" at 1:37 closes nothing, since the brackets before it balance; remove it.']);
+  assert.deepEqual(await json('{ "page": { "use": "page/basic",, "data": {} } }'), ['1:33 /: isn’t valid JSON: Expected double-quoted property name.']);
   assert.deepEqual(planFindings(await run({ fragment: { context: 'Main', rank: 9, children: {} } })), [
     'assembly/plan /fragment/context: must be the element the fragment goes in, such as "main" or "tbody".',
     'assembly/plan /fragment/rank: must be the level of the heading the fragment sits under, 0 to 5.',
@@ -222,6 +231,11 @@ test('assembly/slot: unknown slots, counts, accepted components, and children th
   const fragment = await run({ fragment: { context: 'ul', children: [prose('p', '<p>A.</p>')] } }, { registry });
   assert.deepEqual(planFindings(fragment), [
     'assembly/slot /fragment/children/0/use: content/prose doesn’t fit in <ul>: <ul> takes <li>, <script>, or <template>, and its root is <layout-stack>.',
+  ]);
+  // A form deeper in a component's template meets the form around the slot all the same.
+  const deep = registryWith({ 'test/finder': { template: '<search><form action="/find"><label>Find <input type="search" name="q" /></label></form></search>' } });
+  assert.deepEqual(planFindings(await run(page([form('f', [{ use: 'test/finder', key: 'find' }])]), { registry: deep })), [
+    'assembly/slot /page/slots/main/0/slots/fields/0/use: test/finder doesn’t fit in <form>: it puts <form> inside <form>, and the parser drops the inner one.',
   ]);
 });
 
@@ -326,6 +340,10 @@ test('assembly/restricted-html: inline, prose, and HTML-node values are validate
     'assembly/restricted-html /page/slots/main/1/html: 1:1 <script> isn’t allowed in an HTML node.',
     'assembly/restricted-html /page/slots/main/1/html: 1:29 onclick isn’t allowed in an HTML node; event handlers belong in scripts.',
   ]);
+  // How a value is written is the serializer's business: the house style comes out, and the output check applies it.
+  const loose = await run(page([{ key: 'opt', html: '<p><label>Keep me signed in <input type=checkbox name=keep checked></label></p>' }]));
+  assert.equal(loose.status, 'pass', planFindings(loose).join('\n'));
+  assert.match(loose.html!, /<label>Keep me signed in <input type="checkbox" name="keep" checked="true" \/><\/label>/);
   const good = await run(page([{ key: 'raw', html: '<p>Hand <em>written</em>.</p>' }]));
   assert.equal(good.status, 'pass');
   assert.match(good.html!, /<h1>Test<\/h1>\n\s+<p>Hand <em>written<\/em>\.<\/p>/);

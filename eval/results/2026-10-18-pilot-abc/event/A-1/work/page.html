@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Winter Skills Weekend</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="#main">Skip to content</a></li>
+      </ul>
+    </nav>
+    <h1>Winter Skills Weekend</h1>
+    <p><time datetime="2026-12-06">Saturday 6</time> to <time datetime="2026-12-07">Sunday 7 December 2026</time></p>
+    <p>Hollow Pine Camp, 88 Ridge Road, Mount Alder</p>
+  </header>
+
+  <main id="main" data-layout="stack">
+    <article data-layout="stack">
+      <section aria-labelledby="about-heading">
+        <h2 id="about-heading">About</h2>
+        <p>Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience.</p>
+      </section>
+
+      <section aria-labelledby="schedule-heading">
+        <h2 id="schedule-heading">Schedule</h2>
+        <section aria-labelledby="sat-heading">
+          <h3 id="sat-heading">Saturday 6 December</h3>
+          <ul>
+            <li><time datetime="09:00">9:00</time> Arrival and gear check</li>
+            <li><time datetime="10:00">10:00</time> Avalanche awareness</li>
+            <li><time datetime="14:00">14:00</time> Snowshoe technique</li>
+          </ul>
+        </section>
+        <section aria-labelledby="sun-heading">
+          <h3 id="sun-heading">Sunday 7 December</h3>
+          <ul>
+            <li><time datetime="09:00">9:00</time> Snow shelters</li>
+            <li><time datetime="13:00">13:00</time> Debrief and lunch</li>
+          </ul>
+        </section>
+      </section>
+
+      <section aria-labelledby="price-heading">
+        <h2 id="price-heading">Price</h2>
+        <p>$180 for members, $220 for others. Includes meals and a bunk.</p>
+      </section>
+
+      <section aria-labelledby="register-heading">
+        <h2 id="register-heading">Registration</h2>
+        <p>Spaces left: 6 of 24.</p>
+        <form action="/register" method="post">
+          <form-field>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required="required" autocomplete="name"/>
+          </form-field>
+
+          <form-field>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required="required" autocomplete="email"/>
+          </form-field>
+
+          <form-field>
+            <label for="membership">Membership number (optional)</label>
+            <input type="text" id="membership" name="membership"/>
+          </form-field>
+
+          <form-field>
+            <label for="dietary">Dietary needs</label>
+            <textarea id="dietary" name="dietary" rows="3"></textarea>
+          </form-field>
+
+          <button type="submit">Register</button>
+        </form>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

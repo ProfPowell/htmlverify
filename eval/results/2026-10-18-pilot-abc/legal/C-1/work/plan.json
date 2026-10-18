@@ -1,0 +1,70 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Privacy policy",
+      "site": "Larkspur Supply Co.",
+      "description": "Privacy policy for Larkspur Supply Co.",
+      "heading": "Privacy policy"
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "content/prose",
+          "key": "intro",
+          "data": { "html": "<p>Privacy policy for Larkspur Supply Co.. Last updated <time datetime=\"2026-09-01\">1 September 2026</time>.</p>" }
+        },
+        {
+          "use": "nav/toc",
+          "key": "toc",
+          "data": {
+            "items": [
+              { "text": "What we collect", "target": { "ref": "collect" } },
+              { "text": "How we use it", "target": { "ref": "use" } },
+              { "text": "Who we share it with", "target": { "ref": "share" } },
+              { "text": "How long we keep it", "target": { "ref": "keep" } },
+              { "text": "Your rights", "target": { "ref": "rights" } },
+              { "text": "Cookies", "target": { "ref": "cookies" } }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "collect",
+          "data": { "title": "What we collect" },
+          "slots": { "body": [ { "use": "content/prose", "key": "collect-text", "data": { "html": "<p>Your name, email, and address when you join; what you buy, so we can calculate your dividend; and rental records.</p>" } } ] }
+        },
+        {
+          "use": "content/section",
+          "key": "use",
+          "data": { "title": "How we use it" },
+          "slots": { "body": [ { "use": "content/prose", "key": "use-text", "data": { "html": "<p>To run your membership, process orders and rentals, and send the newsletter if you ask for it.</p>" } } ] }
+        },
+        {
+          "use": "content/section",
+          "key": "share",
+          "data": { "title": "Who we share it with" },
+          "slots": { "body": [ { "use": "content/prose", "key": "share-text", "data": { "html": "<p>Our payment processor and our shipping carrier, only as needed. We never sell personal data.</p>" } } ] }
+        },
+        {
+          "use": "content/section",
+          "key": "keep",
+          "data": { "title": "How long we keep it" },
+          "slots": { "body": [ { "use": "content/prose", "key": "keep-text", "data": { "html": "<p>Purchase records for seven years, as tax law requires; everything else until you ask us to delete it.</p>" } } ] }
+        },
+        {
+          "use": "content/section",
+          "key": "rights",
+          "data": { "title": "Your rights" },
+          "slots": { "body": [ { "use": "content/prose", "key": "rights-text", "data": { "html": "<p>You can ask for a copy of your data, a correction, or deletion. Email <a href=\"mailto:privacy@larkspur.coop\">privacy@larkspur.coop</a>.</p>" } } ] }
+        },
+        {
+          "use": "content/section",
+          "key": "cookies",
+          "data": { "title": "Cookies" },
+          "slots": { "body": [ { "use": "content/prose", "key": "cookies-text", "data": { "html": "<p>We use one cookie to keep you signed in, and no tracking cookies.</p>" } } ] }
+        }
+      ]
+    }
+  }
+}

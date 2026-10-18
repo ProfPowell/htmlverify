@@ -1,0 +1,18 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Page not found",
+      "site": "Shop",
+      "description": "Error 404: page not found.",
+      "heading": "Page not found"
+    },
+    "slots": {
+      "main": [
+        { "use": "content/prose", "key": "message", "data": { "html": "<p>We couldn't find that page. It may have moved when we redesigned the shop.</p>" } },
+        { "use": "form/search", "key": "search", "data": { "action": "/search" } },
+        { "use": "content/prose", "key": "links", "data": { "html": "<ul><li><a href=\"/shop/packs\">Shop backpacks</a></li><li><a href=\"/rentals\">Rental gear</a></li><li><a href=\"/workshops\">Workshops</a></li><li><a href=\"/contact\">Contact us</a></li></ul><p><a href=\"/\">Back to the home page</a></p>" } }
+      ]
+    }
+  }
+}

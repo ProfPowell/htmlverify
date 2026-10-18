@@ -1,0 +1,60 @@
+{
+  "id": "form/file-field",
+  "version": "1.0.0",
+  "summary": "Labeled file upload, with an optional hint and error message.",
+  "use": "Uploading a file, such as a photo or a document. Its form/form needs method post and enctype multipart/form-data.",
+  "context": "form",
+  "params": {
+    "label": {
+      "type": "text",
+      "minLength": 1
+    },
+    "name": {
+      "type": "text",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "The field's name in the submitted form data."
+    },
+    "accept": {
+      "type": "enum",
+      "values": [
+        "image/*",
+        "audio/*",
+        "video/*",
+        "application/pdf",
+        "text/csv"
+      ],
+      "required": false,
+      "description": "The kind of file it takes; any kind when left out."
+    },
+    "multiple": {
+      "type": "boolean",
+      "default": false
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "hint": {
+      "type": "inline",
+      "required": false,
+      "description": "Help shown with the field until it's valid."
+    },
+    "error": {
+      "type": "text",
+      "required": false,
+      "description": "Shown when the browser finds the value invalid."
+    }
+  },
+  "budget": {
+    "elements": 5
+  },
+  "obligations": [
+    "The label names the file wanted."
+  ],
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "duration_api_ms": 9953,
+  "stop_reason": "end_turn",
+  "session_id": "1f37c900-7107-4229-a363-333c3a1d43f5",
+  "total_cost_usd": 0.06769,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 11145,
+    "cache_read_input_tokens": 136287,
+    "output_tokens": 913,
+    "output_tokens_details": {
+      "thinking_tokens": 0
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 11145,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 61,
+        "cache_read_input_tokens": 38336,
+        "cache_creation_input_tokens": 903,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 903
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 408,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00033529999999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 384,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 913,
+      "cacheReadInputTokens": 136287,
+      "cacheCreationInputTokens": 11145,
+      "webSearchRequests": 0,
+      "costUSD": 0.06735469999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 9,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE. (htmlverify passes with 0 errors. Two open review items for you: whether `lang=\"en\"` matches the page content, and whether the title \"Page not found\" describes the page.)",
+  "ttft_ms": 1498,
+  "type": "result",
+  "duration_ms": 13121,
+  "uuid": "7700126b-52cd-4800-9d8d-dfb0384f3547",
+  "ttft_stream_ms": 1143,
+  "time_to_request_ms": 251,
+  "time_to_request_phases_ms": {
+    "other": 45,
+    "system_prompt": 47,
+    "resume_other": 0,
+    "process_user_input": 8,
+    "input_attachments": 48,
+    "input_hooks": 7,
+    "tool_pool_refresh": 11,
+    "init_message": 11,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 13,
+    "autocompact": 2,
+    "query_setup": 1,
+    "model_gates": 1,
+    "tool_schema_build": 32,
+    "message_normalization": 1,
+    "client_creation": 15,
+    "request_build": 7
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 150,
+  "time_to_request_cpu_ms": 175,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 241,
+  "process_anon_mib_turn_start": 124,
+  "process_rss_mib_result": 241,
+  "process_anon_mib_result": 121,
+  "process_peak_rss_mib": 243,
+  "process_cpu_ms_turn": 1273,
+  "process_wall_ms_turn": 13120,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 40,
+    "cpu_ms": 29,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1143,
+  "time_to_request_from_spawn_ms": 3708508,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329593143.5977,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

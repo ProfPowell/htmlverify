@@ -1,0 +1,24 @@
+{
+  "page": {
+    "use": "page/article",
+    "data": {
+      "title": "Larkspur Supply Co. opens the region's first gear library",
+      "site": "Larkspur Supply Co.",
+      "description": "Members can borrow tents, stoves, and snowshoes for free, starting 1 November 2026.",
+      "heading": "Larkspur Supply Co. opens the region's first gear library",
+      "subtitle": "Members can borrow tents, stoves, and snowshoes for free, starting 1 November 2026.",
+      "byline": "For immediate release · Port Wren, <time datetime=\"2026-10-14\">14 October 2026</time>"
+    },
+    "slots": {
+      "body": [
+        {
+          "use": "content/prose",
+          "key": "body",
+          "data": {
+            "html": "<p>Port Wren — Larkspur Supply Co. will open a gear library on 1 November 2026. Members can borrow up to three items for a week at no cost. The library starts with 240 items donated by members and repaired in the co-op's workshop.</p><p>\"Most gear spends its life in a closet,\" said general manager Priya Raman. \"A library puts it back on the trail.\"</p><p>The library will be open during store hours at 214 Alder Street.</p><p>About Larkspur Supply Co.: Founded in 1987, the cooperative is owned by 9,400 members and sells, rents, and repairs outdoor equipment.</p><p>Media contact: Sam Whitlock, <a href=\"mailto:press@larkspur.coop\">press@larkspur.coop</a>, (360) 555-0177.</p>"
+          }
+        }
+      ]
+    }
+  }
+}

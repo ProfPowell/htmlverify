@@ -1,0 +1,27 @@
+{
+  "data": {},
+  "slots": {
+    "fields": [
+      {
+        "use": "form/text-field",
+        "key": "email",
+        "data": {
+          "label": "Email",
+          "name": "email",
+          "type": "email",
+          "autocomplete": "email",
+          "required": true
+        }
+      }
+    ],
+    "actions": [
+      {
+        "use": "action/submit",
+        "key": "subscribe",
+        "data": {
+          "label": "Subscribe"
+        }
+      }
+    ]
+  }
+}

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
-import { countMatches, parsePage, scoreChecklist, skeletonDistance, variance, type Brief } from '../eval/lib.ts';
+import { countMatches, parsePage, scoreChecklist, skeletonDistance, variance, withoutAllowedTools, type Brief } from '../eval/lib.ts';
 
 const BRIEFS = join(import.meta.dirname, '..', 'eval', 'briefs');
 
@@ -35,4 +35,15 @@ test('structural variance is the mean pairwise normalized edit distance of skele
   assert.equal(skeletonDistance(['a', 'b'], ['a', 'c']), 0.5);
   assert.equal(variance([['a'], ['a'], ['b']]), 2 / 3);
   assert.equal(variance([['a']]), null);
+});
+
+test('the house skills load headless: their copies drop allowed-tools and nothing else', () => {
+  const skill = '---\nname: forms\ndescription: Forms.\nallowed-tools: Read, Write, Edit\n---\n\n# Forms\n\nallowed-tools: stays in the body.\n';
+  assert.equal(withoutAllowedTools(skill), '---\nname: forms\ndescription: Forms.\n---\n\n# Forms\n\nallowed-tools: stays in the body.\n');
+  assert.equal(withoutAllowedTools('# No frontmatter\n'), '# No frontmatter\n');
+  for (const name of readdirSync(join(import.meta.dirname, '..', 'eval', 'skills'))) {
+    const text = withoutAllowedTools(readFileSync(join(import.meta.dirname, '..', 'eval', 'skills', name, 'SKILL.md'), 'utf8'));
+    assert.doesNotMatch(text.slice(0, text.indexOf('\n---', 4)), /allowed-tools/, name);
+    assert.match(text, /^---\nname: /, name);
+  }
 });

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>The Trail Report | The Trail Report</title>
+  <meta name="description" content="Landing page for The Trail Report, the co-op's monthly newsletter." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">The Trail Report</a></header>
+  <main id="main" tabindex="-1">
+    <h1>The Trail Report, once a month, never more.</h1>
+    <section id="what-you-get" aria-labelledby="what-you-get-title" data-layout="stack">
+      <h2 id="what-you-get-title">What you get</h2>
+      <layout-text>
+        <ul>
+          <li>Trail and water conditions from members who were just there</li>
+          <li>Early booking for workshops</li>
+          <li>Repair tips from the workshop</li>
+          <li>The used-gear sale date, a week early</li>
+        </ul>
+      </layout-text>
+    </section>
+    <section id="sign-up" aria-labelledby="sign-up-title" data-layout="stack">
+      <h2 id="sign-up-title">Sign up</h2>
+      <form method="post" class="stacked" aria-label="Subscribe">
+        <form-field>
+          <label for="sign-up-subscribe-form-email-input">Email</label>
+          <input id="sign-up-subscribe-form-email-input" type="email" name="email" autocomplete="email" required="true" />
+        </form-field>
+        <footer class="actions end"><button type="submit">Subscribe</button></footer>
+      </form>
+      <layout-text>
+        <p><small>We send one email a month. Unsubscribe from any issue.</small></p>
+      </layout-text>
+    </section>
+    <section id="readers" aria-labelledby="readers-title" data-layout="stack">
+      <h2 id="readers-title">6,200 readers</h2>
+      <figure class="quote">
+        <blockquote>
+          <p>The only newsletter I read the day it arrives.</p>
+        </blockquote>
+        <figcaption>Jo</figcaption>
+      </figure>
+    </section>
+  </main>
+</body>
+</html>

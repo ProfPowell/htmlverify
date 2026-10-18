@@ -1,0 +1,20 @@
+{
+  "id": "content/address",
+  "version": "1.0.0",
+  "summary": "Contact details: a postal address, phone, and email, a line each.",
+  "use": "How to reach the organization or person the page is about, as on a contact page. In a footer, use site/footer's contact instead. Not for other addresses, such as a shipping address.",
+  "params": {
+    "lines": {
+      "type": "list",
+      "minItems": 1,
+      "items": "inline",
+      "description": "One line each, such as a street address, or a tel: or mailto: link."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

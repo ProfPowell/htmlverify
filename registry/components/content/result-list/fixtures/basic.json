@@ -1,0 +1,16 @@
+{
+  "data": {
+    "results": [
+      {
+        "title": "Returns made simple",
+        "href": "/help/returns",
+        "summary": "Send anything back within 60 days.",
+        "note": "Help"
+      },
+      {
+        "title": "Shipping in winter",
+        "href": "/blog/winter"
+      }
+    ]
+  }
+}

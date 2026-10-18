@@ -1,0 +1,155 @@
+{
+  "duration_api_ms": 19394,
+  "stop_reason": "end_turn",
+  "session_id": "8148976f-addc-4d19-b709-c6447821b080",
+  "total_cost_usd": 0.1158702,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 15662,
+    "cache_read_input_tokens": 255589,
+    "output_tokens": 2749,
+    "output_tokens_details": {
+      "thinking_tokens": 415
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 15662,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 294,
+        "cache_read_input_tokens": 42245,
+        "cache_creation_input_tokens": 1511,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1511
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 28,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00014529999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 2749,
+      "cacheReadInputTokens": 255589,
+      "cacheCreationInputTokens": 15662,
+      "webSearchRequests": 0,
+      "costUSD": 0.11572489999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 415,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 12,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "DONE.\n\nI haven't answered the three review questions. They ask whether `lang=\"en\"` fits the content, whether the title \"Ridgeline 40 L pack | Ridgeline\" describes the page, and whether \"$189\" is a heading.\n\n- **Photos:** I left out the four photos (front, back panel, side zip open, on a hiker). The brief gives no image files or alt text, and I didn't want to invent them.\n- **Invented values:** The brief doesn't name the site or give breadcrumb links, so I used \"Ridgeline\" as the site name and `/`, `/shop` and `/shop/backpacks` as the links.\n- **Component gap:** \"Save to wishlist\" is a plain HTML button placed after the form, because no component fits a button that isn't a dialog opener or a submit.\n- **Unapproved components:** All the components used are still unapproved, which is a warning for whoever reviews components.",
+  "ttft_ms": 1198,
+  "type": "result",
+  "duration_ms": 22759,
+  "uuid": "540fdcd6-966d-4cd3-891c-e3c613092a0c",
+  "ttft_stream_ms": 831,
+  "time_to_request_ms": 135,
+  "time_to_request_phases_ms": {
+    "other": 24,
+    "system_prompt": 19,
+    "resume_other": 0,
+    "process_user_input": 4,
+    "input_attachments": 32,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 6,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 2,
+    "autocompact": 2,
+    "query_setup": 0,
+    "model_gates": 1,
+    "tool_schema_build": 26,
+    "message_normalization": 2,
+    "client_creation": 3,
+    "request_build": 6
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 85,
+  "time_to_request_cpu_ms": 145,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 247,
+  "process_anon_mib_turn_start": 128,
+  "process_rss_mib_result": 251,
+  "process_anon_mib_result": 129,
+  "process_peak_rss_mib": 256,
+  "process_cpu_ms_turn": 1688,
+  "process_wall_ms_turn": 22759,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 25,
+    "cpu_ms": 35,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 832,
+  "time_to_request_from_spawn_ms": 3900211,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329784861.5022,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

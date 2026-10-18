@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout: shipping address</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css" />
+  <script src="/vb/vanilla-breeze.js" defer="true"></script>
+</head>
+<body>
+  <header>
+    <h1>Checkout: shipping address</h1>
+    <nav aria-label="Checkout progress">
+      <ol>
+        <li>1 Cart (done)</li>
+        <li aria-current="step">2 Shipping (current)</li>
+        <li>3 Payment</li>
+      </ol>
+    </nav>
+  </header>
+
+  <main>
+    <p>Checkout, step 2 of 3: Shipping address.</p>
+    <section data-layout="sidebar" aria-label="Shipping details">
+      <form action="/checkout/payment" method="post">
+        <form-field>
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" required="true" autocomplete="name" />
+        </form-field>
+
+        <form-field>
+          <label for="address1">Address line 1</label>
+          <input type="text" id="address1" name="address1" required="true" autocomplete="address-line1" />
+        </form-field>
+
+        <form-field>
+          <label for="address2">Address line 2 (optional)</label>
+          <input type="text" id="address2" name="address2" autocomplete="address-line2" />
+        </form-field>
+
+        <form-field>
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" required="true" autocomplete="address-level2" />
+        </form-field>
+
+        <form-field>
+          <label for="region">State or region</label>
+          <input type="text" id="region" name="region" required="true" autocomplete="address-level1" />
+        </form-field>
+
+        <form-field>
+          <label for="postal">Postal code</label>
+          <input type="text" id="postal" name="postal" required="true" autocomplete="postal-code" />
+        </form-field>
+
+        <form-field>
+          <label for="country">Country</label>
+          <select id="country" name="country" required="true" autocomplete="country-name">
+            <option value="" disabled="true" selected="true">Select a country</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="MX">Mexico</option>
+          </select>
+        </form-field>
+
+        <form-field>
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" required="true" autocomplete="tel" aria-describedby="phone-msg" />
+          <output id="phone-msg" for="phone">For the courier</output>
+        </form-field>
+
+        <form-field>
+          <label for="billing-same">
+            <input type="checkbox" id="billing-same" name="billing_same" />
+            Billing address is the same
+          </label>
+        </form-field>
+
+        <fieldset>
+          <legend>Shipping speed</legend>
+          <label for="speed-standard">
+            <input type="radio" id="speed-standard" name="speed" value="standard" required="true" />
+            Standard, 5–7 days, free
+          </label>
+          <label for="speed-express">
+            <input type="radio" id="speed-express" name="speed" value="express" />
+            Express, 2 days, $12
+          </label>
+        </fieldset>
+
+        <button type="submit">Continue to payment</button>
+        <a href="/cart">Back to cart</a>
+      </form>
+
+      <aside aria-labelledby="summary-heading">
+        <h2 id="summary-heading">Order summary</h2>
+        <dl>
+          <dt>Ridgeline 40 L × 1</dt>
+          <dd>$189</dd>
+          <dt>Shipping</dt>
+          <dd>$0</dd>
+          <dt>Total</dt>
+          <dd>$189</dd>
+        </dl>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

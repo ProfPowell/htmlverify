@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 30334,
+  "stop_reason": "end_turn",
+  "session_id": "20b2f8d1-aabb-4176-852c-3cadea8ae9ca",
+  "total_cost_usd": 0.1176145,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 13205,
+    "cache_read_input_tokens": 252322,
+    "output_tokens": 3939,
+    "output_tokens_details": {
+      "thinking_tokens": 803
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 13205,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 436,
+        "cache_read_input_tokens": 40607,
+        "cache_creation_input_tokens": 692,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 692
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 26,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00014429999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 3939,
+      "cacheReadInputTokens": 252322,
+      "cacheCreationInputTokens": 13205,
+      "webSearchRequests": 0,
+      "costUSD": 0.1174702,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 803,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Read",
+      "tool_use_id": "toolu_01XTXiVFU9bFLX8BpPCaPGkV",
+      "tool_input": {
+        "file_path": "/home/user/htmlverify/eval/results/2026-10-18-pilot-c-before-event-C-1/work/brief.md"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_014WKiAyxbNxt7qs6xrhyEWW",
+      "tool_input": {
+        "command": "cat > plan.json <<'E'\n{\"page\":{\"use\":\"page/basic\",\"data\":{\"title\":\"Winter Skills Weekend\",\"site\":\"Winter Skills Weekend\",\"description\":\"Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience.\",\"heading\":\"Winter Skills Weekend\"},\"slots\":{\"main\":[\n{\"use\":\"content/section\",\"key\":\"details\",\"data\":{\"title\":\"Details\"},\"slots\":{\"body\":[\n{\"use\":\"data/description-list\",\"key\":\"facts\",\"data\":{\"items\":[\n{\"term\":\"When\",\"description\":\"Saturday 6 to Sunday 7 December 2026\"},\n{\"term\":\"Where\",\"description\":\"Hollow Pine Camp, 88 Ridge Road, Mount Alder\"},\n{\"term\":\"Price\",\"description\":\"$180 for members, $220 for others. Includes meals and a bunk.\"},\n{\"term\":\"Spaces left\",\"description\":\"6 of 24\"}]}}]}},\n{\"use\":\"content/section\",\"key\":\"schedule\",\"data\":{\"title\":\"Schedule\"},\"slots\":{\"body\":[\n{\"use\":\"data/table\",\"key\":\"saturday\",\"data\":{\"caption\":\"Saturday 6 December\",\"columns\":[\"Time\",\"Session\"],\"rows\":[\n{\"header\":\"9:00\",\"cells\":[\"Arrival and gear check\"]},\n{\"header\":\"10:00\",\"cells\":[\"Avalanche awareness\"]},\n{\"header\":\"14:00\",\"cells\":[\"Snowshoe technique\"]}]}},\n{\"use\":\"data/table\",\"key\":\"sunday\",\"data\":{\"caption\":\"Sunday 7 December\",\"columns\":[\"Time\",\"Session\"],\"rows\":[\n{\"header\":\"9:00\",\"cells\":[\"Snow shelters\"]},\n{\"header\":\"13:00\",\"cells\":[\"Debrief and lunch\"]}]}}]}},\n{\"use\":\"content/section\",\"key\":\"registration\",\"data\":{\"title\":\"Registration\"},\"slots\":{\"body\":[\n{\"use\":\"form/form\",\"key\":\"register\",\"data\":{\"action\":\"#\",\"method\":\"post\",\"label\":\"Registration\"},\"slots\":{\"fields\":[\n{\"use\":\"form/text-field\",\"key\":\"name\",\"data\":{\"label\":\"Name\",\"name\":\"name\",\"autocomplete\":\"name\",\"required\":true}},\n{\"use\":\"form/text-field\",\"key\":\"email\",\"data\":{\"label\":\"Email\",\"name\":\"email\",\"type\":\"email\",\"autocomplete\":\"email\",\"required\":true}},\n{\"use\":\"form/text-field\",\"key\":\"membership\",\"data\":{\"label\":\"Membership number (optional)\",\"name\":\"membership\"}},\n{\"use\":\"form/textarea-field\",\"key\":\"dietary\",\"data\":{\"label\":\"Dietary needs\",\"name\":\"dietary\"}}],\n\"actions\":[{\"use\":\"action/submit\",\"key\":\"register\",\"data\":{\"label\":\"Register\"}}]}}]}}]}}\nE"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 14,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "I didn't finish: `page.html` was not written. Three assemblies failed on the same error, and the session's limit is three, so I stopped.\n\nThe error is in my own `plan.json`, at about line 22. The closing brackets at the end of the file are mismatched, and the checker rejects it as invalid JSON. Because of that, none of the components or content were checked. The plan has three sections (Details, Schedule with two day tables, and a Registration form), but `assemble` never got far enough to build or review them.\n\nTwo things in the plan are my choices, not from the brief:\n- **Site name:** `page/basic` needs one, so I used \"Winter Skills Weekend\".\n- **Form action:** the form component needs a URL, so I used `#`.\n\nFixing the closing brackets and running `assemble` once more should settle it.",
+  "ttft_ms": 2070,
+  "type": "result",
+  "duration_ms": 29950,
+  "uuid": "8fb65757-7cc0-4bf3-8894-2b183aa6a084",
+  "ttft_stream_ms": 1841,
+  "time_to_request_ms": 101,
+  "time_to_request_phases_ms": {
+    "other": 17,
+    "system_prompt": 11,
+    "resume_other": 0,
+    "process_user_input": 3,
+    "input_attachments": 16,
+    "input_hooks": 3,
+    "tool_pool_refresh": 3,
+    "init_message": 5,
+    "engine_pickup": 1,
+    "message_prep": 1,
+    "model_config_wait": 1,
+    "autocompact": 2,
+    "query_setup": 1,
+    "model_gates": 0,
+    "tool_schema_build": 23,
+    "message_normalization": 2,
+    "client_creation": 2,
+    "request_build": 10
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 50,
+  "time_to_request_cpu_ms": 111,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 254,
+  "process_anon_mib_turn_start": 135,
+  "process_rss_mib_result": 267,
+  "process_anon_mib_result": 145,
+  "process_peak_rss_mib": 278,
+  "process_cpu_ms_turn": 1813,
+  "process_wall_ms_turn": 29950,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 12,
+    "cpu_ms": 23,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1842,
+  "time_to_request_from_spawn_ms": 1665029,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792327550049.009,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

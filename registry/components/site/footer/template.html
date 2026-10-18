@@ -1,8 +1,17 @@
 <footer class="minimal">
+  <template vb-if="contact">
+    <address class="footer">
+      <template vb-each="contact" vb-as="line">
+        <p>{{line}}</p>
+      </template>
+    </address>
+  </template>
   <site-legal>
     <span>{{copyright}}</span>
-    <template vb-each="legal" vb-as="link">
-      <a href="{{link.href}}">{{link.text}}</a>
+    <template vb-if="legal">
+      <template vb-each="legal" vb-as="link">
+        <a href="{{link.href}}">{{link.text}}</a>
+      </template>
     </template>
   </site-legal>
   <template vb-if="links">

@@ -1,0 +1,22 @@
+{
+  "data": {
+    "lang": "en-GB",
+    "title": "Acme opens a second warehouse",
+    "site": "Acme",
+    "description": "Acme's new warehouse halves delivery times in the north.",
+    "heading": "Acme opens a second warehouse",
+    "subtitle": "Next-day delivery reaches the north from 1 March",
+    "byline": "Leeds, <time datetime=\"2026-02-02\">2 February 2026</time>"
+  },
+  "slots": {
+    "body": [
+      {
+        "use": "content/prose",
+        "key": "text",
+        "data": {
+          "html": "<p>Acme will open its second warehouse on 1 March 2026.</p>"
+        }
+      }
+    ]
+  }
+}

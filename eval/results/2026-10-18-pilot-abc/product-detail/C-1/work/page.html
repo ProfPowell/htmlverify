@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Ridgeline 40 L pack | Ridgeline</title>
+  <meta name="description" content="The Ridgeline 40 L backpack for multi-day trips: $189, rated 4.7 out of 5 from 212 reviews." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Ridgeline</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Ridgeline 40 L pack</h1>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/shop/backpacks">Backpacks</a></li>
+        <li><span aria-current="page">Ridgeline 40 L</span></li>
+      </ol>
+    </nav>
+    <layout-text>
+      <p><strong>$189</strong></p>
+      <p>Rating: 4.7 out of 5 from 212 reviews.</p>
+      <p>A 40-liter pack for multi-day trips. The frame transfers weight to your hips, and the side zip lets you reach the bottom without unpacking.</p>
+    </layout-text>
+    <form method="post" class="stacked" aria-label="Order">
+      <fieldset>
+        <legend>Color</legend>
+        <layout-stack data-layout-gap="xs">
+          <form-field data-type="radio"><label><input type="radio" name="color" value="moss" required="true" /> Moss</label></form-field>
+          <form-field data-type="radio"><label><input type="radio" name="color" value="slate" required="true" /> Slate</label></form-field>
+          <form-field data-type="radio"><label><input type="radio" name="color" value="ember" required="true" /> Ember</label></form-field>
+        </layout-stack>
+      </fieldset>
+      <fieldset>
+        <legend>Size</legend>
+        <layout-stack data-layout-gap="xs">
+          <form-field data-type="radio"><label><input type="radio" name="size" value="s-m" required="true" /> S/M</label></form-field>
+          <form-field data-type="radio"><label><input type="radio" name="size" value="m-l" required="true" /> M/L</label></form-field>
+        </layout-stack>
+      </fieldset>
+      <form-field>
+        <label for="order-quantity-input">Quantity</label>
+        <input id="order-quantity-input" type="number" name="quantity" min="1" max="5" value="1" />
+      </form-field>
+      <footer class="actions end"><button type="submit">Add to cart</button></footer>
+    </form>
+    <button type="button">Save to wishlist</button>
+    <section id="specs" aria-labelledby="specs-title" data-layout="stack">
+      <h2 id="specs-title">Specifications</h2>
+      <dl>
+        <dt>Capacity</dt>
+        <dd>40 L</dd>
+        <dt>Weight</dt>
+        <dd>1.4 kg</dd>
+        <dt>Fabric</dt>
+        <dd>210-denier recycled nylon</dd>
+        <dt>Torso range</dt>
+        <dd>41–53 cm</dd>
+        <dt>Warranty</dt>
+        <dd>lifetime, with free repairs at the co-op</dd>
+      </dl>
+    </section>
+    <section id="reviews" aria-labelledby="reviews-title" data-layout="stack">
+      <h2 id="reviews-title">Reviews</h2>
+      <figure class="quote">
+        <blockquote>
+          <p>Carried it 90 km on the Coast Trail without a sore hip.</p>
+        </blockquote>
+        <figcaption>Dana, 5 stars</figcaption>
+      </figure>
+      <figure class="quote">
+        <blockquote>
+          <p>Wish the hip belt pockets were larger.</p>
+        </blockquote>
+        <figcaption>Theo, 4 stars</figcaption>
+      </figure>
+    </section>
+  </main>
+</body>
+</html>

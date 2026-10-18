@@ -1,0 +1,18 @@
+{
+  "data": {
+    "label": "Checkout progress",
+    "steps": [
+      {
+        "text": "Basket",
+        "done": true
+      },
+      {
+        "text": "Delivery",
+        "current": "step"
+      },
+      {
+        "text": "Payment"
+      }
+    ]
+  }
+}

@@ -2,7 +2,7 @@
   "id": "form/text-field",
   "version": "1.0.0",
   "summary": "Labeled single-line input, with an optional hint and error message.",
-  "use": "Single-line text, email, phone, URL, search, or password input. For longer text use form/textarea-field; for choices, form/select-field or form/choice-group.",
+  "use": "Single-line text, email, phone, URL, search, or password input. For longer text use form/textarea-field; for choices, form/select-field or form/choice-group; for a site search box, form/search.",
   "context": "form",
   "params": {
     "label": {

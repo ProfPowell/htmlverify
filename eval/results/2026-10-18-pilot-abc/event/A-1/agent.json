@@ -1,0 +1,170 @@
+{
+  "duration_api_ms": 16839,
+  "stop_reason": "end_turn",
+  "session_id": "6f5ad080-0ae6-415c-b460-299562a85599",
+  "total_cost_usd": 0.1255335,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 20213,
+    "cache_read_input_tokens": 242677,
+    "output_tokens": 2025,
+    "output_tokens_details": {
+      "thinking_tokens": 126
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 20213,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 81,
+        "cache_read_input_tokens": 46831,
+        "cache_creation_input_tokens": 1476,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1476
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 1313,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.00013979999999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    },
+    "claude-sonnet-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 2025,
+      "cacheReadInputTokens": 242677,
+      "cacheCreationInputTokens": 20213,
+      "webSearchRequests": 0,
+      "costUSD": 0.1253937,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 126,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01GKv3oYAfZKeTHBMPb6EXg9",
+      "tool_input": {
+        "command": "grep -o 'data-layout=\"[a-z-]*\"' /vb/vanilla-breeze.css | sort -u | head -30; grep -o '^[a-z]*-[a-z-]*' /vb/vanilla-breeze.css | sort -u | head -30"
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01DzHZuWz9unLLhVsGaNWPpb",
+      "tool_input": {
+        "command": "grep -o 'data-layout~\\?=\\?\"\\?[a-z-]*' /vb/vanilla-breeze.css | sort -u | head -30"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "safety_stops": 0,
+  "is_error": false,
+  "num_turns": 13,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "I've written page.html and I'm done, apart from one thing I didn't check. I didn't confirm that the `data-layout=\"stack\"` value I used exists in Vanilla Breeze, because my grep of the stylesheet was blocked.\n\nDONE",
+  "ttft_ms": 1797,
+  "type": "result",
+  "duration_ms": 18550,
+  "uuid": "a8baa991-470f-4620-acf6-06c1af54aaf1",
+  "ttft_stream_ms": 1411,
+  "time_to_request_ms": 266,
+  "time_to_request_phases_ms": {
+    "other": 29,
+    "system_prompt": 31,
+    "resume_other": 1,
+    "process_user_input": 5,
+    "input_attachments": 43,
+    "input_hooks": 5,
+    "tool_pool_refresh": 5,
+    "init_message": 9,
+    "engine_pickup": 2,
+    "message_prep": 1,
+    "model_config_wait": 60,
+    "autocompact": 4,
+    "query_setup": 1,
+    "model_gates": 1,
+    "tool_schema_build": 52,
+    "message_normalization": 2,
+    "client_creation": 5,
+    "request_build": 10
+  },
+  "turn_start_resume_kind": "none",
+  "process_turn_index": 0,
+  "time_to_request_loop_lag_ms": 146,
+  "time_to_request_cpu_ms": 214,
+  "time_to_request_major_faults": 0,
+  "process_rss_mib_turn_start": 237,
+  "process_anon_mib_turn_start": 121,
+  "process_rss_mib_result": 246,
+  "process_anon_mib_result": 126,
+  "process_peak_rss_mib": 262,
+  "process_cpu_ms_turn": 1903,
+  "process_wall_ms_turn": 18549,
+  "input_attachments_detail": {
+    "slowest_producer": "queued_commands",
+    "slowest_producer_ms": 29,
+    "cpu_ms": 30,
+    "major_faults": 0
+  },
+  "first_content_frame_ms": 1412,
+  "time_to_request_from_spawn_ms": 3790088,
+  "warm_spare_claimed": false,
+  "flag_fetch_kick": "not_asked_warm",
+  "time_origin_ms": 1792329675027.7334,
+  "queued_turn_count": 0,
+  "result_index": 0
+}

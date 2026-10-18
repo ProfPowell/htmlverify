@@ -1,0 +1,29 @@
+{
+  "data": {
+    "legend": "Delivery address"
+  },
+  "slots": {
+    "fields": [
+      {
+        "use": "form/text-field",
+        "key": "street",
+        "data": {
+          "label": "Street",
+          "name": "street",
+          "autocomplete": "street-address",
+          "required": true
+        }
+      },
+      {
+        "use": "form/text-field",
+        "key": "postcode",
+        "data": {
+          "label": "Postcode",
+          "name": "postcode",
+          "autocomplete": "postal-code",
+          "required": true
+        }
+      }
+    ]
+  }
+}

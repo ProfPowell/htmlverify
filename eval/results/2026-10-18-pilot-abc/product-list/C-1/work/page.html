@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Backpacks | Packs</title>
+  <meta name="description" content="Backpacks category page: 8 products, sorted by popularity." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Packs</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Backpacks</h1>
+    <section id="filters" aria-labelledby="filters-title" data-layout="stack">
+      <h2 id="filters-title">Filters</h2>
+      <form method="get" class="stacked" aria-label="Filter backpacks">
+        <fieldset>
+          <legend>Capacity</legend>
+          <layout-stack data-layout-gap="xs">
+            <form-field data-type="checkbox"><label><input type="checkbox" name="capacity" value="under-30" /> Under 30 L</label></form-field>
+            <form-field data-type="checkbox"><label><input type="checkbox" name="capacity" value="30-50" /> 30–50 L</label></form-field>
+            <form-field data-type="checkbox"><label><input type="checkbox" name="capacity" value="over-50" /> Over 50 L</label></form-field>
+          </layout-stack>
+        </fieldset>
+        <fieldset>
+          <legend>Price</legend>
+          <layout-stack data-layout-gap="xs">
+            <form-field data-type="checkbox"><label><input type="checkbox" name="price" value="under-100" /> Under $100</label></form-field>
+            <form-field data-type="checkbox"><label><input type="checkbox" name="price" value="100-200" /> $100–$200</label></form-field>
+            <form-field data-type="checkbox"><label><input type="checkbox" name="price" value="over-200" /> Over $200</label></form-field>
+          </layout-stack>
+        </fieldset>
+        <form-field data-type="checkbox"><label><input type="checkbox" name="in-stock" value="1" /> Only show items in stock</label></form-field>
+        <footer class="actions end"><button type="submit">Apply filters</button></footer>
+      </form>
+    </section>
+    <section id="products" aria-labelledby="products-title" data-layout="stack">
+      <h2 id="products-title">Products, sorted by popularity</h2>
+      <ol class="unstyled" data-layout="stack" data-layout-gap="l">
+        <li>
+          <h3><a href="/shop/ridgeline-40">Ridgeline 40 L</a></h3>
+          <p>$189 · Rated 4.7 out of 5</p>
+          <p><small>In stock</small></p>
+        </li>
+        <li>
+          <h3><a href="/shop/day-hiker-22">Day Hiker 22 L</a></h3>
+          <p>$79 · Rated 4.5 out of 5</p>
+          <p><small>In stock</small></p>
+        </li>
+        <li>
+          <h3><a href="/shop/summit-55">Summit 55 L</a></h3>
+          <p>$249 · Rated 4.8 out of 5</p>
+          <p><small>2 left</small></p>
+        </li>
+        <li>
+          <h3><a href="/shop/commuter-18">Commuter 18 L</a></h3>
+          <p>$64 · Rated 4.2 out of 5</p>
+          <p><small>In stock</small></p>
+        </li>
+        <li>
+          <h3><a href="/shop/trailhead-30">Trailhead 30 L</a></h3>
+          <p>$119 · Rated 4.4 out of 5</p>
+          <p><small>Out of stock</small></p>
+        </li>
+        <li>
+          <h3><a href="/shop/expedition-70">Expedition 70 L</a></h3>
+          <p>$329 · Rated 4.9 out of 5</p>
+          <p><small>In stock</small></p>
+        </li>
+        <li>
+          <h3><a href="/shop/explorer-12">Kids' Explorer 12 L</a></h3>
+          <p>$45 · Rated 4.6 out of 5</p>
+          <p><small>In stock</small></p>
+        </li>
+        <li>
+          <h3><a href="/shop/ultralight-35">Ultralight 35 L</a></h3>
+          <p>$215 · Rated 4.3 out of 5</p>
+          <p><small>In stock</small></p>
+        </li>
+      </ol>
+      <nav class="pagination" aria-label="Pagination">
+        <ul>
+          <li><a href="?page=1" aria-current="page">1</a></li>
+          <li><a href="?page=2">2</a></li>
+          <li><a href="?page=3">3</a></li>
+          <li><a href="?page=2" rel="next" data-next="">Next</a></li>
+        </ul>
+      </nav>
+    </section>
+  </main>
+</body>
+</html>

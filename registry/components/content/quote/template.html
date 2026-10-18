@@ -2,5 +2,7 @@
   <blockquote cite="{{cite}}">
     <p>{{quote}}</p>
   </blockquote>
-  <figcaption>{{author}}<template vb-if="source">, <cite>{{source}}</cite></template></figcaption>
+  <template vb-if="author">
+    <figcaption>{{author}}<template vb-if="source">, <cite>{{source}}</cite></template></figcaption>
+  </template>
 </figure>

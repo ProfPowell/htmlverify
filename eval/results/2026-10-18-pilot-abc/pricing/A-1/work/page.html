@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Rental Memberships Pricing</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css"/>
+  <script src="/vb/vanilla-breeze.js" defer="defer"></script>
+  <style>
+    main { max-width: 70rem; margin-inline: auto; padding-inline: 1rem; }
+    #plans { list-style: none; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+    #plans article { height: 100%; }
+    .table-scroll { overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="#main">Skip to content</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <h1>Pricing page: rental memberships</h1>
+    <p>Rental plans. Compare three plans.</p>
+
+    <section aria-labelledby="plans-heading">
+      <h2 id="plans-heading">Plans</h2>
+      <ul id="plans" data-layout="grid">
+        <li>
+          <article data-layout="stack">
+            <h3>Day Pass</h3>
+            <p><strong>$0</strong> a month</p>
+            <ul>
+              <li>Pay per rental</li>
+              <li>Members get 20% off</li>
+            </ul>
+            <a href="#day-pass" role="button">Rent now</a>
+          </article>
+        </li>
+        <li>
+          <article data-layout="stack">
+            <h3>Weekender</h3>
+            <p><strong>Most popular</strong></p>
+            <p><strong>$19</strong> a month</p>
+            <ul>
+              <li>2 rentals a month included</li>
+              <li>Free gear delivery</li>
+            </ul>
+            <a href="#weekender" role="button">Choose Weekender</a>
+          </article>
+        </li>
+        <li>
+          <article data-layout="stack">
+            <h3>Season Pass</h3>
+            <p><strong>$49</strong> a month</p>
+            <ul>
+              <li>Unlimited rentals</li>
+              <li>Priority booking for kayaks</li>
+              <li>Free delivery</li>
+            </ul>
+            <a href="#season-pass" role="button">Choose Season Pass</a>
+          </article>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="compare-heading">
+      <h2 id="compare-heading">Comparison of features</h2>
+      <figure class="table-scroll">
+        <table>
+          <caption>Features by plan</caption>
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Day Pass</th>
+              <th scope="col">Weekender</th>
+              <th scope="col">Season Pass</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Included rentals</th>
+              <td>None</td>
+              <td>2 per month</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <th scope="row">Member discount</th>
+              <td>20%</td>
+              <td>20%</td>
+              <td>20%</td>
+            </tr>
+            <tr>
+              <th scope="row">Free delivery</th>
+              <td>No</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <th scope="row">Priority kayak booking</th>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </section>
+  </main>
+
+  <footer>
+    <p>Prices include tax. Cancel any time.</p>
+  </footer>
+</body>
+</html>

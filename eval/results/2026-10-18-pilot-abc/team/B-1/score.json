@@ -1,0 +1,122 @@
+{
+  "brief": "team",
+  "condition": "B",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": null,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 1,
+  "capped": false,
+  "assembly": null,
+  "denials": 3,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 4,
+    "of": 4,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "people",
+        "met": true,
+        "found": 12
+      },
+      {
+        "id": "photos",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "names",
+        "met": true,
+        "found": 8
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "title",
+    "link",
+    "script",
+    "body",
+    "header",
+    "h1",
+    "p",
+    "main",
+    "section",
+    "h2",
+    "ul",
+    "li",
+    "article",
+    "figure",
+    "img",
+    "h3",
+    "p",
+    "p",
+    "li",
+    "article",
+    "figure",
+    "img",
+    "h3",
+    "p",
+    "p",
+    "li",
+    "article",
+    "figure",
+    "img",
+    "h3",
+    "p",
+    "p",
+    "li",
+    "article",
+    "figure",
+    "img",
+    "h3",
+    "p",
+    "p",
+    "li",
+    "article",
+    "figure",
+    "img",
+    "h3",
+    "p",
+    "p",
+    "li",
+    "article",
+    "figure",
+    "img",
+    "h3",
+    "p",
+    "p",
+    "section",
+    "h2",
+    "p",
+    "a"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 2265,
+    "cacheRead": 214511,
+    "cacheWrite": 14614
+  },
+  "costUsd": 0.1027254,
+  "wallMs": 27744,
+  "turns": 12
+}

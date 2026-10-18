@@ -24,10 +24,10 @@ test('every starter component checks clean, with full coverage', async () => {
   assert.deepEqual(failing.map((c) => c.id), [], failing.map((c) => formatComponentCheck(c)).join('\n'));
   assert.deepEqual(result.components.map((c) => c.id), [
     'action/button', 'action/link-button', 'action/submit',
-    'content/callout', 'content/card-list', 'content/faq', 'content/figure', 'content/image', 'content/prose', 'content/quote', 'content/section',
+    'content/address', 'content/callout', 'content/card-list', 'content/faq', 'content/figure', 'content/image', 'content/prose', 'content/quote', 'content/result-list', 'content/section',
     'data/description-list', 'data/table', 'dialog/modal', 'disclosure/details', 'disclosure/tabs',
-    'form/checkbox', 'form/choice-group', 'form/form', 'form/select-field', 'form/text-field', 'form/textarea-field',
-    'nav/breadcrumb', 'nav/pagination', 'nav/primary', 'nav/toc', 'page/basic', 'site/footer',
+    'form/checkbox', 'form/checkbox-group', 'form/choice-group', 'form/fieldset', 'form/file-field', 'form/form', 'form/number-field', 'form/search', 'form/select-field', 'form/text-field', 'form/textarea-field',
+    'nav/breadcrumb', 'nav/pagination', 'nav/primary', 'nav/steps', 'nav/toc', 'page/article', 'page/basic', 'site/footer',
   ]);
 });
 

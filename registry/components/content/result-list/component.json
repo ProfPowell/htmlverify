@@ -1,0 +1,36 @@
+{
+  "id": "content/result-list",
+  "version": "1.0.0",
+  "summary": "A numbered list of results, each a linked title with an optional summary and note.",
+  "use": "Search results, or another ranked list of pages. For related links, use a list in content/prose; for cards, content/card-list.",
+  "params": {
+    "results": {
+      "type": "list",
+      "minItems": 1,
+      "items": {
+        "title": {
+          "type": "text",
+          "minLength": 1
+        },
+        "href": {
+          "type": "url"
+        },
+        "summary": {
+          "type": "inline",
+          "required": false
+        },
+        "note": {
+          "type": "text",
+          "required": false,
+          "description": "Such as the section or the date."
+        }
+      }
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

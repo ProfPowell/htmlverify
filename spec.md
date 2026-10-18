@@ -570,9 +570,9 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 | `inline` | restricted phrasing HTML | text positions that accept phrasing content |
 | `prose` | restricted flow HTML | the sole content of a flow container |
 | `url` | string, parsed by WHATWG `URL` against the configured base | `href`, `src`, `action`, `formaction`, `cite`, `poster`, `data` |
-| `boolean` | `true` or `false` | boolean attributes (rendered `name="true"` or omitted), `vb-if` |
+| `boolean` | `true` or `false` | boolean attributes (rendered `name="true"` or omitted), `data-*` attributes nothing types (present or omitted, as in `li[data-completed]`), `vb-if` |
 | `enum` | one of `values` | enumerated attributes (values checked against the spec data or the vocabulary), `class`, and `data-*` attributes nothing types, whose values are the author's |
-| `integer` | number; `min`, `max` | numeric attributes (`width`, `height`, `colspan`, `rows`, …) |
+| `integer` | number; `min`, `max` | numeric attributes (`width`, `height`, `colspan`, `rows`, …), and `min`, `max`, and `value` on a number or range input |
 | `datetime` | HTML date/time microsyntax | `time[datetime]`, `ins[datetime]`, `del[datetime]` |
 | `lang` | well-formed BCP 47 tag | `lang`, `hreflang` |
 | `ref` | `{ "ref": "key/path" }`, another instance's ID; `accepts` lists the components it may name | ID-reference attributes (`commandfor`, `popovertarget`, `aria-controls`, …); in `href` it becomes `#id` |
@@ -582,9 +582,9 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 - **Never bindable**: `on*`, `style`, `srcdoc`, `srcset` and `sizes` (until a dedicated type exists), `script` and `style` contents, element and attribute names. There is no raw-HTML type.
 - **`inline` allowlist**: `a[href hreflang]`, `abbr[title]`, `b`, `bdi`, `br`, `cite`, `code`, `data[value]`, `del`, `dfn`, `em`, `i`, `ins`, `kbd`, `mark`, `q[cite]`, `s`, `samp`, `small`, `span`, `strong`, `sub`, `sup`, `time[datetime]`, `u`, `var`, `wbr`, plus the global `lang`, `dir`, and `title`. No `id`, `class`, `style`, or event attributes.
 - **`prose` allowlist**: the `inline` list plus `p`, `ul`, `ol[start reversed]`, `li`, `dl`, `dt`, `dd`, `blockquote[cite]`, `pre`, `hr`, `h2`–`h6`. Prose headings are relative: the highest-ranked one becomes context + 1, the others keep their offsets, and skipped levels are errors.
-- **Text attributes**: `alt`, `title`, `aria-label`, `aria-description`, `aria-roledescription`, `aria-valuetext`, `placeholder`, `name`, `value`, `content`, `label`, `abbr`, `data-*`, and custom-element attributes the vocabulary types as strings or leaves untyped. Only these and `class` take text around a binding (`title="Fish & {{dish}}"`, `class="card {{variant}}"`); in `class` the binding is an `enum` of single tokens. ARIA states aren't boolean attributes, so `aria-expanded` binds an `enum` of `"true"` and `"false"`. Every `enum` value must be valid for the attribute it binds, by the spec data, the ARIA data, or the vocabulary. `integer` binds attributes whose value type is an integer or a floating-point number, and custom-element attributes typed as numbers.
+- **Text attributes**: `alt`, `title`, `aria-label`, `aria-description`, `aria-roledescription`, `aria-valuetext`, `placeholder`, `name`, `value`, `content`, `label`, `abbr`, `data-*`, and custom-element attributes the vocabulary types as strings or leaves untyped. Only these and `class` take text around a binding (`title="Fish & {{dish}}"`, `class="card {{variant}}"`); in `class` the binding is an `enum` of single tokens. ARIA states aren't boolean attributes, so `aria-expanded` binds an `enum` of `"true"` and `"false"`. Every `enum` value must be valid for the attribute it binds, by the spec data, the ARIA data, or the vocabulary. `integer` binds attributes whose value type is an integer or a floating-point number, the limits and value of an input whose static type is number or range (the attribute index lists them as varying), and custom-element attributes typed as numbers.
 - **Values**: strings exclude control characters other than tab and line feed, carriage returns (write `\n`), lone surrogates, and noncharacters. A `url` has no surrounding spaces and passes the same URL syntax check as `content/attribute-value`, so assembly can't produce one that the checker rejects; its scheme is checked after parsing, so `jav&#x09;ascript:` and `JaVaScRiPt:` are caught too.
-- Restricted HTML is **validated, not sanitized**. An element outside the allowlist, a parse repair, or any `strict` error fails assembly, with the location inside the value. Nothing is silently dropped.
+- Restricted HTML is **validated, not sanitized**. An element outside the allowlist, a parse repair, or any `strict` error fails assembly, with the location inside the value. Nothing is silently dropped. The style rules are the exception: they judge how a value is written (quotes, case, `<br />`, boolean values), which the serializer rewrites in the house style anyway, and the output check applies them to what it writes.
 
 ### 9.6 Composition rules
 
@@ -598,7 +598,7 @@ Without a `hint`, the `output` isn't rendered and `@hint` is pruned from `aria-d
 
 **Heading ranks.** Instantiation runs in document order and tracks a current rank per instance, starting at the rank the instance received; a page starts at 0. A literal heading (page components only) sets the current rank to its level. An `vb-rank` heading renders at the received rank + 1 (or + n) and sets the current rank to that. A slot's children receive the current rank at the slot's position. A rank above 6 is `assembly/heading-depth`. Heading levels are correct by construction, however deep the nesting.
 
-**HTML nodes.** A plan node `{ "key": "…", "html": "…" }` inserts hand-written HTML where no component fits. It's parsed in its insertion context, must pass `strict`, and can't contain `script`, `style`, or event attributes. Each one is reported as a registry gap (§13). A project can forbid them with `"htmlNodes": false`.
+**HTML nodes.** A plan node `{ "key": "…", "html": "…" }` inserts hand-written HTML where no component fits. It's parsed in its insertion context, must pass `strict` apart from the style rules (§9.5), and can't contain `script`, `style`, or event attributes. Each one is reported as a registry gap (§13). A project can forbid them with `"htmlNodes": false`.
 
 ### 9.7 Plan
 
@@ -661,7 +661,7 @@ Assembly rules:
 
 | Rule | Error |
 | --- | --- |
-| `assembly/plan` | the plan violates its schema |
+| `assembly/plan` | the plan isn't valid JSON, in which case the message names a bracket that doesn't pair up, or it violates its schema |
 | `assembly/component` | unknown component or version; unreviewed or stale under `strict` |
 | `assembly/data` | parameter missing, unknown, of the wrong type, or out of its constraints |
 | `assembly/slot` | unknown slot, wrong count, or a child that doesn't fit |
@@ -701,14 +701,16 @@ Enough to build the page set in §13, on Vanilla Breeze 0.3.1. It ships in `regi
 
 | Group | Components (markup) |
 | --- | --- |
-| page | `page/basic`: charset first, viewport, color scheme, title "Title \| Site", description, `lang`, VB stylesheet, module script, and icon path, a skip link with the CSS VB doesn't ship, a site header with the home link and a `nav` slot, `main` with the `h1`, and a footer slot |
-| navigation | `nav/primary` (`nav.horizontal` around a list), `nav/breadcrumb` (`nav.breadcrumb` around an `ol`), `nav/pagination` (`nav.pagination` links), `nav/toc` (`page-toc` in its manual form, linking sections by ref) |
-| content | `content/section` (ranked heading, ID, `data-layout="stack"`), `content/prose` (`layout-text`), `content/figure`, `content/image`, `content/callout` (`status-message`), `content/card-list` (`layout-card` in a grid list), `content/faq` (`accordion-wc` with `details` and `summary`), `content/quote` (`figure.quote`) |
+| page | `page/basic`: charset first, viewport, color scheme, title "Title \| Site" (the site name alone when there's no title, as on the home page), description, `lang`, VB stylesheet, module script, and icon path, a skip link with the CSS VB doesn't ship, a site header with the home link and a `nav` slot, `main` with the `h1`, and a footer slot. `page/article`: the same shell, with `main` holding an `article.blog` whose header has the `h1`, subtitle, and byline in an `hgroup.byline`, and an `after` slot below the article |
+| navigation | `nav/primary` (`nav.horizontal` around a list), `nav/breadcrumb` (`nav.breadcrumb` around an `ol`), `nav/pagination` (`nav.pagination` links), `nav/toc` (`page-toc` in its manual form, linking sections by ref), `nav/steps` (`nav.steps` around an `ol`, with `data-completed` and `aria-current="step"`) |
+| content | `content/section` (ranked heading, ID, `data-layout="stack"`), `content/prose` (`layout-text`), `content/figure`, `content/image`, `content/callout` (`status-message`), `content/card-list` (`layout-card` in a grid list), `content/faq` (`accordion-wc` with `details` and `summary`), `content/quote` (`figure.quote`, its author optional for a pull quote), `content/address` (`address.contact`), `content/result-list` (an `ol` of ranked, linked headings) |
 | data | `data/table` (`data-table` around a `table` with a caption and scoped headers), `data/description-list` (`dl`) |
-| forms | `form/form` (`form.stacked`, actions in `footer.actions`), `form/text-field`, `form/textarea-field`, `form/select-field` (each in `form-field`, with hint and error `output`s), `form/choice-group` (radios in a `fieldset` with a `legend`), `form/checkbox` |
+| forms | `form/form` (`form.stacked`, actions in `footer.actions`; without an `action` it submits to its own page), `form/text-field`, `form/textarea-field`, `form/select-field`, `form/number-field`, `form/file-field` (each in `form-field`, with hint and error `output`s), `form/choice-group` and `form/checkbox-group` (radios or checkboxes in a `fieldset` with a `legend`), `form/checkbox`, `form/fieldset` (a `legend` over stacked fields), `form/search` (a `search` landmark around an inline `get` form) |
 | actions | `action/button` (`command` and `commandfor`, to a dialog), `action/submit`, `action/link-button` (`a.button`) |
 | overlays | `disclosure/details`, `disclosure/tabs` (`tab-set` over `details`), `dialog/modal` (`dialog` named by its heading, closed by invoker buttons; runtime checks in M4) |
-| site | `site/footer` (`footer.minimal` with `site-legal`, and a `nav` for other links) |
+| site | `site/footer` (`footer.minimal` with contact details in `address.footer`, `site-legal`, and a `nav` for other links) |
+
+The first condition C pilot (§13) shaped it: `page/article`, `content/address`, `content/result-list`, `nav/steps`, and five form components cover what its pages had to write as HTML nodes or leave out, and a form's `action`, a quote's author, and a footer's legal links became optional, since the content doesn't always have them. Two things stay out because a contract can't promise them yet: a preselected option or radio, since nothing says only one item may be selected, and a starting value for a text field, whose validity depends on its type.
 
 Every component's fixtures also pass Nu. Its one warning, "Section lacks heading", is on the body `section` of `dialog/modal`, which VB pads and which `aria-labelledby` names after the dialog's title. Nu doesn't count `aria-labelledby`; `semantic/section-heading` does, and Nu's alternative, a `div`, is what `policy/no-div` forbids.
 
@@ -767,18 +769,18 @@ Unknown keys, unknown rules, and invalid severities are errors. Every report inc
 
 ### 10.3 MCP server (M3)
 
-JSON-RPC over stdio, written directly (`initialize`, `tools/list`, `tools/call`; about 200 lines). If protocol churn makes upkeep costly, swap in the official SDK. Tools accept HTML as a string or a path, so they work without a shared filesystem:
+`htmlverify mcp [--draft] [--emit-failed] [--structured] [--config file]` speaks JSON-RPC over stdio, one message per line. It's written directly, in about 350 lines: `initialize`, `ping`, `tools/list`, and `tools/call`, with protocol versions 2024-11-05 to 2025-11-25. If protocol churn makes upkeep costly, swap in the official SDK. The config and registry are read once, at startup. Tools accept HTML or a plan inline or as a path, so they work without a shared filesystem; paths are relative to the server's working directory and can't leave it.
 
 | Tool | Input → output |
 | --- | --- |
-| `check_html` | `{ html \| path, context?, profile? }` → report |
-| `fix_html` | `{ html \| path }` → fixed HTML and remaining findings |
+| `check_html` | `{ html \| path, context?, profile? }` → report; without a context, input that doesn't start as a document is checked inside `body`, as the hook does |
+| `fix_html` | `{ html \| path, context? }` → fixed HTML and the findings left; nothing is written |
 | `list_components` | `{ query? }` → catalog |
 | `get_component` | `{ id }` → contract, example plan, rendered example |
-| `assemble` | `{ plan, out? }` → HTML and report |
+| `assemble` | `{ plan \| path, out? }` → report, with the page written to `out` when it passes, or else returned |
 | `explain_rule` | `{ rule }` → explanation |
 
-Each result returns the text format as content and the JSON report as `structuredContent`.
+Each result is the text format. With `--structured`, from protocol version 2025-06-18, it also carries the JSON as `structuredContent`. That's off by default because Claude Code hands a model the structured content instead of the text: in the first pilot the catalog reached the model as 24 KB of JSON instead of 4 KB of text, and the text is also what says what to do next. Programs that want the JSON can use the library or `--format json`. A bad call, such as an unknown argument, a path outside the working directory, or an unknown component or rule, is a tool error the model can correct, not a protocol error. `--draft` and `--emit-failed` mean what they mean for `assemble`. The server sets them, not the model, so a model can't choose to assemble unreviewed components. The server's instructions summarize §11.
 
 ### 10.4 Claude Code integration (M1)
 
@@ -886,19 +888,22 @@ Each brief runs 3 times per condition.
 
 Results, raw outputs, and the failure analysis go in `eval/results/`.
 
-**Harness (M1).** `eval/run.ts` runs conditions A and B; `eval/README.md` describes it.
+**Harness (M1, M3).** `eval/run.ts` runs the three conditions; `eval/README.md` describes it.
 
-- **Agent driver**: headless Claude Code (`claude -p`) in a fresh directory per run, with its own session, project settings only, and no MCP servers.
+- **Agent driver**: headless Claude Code (`claude -p`) in a fresh directory per run, with its own session, project settings only, and no MCP servers but, in C, htmlverify's. Each run keeps its transcript.
 - **Human driver**: the same directories, with instructions.
-- **House skills**: `eval/skills/`, a snapshot of Vanilla Breeze's at commit `1817856`.
+- **House skills**: `eval/skills/`, a snapshot of Vanilla Breeze's at commit `1817856`. Each run's copies drop the skills' `allowed-tools`, since headless Claude Code refuses a skill that grants tools; in the M1 pilot that refusal kept the skills from loading in A and B.
 - **Condition B** adds the htmlverify skill and the hook. The hook logs each round and stops blocking after 3.
+- **Condition C** adds the assembler skill (`assets/claude/assemble/SKILL.md`) and the MCP server, and denies the model's own writes to `.html` files, so the page has to be assembled. The server logs each assembly; after the third failing one, its result says to stop. A run with no passing assembly is scored on its last failing output, `page.failed.html`. `--draft` lets C assemble unreviewed components, for pilots before the registry is approved; `registry.json` records each component's version, digest, and review status for the run.
 - **Measurements**:
-  - The first attempt is B's first hook check, or A's final file.
-  - Repair rounds are failing hook checks.
+  - The first attempt is B's first hook check, C's first assembly, or A's final file.
+  - Repair rounds are failing hook checks, or in C failing assemblies.
+  - For C, also the HTML nodes in the last assembly and the origins of every assembly's errors.
   - The checklist is selectors over the parsed page.
   - Structural variance is the mean pairwise edit distance between element skeletons, normalized by the longer one.
 - **Rubric**: scoring by human raters or a calibrated agent judge isn't in the harness yet.
-- **First results**: `eval/results/2026-10-17-pilot/`, 5 briefs × 2 runs. With the loop, `strict` passes on all of them at the end, against none without it. Both conditions conform to HTML. The loop roughly halves structural variance and costs about 1.7 times as much.
+- **First results**: `eval/results/2026-10-17-pilot/`, 5 briefs × 2 runs. With the loop, `strict` passes on all of them at the end, against none without it. Both conditions conform to HTML. The loop roughly halves structural variance and costs about 1.7 times as much. The house skills didn't load in that pilot (see the house skills above).
+- **M3 pilot**: `eval/results/2026-10-18-pilot-abc/`, all 20 briefs once per condition, with C drafting. C passed every page on its first assembly. With the house skills loading, A passed none, and B passed all 20 at the end but none on its first write. Its README lists what C's first two rounds, in `2026-10-18-pilot-c-before/` and `-after/`, changed in the assembler, the registry, and the harness.
 
 ## 14. Milestones
 

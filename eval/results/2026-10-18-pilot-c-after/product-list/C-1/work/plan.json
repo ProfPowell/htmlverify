@@ -1,0 +1,35 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": { "title": "Backpacks", "site": "Packs", "description": "Backpacks category page: 8 products, sorted by popularity.", "heading": "Backpacks" },
+    "slots": {
+      "main": [
+        { "use": "content/prose", "key": "intro", "data": { "html": "<p>8 products, sorted by popularity.</p>" } },
+        { "use": "form/form", "key": "filters", "data": { "method": "get", "label": "Filters" },
+          "slots": {
+            "fields": [
+              { "use": "form/choice-group", "key": "capacity", "data": { "legend": "Capacity", "name": "capacity", "choices": [
+                { "value": "under-30", "label": "Under 30 L" }, { "value": "30-50", "label": "30–50 L" }, { "value": "over-50", "label": "Over 50 L" } ] } },
+              { "use": "form/choice-group", "key": "price", "data": { "legend": "Price", "name": "price", "choices": [
+                { "value": "under-100", "label": "Under $100" }, { "value": "100-200", "label": "$100–$200" }, { "value": "over-200", "label": "Over $200" } ] } },
+              { "use": "form/checkbox", "key": "in-stock", "data": { "label": "Only show items in stock", "name": "in-stock" } }
+            ],
+            "actions": [ { "use": "action/submit", "key": "apply", "data": { "label": "Apply filters" } } ]
+          } },
+        { "use": "content/result-list", "key": "products", "data": { "results": [
+          { "title": "Ridgeline 40 L", "href": "/shop/ridgeline-40", "summary": "$189 · Rated 4.7 out of 5", "note": "In stock" },
+          { "title": "Day Hiker 22 L", "href": "/shop/day-hiker-22", "summary": "$79 · Rated 4.5 out of 5", "note": "In stock" },
+          { "title": "Summit 55 L", "href": "/shop/summit-55", "summary": "$249 · Rated 4.8 out of 5", "note": "2 left" },
+          { "title": "Commuter 18 L", "href": "/shop/commuter-18", "summary": "$64 · Rated 4.2 out of 5", "note": "In stock" },
+          { "title": "Trailhead 30 L", "href": "/shop/trailhead-30", "summary": "$119 · Rated 4.4 out of 5", "note": "Out of stock" },
+          { "title": "Expedition 70 L", "href": "/shop/expedition-70", "summary": "$329 · Rated 4.9 out of 5", "note": "In stock" },
+          { "title": "Kids' Explorer 12 L", "href": "/shop/explorer-12", "summary": "$45 · Rated 4.6 out of 5", "note": "In stock" },
+          { "title": "Ultralight 35 L", "href": "/shop/ultralight-35", "summary": "$215 · Rated 4.3 out of 5", "note": "In stock" } ] } },
+        { "use": "nav/pagination", "key": "pages", "data": { "next": "/shop/backpacks?page=2", "pages": [
+          { "label": "1", "href": "/shop/backpacks?page=1", "current": "page" },
+          { "label": "2", "href": "/shop/backpacks?page=2" },
+          { "label": "3", "href": "/shop/backpacks?page=3" } ] } }
+      ]
+    }
+  }
+}

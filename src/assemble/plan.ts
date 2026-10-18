@@ -2,6 +2,7 @@
 // their slots. Unknown properties are errors at every level, so typos fail
 // loudly; keys follow §9.6.
 
+import { LineIndex } from '../parse/lines.ts';
 import { at, isObject } from './params.ts';
 
 export interface PlanInstance {
@@ -133,3 +134,41 @@ export function parsePlan(raw: unknown): { plan: Plan | null; problems: PlanProb
   return { plan: problems.length ? null : plan, problems };
 }
 
+
+/**
+ * For plan text that isn't valid JSON: the first bracket that doesn't pair
+ * up, named by its key, which a parser's own message ("Expected ',' or '}'")
+ * leaves the reader to find. Null when the brackets balance.
+ */
+export function unmatchedBracket(text: string): { offset: number; message: string } | null {
+  const lines = new LineIndex(text);
+  const at = (offset: number) => {
+    const p = lines.position(offset);
+    return `${p.line}:${p.column}`;
+  };
+  const open: { char: string; offset: number; key: string | null }[] = [];
+  const name = (b: (typeof open)[number]) => `the "${b.char}"${b.key === null ? '' : ` of "${b.key}"`} at ${at(b.offset)}`;
+  const closer = (char: string) => (char === '{' ? '}' : ']');
+  let key: string | null = null;
+  let last: string | null = null;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]!;
+    if (c === '"') {
+      let j = i + 1;
+      while (j < text.length && text[j] !== '"') j += text[j] === '\\' ? 2 : 1;
+      last = text.slice(i + 1, j);
+      i = j;
+    } else if (c === ':') key = last;
+    else if (c === '{' || c === '[') {
+      open.push({ char: c, offset: i, key });
+      key = null;
+    } else if (c === '}' || c === ']') {
+      const top = open.pop();
+      if (!top) return { offset: i, message: `the "${c}" at ${at(i)} closes nothing, since the brackets before it balance; remove it` };
+      if (closer(top.char) !== c) return { offset: i, message: `the "${c}" at ${at(i)} can’t close ${name(top)}, which needs "${closer(top.char)}"` };
+      key = null;
+    } else if (c === ',') key = null;
+  }
+  const top = open.at(-1);
+  return top ? { offset: top.offset, message: `${name(top)} is never closed; add its "${closer(top.char)}"` } : null;
+}

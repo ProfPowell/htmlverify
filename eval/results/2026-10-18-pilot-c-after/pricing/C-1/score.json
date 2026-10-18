@@ -1,0 +1,150 @@
+{
+  "brief": "pricing",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "fail",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 2,
+  "capped": false,
+  "assembly": {
+    "calls": 3,
+    "gaps": 3,
+    "origins": {
+      "plan": 6
+    },
+    "handWritten": false
+  },
+  "denials": 1,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 5,
+    "of": 5,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "plans",
+        "met": true,
+        "found": 12
+      },
+      {
+        "id": "table",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "headers",
+        "met": true,
+        "found": 7
+      },
+      {
+        "id": "actions",
+        "met": true,
+        "found": 5
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "section",
+    "h2",
+    "section",
+    "h3",
+    "layout-text",
+    "p",
+    "ul",
+    "li",
+    "li",
+    "button",
+    "section",
+    "h3",
+    "layout-text",
+    "p",
+    "p",
+    "ul",
+    "li",
+    "li",
+    "button",
+    "section",
+    "h3",
+    "layout-text",
+    "p",
+    "ul",
+    "li",
+    "li",
+    "li",
+    "button",
+    "section",
+    "h2",
+    "data-table",
+    "table",
+    "caption",
+    "thead",
+    "tr",
+    "th",
+    "th",
+    "th",
+    "tbody",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "tr",
+    "th",
+    "td",
+    "td",
+    "td",
+    "layout-text",
+    "p"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 2869,
+    "cacheRead": 215304,
+    "cacheWrite": 14422
+  },
+  "costUsd": 0.10807669999999998,
+  "wallMs": 22296,
+  "turns": 13
+}

@@ -1,0 +1,66 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "Search results for rain jacket",
+      "site": "Search",
+      "description": "Search results for \"rain jacket\": 5 results.",
+      "heading": "Search results"
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "form/search",
+          "key": "search",
+          "data": { "name": "q", "value": "rain jacket", "button": "Search", "label": "Search" }
+        },
+        {
+          "use": "content/prose",
+          "key": "summary",
+          "data": { "html": "<p>Search results for \"rain jacket\": 5 results.</p>" }
+        },
+        {
+          "use": "content/section",
+          "key": "filters",
+          "data": { "title": "Filters" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/prose",
+                "key": "filter-list",
+                "data": { "html": "<ul><li>Shop (3)</li><li>Workshops (1)</li><li>Blog (1)</li></ul>" }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "results",
+          "data": { "title": "Results" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/result-list",
+                "key": "result-list",
+                "data": {
+                  "results": [
+                    { "title": "Drift rain jacket", "href": "/shop/drift-jacket", "summary": "A packable 2.5-layer shell for spring hiking.", "note": "Shop" },
+                    { "title": "Storm Line rain jacket", "href": "/shop/storm-line", "summary": "Fully taped seams and a stiff brim for coastal storms.", "note": "Shop" },
+                    { "title": "Kids' Puddle jacket", "href": "/shop/puddle-jacket", "summary": "Reflective trim and room to grow.", "note": "Shop" },
+                    { "title": "Waterproofing your shell", "href": "/workshops/waterproofing", "summary": "Bring your jacket; we'll reproof it with you.", "note": "Workshops" },
+                    { "title": "How we test rain gear", "href": "/blog/rain-testing", "summary": "Two weeks in a coastal rainforest.", "note": "Blog" }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "nav/pagination",
+          "key": "pagination",
+          "data": { "pages": [ { "label": "1", "href": "?page=1", "current": "page" } ] }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{"page":{"use":"page/basic","data":{"title":"Winter Skills Weekend","site":"Winter Skills Weekend","description":"Two days of hands-on practice for winter travel: avalanche awareness, snowshoe technique, and building a snow shelter. For adults with basic hiking experience.","heading":"Winter Skills Weekend"},"slots":{"main":[
+{"use":"content/section","key":"details","data":{"title":"Details"},"slots":{"body":[
+{"use":"data/description-list","key":"facts","data":{"items":[
+{"term":"When","description":"Saturday 6 to Sunday 7 December 2026"},
+{"term":"Where","description":"Hollow Pine Camp, 88 Ridge Road, Mount Alder"},
+{"term":"Price","description":"$180 for members, $220 for others. Includes meals and a bunk."},
+{"term":"Spaces left","description":"6 of 24"}]}}]}},
+{"use":"content/section","key":"schedule","data":{"title":"Schedule"},"slots":{"body":[
+{"use":"data/table","key":"saturday","data":{"caption":"Saturday 6 December","columns":["Time","Session"],"rows":[
+{"header":"9:00","cells":["Arrival and gear check"]},
+{"header":"10:00","cells":["Avalanche awareness"]},
+{"header":"14:00","cells":["Snowshoe technique"]}]}},
+{"use":"data/table","key":"sunday","data":{"caption":"Sunday 7 December","columns":["Time","Session"],"rows":[
+{"header":"9:00","cells":["Snow shelters"]},
+{"header":"13:00","cells":["Debrief and lunch"]}]}}]}},
+{"use":"content/section","key":"registration","data":{"title":"Registration"},"slots":{"body":[
+{"use":"form/form","key":"register","data":{"action":"#","method":"post","label":"Registration"},"slots":{"fields":[
+{"use":"form/text-field","key":"name","data":{"label":"Name","name":"name","autocomplete":"name","required":true}},
+{"use":"form/text-field","key":"email","data":{"label":"Email","name":"email","type":"email","autocomplete":"email","required":true}},
+{"use":"form/text-field","key":"membership","data":{"label":"Membership number (optional)","name":"membership"}},
+{"use":"form/textarea-field","key":"dietary","data":{"label":"Dietary needs","name":"dietary"}}],
+"actions":[{"use":"action/submit","key":"register","data":{"label":"Register"}}]}}]}}]}}}]}}

@@ -1,0 +1,120 @@
+{
+  "brief": "about",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 2,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 4,
+    "of": 5,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "sections",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "principles",
+        "met": true,
+        "found": 3
+      },
+      {
+        "id": "quote",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "milestone-times",
+        "met": false,
+        "found": 0
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "section",
+    "h2",
+    "layout-text",
+    "p",
+    "section",
+    "h2",
+    "layout-text",
+    "ol",
+    "li",
+    "li",
+    "li",
+    "section",
+    "h2",
+    "dl",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "dt",
+    "dd",
+    "figure",
+    "blockquote",
+    "p",
+    "figcaption",
+    "cite",
+    "layout-text",
+    "ul",
+    "li",
+    "a",
+    "li",
+    "a"
+  ],
+  "tokens": {
+    "input": 10,
+    "output": 2149,
+    "cacheRead": 171629,
+    "cacheWrite": 11725
+  },
+  "costUsd": 0.0857182,
+  "wallMs": 21840,
+  "turns": 10
+}

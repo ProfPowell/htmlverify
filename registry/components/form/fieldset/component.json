@@ -1,0 +1,26 @@
+{
+  "id": "form/fieldset",
+  "version": "1.0.0",
+  "summary": "A titled group of related fields in a form.",
+  "use": "A section of a longer form, such as a profile's fields or a shipping address. For one question answered with radio buttons or checkboxes, use form/choice-group or form/checkbox-group, which are fieldsets themselves.",
+  "context": "form",
+  "params": {
+    "legend": {
+      "type": "text",
+      "minLength": 1,
+      "description": "The group's title."
+    }
+  },
+  "slots": {
+    "fields": {
+      "min": 1,
+      "description": "The group's fields."
+    }
+  },
+  "provenance": {
+    "authors": [
+      "htmlverify starter registry"
+    ],
+    "aiAssisted": true
+  }
+}

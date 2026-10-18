@@ -1,0 +1,140 @@
+{
+  "brief": "sign-up",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 7,
+    "of": 7,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "password",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "interests",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "checkboxes",
+        "met": true,
+        "found": 6
+      },
+      {
+        "id": "labels",
+        "met": true,
+        "found": 10
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "layout-text",
+    "p",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "output",
+    "form-field",
+    "label",
+    "input",
+    "fieldset",
+    "legend",
+    "layout-stack",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "form-field",
+    "label",
+    "input",
+    "a",
+    "footer",
+    "button",
+    "layout-text",
+    "p",
+    "a"
+  ],
+  "tokens": {
+    "input": 12,
+    "output": 1845,
+    "cacheRead": 213448,
+    "cacheWrite": 15587
+  },
+  "costUsd": 0.10230610000000001,
+  "wallMs": 17591,
+  "turns": 15
+}

@@ -31,6 +31,13 @@ export interface CheckInput {
   context?: string | null;
 }
 
+/** The context for input that doesn't name one: null for a document, which starts with a doctype or <html>, else "body". */
+export function inferContext(source: Uint8Array | string): string | null {
+  const start = typeof source === 'string' ? source.slice(0, 4096) : new TextDecoder().decode(source.slice(0, 4096));
+  const head = start.replace(/^﻿/, '').replace(/^(?:\s|<!--[\s\S]*?-->)*/, '');
+  return /^<(?:!doctype|html[\s>])/i.test(head) ? null : 'body';
+}
+
 export interface CheckOptions {
   /** The built-in profile; defaults to the config's `extends`, then strict. */
   profile?: ProfileName;

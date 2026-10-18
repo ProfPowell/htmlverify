@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Checkout: shipping address | Checkout</title>
+  <meta name="description" content="Checkout, step 2 of 3: Shipping address." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Checkout</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Checkout: shipping address</h1>
+    <nav aria-label="Checkout progress">
+      <ol>
+        <li>1 Cart (done)</li>
+        <li aria-current="step">2 Shipping (current)</li>
+        <li>3 Payment</li>
+      </ol>
+    </nav>
+    <section id="address" aria-labelledby="address-title" data-layout="stack">
+      <h2 id="address-title">Shipping address</h2>
+      <form action="/checkout/payment" method="post" class="stacked" aria-label="Shipping address">
+        <form-field>
+          <label for="address-form-full-name-input">Full name</label>
+          <input id="address-form-full-name-input" type="text" name="full-name" autocomplete="name" required="true" />
+        </form-field>
+        <form-field>
+          <label for="address-form-address-1-input">Address line 1</label>
+          <input id="address-form-address-1-input" type="text" name="address-line1" autocomplete="address-line1" required="true" />
+        </form-field>
+        <form-field>
+          <label for="address-form-address-2-input">Address line 2 (optional)</label>
+          <input id="address-form-address-2-input" type="text" name="address-line2" autocomplete="address-line2" />
+        </form-field>
+        <form-field>
+          <label for="address-form-city-input">City</label>
+          <input id="address-form-city-input" type="text" name="city" autocomplete="address-level2" required="true" />
+        </form-field>
+        <form-field>
+          <label for="address-form-region-input">State or region</label>
+          <input id="address-form-region-input" type="text" name="region" autocomplete="address-level1" required="true" />
+        </form-field>
+        <form-field>
+          <label for="address-form-postal-code-input">Postal code</label>
+          <input id="address-form-postal-code-input" type="text" name="postal-code" autocomplete="postal-code" required="true" />
+        </form-field>
+        <form-field>
+          <label for="address-form-country-input">Country</label>
+          <select id="address-form-country-input" name="country" required="true">
+            <option value="">Choose…</option>
+            <option value="us">United States</option>
+            <option value="ca">Canada</option>
+            <option value="mx">Mexico</option>
+          </select>
+        </form-field>
+        <form-field>
+          <label for="address-form-phone-input">Phone</label>
+          <input id="address-form-phone-input" type="tel" name="phone" autocomplete="tel" required="true" aria-describedby="address-form-phone-hint" />
+          <output id="address-form-phone-hint" class="hint" for="address-form-phone-input">For the courier</output>
+        </form-field>
+        <form-field data-type="checkbox"><label><input type="checkbox" name="billing-same" /> Billing address is the same</label></form-field>
+        <fieldset>
+          <legend>Shipping speed</legend>
+          <layout-stack data-layout-gap="xs">
+            <form-field data-type="radio"><label><input type="radio" name="shipping-speed" value="standard" required="true" /> Standard, 5–7 days, free</label></form-field>
+            <form-field data-type="radio"><label><input type="radio" name="shipping-speed" value="express" required="true" /> Express, 2 days, $12</label></form-field>
+          </layout-stack>
+        </fieldset>
+        <footer class="actions end"><button type="submit">Continue to payment</button><a href="/cart" class="button secondary">Back to cart</a></footer>
+      </form>
+    </section>
+    <section id="summary" aria-labelledby="summary-title" data-layout="stack">
+      <h2 id="summary-title">Order summary</h2>
+      <dl>
+        <dt>Ridgeline 40 L × 1</dt>
+        <dd>$189</dd>
+        <dt>Shipping</dt>
+        <dd>$0</dd>
+        <dt>Total</dt>
+        <dd>$189</dd>
+      </dl>
+    </section>
+  </main>
+</body>
+</html>

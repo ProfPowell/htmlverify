@@ -1,0 +1,13 @@
+{
+  "data": {
+    "label": "Guests",
+    "name": "guests",
+    "min": 1,
+    "max": 8,
+    "step": 1,
+    "value": 2,
+    "required": true,
+    "hint": "Up to 8 per booking.",
+    "error": "Choose 1 to 8 guests."
+  }
+}

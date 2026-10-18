@@ -1,0 +1,75 @@
+{
+  "page": {
+    "use": "page/basic",
+    "data": {
+      "title": "The Trail Report",
+      "site": "The Trail Report",
+      "description": "The Trail Report is the co-op's monthly newsletter: trail and water conditions, early workshop booking, repair tips and the used-gear sale date.",
+      "heading": "The Trail Report, once a month, never more."
+    },
+    "slots": {
+      "main": [
+        {
+          "use": "content/section",
+          "key": "what-you-get",
+          "data": { "title": "What you get" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/prose",
+                "key": "benefits",
+                "data": {
+                  "html": "<ul><li>Trail and water conditions from members who were just there</li><li>Early booking for workshops</li><li>Repair tips from the workshop</li><li>The used-gear sale date, a week early</li></ul>"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "sign-up",
+          "data": { "title": "Sign up" },
+          "slots": {
+            "body": [
+              {
+                "use": "form/form",
+                "key": "subscribe-form",
+                "slots": {
+                  "fields": [
+                    {
+                      "use": "form/text-field",
+                      "key": "email",
+                      "data": { "label": "Email", "name": "email", "type": "email", "autocomplete": "email", "required": true }
+                    }
+                  ],
+                  "actions": [
+                    { "use": "action/submit", "key": "subscribe", "data": { "label": "Subscribe" } }
+                  ]
+                }
+              },
+              {
+                "use": "content/prose",
+                "key": "fine-print",
+                "data": { "html": "<p><small>We send one email a month. Unsubscribe from any issue.</small></p>" }
+              }
+            ]
+          }
+        },
+        {
+          "use": "content/section",
+          "key": "readers",
+          "data": { "title": "6,200 readers" },
+          "slots": {
+            "body": [
+              {
+                "use": "content/quote",
+                "key": "jo",
+                "data": { "quote": "The only newsletter I read the day it arrives.", "author": "Jo" }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

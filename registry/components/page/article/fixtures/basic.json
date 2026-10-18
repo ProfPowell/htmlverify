@@ -1,0 +1,58 @@
+{
+  "data": {
+    "title": "Shipping in winter",
+    "site": "Acme",
+    "description": "How we pack orders when it's freezing.",
+    "heading": "Shipping in winter",
+    "byline": "By Ana Ruiz · <time datetime=\"2026-01-12\">12 January 2026</time>"
+  },
+  "slots": {
+    "body": [
+      {
+        "use": "content/prose",
+        "key": "intro",
+        "data": {
+          "html": "<p>Cold doesn't stop the vans, but it changes how we pack.</p>"
+        }
+      },
+      {
+        "use": "content/section",
+        "key": "padding",
+        "data": {
+          "title": "More padding"
+        },
+        "slots": {
+          "body": [
+            {
+              "use": "content/prose",
+              "key": "text",
+              "data": {
+                "html": "<p>Liquids get a second box.</p>"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "after": [
+      {
+        "use": "content/section",
+        "key": "related",
+        "data": {
+          "title": "Related posts"
+        },
+        "slots": {
+          "body": [
+            {
+              "use": "content/prose",
+              "key": "links",
+              "data": {
+                "html": "<ul><li><a href=\"/blog/returns\">Returns made simple</a></li></ul>"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

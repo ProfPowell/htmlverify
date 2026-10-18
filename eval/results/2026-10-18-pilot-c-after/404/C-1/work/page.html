@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Page not found | Shop</title>
+  <meta name="description" content="Error 404: page not found." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Shop</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Page not found</h1>
+    <layout-text>
+      <p>We couldn't find that page. It may have moved when we redesigned the shop.</p>
+    </layout-text>
+    <search>
+      <form action="/search" method="get" class="inline">
+        <label for="search-input">Search</label>
+        <input id="search-input" type="search" name="q" />
+        <button type="submit">Search</button>
+      </form>
+    </search>
+    <layout-text>
+      <ul>
+        <li><a href="/shop/packs">Shop backpacks</a></li>
+        <li><a href="/rentals">Rental gear</a></li>
+        <li><a href="/workshops">Workshops</a></li>
+        <li><a href="/contact">Contact us</a></li>
+      </ul>
+      <p><a href="/">Back to the home page</a></p>
+    </layout-text>
+  </main>
+</body>
+</html>

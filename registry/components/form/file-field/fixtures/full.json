@@ -1,0 +1,10 @@
+{
+  "data": {
+    "label": "Documents",
+    "name": "documents",
+    "multiple": true,
+    "required": true,
+    "hint": "PDFs, up to 10 MB each.",
+    "error": "Attach at least one document."
+  }
+}

@@ -1,0 +1,9 @@
+{"page":{"use":"page/basic","data":{"title":"The Trail Report","site":"The Trail Report","description":"Landing page for The Trail Report, the co-op's monthly newsletter.","heading":"The Trail Report, once a month, never more."},"slots":{"main":[
+{"key":"what-you-get","use":"content/section","data":{"title":"What you get"},"slots":{"body":[{"key":"list","use":"content/prose","data":{"html":"<ul><li>Trail and water conditions from members who were just there</li><li>Early booking for workshops</li><li>Repair tips from the workshop</li><li>The used-gear sale date, a week early</li></ul>"}}]}},
+{"key":"sign-up","use":"content/section","data":{"title":"Sign up"},"slots":{"body":[
+{"key":"form","use":"form/form","data":{"action":"/subscribe","method":"post","label":"Sign up"},"slots":{"fields":[{"key":"email","use":"form/text-field","data":{"label":"Email","name":"email","type":"email","autocomplete":"email","required":true}}],"actions":[{"key":"subscribe","use":"action/submit","data":{"label":"Subscribe"}}]}},
+{"key":"fine-print","use":"content/prose","data":{"html":"<p>We send one email a month. Unsubscribe from any issue.</p>"}}]}},
+{"key":"readers","use":"content/section","data":{"title":"Readers"},"slots":{"body":[
+{"key":"count","use":"content/prose","data":{"html":"<p>6,200 readers.</p>"}},
+{"key":"quote","use":"content/quote","data":{"quote":"The only newsletter I read the day it arrives.","author":"Jo"}}]}}
+]}}}

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Larkspur Supply Co.</title>
+  <link rel="stylesheet" href="/vb/vanilla-breeze.css" />
+  <script src="/vb/vanilla-breeze.js" defer="true"></script>
+</head>
+<body>
+  <header>
+    <h1>Contact Larkspur Supply Co.</h1>
+  </header>
+
+  <main id="main">
+    <section aria-labelledby="visit-heading">
+      <h2 id="visit-heading">Visit</h2>
+      <address>
+        <p>214 Alder Street, Port Wren, WA 98301</p>
+        <p>Phone: <a href="tel:+13605550142">(360) 555-0142</a></p>
+        <p>Email: <a href="mailto:hello@larkspur.coop">hello@larkspur.coop</a></p>
+      </address>
+    </section>
+
+    <section aria-labelledby="hours-heading">
+      <h2 id="hours-heading">Hours</h2>
+      <ul>
+        <li>Monday–Saturday 9:00–19:00</li>
+        <li>Sunday 10:00–17:00</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="form-heading">
+      <h2 id="form-heading">Contact form</h2>
+      <form action="/api/contact" method="post">
+        <form-field>
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" required="true" autocomplete="name" />
+        </form-field>
+
+        <form-field>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required="true" autocomplete="email" />
+        </form-field>
+
+        <form-field>
+          <label for="topic">Topic</label>
+          <select id="topic" name="topic">
+            <option value="membership">Membership</option>
+            <option value="rentals">Rentals</option>
+            <option value="repairs">Repairs</option>
+            <option value="other">Something else</option>
+          </select>
+        </form-field>
+
+        <form-field>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required="true"></textarea>
+        </form-field>
+
+        <form-field>
+          <label for="copy">
+            <input type="checkbox" id="copy" name="copy" />
+            Send me a copy
+          </label>
+        </form-field>
+
+        <button type="submit">Send message</button>
+      </form>
+      <p>We answer within one business day.</p>
+    </section>
+
+    <section aria-labelledby="getting-heading">
+      <h2 id="getting-heading">Getting here</h2>
+      <p>Bus routes 4 and 11 stop at Alder and 3rd. Free bike parking out front; paid parking in the Harbor Street garage.</p>
+    </section>
+  </main>
+</body>
+</html>

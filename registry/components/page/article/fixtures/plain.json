@@ -1,0 +1,18 @@
+{
+  "data": {
+    "site": "Acme",
+    "description": "Our notes on the year.",
+    "heading": "A year in review"
+  },
+  "slots": {
+    "body": [
+      {
+        "use": "content/prose",
+        "key": "text",
+        "data": {
+          "html": "<p>It was a busy year.</p>"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,1426 @@
+{
+  "rows": [
+    {
+      "condition": "C",
+      "runs": 20,
+      "passFirst": 16,
+      "passFinal": 19,
+      "passStandard": 19,
+      "errorsStandard": 0,
+      "capped": 1,
+      "medianRounds": 0,
+      "errorsPerPage": {},
+      "errorsTotal": 0,
+      "checklist": 0.8157142857142858,
+      "variance": null,
+      "gaps": 0.55,
+      "origins": {
+        "plan": 11
+      },
+      "handWritten": 0,
+      "denials": 17,
+      "outputTokens": 1979.6,
+      "costUsd": 0.088776105,
+      "wallSeconds": 19.084149999999998
+    }
+  ],
+  "runs": [
+    {
+      "brief": "404",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 4,
+        "of": 4,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "search",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "search-input",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "links",
+            "met": true,
+            "found": 5
+          }
+        ]
+      },
+      "tokens": {
+        "input": 8,
+        "output": 909,
+        "cacheRead": 133039,
+        "cacheWrite": 10013
+      },
+      "costUsd": 0.0626017,
+      "wallMs": 11427,
+      "turns": 7
+    },
+    {
+      "brief": "about",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 2,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 4,
+        "of": 5,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "sections",
+            "met": true,
+            "found": 3
+          },
+          {
+            "id": "principles",
+            "met": true,
+            "found": 3
+          },
+          {
+            "id": "quote",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "milestone-times",
+            "met": false,
+            "found": 0
+          }
+        ]
+      },
+      "tokens": {
+        "input": 10,
+        "output": 2149,
+        "cacheRead": 171629,
+        "cacheWrite": 11725
+      },
+      "costUsd": 0.0857182,
+      "wallMs": 21840,
+      "turns": 10
+    },
+    {
+      "brief": "article",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 1,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 1,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 4,
+        "of": 5,
+        "items": [
+          {
+            "id": "article",
+            "met": false,
+            "found": 0
+          },
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "published",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "sections",
+            "met": true,
+            "found": 6
+          },
+          {
+            "id": "figure",
+            "met": true,
+            "found": 1
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 2074,
+        "cacheRead": 210200,
+        "cacheWrite": 12815
+      },
+      "costUsd": 0.0933108,
+      "wallMs": 19894,
+      "turns": 14
+    },
+    {
+      "brief": "checkout-address",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 1,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 1,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 7,
+        "of": 7,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "form",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "autocomplete",
+            "met": true,
+            "found": 7
+          },
+          {
+            "id": "country",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "speed",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "radios",
+            "met": true,
+            "found": 2
+          },
+          {
+            "id": "labels",
+            "met": true,
+            "found": 11
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 2169,
+        "cacheRead": 210091,
+        "cacheWrite": 13539
+      },
+      "costUsd": 0.0970194,
+      "wallMs": 21042,
+      "turns": 9
+    },
+    {
+      "brief": "contact",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 1,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 6,
+        "of": 7,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "form",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "email",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "textarea",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "labels",
+            "met": true,
+            "found": 5
+          },
+          {
+            "id": "required",
+            "met": true,
+            "found": 3
+          },
+          {
+            "id": "address",
+            "met": false,
+            "found": 0
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 1664,
+        "cacheRead": 209671,
+        "cacheWrite": 13330
+      },
+      "costUsd": 0.0910909,
+      "wallMs": 15907,
+      "turns": 12
+    },
+    {
+      "brief": "data-report",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 2,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 5,
+        "of": 5,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "table",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "caption",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "headers",
+            "met": true,
+            "found": 5
+          },
+          {
+            "id": "rows",
+            "met": true,
+            "found": 5
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 1799,
+        "cacheRead": 209242,
+        "cacheWrite": 12060
+      },
+      "costUsd": 0.08732300000000001,
+      "wallMs": 17096,
+      "turns": 11
+    },
+    {
+      "brief": "docs",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 5,
+        "of": 5,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "nav",
+            "met": true,
+            "found": 9
+          },
+          {
+            "id": "code",
+            "met": true,
+            "found": 4
+          },
+          {
+            "id": "params",
+            "met": true,
+            "found": 5
+          },
+          {
+            "id": "sections",
+            "met": true,
+            "found": 3
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 1988,
+        "cacheRead": 210293,
+        "cacheWrite": 13428
+      },
+      "costUsd": 0.09491559999999999,
+      "wallMs": 21482,
+      "turns": 14
+    },
+    {
+      "brief": "event",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": false,
+      "pageFile": null,
+      "status": {
+        "first": "fail",
+        "final": null
+      },
+      "standard": {
+        "status": null,
+        "errors": 0
+      },
+      "rounds": 3,
+      "capped": true,
+      "assembly": {
+        "calls": 3,
+        "gaps": 0,
+        "origins": {
+          "plan": 3
+        },
+        "handWritten": false
+      },
+      "denials": 2,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 0,
+        "of": 6,
+        "items": []
+      },
+      "tokens": {
+        "input": 14,
+        "output": 3939,
+        "cacheRead": 252322,
+        "cacheWrite": 13205
+      },
+      "costUsd": 0.1176145,
+      "wallMs": 31245,
+      "turns": 14
+    },
+    {
+      "brief": "faq",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 1,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 3,
+        "of": 3,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "questions",
+            "met": true,
+            "found": 6
+          },
+          {
+            "id": "contact-link",
+            "met": true,
+            "found": 3
+          }
+        ]
+      },
+      "tokens": {
+        "input": 14,
+        "output": 1910,
+        "cacheRead": 246524,
+        "cacheWrite": 11710
+      },
+      "costUsd": 0.09076469999999999,
+      "wallMs": 17538,
+      "turns": 11
+    },
+    {
+      "brief": "home",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 1,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 5,
+        "of": 6,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "nav",
+            "met": true,
+            "found": 5
+          },
+          {
+            "id": "main",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "featured-imgs",
+            "met": false,
+            "found": 0
+          },
+          {
+            "id": "footer",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "time",
+            "met": true,
+            "found": 2
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 2243,
+        "cacheRead": 210822,
+        "cacheWrite": 13416
+      },
+      "costUsd": 0.09734550000000002,
+      "wallMs": 20809,
+      "turns": 14
+    },
+    {
+      "brief": "legal",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "fail",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 1,
+      "capped": false,
+      "assembly": {
+        "calls": 2,
+        "gaps": 0,
+        "origins": {
+          "plan": 6
+        },
+        "handWritten": false
+      },
+      "denials": 3,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 3,
+        "of": 4,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "sections",
+            "met": true,
+            "found": 6
+          },
+          {
+            "id": "toc",
+            "met": true,
+            "found": 6
+          },
+          {
+            "id": "updated",
+            "met": false,
+            "found": 0
+          }
+        ]
+      },
+      "tokens": {
+        "input": 16,
+        "output": 3706,
+        "cacheRead": 291719,
+        "cacheWrite": 14100
+      },
+      "costUsd": 0.12290519999999998,
+      "wallMs": 32893,
+      "turns": 13
+    },
+    {
+      "brief": "newsletter",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "fail",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 1,
+      "capped": false,
+      "assembly": {
+        "calls": 2,
+        "gaps": 0,
+        "origins": {
+          "plan": 1
+        },
+        "handWritten": false
+      },
+      "denials": 2,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 6,
+        "of": 6,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "benefits",
+            "met": true,
+            "found": 4
+          },
+          {
+            "id": "form",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "email",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "label",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "quote",
+            "met": true,
+            "found": 1
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 2346,
+        "cacheRead": 210813,
+        "cacheWrite": 12688
+      },
+      "costUsd": 0.0954616,
+      "wallMs": 20002,
+      "turns": 12
+    },
+    {
+      "brief": "press-release",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 1,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 2,
+        "of": 5,
+        "items": [
+          {
+            "id": "article",
+            "met": false,
+            "found": 0
+          },
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "date",
+            "met": false,
+            "found": 0
+          },
+          {
+            "id": "quote",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "email-link",
+            "met": false,
+            "found": 0
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 1421,
+        "cacheRead": 210129,
+        "cacheWrite": 12914
+      },
+      "costUsd": 0.0870482,
+      "wallMs": 16087,
+      "turns": 11
+    },
+    {
+      "brief": "pricing",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 1,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 1,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 5,
+        "of": 5,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "plans",
+            "met": true,
+            "found": 5
+          },
+          {
+            "id": "table",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "headers",
+            "met": true,
+            "found": 7
+          },
+          {
+            "id": "actions",
+            "met": true,
+            "found": 5
+          }
+        ]
+      },
+      "tokens": {
+        "input": 8,
+        "output": 1418,
+        "cacheRead": 133350,
+        "cacheWrite": 10825
+      },
+      "costUsd": 0.07119629999999999,
+      "wallMs": 15234,
+      "turns": 8
+    },
+    {
+      "brief": "product-detail",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 1,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 6,
+        "of": 7,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "form",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "submit",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "selects",
+            "met": true,
+            "found": 6
+          },
+          {
+            "id": "specs",
+            "met": true,
+            "found": 5
+          },
+          {
+            "id": "breadcrumb",
+            "met": true,
+            "found": 3
+          },
+          {
+            "id": "imgs",
+            "met": false,
+            "found": 0
+          }
+        ]
+      },
+      "tokens": {
+        "input": 8,
+        "output": 2162,
+        "cacheRead": 133695,
+        "cacheWrite": 12304
+      },
+      "costUsd": 0.0843613,
+      "wallMs": 19679,
+      "turns": 7
+    },
+    {
+      "brief": "product-list",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 5,
+        "of": 6,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "products",
+            "met": true,
+            "found": 12
+          },
+          {
+            "id": "filter-form",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "labels",
+            "met": true,
+            "found": 7
+          },
+          {
+            "id": "pagination",
+            "met": true,
+            "found": 4
+          },
+          {
+            "id": "imgs",
+            "met": false,
+            "found": 0
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 1955,
+        "cacheRead": 210550,
+        "cacheWrite": 13303
+      },
+      "costUsd": 0.0941088,
+      "wallMs": 16951,
+      "turns": 12
+    },
+    {
+      "brief": "search-results",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "fail",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 1,
+      "capped": false,
+      "assembly": {
+        "calls": 2,
+        "gaps": 2,
+        "origins": {
+          "plan": 1
+        },
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 3,
+        "of": 5,
+        "items": [
+          {
+            "id": "heading",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "search-input",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "label",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "results",
+            "met": false,
+            "found": 0
+          },
+          {
+            "id": "result-links",
+            "met": false,
+            "found": 0
+          }
+        ]
+      },
+      "tokens": {
+        "input": 10,
+        "output": 1544,
+        "cacheRead": 172127,
+        "cacheWrite": 11310
+      },
+      "costUsd": 0.07805250000000001,
+      "wallMs": 16595,
+      "turns": 9
+    },
+    {
+      "brief": "settings",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 3,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 5,
+        "of": 6,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "form",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "fieldsets",
+            "met": false,
+            "found": 1
+          },
+          {
+            "id": "radios",
+            "met": true,
+            "found": 2
+          },
+          {
+            "id": "file",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "select",
+            "met": true,
+            "found": 1
+          }
+        ]
+      },
+      "tokens": {
+        "input": 12,
+        "output": 1782,
+        "cacheRead": 208541,
+        "cacheWrite": 12373
+      },
+      "costUsd": 0.08832990000000002,
+      "wallMs": 18049,
+      "turns": 10
+    },
+    {
+      "brief": "sign-up",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 1,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 7,
+        "of": 7,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "form",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "email",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "password",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "interests",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "checkboxes",
+            "met": true,
+            "found": 6
+          },
+          {
+            "id": "labels",
+            "met": true,
+            "found": 10
+          }
+        ]
+      },
+      "tokens": {
+        "input": 8,
+        "output": 1380,
+        "cacheRead": 133271,
+        "cacheWrite": 11091
+      },
+      "costUsd": 0.0716514,
+      "wallMs": 14941,
+      "turns": 7
+    },
+    {
+      "brief": "team",
+      "condition": "C",
+      "run": 1,
+      "driver": "agent",
+      "model": "claude-sonnet-5-5",
+      "draft": true,
+      "page": true,
+      "pageFile": "page.html",
+      "status": {
+        "first": "pass",
+        "final": "pass"
+      },
+      "standard": {
+        "status": "pass",
+        "errors": 0
+      },
+      "rounds": 0,
+      "capped": false,
+      "assembly": {
+        "calls": 1,
+        "gaps": 0,
+        "origins": {},
+        "handWritten": false
+      },
+      "denials": 0,
+      "errors": {},
+      "warnings": 0,
+      "checklist": {
+        "met": 3,
+        "of": 4,
+        "items": [
+          {
+            "id": "one-h1",
+            "met": true,
+            "found": 1
+          },
+          {
+            "id": "people",
+            "met": true,
+            "found": 6
+          },
+          {
+            "id": "photos",
+            "met": false,
+            "found": 0
+          },
+          {
+            "id": "names",
+            "met": true,
+            "found": 7
+          }
+        ]
+      },
+      "tokens": {
+        "input": 8,
+        "output": 1034,
+        "cacheRead": 133343,
+        "cacheWrite": 10218
+      },
+      "costUsd": 0.0647026,
+      "wallMs": 12972,
+      "turns": 7
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "brief": "newsletter",
+  "condition": "C",
+  "run": 1,
+  "driver": "agent",
+  "model": "claude-sonnet-5-5",
+  "draft": true,
+  "page": true,
+  "pageFile": "page.html",
+  "status": {
+    "first": "pass",
+    "final": "pass"
+  },
+  "standard": {
+    "status": "pass",
+    "errors": 0
+  },
+  "rounds": 0,
+  "capped": false,
+  "assembly": {
+    "calls": 1,
+    "gaps": 0,
+    "origins": {},
+    "handWritten": false
+  },
+  "denials": 0,
+  "errors": {},
+  "warnings": 0,
+  "checklist": {
+    "met": 6,
+    "of": 6,
+    "items": [
+      {
+        "id": "one-h1",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "benefits",
+        "met": true,
+        "found": 4
+      },
+      {
+        "id": "form",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "email",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "label",
+        "met": true,
+        "found": 1
+      },
+      {
+        "id": "quote",
+        "met": true,
+        "found": 1
+      }
+    ]
+  },
+  "skeleton": [
+    "html",
+    "head",
+    "meta",
+    "meta",
+    "meta",
+    "title",
+    "meta",
+    "link",
+    "style",
+    "script",
+    "body",
+    "a",
+    "header",
+    "a",
+    "main",
+    "h1",
+    "section",
+    "h2",
+    "layout-text",
+    "ul",
+    "li",
+    "li",
+    "li",
+    "li",
+    "section",
+    "h2",
+    "form",
+    "form-field",
+    "label",
+    "input",
+    "footer",
+    "button",
+    "layout-text",
+    "p",
+    "small",
+    "section",
+    "h2",
+    "figure",
+    "blockquote",
+    "p",
+    "figcaption"
+  ],
+  "tokens": {
+    "input": 8,
+    "output": 1212,
+    "cacheRead": 134102,
+    "cacheWrite": 11449
+  },
+  "costUsd": 0.07162500000000001,
+  "wallMs": 13216,
+  "turns": 7
+}

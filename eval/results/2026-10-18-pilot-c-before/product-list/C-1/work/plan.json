@@ -1,0 +1,19 @@
+{"page":{"use":"page/basic","data":{"title":"Backpacks","site":"Packs","description":"Backpacks category page: 8 products, sorted by popularity.","heading":"Backpacks"},"slots":{"main":[
+{"use":"content/prose","key":"intro","data":{"html":"<p>8 products, sorted by popularity.</p>"}},
+{"use":"form/form","key":"filters","data":{"action":"/shop/backpacks","method":"get","label":"Filters"},"slots":{"fields":[
+{"use":"form/choice-group","key":"capacity","data":{"legend":"Capacity","name":"capacity","choices":[{"value":"under-30","label":"Under 30 L"},{"value":"30-50","label":"30–50 L"},{"value":"over-50","label":"Over 50 L"}]}},
+{"use":"form/choice-group","key":"price","data":{"legend":"Price","name":"price","choices":[{"value":"under-100","label":"Under $100"},{"value":"100-200","label":"$100–$200"},{"value":"over-200","label":"Over $200"}]}},
+{"use":"form/checkbox","key":"in-stock","data":{"label":"Only show items in stock","name":"in-stock","value":"1"}}
+],"actions":[{"use":"action/submit","key":"apply","data":{"label":"Apply filters"}}]}},
+{"use":"content/card-list","key":"products","data":{"cards":[
+{"title":"Ridgeline 40 L","text":"$189 · Rating 4.7 out of 5 · In stock","href":"/shop/ridgeline-40"},
+{"title":"Day Hiker 22 L","text":"$79 · Rating 4.5 out of 5 · In stock","href":"/shop/day-hiker-22"},
+{"title":"Summit 55 L","text":"$249 · Rating 4.8 out of 5 · 2 left","href":"/shop/summit-55"},
+{"title":"Commuter 18 L","text":"$64 · Rating 4.2 out of 5 · In stock","href":"/shop/commuter-18"},
+{"title":"Trailhead 30 L","text":"$119 · Rating 4.4 out of 5 · Out of stock","href":"/shop/trailhead-30"},
+{"title":"Expedition 70 L","text":"$329 · Rating 4.9 out of 5 · In stock","href":"/shop/expedition-70"},
+{"title":"Kids' Explorer 12 L","text":"$45 · Rating 4.6 out of 5 · In stock","href":"/shop/explorer-12"},
+{"title":"Ultralight 35 L","text":"$215 · Rating 4.3 out of 5 · In stock","href":"/shop/ultralight-35"}
+]}},
+{"use":"nav/pagination","key":"pager","data":{"label":"Pagination","next":"/shop/backpacks?page=2","pages":[{"label":"1","href":"/shop/backpacks?page=1","current":"page"},{"label":"2","href":"/shop/backpacks?page=2"},{"label":"3","href":"/shop/backpacks?page=3"}]}}
+]}}}

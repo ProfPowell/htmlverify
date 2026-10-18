@@ -5,7 +5,9 @@
   "use": "Any form. Fields go in fields, buttons in actions. Give a label when the page has more than one form.",
   "params": {
     "action": {
-      "type": "url"
+      "type": "url",
+      "required": false,
+      "description": "Where it submits. Without one, it submits to the page it's on; don't make one up."
     },
     "method": {
       "type": "enum",
@@ -19,6 +21,14 @@
       "type": "text",
       "required": false,
       "description": "Names the form, which also makes it a landmark."
+    },
+    "enctype": {
+      "type": "enum",
+      "values": [
+        "multipart/form-data"
+      ],
+      "required": false,
+      "description": "Set it when the form has a form/file-field, with method post."
     }
   },
   "slots": {

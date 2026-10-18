@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-icon-path="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/icons">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Join Larkspur Supply Co. | Larkspur Supply Co.</title>
+  <meta name="description" content="Join Larkspur Supply Co. with a one-time $30 lifetime membership." />
+  <link rel="stylesheet" href="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.css" />
+  <style>
+    .skip-link { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 1000; padding: var(--size-s) var(--size-m); background: var(--color-surface); color: var(--color-text); transform: translateY(-120%); }
+    .skip-link:focus-visible { transform: translateY(0); }
+  </style>
+  <script type="module" src="https://unpkg.com/vanilla-breeze@0.3.1/dist/cdn/vanilla-breeze.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="site"><a href="/" class="logo">Larkspur Supply Co.</a></header>
+  <main id="main" tabindex="-1">
+    <h1>Join Larkspur Supply Co.</h1>
+    <layout-text>
+      <p>A one-time $30 lifetime membership.</p>
+    </layout-text>
+    <form method="post" class="stacked" aria-label="Sign-up form">
+      <form-field>
+        <label for="signup-name-input">Full name</label>
+        <input id="signup-name-input" type="text" name="name" autocomplete="name" required="true" />
+      </form-field>
+      <form-field>
+        <label for="signup-email-input">Email</label>
+        <input id="signup-email-input" type="email" name="email" autocomplete="email" required="true" />
+      </form-field>
+      <form-field>
+        <label for="signup-password-input">Password</label>
+        <input id="signup-password-input" type="password" name="password" autocomplete="new-password" required="true" aria-describedby="signup-password-hint" />
+        <output id="signup-password-hint" class="hint" for="signup-password-input">At least 12 characters</output>
+      </form-field>
+      <form-field>
+        <label for="signup-phone-input">Phone (optional)</label>
+        <input id="signup-phone-input" type="tel" name="phone" autocomplete="tel" />
+      </form-field>
+      <fieldset aria-describedby="signup-interests-hint">
+        <legend>Interests</legend>
+        <output id="signup-interests-hint" class="hint">Choose any</output>
+        <layout-stack data-layout-gap="xs">
+          <form-field data-type="checkbox"><label><input type="checkbox" name="interests" value="hiking" /> Hiking</label></form-field>
+          <form-field data-type="checkbox"><label><input type="checkbox" name="interests" value="paddling" /> Paddling</label></form-field>
+          <form-field data-type="checkbox"><label><input type="checkbox" name="interests" value="climbing" /> Climbing</label></form-field>
+          <form-field data-type="checkbox"><label><input type="checkbox" name="interests" value="winter-travel" /> Winter travel</label></form-field>
+        </layout-stack>
+      </fieldset>
+      <form-field data-type="checkbox"><label><input type="checkbox" name="newsletter" /> Send me the monthly newsletter</label></form-field>
+      <form-field data-type="checkbox"><label><input type="checkbox" name="terms" required="true" /> I agree to the <a href="/terms">member terms</a></label></form-field>
+      <footer class="actions end"><button type="submit">Join and pay $30</button></footer>
+    </form>
+    <layout-text>
+      <p>Already a member? <a href="/sign-in">Sign in</a></p>
+    </layout-text>
+  </main>
+</body>
+</html>

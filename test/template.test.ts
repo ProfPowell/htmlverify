@@ -182,6 +182,16 @@ test('sinks: each type binds only where it fits', () => {
   ]);
 });
 
+test('sinks that depend on the element: a number input’s limits and value, and an untyped data-* attribute’s presence', () => {
+  const c = contract({ low: { type: 'integer' }, done: { type: 'boolean', default: false } });
+  assert.deepEqual(problems('<input name="n" type="number" min="{{low}}" max="{{low}}" value="{{low}}" />\n<ol><li data-completed="{{done}}">x</li></ol>', c), []);
+  assert.deepEqual(problems('<input name="n" type="text" min="{{low}}" />\n<input name="d" type="date" value="{{low}}" />\n<b title="{{done}}">y</b>', c), [
+    '1:29 min="{{low}}": min isn’t a numeric attribute.',
+    '2:29 value="{{low}}": value isn’t a numeric attribute.',
+    '3:4 title="{{done}}": title isn’t a boolean attribute; for ARIA states, use an enum of "true" and "false".',
+  ]);
+});
+
 test('markup problems: parse errors, unknown names, and bindings where none may go', () => {
   assert.deepEqual(problems(`<labl>x</labl><p colour="red">y</p>
 <!-- {{label}} --><script>let x = "{{label}}";</script>
